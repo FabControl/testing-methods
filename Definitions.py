@@ -213,7 +213,7 @@ class Machine(object):
 def minmax_path_width(machine: Machine):
     coef_w_min = 2 / 3
 
-    if machine.nozzle.size_id <= 1.0:
+    if machine.nozzle.size_id <= 0.4:
         coef_w_max = 1
     else:
         coef_w_max = machine.nozzle.size_od / machine.nozzle.size_id

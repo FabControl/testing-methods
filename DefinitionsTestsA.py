@@ -224,10 +224,11 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
             g.write(ts.comment1)
             g.write(ts.comment2[dummy1])
 
-            g.abs_move(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
-                       y=+ts.test_structure_size / 2,
-                       z=+ts.abs_z[dummy1],
-                       extrude=False)
+            g.abs_travel(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
+                         y=+ts.test_structure_size / 2,
+                         z=+ts.abs_z[dummy1],
+                         lift=1)
+
 
             if ts.test_name == 'extrusion temperature':  # TODO! Fix the movement, time, extra restart distance
                 g.travel(x=0,
