@@ -23,7 +23,7 @@ def print_raft(ts: TestSetupA):
         g.set_printbed_temperature(machine.settings.temperature_printbed)
 
     g.write("; --- start to clean the nozzle ---")
-    g.set_extruder_temperature(machine.settings.temperature_extruder)
+    g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
     g.dwell(5)
     output = "G1 F1000 E5; extrude 5 mm of material"
     g.write(output)
@@ -43,14 +43,11 @@ def print_raft(ts: TestSetupA):
            extrude=False, extrusion_multiplier=0)
     g.write("; --- end to clean the nozzle ---")
 
-    if machine.settings.part_cooling is not None:
-        g.set_part_cooling(machine.settings.part_cooling)
-
     g.write("; --- start to print the raft ---")
     g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
 
     g.write("; --- print the outer perimeter ---")
-    g.feed(machine.settings.speed_printing_raft/3)  # print the outer perimeter of the raft
+    g.feed(machine.settings.speed_printing_raft)  # print the outer perimeter of the raft
     g.move(x=0,
            y=+test_structure_size,
            z=0,
@@ -113,6 +110,9 @@ def print_raft(ts: TestSetupA):
            y=0,
            z=0,
            extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
+
+    if machine.settings.part_cooling is not None:
+        g.set_part_cooling(machine.settings.part_cooling)
 
     return
 

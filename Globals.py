@@ -36,12 +36,12 @@ except:
         "settings": {
             "path_width": 0.850,
             "path_height": 0.250,
-            "temperature_extruder_raft": 290,
+            "temperature_extruder_raft": 288,
             "temperature_printbed_raft": 60,
             "raft_density": 75,
-            "temperature_extruder": 280,
+            "temperature_extruder": 288,
             "temperature_printbed": 60,
-            "speed_printing": 70,
+            "speed_printing": 72,
             "speed_printing_raft": 20,
             "part_cooling": 100,
             "retraction_distance": 3.333,
@@ -52,7 +52,7 @@ except:
             "matrix_size": 3,
             "layer_count": 20,
             "safe_distance": 50,
-            "number_of_test_structures": 5,
+            "number_of_test_structures": 6,
             "edges": 30
     },
         "session": {

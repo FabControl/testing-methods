@@ -76,7 +76,7 @@ if import_json_dict["session"]["test_type"] == "A":
             retraction_restart_distance_vs_coasting_distance(ts)
         else:
             path = str(cwd + gcode_folder + '\\test' + str(number) + ' ' + test + '.gcode')
-            ts = TestSetupA(machine, material, test, path, min_max_argument = None, min_max_speed_printing = [35, 90], raft = False)
+            ts = TestSetupA(machine, material, test, path, min_max_argument = [240, 300], min_max_speed_printing = [35, 90], raft = True)
             flat_test_single_parameter_vs_speed_printing(ts)
 
 elif import_json_dict["session"]["test_type"] == "B":
