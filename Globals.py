@@ -34,9 +34,9 @@ except:
             }
         },
         "settings": {
-            "path_width": 0.645,
-            "path_height": 0.292,
-            "temperature_extruder_raft": 280,
+            "path_width": 0.850,
+            "path_height": 0.250,
+            "temperature_extruder_raft": 290,
             "temperature_printbed_raft": 60,
             "raft_density": 75,
             "temperature_extruder": 280,
@@ -48,11 +48,11 @@ except:
             "retraction_restart_distance": 0.45,
             "coasting_distance": 0.50,
             "overlap": 5,
-            "perimeter": 2,
+            "perimeter": 5,
             "matrix_size": 3,
             "layer_count": 20,
             "safe_distance": 50,
-            "number_of_test_structures": 7,
+            "number_of_test_structures": 5,
             "edges": 30
     },
         "session": {

@@ -165,7 +165,7 @@ def addcomment1(argument, test_name: str, machine: Machine):
     elif test_name == 'retraction distance':
         comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in argument) + ' ---')
     elif test_name == 'retraction restart distance and coasting distance':
-        comment1 = str('; --- testing the following ' + test_name[:26] + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in argument[0]) + 'and the following' + test_name[31:] + ' values: ' + ', '.join('{:.3f} mm'.format(j) for j in argument[1]) + ' ---')
+        comment1 = str('; --- testing the following ' + test_name[:27] + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in argument[0]) + ' and the following' + test_name[31:] + ' values: ' + ', '.join('{:.3f} mm'.format(j) for j in argument[1]) + ' ---')
     else:
         comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in [x * machine.nozzle.size_id for x in argument]) + ' ---')
 
