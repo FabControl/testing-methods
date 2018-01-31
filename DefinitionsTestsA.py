@@ -211,7 +211,7 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
     if ts.test_name == 'printing speed':
         flat_test_single_parameter(ts)
     else:
-        if ts.raft == True:
+        if ts.raft:
             print_raft(ts)  # print the raft to support the test structure
         elif ts.raft == True and ts.test_name != 'first layer height':
             print_raft(ts)  # print the raft to support the test structure
