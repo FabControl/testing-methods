@@ -43,9 +43,6 @@ def print_raft(ts: TestSetupA):
            extrude=False, extrusion_multiplier=0)
     g.write("; --- end to clean the nozzle ---")
 
-    if machine.settings.part_cooling is not None:
-        g.set_part_cooling(machine.settings.part_cooling)
-
     g.write("; --- start to print the raft ---")
     g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
 
@@ -113,6 +110,9 @@ def print_raft(ts: TestSetupA):
            y=0,
            z=0,
            extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
+
+    if machine.settings.part_cooling is not None:
+        g.set_part_cooling(machine.settings.part_cooling)
 
     return
 
@@ -211,7 +211,7 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
     if ts.test_name == 'printing speed':
         flat_test_single_parameter(ts)
     else:
-        if ts.raft == True:
+        if ts.raft:
             print_raft(ts)  # print the raft to support the test structure
         elif ts.raft == True and ts.test_name != 'first layer height':
             print_raft(ts)  # print the raft to support the test structure
