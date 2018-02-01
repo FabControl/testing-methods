@@ -9,8 +9,8 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "Titan",
-            "manufacturer": "FF",
+            "name": "FPU 77D",
+            "manufacturer": "Covestro",
             "id": "123456",
             "size_od": 1.75,
             "temperature_melting": 235,
@@ -27,22 +27,22 @@ except:
             "size_extruder_id": 1.95,
             "nozzle": {
                 "size_id": 0.80,
-                "size_od": 1.24,
+                "size_od": 1.04,
                 "size_capillary_length": 5,
                 "size_angle": 60,
                 "metal": "brass"
             }
         },
         "settings": {
-            "path_width": 0.850,
-            "path_height": 0.250,
-            "temperature_extruder_raft": 288,
-            "temperature_printbed_raft": 60,
+            "path_width": 0.800,
+            "path_height": 0.255,
+            "temperature_extruder_raft": 260,
+            "temperature_printbed_raft": 40,
             "raft_density": 75,
-            "temperature_extruder": 288,
-            "temperature_printbed": 60,
-            "speed_printing": 72,
-            "speed_printing_raft": 20,
+            "temperature_extruder": 275,
+            "temperature_printbed": 40,
+            "speed_printing": 53,
+            "speed_printing_raft": 25,
             "part_cooling": 100,
             "retraction_distance": 3.333,
             "retraction_restart_distance": 0.45,
@@ -52,7 +52,7 @@ except:
             "matrix_size": 3,
             "layer_count": 20,
             "safe_distance": 50,
-            "number_of_test_structures": 6,
+            "number_of_test_structures": 7,
             "edges": 30
     },
         "session": {

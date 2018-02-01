@@ -4,10 +4,6 @@ MP MT Framework.
 Usage:
     CLI.py
 """
-
-import json
-import os
-
 from Calculations import shear_rate, pressure_drop, rheology
 from CheckCompatibility import check_compatibility
 from Definitions import *
@@ -76,7 +72,7 @@ if import_json_dict["session"]["test_type"] == "A":
             retraction_restart_distance_vs_coasting_distance(ts)
         else:
             path = str(cwd + gcode_folder + '\\test' + str(number) + ' ' + test + '.gcode')
-            ts = TestSetupA(machine, material, test, path, min_max_argument = [240, 300], min_max_speed_printing = [35, 90], raft = True)
+            ts = TestSetupA(machine, material, test, path, min_max_argument = [0.25, 0.4], min_max_speed_printing = [35, 90], raft = True)
             flat_test_single_parameter_vs_speed_printing(ts)
 
 elif import_json_dict["session"]["test_type"] == "B":

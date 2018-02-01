@@ -104,10 +104,11 @@ def print_raft(ts: TestSetupA):
            z=0,
            extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
 
+    g.set_extruder_temperature(machine.settings.temperature_extruder)
     g.dwell(30)  # to unload the nozzle
 
-    g.move(x=-20,
-           y=0,
+    g.move(x=0,
+           y=20,
            z=0,
            extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
 
@@ -253,26 +254,25 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
                 g.write('; --- testing the following printing speed value: %.3f mm/s' % (current_printing_speed))
                 g.feed(current_printing_speed)
 
-                for dummy3 in range(0, int(ts.number_of_lines/2)):
+                dummy3_range = range(0, int(ts.number_of_lines/2))
+                for dummy3 in dummy3_range:
                         g.move(x=(-1)**(dummy2 + 1) * step_x,
-                               y=0,
-                               z=0,
-                               extrude=False, extrusion_multiplier=0)
+                           y=0,
+                           z=0,
+                           extrude=False)
                         g.move(x=0,
                                y=-ts.step_y/4,
                                z=0,
                                extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
-                        g.move(x=(-1)**(dummy2 + 1) * step_x,
-                               y=0,
-                               z=0,
-                               extrude=False, extrusion_multiplier=0)
-                        g.move(x=0,
-                               y=+ts.step_y/4,
-                               z=0,
-                               extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
-                g.travel(x=0,
-                         y=-ts.step_y / 4,
-                         z=0, retraction_speed=ts.retraction_speed, retraction_distance=ts.retraction_distance[dummy1])
+                        if dummy3 != len(dummy3_range)-1:
+                            g.move(x=(-1)**(dummy2 + 1) * step_x,
+                                   y=0,
+                                   z=0,
+                                   extrude=False)
+                            g.move(x=0,
+                                   y=+ts.step_y/4,
+                                   z=0,
+                                   extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
 
         g.write("; --- finish to print the test structure ---")
         g.teardown()
