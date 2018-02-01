@@ -34,17 +34,23 @@ except:
             }
         },
         "settings": {
-            "path_width": 0.800,
-            "path_height": 0.255,
-            "path_height_raft": 0.320,
-            "temperature_extruder_raft": 260,
             "temperature_printbed_raft": 40,
-            "raft_density": 75,
-            "temperature_extruder": 275,
             "temperature_printbed": 40,
-            "speed_printing": 53,
-            "speed_printing_raft": 25,
             "part_cooling": 100,
+
+            "raft_density": 75,
+
+            "temperature_extruder_raft": 260,
+
+            "path_height_raft": 0.320,
+            "speed_printing_raft": 25,
+
+            "temperature_extruder": 275,
+            "speed_printing": 53,
+
+            "path_height": 0.255,
+            "path_width": 0.800,
+
             "retraction_distance": 3.333,
             "retraction_restart_distance": 0.45,
             "coasting_distance": 0.50,
