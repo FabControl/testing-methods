@@ -4,9 +4,8 @@ import slicing_functionality as sf
 from Definitions import *
 from Globals import machine, material
 
-# PRINTING RAFT
-def print_raft(ts: TestSetupA):
-
+# WIPE
+def wipe(ts: TestSetupA):
     test_structure_size = ts.test_structure_size
     coef_w_raft = ts.coef_w_raft
     coef_h_raft = ts.coef_h_raft
@@ -43,6 +42,14 @@ def print_raft(ts: TestSetupA):
            extrude=False, extrusion_multiplier=0)
     g.write("; --- end to clean the nozzle ---")
 
+# PRINTING RAFT
+def print_raft(ts: TestSetupA):
+    test_structure_size = ts.test_structure_size
+    coef_w_raft = ts.coef_w_raft
+    coef_h_raft = ts.coef_h_raft
+    g = ts.g
+
+    g.feed(machine.settings.speed_printing_raft)  # print the raft
     g.write("; --- start to print the raft ---")
     g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
 
@@ -144,10 +151,9 @@ def flat_test_single_parameter(ts: TestSetupA):
 
     g.write(ts.title)
     g.write(ts.comment1)
+    wipe(ts)
 
     if ts.test_name == 'printing speed':
-        flat_test_single_parameter(ts)
-    else:
         if ts.raft:
             print_raft(ts)  # print the raft to support the test structure
         elif ts.raft == True and ts.test_name != 'first layer height':
@@ -209,16 +215,14 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
 
     g.write(ts.title)
     g.write(ts.comment1)
+    wipe(ts)
 
     if ts.test_name == 'printing speed':
         flat_test_single_parameter(ts)
     else:
-        if ts.raft:
+        if ts.raft and ts.test_name != "first layer height":
             print_raft(ts)  # print the raft to support the test structure
-        elif ts.raft == True and ts.test_name != 'first layer height':
-            print_raft(ts)  # print the raft to support the test structure
-        else:
-            pass
+
 
         g.write("; --- start to print the test structure ---")
         g.feed(machine.settings.speed_printing)  # respect the units: mm/min
@@ -285,6 +289,7 @@ def retraction_distance(ts: TestSetupA):
 
     g.write(ts.title)
     g.write(ts.comment1)
+    wipe(ts)
 
     print_raft(ts)  # print the raft to support the test structure
 
@@ -353,6 +358,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
 
     g.write(ts.title)
     g.write(ts.comment1)
+    wipe(ts)
 
     print_raft(ts)  # print the raft to support the test structure
 

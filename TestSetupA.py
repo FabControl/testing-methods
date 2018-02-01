@@ -46,8 +46,9 @@ class TestSetupA(object):
 
         self.number_of_lines = int(1.25*(self.test_structure_size / (2 * self.number_of_test_structures + 1))/(np.mean(self.coef_w) * machine.nozzle.size_id))
 
-        self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], 4).tolist()
-
+        if min_max_speed_printing is not None:
+            self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], 4).tolist()
+            
         if test_name == 'first layer height':
             # FIRST LAYER HEIGHT test parameters
 
