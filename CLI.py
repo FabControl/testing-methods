@@ -54,26 +54,22 @@ else:
     pass
 
 if import_json_dict["session"]["test_type"] == "A":
-    test_dictionary = ['extrusion temperature', 'first layer height', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance']
-
-    number = 0
+    test = 'extrusion temperature'#, 'first layer height', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance'
 
     from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, flat_test_single_parameter, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
-    for test in test_dictionary:
-        number = number + 1
-        if test == 'retraction distance':
-            path = str(cwd + gcode_folder + '\\test' + str(number) + ' ' + test + '.gcode')
-            ts = TestSetupA(machine, material, test, path, min_max_argument = None, min_max_speed_printing = [35, 90], raft = True)
-            retraction_distance(ts)
-        elif test == 'retraction restart distance and coasting distance':
-            path = str(cwd + gcode_folder + '\\test' + str(number) + ' ' + test + '.gcode')
-            ts = TestSetupA(machine, material, test, path, min_max_argument = None, min_max_speed_printing = [35, 90], raft = True)
-            retraction_restart_distance_vs_coasting_distance(ts)
-        else:
-            path = str(cwd + gcode_folder + '\\test' + str(number) + ' ' + test + '.gcode')
-            ts = TestSetupA(machine, material, test, path, min_max_argument = [0.25, 0.4], min_max_speed_printing = [35, 90], raft = True)
-            flat_test_single_parameter_vs_speed_printing(ts)
+    if test == 'retraction distance':
+        path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
+        ts = TestSetupA(machine, material, test, path, min_max_argument = None, min_max_speed_printing = [10, 100], raft = True)
+        retraction_distance(ts)
+    elif test == 'retraction restart distance and coasting distance':
+        path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
+        ts = TestSetupA(machine, material, test, path, min_max_argument = None, min_max_speed_printing = [10, 100], raft = True)
+        retraction_restart_distance_vs_coasting_distance(ts)
+    else:
+        path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
+        ts = TestSetupA(machine, material, test, path, min_max_argument = [225, 290], min_max_speed_printing = [10, 100], raft = True)
+        flat_test_single_parameter_vs_speed_printing(ts)
 
 elif import_json_dict["session"]["test_type"] == "B":
     test_dictionary = ['perimeter', 'overlap', 'path height']  # TODO
