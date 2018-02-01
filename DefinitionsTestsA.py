@@ -47,23 +47,23 @@ def print_raft(ts: TestSetupA):
     g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
 
     g.write("; --- print the outer perimeter ---")
-    g.feed(machine.settings.speed_printing_raft)  # print the outer perimeter of the raft
+    g.feed(machine.settings.speed_printing_raft/3)  # print the outer perimeter of the raft
     g.move(x=0,
            y=+test_structure_size,
            z=0,
-           extrude=True, extrusion_multiplier=1.25, coef_h=coef_h_raft, coef_w=coef_w_raft)
+           extrude=True, extrusion_multiplier=1.5, coef_h=coef_h_raft, coef_w=coef_w_raft)
     g.move(x=-test_structure_size,
            y=0,
            z=0,
-           extrude=True, extrusion_multiplier=1.25, coef_h=coef_h_raft, coef_w=coef_w_raft)
+           extrude=True, extrusion_multiplier=1.5, coef_h=coef_h_raft, coef_w=coef_w_raft)
     g.move(x=0,
            y=-test_structure_size,
            z=0,
-           extrude=True, extrusion_multiplier=1.25, coef_h=coef_h_raft, coef_w=coef_w_raft)
+           extrude=True, extrusion_multiplier=1.5, coef_h=coef_h_raft, coef_w=coef_w_raft)
     g.move(x=+test_structure_size,
            y=0,
            z=0,
-           extrude=True, extrusion_multiplier=1.25, coef_h=coef_h_raft, coef_w=coef_w_raft)
+           extrude=True, extrusion_multiplier=1.5, coef_h=coef_h_raft, coef_w=coef_w_raft)
 
     output = ("; --- print the infill with the fill density of %.f %% ---" % (machine.settings.raft_density))
 
@@ -98,18 +98,13 @@ def print_raft(ts: TestSetupA):
 
     g.write("; --- finish to print the raft ---")
 
-    g.move(x=+20,
-           y=0,
+    g.move(x=0,
+           y=20,
            z=0,
            extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
 
     g.set_extruder_temperature(machine.settings.temperature_extruder)
     g.dwell(30)  # to unload the nozzle
-
-    g.move(x=0,
-           y=+20,
-           z=0,
-           extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
 
     if machine.settings.part_cooling is not None:
         g.set_part_cooling(machine.settings.part_cooling)
