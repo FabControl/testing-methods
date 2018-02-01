@@ -18,6 +18,10 @@ class TestSetupA(object):
         self.number_of_test_structures = machine.settings.number_of_test_structures
         self.test_name = test_name
         self.coef_h_raft, self.coef_h_min_raft, self.coef_h_max_raft, self.coef_w_raft, self.coef_h_raft_all = minmax_path_width_height_raft(machine)
+
+        if machine.settings.path_height_raft != None:
+            self.coef_h_raft = machine.settings.path_height_raft/machine.nozzle.size_id
+
         self.test_structure_size = get_test_structure_size(machine)
         self.speed_printing = [x*machine.settings.speed_printing for x in [1] * self.number_of_test_structures]
         self.coef_h = [x * machine.settings.path_height / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]

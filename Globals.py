@@ -36,6 +36,7 @@ except:
         "settings": {
             "path_width": 0.800,
             "path_height": 0.255,
+            "path_height_raft": 0.320,
             "temperature_extruder_raft": 260,
             "temperature_printbed_raft": 40,
             "raft_density": 75,

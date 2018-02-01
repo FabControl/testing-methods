@@ -108,7 +108,7 @@ class Settings(object):
     retraction_distance - retraction distance (mm)
     """
 
-    def __init__(self, material=None, nozzle=None, path_width=None, path_height=None, temperature_extruder_raft=None,
+    def __init__(self, material=None, nozzle=None, path_width=None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
                  temperature_printbed_raft=None, extrusion_multiplier_raft=None, speed_printing_raft=None, temperature_extruder=None,
                  temperature_printbed=None, extrusion_multiplier=None, speed_printing=None, retraction_distance = None, retraction_restart_distance = None,
                  coasting_distance = None, part_cooling=None, raft_density=None, number_of_test_structures = None, optimize_temperature_printbed = None, optimize_speed_printing = None, optimize_path_height = None,                    get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, *args, **kwargs):
@@ -121,6 +121,7 @@ class Settings(object):
         self.material = Material(None, None, None, 1.75)
         self.path_width = path_width  # respect the units: mm
         self.path_height = path_height  # respect the units: mm
+        self.path_height_raft = path_height_raft
         self.temperature_printbed_raft = temperature_printbed_raft
         self.temperature_extruder_raft = temperature_extruder_raft  # respect the units: degC
         self.extrusion_multiplier_raft = 1.15 if extrusion_multiplier_raft is None else extrusion_multiplier_raft
