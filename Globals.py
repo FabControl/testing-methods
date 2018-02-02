@@ -40,18 +40,18 @@ except:
 
             "raft_density": 75,
 
-            "temperature_extruder_raft": 260,
+            "temperature_extruder_raft": 240,
 
-            "path_height_raft": 0.320,
-            "speed_printing_raft": 25,
+            "path_height_raft": 0.333,
+            "speed_printing_raft": 15,
 
-            "temperature_extruder": 275,
-            "speed_printing": 53,
+            "temperature_extruder": 285,
+            "speed_printing": 58,
 
-            "path_height": 0.255,
-            "path_width": 0.800,
+            "path_height": 0.350,
+            "path_width": 0.773,
 
-            "retraction_distance": 3.333,
+            "retraction_distance": 2.00,
             "retraction_restart_distance": 0.45,
             "coasting_distance": 0.50,
             "overlap": 5,
@@ -74,4 +74,4 @@ material = Material(**import_json_dict["material"])
 machine = Machine(**import_json_dict["machine"])
 machine.settings = Settings(nozzle=machine.nozzle, material=material, **import_json_dict["settings"])
 g = Gplus(material, machine, outfile="placeholder.gcode", footer=footer, header=header, aerotech_include=False)
-coef_h_raft, coef_h_min_raft, coef_h_max_raft, coef_w_raft, coef_h_raft_all = minmax_path_width_height_raft(machine)
+coef_h_raft, coef_h_min_raft, coef_h_max_raft, coef_w_raft, coef_h_raft_all = minmax_path_width_height_raft(machine) #TODO reallz needed?

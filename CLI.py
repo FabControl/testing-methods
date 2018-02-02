@@ -54,9 +54,9 @@ else:
     pass
 
 if import_json_dict["session"]["test_type"] == "A":
-    test = 'extrusion temperature'#, 'first layer height', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance'
-    min_max_argument = [225, 290]
-    min_max_speed_printing = [10, 100]
+    test = 'retraction restart distance and coasting distance' #'extrusion temperature', 'first layer height', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance'
+    min_max_argument = [0, 4]
+    min_max_speed_printing = None #[50, 75]
 
     from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, flat_test_single_parameter, retraction_restart_distance_vs_coasting_distance, retraction_distance
 

@@ -110,7 +110,7 @@ def print_raft(ts: TestSetupA):
            z=0,
            extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
 
-    g.set_extruder_temperature(machine.settings.temperature_extruder)
+    g.set_extruder_temperature(ts.temperature_extruder[0])
     g.dwell(30)  # to unload the nozzle
 
     if machine.settings.part_cooling is not None:
@@ -153,13 +153,10 @@ def flat_test_single_parameter(ts: TestSetupA):
     g.write(ts.comment1)
     wipe(ts)
 
-    if ts.test_name == 'printing speed':
-        if ts.raft:
-            print_raft(ts)  # print the raft to support the test structure
-        elif ts.raft == True and ts.test_name != 'first layer height':
-            print_raft(ts)  # print the raft to support the test structure
-        else:
-            pass
+    if ts.raft == True and ts.test_name != 'first layer height':
+        print_raft(ts)  # print the raft to support the test structure
+    else:
+        pass
 
     g.write("; --- start to print the test structure ---")
     g.feed(machine.settings.speed_printing)  # respect the units: mm/min
@@ -213,20 +210,18 @@ def flat_test_single_parameter(ts: TestSetupA):
 def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
     g = ts.g
 
-    g.write(ts.title)
-    g.write(ts.comment1)
-    wipe(ts)
-
     if ts.test_name == 'printing speed':
         flat_test_single_parameter(ts)
     else:
+        g.write(ts.title)
+        g.write(ts.comment1)
+        wipe(ts)
         if ts.raft and ts.test_name != "first layer height":
             print_raft(ts)  # print the raft to support the test structure
-
-
+        else:
+            pass
         g.write("; --- start to print the test structure ---")
         g.feed(machine.settings.speed_printing)  # respect the units: mm/min
-
         for dummy1 in range(0, ts.number_of_test_structures):
 
             g.write(ts.comment2[dummy1])
@@ -369,7 +364,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
         g.set_extruder_temperature(ts.temperature_extruder[dummy2])
         g.write(ts.comment2[dummy2])
 
-        for dummy3 in range(0, 4): # layers
+        for dummy3 in range(0, 1): # layers
                 g.abs_move(x=+ts.test_structure_size / 2 - (2 * dummy2 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
                            y=+ts.test_structure_size / 2,
                            z=+(dummy3 + 1) * ts.coef_h[dummy2] * machine.nozzle.size_id + ts.coef_h_raft * machine.nozzle.size_id,

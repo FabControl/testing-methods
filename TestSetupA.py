@@ -116,7 +116,7 @@ class TestSetupA(object):
             # RETRACTION DISTANCE test parameters
 
             if min_max_argument is None:
-                self.retraction_distance = np.linspace(0.0, 5.0, self.number_of_test_structures).tolist()
+                self.retraction_distance = np.linspace(0.0, 4.0, self.number_of_test_structures).tolist()
             else:
                 self.retraction_distance = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
