@@ -20,11 +20,13 @@ class Prism(object):
                        self.origin[1] + circumradius * math.sin(np.pi * (edges - 2) / (2 * edges)))
         temp_speed = g.speed
         g.feed(100) # TODO
+
         if raft:
             g.abs_move(self.center[0], self.center[1], machine.settings.path_height, extrude=False)
             g.feed(8)  # set speed for raft TODO
             sf.infill(sf.raft_structure(circumradius*1.35, "square"),1, g=g)
             g.feed(temp_speed / 60)
+
         g.abs_move(x, y, z if not raft else z + 2 * machine.settings.path_height, extrude=False)  # TODO
 
         g.set_part_cooling(cooling)

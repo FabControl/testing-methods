@@ -42,14 +42,16 @@ except:
 
             "temperature_extruder_raft": 240,
 
-            "path_height_raft": 0.333,
-            "speed_printing_raft": 15,
+            "path_height_raft": 0.433,
+            "speed_printing_raft": 20,
 
-            "temperature_extruder": 285,
-            "speed_printing": 58,
+            "temperature_extruder": 260,
+            "speed_printing": 60,
 
-            "path_height": 0.350,
-            "path_width": 0.773,
+            "path_height": 0.400,
+            "path_width": 0.800,
+
+            "extrusion_multiplier": 1.000,
 
             "retraction_distance": 2.00,
             "retraction_restart_distance": 0.45,
