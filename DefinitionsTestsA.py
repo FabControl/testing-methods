@@ -42,19 +42,18 @@ def wipe(ts: TestSetupA):
            extrude=False, extrusion_multiplier=0)
     g.write("; --- end to clean the nozzle ---")
 
-# PRINTING RAFT
-def print_raft(ts: TestSetupA):
+# RAFT PERIMETER
+def raft_perimeter(ts: TestSetupA):
     test_structure_size = ts.test_structure_size
     coef_w_raft = ts.coef_w_raft
     coef_h_raft = ts.coef_h_raft
     g = ts.g
 
     g.feed(machine.settings.speed_printing_raft)  # print the raft
-    g.write("; --- start to print the raft ---")
     g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
 
     g.write("; --- print the outer perimeter ---")
-    g.feed(machine.settings.speed_printing_raft/3)  # print the outer perimeter of the raft
+    g.feed(machine.settings.speed_printing_raft / 3)  # print the outer perimeter of the raft
     g.move(x=0,
            y=+test_structure_size,
            z=0,
@@ -71,6 +70,20 @@ def print_raft(ts: TestSetupA):
            y=0,
            z=0,
            extrude=True, extrusion_multiplier=1.5, coef_h=coef_h_raft, coef_w=coef_w_raft)
+
+
+# PRINTING RAFT
+def print_raft(ts: TestSetupA):
+    test_structure_size = ts.test_structure_size
+    coef_w_raft = ts.coef_w_raft
+    coef_h_raft = ts.coef_h_raft
+    g = ts.g
+
+    g.feed(machine.settings.speed_printing_raft)  # print the raft
+    g.write("; --- start to print the raft ---")
+    g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
+
+    raft_perimeter(ts)
 
     output = ("; --- print the infill with the fill density of %.f %% ---" % (machine.settings.raft_density))
 
@@ -156,7 +169,7 @@ def flat_test_single_parameter(ts: TestSetupA):
     if ts.raft == True and ts.test_name != 'first layer height':
         print_raft(ts)  # print the raft to support the test structure
     else:
-        pass
+        raft_perimeter(ts)
 
     g.write("; --- start to print the test structure ---")
     g.feed(machine.settings.speed_printing)  # respect the units: mm/min
@@ -219,7 +232,7 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
         if ts.raft and ts.test_name != "first layer height":
             print_raft(ts)  # print the raft to support the test structure
         else:
-            pass
+            raft_perimeter(ts)
         g.write("; --- start to print the test structure ---")
         g.feed(machine.settings.speed_printing)  # respect the units: mm/min
         for dummy1 in range(0, ts.number_of_test_structures):
