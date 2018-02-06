@@ -5,7 +5,7 @@ import numpy as np
 
 
 class TestSetupB(object):
-    def __init__(self, machine: Machine, material: Material, test_name: str, path: str, min_max_argument: list = None, min_max_speed_printing: list = None):
+    def __init__(self, machine: Machine, material: Material, test_name: str, path: str, min_max_argument: list = None, min_max_speed_printing: list = None, raft: bool = True):
         """
         :param machine:
         :param material:
@@ -17,6 +17,8 @@ class TestSetupB(object):
         self.number_of_test_structures = machine.settings.matrix_size
         self.test_name = test_name
 
+        self.raft = raft
+
         self.coef_h_raft, _, _, self.coef_w_raft, _ = minmax_path_width_height_raft(machine)
 
         # if machine.settings.path_height_raft != None:
@@ -26,6 +28,7 @@ class TestSetupB(object):
 
         self.test_structure_size = get_test_structure_size(machine)
         self.speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], self.number_of_test_structures).tolist()
+
         self.coef_h = [x * machine.settings.path_height / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
         self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
         self.coef_w = [x * machine.settings.path_width / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]

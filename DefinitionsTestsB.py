@@ -74,7 +74,8 @@ def dimensional_test(ts: TestSetupB):
                               coasting_distance=0,
                               cooling=100,
                               extrusion_multiplier=1,
-                              raft=True,
+                              raft=ts.raft,
+                              speed_printing = speed_printing[row],
                               g=g)
                 origin_matrix.append(prism.origin) if prism.origin[2] == 0 else None
 

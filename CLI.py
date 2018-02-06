@@ -90,7 +90,7 @@ elif import_json_dict["session"]["test_type"] == "B":
     elif test == 'temperature':
             path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
 
-    ts = TestSetupB(machine, material, test, path, min_max_argument, min_max_speed_printing)
+    ts = TestSetupB(machine, material, test, path, min_max_argument, min_max_speed_printing, raft = False)
     dimensional_test(ts)
 
 with open("persistence.json", mode="w") as file:
