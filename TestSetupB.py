@@ -5,7 +5,7 @@ import numpy as np
 
 
 class TestSetupB(object):
-    def __init__(self, machine: Machine, material: Material, test_name: str, path: str, min_max: list = None):
+    def __init__(self, machine: Machine, material: Material, test_name: str, path: str, min_max_argument: list = None, min_max_speed_printing: list = None):
         """
         :param machine:
         :param material:
@@ -16,9 +16,16 @@ class TestSetupB(object):
 
         self.number_of_test_structures = machine.settings.matrix_size
         self.test_name = test_name
-        self.coef_h_raft, self.coef_h_min_raft, self.coef_h_max_raft, self.coef_w_raft, self.coef_h_raft_all = minmax_path_width_height_raft(machine)
+
+        self.coef_h_raft, _, _, self.coef_w_raft, _ = minmax_path_width_height_raft(machine)
+
+        # if machine.settings.path_height_raft != None:
+        #     self.coef_h_raft = machine.settings.path_height_raft/machine.nozzle.size_id
+        # if machine.settings.path_width_raft != None:
+        #     self.coef_w_raft = machine.settings.path_width_raft/machine.nozzle.size_id
+
         self.test_structure_size = get_test_structure_size(machine)
-        self.speed_printing = [x*machine.settings.speed_printing for x in [1] * self.number_of_test_structures]
+        self.speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], self.number_of_test_structures).tolist()
         self.coef_h = [x * machine.settings.path_height / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
         self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
         self.coef_w = [x * machine.settings.path_width / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
@@ -36,25 +43,33 @@ class TestSetupB(object):
         self.step_y = self.test_structure_size - self.coef_w_raft * machine.nozzle.size_id / 2
 
         if test_name == 'perimeter':
-            # PERIMETER test parameter
+            # PERIMETER test
             self.perimeter = range(1, 1+self.number_of_test_structures)
 
             self.argument_row = self.speed_printing
             self.argument_column = self.perimeter
 
         elif test_name == 'overlap':
-            # OVERLAP test parameter
+            # OVERLAP test
             self.overlap = np.linspace(3, 7, self.number_of_test_structures).tolist()
 
             self.argument_row = self.speed_printing
             self.argument_column = self.overlap
 
         elif test_name == 'path height':
-            # PATH HEIGHT test parameter
+            # PATH HEIGHT test
             self.coef_h, _ = minmax_path_height(machine, self.number_of_test_structures)
 
             self.argument_row = self.speed_printing
             self.argument_column = self.coef_h
+
+        elif test_name == 'temperature':
+            # EXTRUSION TEMPERATURE test
+            self.temperature_extruder = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
+
+            self.argument_row = self.speed_printing
+            self.argument_column = self.temperature_extruder
+
 
         self.title = addtitle(test_name, material)
         self.comment1 = addcomment1(self.argument_column, test_name, machine)
@@ -82,6 +97,9 @@ def addcomment1(argument_column, test_name: str, machine: Machine):
     elif test_name == 'path height':
         dummy = [x * machine.nozzle.size_id for x in argument_column]
         comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in dummy) + ' ---')
+    elif test_name == 'temperature':
+        dummy = [x * machine.nozzle.size_id for x in argument_column]
+        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} degC'.format(k) for k in dummy) + ' ---')
     else:
         pass
     return comment1

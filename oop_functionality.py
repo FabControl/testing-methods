@@ -12,26 +12,29 @@ footer = r'footer'
 
 
 class Prism(object):
-    def __init__(self, edges, x, y, z, circumradius, layers, coef_h, coef_w, perimeters=1, outline_overlap=1, cooling = 100, extrusion_multiplier=1, raft: bool = True, g= g): # TODO here all of the relevant properties should be explicitly defined!
+    def __init__(self, number_of_edges, x, y, z, circumradius, layers, coef_h, coef_w, coef_h_raft, coef_w_raft, perimeters=1, outline_overlap=1, coasting_distance = 0, cooling = 100, extrusion_multiplier=1, raft: bool = True, g: g = g): # TODO here all of the relevant properties should be explicitly defined!
         points = [[0, 0, 0, False]]
 
         self.origin = (x, y, z)  # To be used for Shapely drawing
-        self.center = (self.origin[0] + circumradius * math.cos(np.pi * (edges - 2) / (2 * edges)),
-                       self.origin[1] + circumradius * math.sin(np.pi * (edges - 2) / (2 * edges)))
+        self.center = (self.origin[0] + circumradius * math.cos(np.pi * (number_of_edges - 2) / (2 * number_of_edges)),
+                       self.origin[1] + circumradius * math.sin(np.pi * (number_of_edges - 2) / (2 * number_of_edges)))
         temp_speed = g.speed
         g.feed(100) # TODO
 
         if raft:
             g.abs_move(self.center[0], self.center[1], machine.settings.path_height, extrude=False)
             g.feed(8)  # set speed for raft TODO
-            sf.infill(sf.raft_structure(circumradius*1.35, "square"),1, g=g)
+            sf.infill(sf.raft_structure(circumradius*1.35, "square"), coef_w_raft = coef_w_raft, coef_h_raft=coef_h_raft, g=g, outlines=1)
             g.feed(temp_speed / 60)
 
         g.abs_move(x, y, z if not raft else z + 2 * machine.settings.path_height, extrude=False)  # TODO
 
         g.set_part_cooling(cooling)
 
-        side = circumradius * 2 * math.sin(np.pi / edges)
+        side = circumradius * 2 * math.sin(np.pi / number_of_edges)
+
+        number_of_edges_to_skip = int(coasting_distance / side)
+
         # angle = np.rad2deg(np.pi * (edges - 2) / edges)
 
         for l in range(0, layers):
@@ -42,14 +45,14 @@ class Prism(object):
                 step = (100 - outline_overlap) * machine.nozzle.size_id*coef_w / 100
 
                 if p != 0:
-                    if edges == 3:
-                        step_x = step / np.abs(math.sin(np.pi * (edges - 2) / (2*edges)))
+                    if number_of_edges == 3:
+                        step_x = step / np.abs(math.sin(np.pi * (number_of_edges - 2) / (2 * number_of_edges)))
                         step_y = step
-                    elif edges == 4:
+                    elif number_of_edges == 4:
                         step_x = step
-                        step_y = step * (1 / np.abs(math.sin(np.pi * (edges - 2) / edges)) + 1 / np.abs(math.tan(np.pi * (edges - 2) / edges)))
-                    elif edges > 4:
-                        step_x = step / np.abs(math.tan(np.pi * (edges - 2) / (2 * edges)))
+                        step_y = step * (1 / np.abs(math.sin(np.pi * (number_of_edges - 2) / number_of_edges)) + 1 / np.abs(math.tan(np.pi * (number_of_edges - 2) / number_of_edges)))
+                    elif number_of_edges > 4:
+                        step_x = step / np.abs(math.tan(np.pi * (number_of_edges - 2) / (2 * number_of_edges)))
                         step_y = step
 
                 elif p == 0:
@@ -58,13 +61,17 @@ class Prism(object):
 
                 points.append([step_x, step_y, 0, False])
 
-                for n in range(0, edges):
+                for n in range(0, number_of_edges):
 
-                    offset = 2 * step / np.abs(math.tan(np.pi * (edges - 2) / (2 * edges)))
+                    offset = 2 * step / np.abs(math.tan(np.pi * (number_of_edges - 2) / (2 * number_of_edges)))
 
-                    x_coord = (side - p * offset) * math.cos(2 * np.pi * n / edges)
-                    y_coord = (side - p * offset) * math.sin(2 * np.pi * n / edges)
-                    points.append([x_coord, y_coord, 0, True])
+                    x_coord = (side - p * offset) * math.cos(2 * np.pi * n / number_of_edges)
+                    y_coord = (side - p * offset) * math.sin(2 * np.pi * n / number_of_edges)
+
+                    if n <= number_of_edges - number_of_edges_to_skip:
+                        points.append([x_coord, y_coord, 0, True])
+                    else:
+                        points.append([x_coord, y_coord, 0, False])
 
             points.append([-step_x * p, -step_y * p, 0, False])
 

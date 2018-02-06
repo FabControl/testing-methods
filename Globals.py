@@ -45,21 +45,21 @@ except:
             "path_height_raft": 0.433,
             "speed_printing_raft": 20,
 
-            "temperature_extruder": 260,
-            "speed_printing": 60,
+            "temperature_extruder": 270,
+            "speed_printing": 50,
 
-            "path_height": 0.400,
+            "path_height": 0.200,
             "path_width": 0.800,
 
             "extrusion_multiplier": 1.000,
 
             "retraction_distance": 2.00,
             "retraction_restart_distance": 0.45,
-            "coasting_distance": 0.50,
-            "overlap": 5,
-            "perimeter": 5,
+            "coasting_distance": 0.0,
+            "overlap": 0,
+            "perimeter": 1,
             "matrix_size": 3,
-            "layer_count": 20,
+            "layer_count": 15,
             "safe_distance": 50,
             "number_of_test_structures": 7,
             "edges": 30
@@ -67,8 +67,8 @@ except:
         "session": {
             "uid": 123456,
             "previous_tests": [],
-            "test_type": 'A',
-            "test_name": []
+            "test_type": 'B',
+            "test_name": 'temperature'
         }
     }
 

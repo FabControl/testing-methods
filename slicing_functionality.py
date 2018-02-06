@@ -1,6 +1,6 @@
 from shapely.geometry import Polygon, LineString, LinearRing, MultiLineString, Point
 from shapely import affinity
-from Globals import machine, g, coef_w_raft, coef_h_raft
+from Globals import machine, g
 import numpy as np
 import math
 
@@ -35,7 +35,7 @@ def make_islands(points: list):
     return islands
 
 
-def find_intersections(polygon: Polygon):
+def find_intersections(polygon: Polygon, coef_w_raft):
     """
     Takes a shapely polygon as an input, finds the bounding box,
     plots vertical lines through the bounding box, using nozzle path width
@@ -232,7 +232,7 @@ def points_to_toolpaths(points, coef_w, coef_h, mode: str = "relative", g = g, r
     g.extrude = False
 
 
-def infill(polygon: Polygon, outlines: int = 1, debug: bool = False, g = g, coef_w = 1.0, coef_h=0.5):
+def infill(polygon: Polygon, coef_w_raft, coef_h_raft, g = g, outlines: int = 1, debug: bool = False):
 
     g.write("; Printing raft")
     def extrusion_switch(points: list):
@@ -256,7 +256,7 @@ def infill(polygon: Polygon, outlines: int = 1, debug: bool = False, g = g, coef
     for x in perimeter:
         points_final.extend(extrusion_switch(list(x.coords)))
 
-    output = make_islands(points_to_coords(find_intersections(poly)))
+    output = make_islands(points_to_coords(find_intersections(poly, coef_w_raft)))
     for island in output:
         # Pass islands to GCODE here
         points_final.extend(extrusion_switch(island))

@@ -250,11 +250,12 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
                          z=+ts.abs_z[dummy1], retraction_speed=ts.retraction_speed, retraction_distance=ts.retraction_distance[dummy1])
                 g.set_extruder_temperature(ts.temperature_extruder[dummy1])
                 g.dwell(30)
-                output = "G1 F500 E" + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + "; extrude " + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + " mm of material"
+                output = "G1 F500 E" + str(round(4 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + \
+                        "; extrude " + str(round(4 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + " mm of material"
                 g.write(output)
                 g.move(x=0,
                        y=-ts.test_structure_size / 5,
-                       z=-ts.abs_z[dummy1], extrude=False)
+                       z=-ts.abs_z[dummy1], extrude=True)
 
             g.feed(ts.speed_printing[dummy1])  # respect the units: mm/min
 
