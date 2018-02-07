@@ -46,12 +46,10 @@ def dimensional_test(ts: TestSetupB):
 
     for row in range(0, number_of_test_structures):
 
-        g.feed(speed_printing[row])
+        g.set_extruder_temperature(temperature_extruder[row])
 
         for column in range(0, number_of_test_structures):
             for stratum in range (0, matrix_vertical_size):
-
-                g.set_extruder_temperature(temperature_extruder[row])
 
                 strata_size = int(layers / matrix_vertical_size)
 
@@ -75,7 +73,7 @@ def dimensional_test(ts: TestSetupB):
                               cooling=100,
                               extrusion_multiplier=1,
                               raft=ts.raft,
-                              speed_printing = speed_printing[row],
+                              speed_printing = speed_printing[column],
                               g=g)
                 origin_matrix.append(prism.origin) if prism.origin[2] == 0 else None
 

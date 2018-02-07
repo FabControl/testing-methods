@@ -18,7 +18,6 @@ class Prism(object):
         self.origin = (x, y, z)  # To be used for Shapely drawing
         self.center = (self.origin[0] + circumradius * math.cos(np.pi * (number_of_edges - 2) / (2 * number_of_edges)),
                        self.origin[1] + circumradius * math.sin(np.pi * (number_of_edges - 2) / (2 * number_of_edges)))
-        speed_printing = speed_printing
 
         if raft:
             g.abs_move(self.center[0], self.center[1], machine.settings.path_height, extrude=False)
