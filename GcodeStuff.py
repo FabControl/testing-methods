@@ -133,7 +133,7 @@ class Gplus(G):
         self.write("G1 F" + str(retraction_speed * 60) + " E" + str(retraction_distance))
         self.feed(temp_speed)
 
-    def abs_travel(self, x=None, y=None, z=None, lift=0.2, retraction_speed=60, retraction_distance=3, **kwargs):
+    def abs_travel(self, x=None, y=None, z=None, speed=None, lift=0.2, retraction_speed=60, retraction_distance=3, **kwargs):
         """
         Travel absolute move method
         :param x:
@@ -144,11 +144,14 @@ class Gplus(G):
         :param kwargs:
         :return:
         """
+        temp_speed = self.speed / 60
+        self.feed(temp_speed * 2 if speed is None else speed)
         self.write("G1 F" + str(retraction_speed * 60) + " E" + str(-retraction_distance))
         self.move(z=lift)
         self.abs_move(x, y, z+lift, extrude=False, **kwargs)
         self.move(z=-lift)
         self.write("G1 F" + str(retraction_speed * 60) + " E" + str(retraction_distance))
+        self.feed(temp_speed)
 
     def feed(self, rate):
         """ Set the feed rate (tool head speed) in mm/s
