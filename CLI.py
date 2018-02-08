@@ -54,9 +54,9 @@ else:
     pass
 
 if import_json_dict["session"]["test_type"] == "A":
-    test = 'extrusion temperature' #'retraction distance' 'path height' 'extrusion temperature' 'retraction restart distance and coasting distance' 'extrusion temperature', 'first layer height', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance'
-    min_max_argument = [240, 300]
-    min_max_speed_printing = [30, 75] # check the jerk value
+    test = 'printing speed'  # 'retraction distance' 'path height' 'extrusion temperature' 'retraction restart distance and coasting distance' 'extrusion temperature', 'first layer height', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance'
+    min_max_argument = None
+    min_max_speed_printing = [30, 75]  # check the jerk value
 
     from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, flat_test_single_parameter, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
@@ -90,7 +90,7 @@ elif import_json_dict["session"]["test_type"] == "B":
     elif test == 'temperature':
             path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
 
-    ts = TestSetupB(machine, material, test, path, min_max_argument, min_max_speed_printing, raft = False)
+    ts = TestSetupB(machine, material, test, path, min_max_argument, min_max_speed_printing, raft = True)
     dimensional_test(ts)
 
 with open("persistence.json", mode="w") as file:

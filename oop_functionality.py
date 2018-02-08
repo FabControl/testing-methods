@@ -1,5 +1,4 @@
 import math
-
 import numpy as np
 
 import slicing_functionality as sf
@@ -12,21 +11,22 @@ footer = r'footer'
 
 
 class Prism(object):
-    def __init__(self, number_of_edges, x, y, z, circumradius, layers, coef_h, coef_w, coef_h_raft, coef_w_raft, speed_printing, perimeters=1, outline_overlap=1, coasting_distance = 0, cooling = 100, extrusion_multiplier=1, raft: bool = True, g: g = g): # TODO here all of the relevant properties should be explicitly defined!
-        points = [[0, 0, 0, False]]
+    def __init__(self, number_of_edges, x, y, z, circumradius, layers, extrusion_temperature, coef_h, coef_w, coef_h_raft, coef_w_raft, speed_printing, perimeters=1, outline_overlap=1, coasting_distance = 0, cooling = 100, extrusion_multiplier=1, raft: bool = True, g: g = g): # TODO here all of the relevant properties should be explicitly defined!
+        points = [[0, 0, machine.nozzle.size_id*coef_h, False]]
 
         self.origin = (x, y, z)  # To be used for Shapely drawing
         self.center = (self.origin[0] + circumradius * math.cos(np.pi * (number_of_edges - 2) / (2 * number_of_edges)),
                        self.origin[1] + circumradius * math.sin(np.pi * (number_of_edges - 2) / (2 * number_of_edges)))
 
+        g.set_extruder_temperature(extrusion_temperature)
         if raft:
-            g.abs_move(self.center[0], self.center[1], machine.settings.path_height, extrude=False)
-            g.feed(8)  # set speed for raft TODO
+            g.abs_travel(self.center[0], self.center[1], machine.nozzle.size_id*coef_h_raft, speed=400, rapid=True)
+            g.feed(machine.settings.speed_printing_raft)
             sf.infill(sf.raft_structure(circumradius*1.35, "square"), coef_w_raft = coef_w_raft, coef_h_raft=coef_h_raft, g=g, outlines=1)
 
         g.feed(speed_printing)
 
-        g.abs_move(x, y, z if not raft else z + 2 * machine.settings.path_height, extrude=False)  # TODO
+        g.abs_travel(x, y, z if not raft else z + 2 * machine.settings.path_height, speed=400, rapid=True)
 
         g.set_part_cooling(cooling)
 
@@ -83,6 +83,7 @@ class Prism(object):
                 g.move(x=point[0], y=point[1], z=point[2], coef_h=0, coef_w=0, extrude=False)
                 #g.feed(temp_speed / 60)
 
+        g.set_part_cooling(0)
         g.move(z=10, extrude=False) # Large lift between structures
         g.extrude = False
 

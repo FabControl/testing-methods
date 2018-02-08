@@ -132,6 +132,7 @@ def make_raft_structures(origin_matrix, circumradius, edges, safe_distance):
 
 
         dilated = structure.buffer(2)
+        # DO NOT DELETE! This generates the connecting arms between the structures.
         # for direction in range(4):
         #     # Filter out the border cases
         #     if origin[0] == min_origin[0] and direction == 3:
@@ -175,7 +176,7 @@ def rotate(points, origin, angle):
     """
     Rotate a point counterclockwise by a given angle around a given origin.
 
-    The angle should be given in radians.
+    The angle should be given in degrees.
     """
     angle = math.radians(angle)
     output = []
@@ -267,7 +268,7 @@ def infill(polygon: Polygon, coef_w_raft, coef_h_raft, g = g, outlines: int = 1,
 
 def raft_structure(circumradius:int or float, structure: str = "circle"):
     """
-    Takes circumradius (int or float), and exports a shapely circle as a polygon
+    Takes circumradius (int or float), and exports a shapely circle or a square as a polygon
     :param circumradius: Circumradius of the raft structure
     :type circumradius: int or float
     :param structure: Type of geometry

@@ -38,7 +38,7 @@ except:
             "temperature_printbed": 40,
             "part_cooling": 100,
 
-            "raft_density": 100,
+            "raft_density": 85,
 
             "temperature_extruder_raft": 240,
 
@@ -48,7 +48,7 @@ except:
             "temperature_extruder": 270,
             "speed_printing": 50,
 
-            "path_height": 0.300,
+            "path_height": 0.328,
             "path_width": 0.800,
 
             "extrusion_multiplier": 1.000,
@@ -68,7 +68,7 @@ except:
             "uid": 123456,
             "previous_tests": [],
             "test_type": 'A',
-            "test_name": 'extrusion temperature'
+            "test_name": 'path width'
         }
     }
 

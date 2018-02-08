@@ -1,11 +1,13 @@
 import Definitions
 from TestSetupA import TestSetupA
+from TestSetupB import TestSetupB
 import slicing_functionality as sf
 from Definitions import *
 from Globals import machine, material
 
+
 # WIPE
-def wipe(ts: TestSetupA):
+def wipe(ts: TestSetupA or TestSetupB, full = True):
     test_structure_size = ts.test_structure_size
     coef_w_raft = ts.coef_w_raft
     coef_h_raft = ts.coef_h_raft
@@ -28,19 +30,34 @@ def wipe(ts: TestSetupA):
     g.write(output)
     g.dwell(5)
     g.feed(machine.settings.speed_printing_raft)  # print the raft
-    g.abs_move(x=+6 * test_structure_size / 10,
-               y=-6 * test_structure_size / 10,
+    if isinstance(ts, TestSetupA):
+        g.abs_move(x=+6 * test_structure_size / 10,
+                   y=-6 * test_structure_size / 10,
+                   z=0,
+                   extrude=True, extrusion_multiplier=2.25, coef_h=coef_h_raft, coef_w=coef_w_raft)
+        g.move(x=0,
+               y=+test_structure_size / 10,
+               z=+coef_h_raft * machine.nozzle.size_id,
+               extrude=False, extrusion_multiplier=0)
+        g.move(x=-test_structure_size / 10,
+               y=0,
                z=0,
-               extrude=True, extrusion_multiplier=2.25, coef_h=coef_h_raft, coef_w=coef_w_raft)
-    g.move(x=0,
-           y=+test_structure_size / 10,
-           z=+coef_h_raft * machine.nozzle.size_id,
-           extrude=False, extrusion_multiplier=0)
-    g.move(x=-test_structure_size / 10,
-           y=0,
-           z=0,
-           extrude=False, extrusion_multiplier=0)
+               extrude=False, extrusion_multiplier=0)
+    elif isinstance(ts, TestSetupB):
+        g.abs_move(x=+6 * test_structure_size / 10,
+                   y=-6 * test_structure_size / 10,
+                   z=0,
+                   extrude=True, extrusion_multiplier=2.25, coef_h=coef_h_raft, coef_w=coef_w_raft)
+        g.move(x=0,
+               y=-test_structure_size / 10,
+               z=+coef_h_raft * machine.nozzle.size_id,
+               extrude=False, extrusion_multiplier=0)
+        g.move(x=-test_structure_size / 10,
+               y=0,
+               z=0,
+               extrude=False, extrusion_multiplier=0)
     g.write("; --- end to clean the nozzle ---")
+
 
 # RAFT PERIMETER
 def raft_perimeter(ts: TestSetupA):

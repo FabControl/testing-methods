@@ -2,6 +2,7 @@ import Definitions
 from TestSetupB import TestSetupB
 import slicing_functionality as sf
 from Definitions import *
+from DefinitionsTestsA import wipe
 from Globals import machine, material
 from oop_functionality import Prism
 
@@ -20,6 +21,8 @@ def dimensional_test(ts: TestSetupB):
     layers = 30
 
     speed_printing = ts.argument_row
+
+    wipe(ts, full=False)  # Shortened form of wipe, so that it does not interfere with a test struture
 
     if ts.test_name == 'perimeter':
         perimeter = ts.argument_column
@@ -46,10 +49,10 @@ def dimensional_test(ts: TestSetupB):
 
     for row in range(0, number_of_test_structures):
 
-        g.set_extruder_temperature(temperature_extruder[row])
-
         for column in range(0, number_of_test_structures):
-            for stratum in range (0, matrix_vertical_size):
+            for stratum in range(0, matrix_vertical_size):
+
+                g.feed(speed_printing[column])
 
                 strata_size = int(layers / matrix_vertical_size)
 
@@ -62,6 +65,7 @@ def dimensional_test(ts: TestSetupB):
                               (row    - (number_of_test_structures - 1)/2) * (safe_distance) - circumradius * math.sin(np.pi * (edges - 2) / (2 * edges)),
                               stratum * strata_size * ts.coef_h[column] * machine.nozzle.size_id,
                               circumradius=circumradius,
+                              extrusion_temperature=temperature_extruder[row],
                               layers=strata_size,
                               coef_h=coef_h[column],
                               coef_w=ts.coef_w[column],

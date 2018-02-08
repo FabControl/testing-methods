@@ -95,6 +95,8 @@ class TestSetupA(object):
         elif test_name == 'printing speed':
             # PRINTING SPEED test parameters
 
+            self.number_of_lines = int(self.number_of_lines/2)
+
             if min_max_argument is None:
                 self.speed_printing = minmax_speed_printing(machine)
             else:
