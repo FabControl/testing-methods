@@ -111,7 +111,7 @@ class Settings(object):
     def __init__(self, material=None, nozzle=None, path_width=None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
                  temperature_printbed_raft=None, extrusion_multiplier_raft=None, speed_printing_raft=None, temperature_extruder=None,
                  temperature_printbed=None, extrusion_multiplier=None, speed_printing=None, retraction_distance = None, retraction_restart_distance = None,
-                 coasting_distance = None, part_cooling=None, raft_density=None, number_of_test_structures = None, optimize_temperature_printbed = None, optimize_speed_printing = None, optimize_path_height = None,                    get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, *args, **kwargs):
+                 coasting_distance = None, part_cooling=None, raft_density=None, number_of_test_structures = None, optimize_temperature_printbed = None, optimize_speed_printing = None, optimize_path_height = None, get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
         self.tests = []
         self.machines = []
         self.aesthetics = []  # aim for aesthetics
@@ -145,6 +145,7 @@ class Settings(object):
         self.perimeter = perimeter
         self.overlap = overlap
         self.matrix_size = matrix_size
+        self.layers = layers
 
 
         if material is None:

@@ -278,37 +278,53 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
 
                 step_x = ts.step_x[dummy1]
 
-                for dummy2 in range(0, 4):
+                dummy2_range = range(4)
+                for dummy2 in dummy2_range:
                     current_printing_speed = ts.min_max_speed_printing[dummy2]
                     g.write('; --- testing the following printing speed value: %.3f mm/s' % (current_printing_speed))
                     g.feed(current_printing_speed)
 
                     number_of_lines = int(ts.number_of_lines/2)
-
-                    for dummy0 in range(0, 2): # layers
+                    dummy0_range = range(2 if ts.test_name != "first layer height" else 1)
+                    for dummy0 in dummy0_range: # layers
                         dummy3_range = range(0, number_of_lines)
+                        if dummy0 != 0:
+                            g.move(z=ts.coef_h[dummy1] * machine.nozzle.size_id)  # move to the next floor
 
                         for dummy3 in dummy3_range:
-
-                            g.move(x=(-1)**(dummy0 + 1) * step_x,
-                                   y=0,
-                                   z=0,
-                                   extrude=False)
-                            g.move(x=0,
-                                   y=(-1)**(dummy3 + 1) * ts.step_y/4,
-                                   z=0,
-                                   extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
-
-                        if dummy0 == 1:
-                            g.move(x=0,
-                                   y=-ts.step_y/4,
-                                   z=-ts.coef_h[dummy1] * machine.nozzle.size_id,
-                                   extrude=False)
-                        else:
-                            g.move(x=-step_x,
-                                   y=0,
-                                   z=+ts.coef_h[dummy1]*machine.nozzle.size_id,
-                                   extrude=False)
+                            if dummy0 % 2 != 0:
+                                g.move(x=(-1)**(dummy0 + 1) * step_x,
+                                       y=0,
+                                       z=0,
+                                       extrude=False)
+                                g.move(x=0,
+                                       y=(-1)**(dummy3 + 1) * ts.step_y/4,
+                                       z=0,
+                                       extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
+                            else:
+                                g.move(x=0,
+                                       y=(-1) ** (dummy3 + 1) * ts.step_y / 4,
+                                       z=0,
+                                       extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1],
+                                       coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
+                                g.move(x=(-1) ** (dummy0 + 1) * step_x,
+                                       y=0,
+                                       z=0,
+                                       extrude=False)
+                    g.move(x=0,
+                           y=-ts.step_y/4,
+                           extrude=False)  # Y step after substructure. Y and Z should be separated and staged
+                    if len(dummy0_range) % 2 != 0:  # check if even layer amount
+                        g.move(x=step_x * number_of_lines,
+                               extrude=False)
+                    g.move(z=-ts.coef_h[dummy1] * machine.nozzle.size_id * (len(dummy0_range)-1),
+                           extrude=False)
+                    if dummy2 != len(dummy2_range)-1:
+                        g.move(x=-step_x,
+                               y=0,
+                               z=0,
+                               extrude=False)  # small X step
+                    # g.move(z=+ts.coef_h[dummy1]*machine.nozzle.size_id,)
 
         g.write("; --- finish to print the test structure ---")
         g.teardown()
@@ -336,7 +352,7 @@ def retraction_distance(ts: TestSetupA):
         g.set_extruder_temperature(ts.temperature_extruder[dummy2])
         g.write(ts.comment2[dummy2])
 
-        for dummy3 in range(0, 4): # layers
+        for dummy3 in range(0, 2): # layers
 
             g.abs_move(x=+ts.test_structure_size / 2 - (2 * dummy2 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
                        y=+ts.test_structure_size / 2,

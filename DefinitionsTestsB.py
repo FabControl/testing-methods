@@ -18,7 +18,7 @@ def dimensional_test(ts: TestSetupB):
     safe_distance = 50
     circumradius = 7
     edges = 50
-    layers = 30
+    layers = 15
 
     speed_printing = ts.argument_row
 
@@ -54,7 +54,7 @@ def dimensional_test(ts: TestSetupB):
 
                 g.feed(speed_printing[column])
 
-                strata_size = int(layers / matrix_vertical_size)
+                strata_size = layers
 
                 output = str("; --- Start to print regular %s-polygon with path height of %s mm and path width of %s mm ---" %
                              (edges, round(machine.nozzle.size_id * ts.coef_h[column], 3), round(machine.nozzle.size_id * ts.coef_w[column], 3)))

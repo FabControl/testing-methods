@@ -9,13 +9,13 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "FPU 77D",
-            "manufacturer": "Covestro",
+            "name": "Nylon",
+            "manufacturer": "Filakemp",
             "id": "123456",
             "size_od": 1.75,
-            "temperature_melting": 235,
+            "temperature_melting": 210,
             "temperature_destr": 300,
-            "temperature_vicat": 95
+            "temperature_vicat": 144
         },
         "machine": {
             "manufacturer": "Mass Portal",
@@ -23,7 +23,7 @@ except:
             "buildarea_maxdim1": 145,
             "buildarea_maxdim2": 145,
             "max_dimension_z": 200,
-            "temperature_max": 450,
+            "temperature_max": 300,
             "size_extruder_id": 1.95,
             "nozzle": {
                 "size_id": 0.80,
@@ -34,21 +34,21 @@ except:
             }
         },
         "settings": {
-            "temperature_printbed_raft": 40,
-            "temperature_printbed": 40,
+            "temperature_printbed_raft": 110,
+            "temperature_printbed": 110,
             "part_cooling": 100,
 
-            "raft_density": 85,
+            "raft_density": 95,
 
             "temperature_extruder_raft": 240,
 
-            "path_height_raft": 0.433,
+            "path_height_raft": 0.4,
             "speed_printing_raft": 20,
 
-            "temperature_extruder": 270,
+            "temperature_extruder": 240,
             "speed_printing": 50,
 
-            "path_height": 0.328,
+            "path_height": 0.4,
             "path_width": 0.800,
 
             "extrusion_multiplier": 1.000,

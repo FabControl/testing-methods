@@ -127,6 +127,8 @@ class TestSetupA(object):
         elif test_name == 'retraction distance':
             # RETRACTION DISTANCE test parameters
 
+            self.number_of_lines = int(self.number_of_lines / 2)
+
             if min_max_argument is None:
                 self.retraction_distance = np.linspace(0.0, 4.0, self.number_of_test_structures).tolist()
             else:
@@ -160,6 +162,9 @@ class TestSetupA(object):
                        extrusion_width=self.coef_w_raft * machine.nozzle.size_id,
                        aerotech_include=False, footer=footer, header=header, extrude=True,
                        extrusion_multiplier=machine.settings.extrusion_multiplier_raft)
+
+        def get_values():
+            return [min(self.argument), max(self.argument)]
 
 
 def addtitle(test_name: str, material: Material):
