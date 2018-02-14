@@ -559,7 +559,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
     return
 
 
-# # BRIDGING TEST TODO
+# # BRIDGING TEST overhang test TODO
 # def test9(material: Material, path: str):
 #     coef_h_raft, coef_h_min_raft, coef_h_max_raft, coef_w_raft, coef_h_raft_all = minmax_path_width_height_raft(machine)
 #

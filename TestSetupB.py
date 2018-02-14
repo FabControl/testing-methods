@@ -74,7 +74,6 @@ class TestSetupB(object):
             self.argument_row = self.speed_printing
             self.argument_column = self.temperature_extruder
 
-
         self.title = addtitle(test_name, material)
         self.comment1 = addcomment1(self.argument_column, test_name, machine)
         self.comment2 = addcomment2(self.coef_h, self.coef_w, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine) # TODO

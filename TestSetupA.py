@@ -62,6 +62,8 @@ class TestSetupA(object):
         if test_name == 'first layer height':
             # FIRST LAYER HEIGHT test parameters
 
+            self.units = 'mm'
+
             if min_max_argument is None:
                 self.coef_h = np.linspace(self.coef_h_min_raft, self.coef_h_max_raft, self.number_of_test_structures).tolist()
             else:
@@ -72,6 +74,8 @@ class TestSetupA(object):
 
         elif test_name == 'path height':
             # PATH HEIGHT test parameters
+
+            self.units = 'mm'
 
             if min_max_argument is None:
                 self.coef_h, coef_h_mean = minmax_path_height(machine, self.number_of_test_structures)
@@ -84,6 +88,8 @@ class TestSetupA(object):
         elif test_name == 'path width':
             # PATH WIDTH test parameters
 
+            self.units = 'mm'
+
             if min_max_argument is None:
                 self.coef_w, coef_w_mean = minmax_path_width(machine)
             else:
@@ -94,6 +100,8 @@ class TestSetupA(object):
 
         elif test_name == 'printing speed':
             # PRINTING SPEED test parameters
+
+            self.units = 'mm/s'
 
             self.number_of_lines = int(self.number_of_lines/2)
 
@@ -107,6 +115,8 @@ class TestSetupA(object):
         elif test_name == 'extrusion multiplier':
             # EXTRUSION MULTIPLIER test parameters
 
+            self.units = '-'
+
             if min_max_argument is None:
                 self.extrusion_multiplier = minmax_extrusion_multiplier(machine)
             else:
@@ -117,6 +127,8 @@ class TestSetupA(object):
         elif test_name == 'extrusion temperature':
             # EXTRUSION TEMPERATURE test parameters
 
+            self.units = 'degC'
+
             if min_max_argument is None:
                 self.temperature_extruder = minmax_temperature(material, machine)
             else:
@@ -126,6 +138,8 @@ class TestSetupA(object):
 
         elif test_name == 'retraction distance':
             # RETRACTION DISTANCE test parameters
+
+            self.units = 'mm'
 
             self.number_of_lines = int(self.number_of_lines / 2)
 
@@ -138,6 +152,8 @@ class TestSetupA(object):
 
         elif test_name == 'retraction restart distance and coasting distance':
             # RETRACTION RESTART DISTANCE amd COASTING DISTANCE test parameters
+
+            self.units = 'mm'
 
             if min_max_argument is None:
                 self.retraction_restart_distance = np.linspace(0.0, 3.0, self.number_of_test_structures).tolist()

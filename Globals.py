@@ -76,4 +76,4 @@ material = Material(**import_json_dict["material"])
 machine = Machine(**import_json_dict["machine"])
 machine.settings = Settings(nozzle=machine.nozzle, material=material, **import_json_dict["settings"])
 g = Gplus(material, machine, outfile="placeholder.gcode", footer=footer, header=header, aerotech_include=False)
-coef_h_raft, coef_h_min_raft, coef_h_max_raft, coef_w_raft, coef_h_raft_all = minmax_path_width_height_raft(machine) #TODO reallz needed?
+coef_h_raft, coef_h_min_raft, coef_h_max_raft, coef_w_raft, coef_h_raft_all = minmax_path_width_height_raft(machine) #TODO really needed?

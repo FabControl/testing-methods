@@ -76,12 +76,9 @@ class Prism(object):
 
         for i, point in enumerate(points):
             if point[3] is True:
-                g.move(x=point[0], y=point[1], z=point[2], coef_h=coef_h, coef_w=coef_w, extrude=True)
+                g.move(x=point[0], y=point[1], z=point[2], coef_h=coef_h, coef_w=coef_w, extrusion_multiplier=extrusion_multiplier, extrude=True)
             elif point[3] is False:
-                #temp_speed = g.speed
-                #g.feed(100)
                 g.move(x=point[0], y=point[1], z=point[2], coef_h=0, coef_w=0, extrude=False)
-                #g.feed(temp_speed / 60)
 
         g.set_part_cooling(0)
         g.move(z=10, extrude=False) # Large lift between structures
@@ -98,9 +95,9 @@ def points_to_toolpaths(points: list, coef_h, coef_w, g=g):
         if point[3] is None:
             point[3] = True
         if point[3] is True:
-            g.move(x=point[0], y=point[1], z=point[2], coef_h=coef_h, coef_w=coef_w, extrude=True)
+            g.move(x=point[0], y=point[1], z=point[2], coef_h=coef_h, coef_w=coef_w, extrusion_multiplier=extrusion_multiplier, extrude=True)
         elif point[3] is False:
-            g.move(x=point[0], y=point[1], z=point[2], coef_h=coef_h, coef_w=coef_w, extrude=True)
+            g.move(x=point[0], y=point[1], z=point[2], coef_h=coef_h, coef_w=coef_w, extrusion_multiplier=extrusion_multiplier, extrude=True)
 
 
 def clean_nozzle():
