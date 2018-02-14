@@ -87,6 +87,9 @@ class TestSetupA(object):
             self.argument = [round(x, 3) for x in self.coef_h]
             self.values = [round(x, 3) * machine.nozzle.size_id for x in self.coef_h]
 
+            print(self.argument)
+            print(self.values)
+
         elif test_name == 'path width':
             # PATH WIDTH test parameters
 
@@ -177,7 +180,7 @@ class TestSetupA(object):
 
 
         self.title = addtitle(test_name, material)
-        self.comment1 = addcomment1(self.argument, test_name, machine)
+        self.comment1 = addcomment1(self.values, test_name, machine)
         self.comment2 = addcomment2(self.coef_h, self.coef_w, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine) # TODO
 
         self.g = Gplus(material, machine,
@@ -197,24 +200,23 @@ def addtitle(test_name: str, material: Material):
     return title
 
 
-def addcomment1(argument, test_name: str, machine: Machine):
+def addcomment1(values, test_name: str, machine: Machine):
     if test_name == 'printing speed':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm/s'.format(k) for k in argument) + ' ---')
+        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm/s'.format(k) for k in values) + ' ---')
     elif test_name == 'temperature':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} degC'.format(k) for k in argument) + ' ---')
+        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} degC'.format(k) for k in values) + ' ---')
     elif test_name == 'first layer height':
-        argument_new = [x * machine.nozzle.size_id for x in argument]
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in argument_new) + ' ---')
+        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in values) + ' ---')
     elif test_name == 'extrusion multiplier':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f}'.format(k) for k in argument) + ' ---')
+        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f}'.format(k) for k in values) + ' ---')
     elif test_name == 'extrusion temperature':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} degC'.format(k) for k in argument) + ' ---')
+        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} degC'.format(k) for k in values) + ' ---')
     elif test_name == 'retraction distance':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in argument) + ' ---')
+        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in values) + ' ---')
     elif test_name == 'retraction restart distance and coasting distance':
-        comment1 = str('; --- testing the following ' + test_name[:27] + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in argument[0]) + ' and the following' + test_name[31:] + ' values: ' + ', '.join('{:.3f} mm'.format(j) for j in argument[1]) + ' ---')
+        comment1 = str('; --- testing the following ' + test_name[:27] + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in values[0]) + ' and the following' + test_name[31:] + ' values: ' + ', '.join('{:.3f} mm'.format(j) for j in values[1]) + ' ---')
     else:
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in [x * machine.nozzle.size_id for x in argument]) + ' ---')
+        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in [x for x in values]) + ' ---')
 
     return comment1
 
@@ -222,8 +224,7 @@ def addcomment1(argument, test_name: str, machine: Machine):
 def addcomment2(coef_h, coef_w, speed_printing, extrusion_multiplier, temperature_extruder, retraction_distance, retraction_restart_distance, machine):
     comment2 = []
     for dummy1 in range(0, machine.settings.number_of_test_structures):
-        addcomment2 = str("; --- path height: %.3f mm, path width: %.3f mm, printing speed: %.1f mm/s, extrusion multiplier: %.2f, extrusion temperature: %.0f degC, retraction distance: %.3f mm, retraction restart distance: %.3f mm  ---" % (
-                            round(coef_h[dummy1] * machine.nozzle.size_id, 3),
+        addcomment2 = str("; --- path height: %.3f mm, path width: %.3f mm, printing speed: %.1f mm/s, extrusion multiplier: %.2f, extrusion temperature: %.0f degC, retraction distance: %.3f mm, retraction restart distance: %.3f mm  ---" % (round(coef_h[dummy1] * machine.nozzle.size_id, 3),
                             round(coef_w[dummy1] * machine.nozzle.size_id, 3),
                             round(speed_printing[dummy1], 2),
                             round(extrusion_multiplier[dummy1], 2),

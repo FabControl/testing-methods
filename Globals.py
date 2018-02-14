@@ -46,10 +46,10 @@ except:
             "speed_printing_raft": 20,
 
             "temperature_extruder": 240,
-            "speed_printing": 50,
+            "speed_printing": 60,
 
             "path_height": 0.4,
-            "path_width": 0.800,
+            "path_width": 0.8,
 
             "extrusion_multiplier": 1.000,
 
