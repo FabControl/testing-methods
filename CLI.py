@@ -54,9 +54,10 @@ else:
     pass
 
 if import_json_dict["session"]["test_type"] == "A":
-    test = 'path height'  # 'retraction distance' 'path height' 'extrusion temperature' 'retraction restart distance and coasting distance' 'extrusion temperature', 'first layer height', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance'
+    test = 'printing speed'  # 'retraction distance' 'path height' 'extrusion temperature' 'retraction restart distance and coasting distance' 'extrusion temperature', 'first layer height', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance'
     min_max_argument = [0.3, 0.6]
     min_max_speed_printing = [30, 75]  # check the jerk value
+
 
     from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, flat_test_single_parameter, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
@@ -93,11 +94,10 @@ elif import_json_dict["session"]["test_type"] == "B":
     ts = TestSetupB(machine, material, test, path, min_max_argument, min_max_speed_printing, raft = True)
     dimensional_test(ts)
 
-
 # Add a step for selecting/approving of the result TODO
 ## Working with buffered content
 previous_tests = import_json_dict["session"]["previous_tests"]
-current_test = {"test_name": ts.test_name, "tested_values": [round(k, 3) for k in ts.argument], "selected_value": [], "units": ts.units}
+current_test = {"test_name": ts.test_name, "tested_values": ts.argument, "selected_value": 0, "units": ts.units}
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
 

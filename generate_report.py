@@ -5,12 +5,13 @@ from reportlab.lib.pagesizes import A4, inch, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle, StyleSheet1
 import json, os
+from datetime import datetime
 
 with open("persistence.json", mode="r") as file:
     import_json_dict = json.load(file)
 
 
-report_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' ' + str(import_json_dict["material"]["size_od"]) + 'mm'
+report_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' ' + str(import_json_dict["material"]["size_od"]) + ' mm'
 
 doc = SimpleDocTemplate(report_name + '.pdf',
                         pagesize=A4,
@@ -41,9 +42,15 @@ elements.append(im)
 elements.append(Paragraph(report_name, style=heading_style))
 elements.append(Spacer(1, 0.5*inch))
 
+datetime_info = "Report generated on: " + datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+elements.append(Paragraph(datetime_info, style=text_style))
 main_info = "Material: " + import_json_dict["material"]["name"]
 elements.append(Paragraph(main_info, style=text_style))
-main_info = "Manufacturer: " + import_json_dict["material"]["manufacturer"] + "\n"
+main_info = "Manufacturer: " + import_json_dict["material"]["manufacturer"]
+elements.append(Paragraph(main_info, style=text_style))
+main_info = "Machine: " + import_json_dict["machine"]["model"]
+elements.append(Paragraph(main_info, style=text_style))
+main_info = "Nozzle: " + str(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm"
 elements.append(Paragraph(main_info, style=text_style))
 elements.append(Spacer(1, 0.5*inch))
 
@@ -70,7 +77,7 @@ style = TableStyle([
 # s = s["BodyText"]
 # s.wordWrap = 'CJK'
 
-colwidths = (75, 90, 60, 240, 60)
+colwidths = (75, 90, 50, 240, 60)
 data2 = [[Paragraph(cell, text_style) for cell in row] for row in data]
 t = Table(data2, colwidths)
 t.setStyle(style)

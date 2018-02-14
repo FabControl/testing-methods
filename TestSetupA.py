@@ -70,7 +70,8 @@ class TestSetupA(object):
                 self.coef_h = np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
 
             self.abs_z = [x * machine.nozzle.size_id for x in self.coef_h]
-            self.argument = self.coef_h
+            self.argument = [round(x, 3) for x in self.coef_h]
+            self.values = [round(x, 3)*machine.nozzle.size_id for x in self.coef_h]
 
         elif test_name == 'path height':
             # PATH HEIGHT test parameters
@@ -83,7 +84,8 @@ class TestSetupA(object):
                 self.coef_h = np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
 
             self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
-            self.argument = self.coef_h
+            self.argument = [round(x, 3) for x in self.coef_h]
+            self.values = [round(x, 3) * machine.nozzle.size_id for x in self.coef_h]
 
         elif test_name == 'path width':
             # PATH WIDTH test parameters
@@ -96,7 +98,8 @@ class TestSetupA(object):
                 self.coef_w = np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
 
             self.step_x = [x * machine.nozzle.size_id for x in self.coef_w]
-            self.argument = self.coef_w
+            self.argument = [round(x, 3) for x in self.coef_w]
+            self.values = [round(x, 3) * machine.nozzle.size_id for x in self.coef_w]
 
         elif test_name == 'printing speed':
             # PRINTING SPEED test parameters
@@ -110,7 +113,8 @@ class TestSetupA(object):
             else:
                 self.speed_printing = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
-            self.argument = self.speed_printing
+            self.argument = [round(x, 1) for x in self.speed_printing]
+            self.values = self.argument
 
         elif test_name == 'extrusion multiplier':
             # EXTRUSION MULTIPLIER test parameters
@@ -122,7 +126,8 @@ class TestSetupA(object):
             else:
                 self.extrusion_multiplier = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
-            self.argument = self.extrusion_multiplier
+            self.argument = [round(x, 3) for x in self.extrusion_multiplier]
+            self.values = self.argument
 
         elif test_name == 'extrusion temperature':
             # EXTRUSION TEMPERATURE test parameters
@@ -134,7 +139,8 @@ class TestSetupA(object):
             else:
                 self.temperature_extruder = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
-            self.argument = self.temperature_extruder
+            self.argument = [round(x, 1) for x in self.temperature_extruder]
+            self.values = self.argument
 
         elif test_name == 'retraction distance':
             # RETRACTION DISTANCE test parameters
@@ -148,7 +154,8 @@ class TestSetupA(object):
             else:
                 self.retraction_distance = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
-            self.argument = self.retraction_distance
+            self.argument = [round(x, 2) for x in self.retraction_distance]
+            self.values = self.argument
 
         elif test_name == 'retraction restart distance and coasting distance':
             # RETRACTION RESTART DISTANCE amd COASTING DISTANCE test parameters
@@ -162,6 +169,7 @@ class TestSetupA(object):
 
             self.coasting_distance = np.linspace(0.00, 1.25, 4).tolist()
             self.argument = [self.retraction_restart_distance, self.retraction_restart_distance]
+            self.values = self.argument
 
         else:
             print('Unknown test')
