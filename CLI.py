@@ -132,8 +132,7 @@ else:
 if ts.test_name == "retraction distance":
     tested_speed_values = []
 
-current_test = {"test_name": ts.test_name, "tested_values": ts.values, "tested_speed_values": tested_speed_values, "selected_value": 0, "selected_speed_printing_value": 0, "units": ts.units}
-current_test = {"test_name": ts.test_name, "tested_values": ts.values, "tested_speed_values": np.linspace(min_max_speed_printing[0],min_max_speed_printing[1],4).tolist(), "selected_value": evaluate(input("Enter the selected value: ")) if not quiet else 0, "selected_speed_printing_value": evaluate(input("Enter the selected speed value: ")) if not quiet else 0, "units": ts.units}
+current_test = {"test_name": ts.test_name, "tested_values": ts.values, "tested_speed_values": tested_speed_values, "selected_value": evaluate(input("Enter the selected value: ")) if not quiet else 0, "selected_speed_printing_value": evaluate(input("Enter the selected speed value: ")) if not quiet else 0, "units": ts.units}
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
 
