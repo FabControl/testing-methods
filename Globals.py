@@ -9,12 +9,12 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "PC-Max",
-            "manufacturer": "PM",
+            "name": "Arnite",
+            "manufacturer": "Nexeo",
             "id": "123456",
             "size_od": 1.75,
-            "temperature_melting": 220,
-            "temperature_destr": 310,
+            "temperature_melting": 235,
+            "temperature_destr": 330,
             "temperature_vicat": 100
         },
         "machine": {
@@ -40,12 +40,12 @@ except:
 
             "raft_density": 75,
 
-            "temperature_extruder_raft": 230,
+            "temperature_extruder_raft": 270,
 
             "path_height_raft": 0.3,
-            "speed_printing_raft": 20,
+            "speed_printing_raft": 30,
 
-            "temperature_extruder": 250,
+            "temperature_extruder": 270,
             "speed_printing": 40,
 
             "path_height": 0.3,
