@@ -186,8 +186,8 @@ class TestSetupA(object):
                        aerotech_include=False, footer=footer, header=header, extrude=True,
                        extrusion_multiplier=machine.settings.extrusion_multiplier_raft)
 
-        def get_values():
-            return [min(self.argument), max(self.argument)]
+    def get_values(self):
+        return self.values
 
 
 def addtitle(test_name: str, material: Material):

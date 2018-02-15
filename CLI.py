@@ -3,7 +3,24 @@ MP MT Framework.
 
 Usage:
     CLI.py
+    CLI.py test [-v] [-q]
+    CLI.py new-test
+    CLI.py generate-report
 """
+
+from docopt import docopt
+quiet = None
+verbose = None
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='MP Material Testing Suite')
+
+    verbose = arguments["-v"]
+    quiet = arguments["-q"]
+
+    if arguments["generate-report"]:
+        import generate_report
+        quit()
+
 from Calculations import shear_rate, pressure_drop, rheology
 from CheckCompatibility import check_compatibility
 from Definitions import *
@@ -11,8 +28,10 @@ from OptimizeSettings import check_printbed_temperature, check_printing_speed_sh
 from Plotting import plotting_mfr
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
-import time
 from Globals import machine, material, import_json_dict
+from CLI_helpers import evaluate
+import time
+import os
 
 start = time.time()
 
@@ -44,33 +63,33 @@ if machine.settings.optimize_speed_printing == True:
 
         if dummy0 == number_of_iterations:
             plotting_mfr(material, machine, gamma_dot, visc, param_power_law)
-        else:
-            pass
 
     check_printing_speed_shear_rate(machine, gamma_dot_out)
     check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
 
-else:
-    pass
+if not verbose:
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 if import_json_dict["session"]["test_type"] == "A":
-    test = 'first layer height' # 'first layer height', 'extrusion temperature', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance'
-    min_max_argument = None
-    min_max_speed_printing = [10, 30]  # check the jerk value
+    test = import_json_dict["session"]["test_name"] if quiet else input("Enter the name of the test to be performed: ")  # 'retraction distance' 'path height' 'extrusion temperature' 'retraction restart distance and coasting distance' 'extrusion temperature', 'first layer height', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance'
+    min_max_argument_input = evaluate(input("Enter a test value override as a range: ")) if not quiet else None
+    min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
+    min_max_speed_printing_input = evaluate(input("Enter a test speed value override as a range: ")) if not quiet else [20, 50]  # check the jerk value
+    min_max_speed_printing = min_max_speed_printing_input if min_max_speed_printing_input != "" else [20, 50]
 
     from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, flat_test_single_parameter, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
     if test == 'retraction distance':
         path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
-        ts = TestSetupA(machine, material, test, path, min_max_argument = min_max_argument, min_max_speed_printing = min_max_speed_printing, raft = True)
+        ts = TestSetupA(machine, material, test, path, min_max_argument = min_max_argument, min_max_speed_printing = min_max_speed_printing, raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
         retraction_distance(ts)
     elif test == 'retraction restart distance and coasting distance':
         path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
-        ts = TestSetupA(machine, material, test, path, min_max_argument = min_max_argument, min_max_speed_printing = min_max_speed_printing, raft = True)
+        ts = TestSetupA(machine, material, test, path, min_max_argument = min_max_argument, min_max_speed_printing = min_max_speed_printing, raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
         retraction_restart_distance_vs_coasting_distance(ts)
     else:
         path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
-        ts = TestSetupA(machine, material, test, path, min_max_argument = min_max_argument, min_max_speed_printing = min_max_speed_printing, raft = True)
+        ts = TestSetupA(machine, material, test, path, min_max_argument = min_max_argument, min_max_speed_printing = min_max_speed_printing, raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
         flat_test_single_parameter_vs_speed_printing(ts)
 
 elif import_json_dict["session"]["test_type"] == "B":
@@ -89,8 +108,15 @@ elif import_json_dict["session"]["test_type"] == "B":
     elif test == 'temperature':
             path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
 
-    ts = TestSetupB(machine, material, test, path, min_max_argument, min_max_speed_printing, raft = True)
+    ts = TestSetupB(machine, material, test, path, min_max_argument, min_max_speed_printing, raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
     dimensional_test(ts)
+if not quiet:
+    if not verbose:
+        os.system('cls' if os.name == 'nt' else 'clear')
+    print("Test values:")
+    print(ts.get_values())
+    print("Speed values:")
+    print(np.linspace(min_max_speed_printing[0],min_max_speed_printing[1],4).tolist())
 
 # Add a step for selecting/approving of the result TODO
 ## Working with buffered content
@@ -107,11 +133,12 @@ if ts.test_name == "retraction distance":
     tested_speed_values = []
 
 current_test = {"test_name": ts.test_name, "tested_values": ts.values, "tested_speed_values": tested_speed_values, "selected_value": 0, "selected_speed_printing_value": 0, "units": ts.units}
+current_test = {"test_name": ts.test_name, "tested_values": ts.values, "tested_speed_values": np.linspace(min_max_speed_printing[0],min_max_speed_printing[1],4).tolist(), "selected_value": evaluate(input("Enter the selected value: ")) if not quiet else 0, "selected_speed_printing_value": evaluate(input("Enter the selected speed value: ")) if not quiet else 0, "units": ts.units}
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
 
 with open("persistence.json", mode="w") as file:
-    output = json.dumps(import_json_dict, indent=4, sort_keys=True)
+    output = json.dumps(import_json_dict, indent=4, sort_keys=False)
     file.write(output)
 
 end = time.time()
