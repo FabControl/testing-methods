@@ -65,13 +65,13 @@ class TestSetupA(object):
             self.units = 'mm'
 
             if min_max_argument is None:
-                self.coef_h = np.linspace(self.coef_h_min_raft, self.coef_h_max_raft, self.number_of_test_structures).tolist()
+                self.coef_h = self.coef_h_raft_all
             else:
                 self.coef_h = np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
 
             self.abs_z = [x * machine.nozzle.size_id for x in self.coef_h]
-            self.argument = [round(x, 3) for x in self.coef_h]
-            self.values = [round(x, 3)*machine.nozzle.size_id for x in self.coef_h]
+            self.argument = self.coef_h
+            self.values = [round(x * machine.nozzle.size_id, 3) for x in self.argument]
 
         elif test_name == 'path height':
             # PATH HEIGHT test parameters
@@ -84,11 +84,8 @@ class TestSetupA(object):
                 self.coef_h = np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
 
             self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
-            self.argument = [round(x, 3) for x in self.coef_h]
-            self.values = [round(x, 3) * machine.nozzle.size_id for x in self.coef_h]
-
-            print(self.argument)
-            print(self.values)
+            self.argument = self.coef_h
+            self.values = [round(x * machine.nozzle.size_id,3) for x in self.argument]
 
         elif test_name == 'path width':
             # PATH WIDTH test parameters
@@ -101,8 +98,8 @@ class TestSetupA(object):
                 self.coef_w = np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
 
             self.step_x = [x * machine.nozzle.size_id for x in self.coef_w]
-            self.argument = [round(x, 3) for x in self.coef_w]
-            self.values = [round(x, 3) * machine.nozzle.size_id for x in self.coef_w]
+            self.argument = self.coef_w
+            self.values = [round(x * machine.nozzle.size_id, 3) for x in self.argument]
 
         elif test_name == 'printing speed':
             # PRINTING SPEED test parameters
@@ -116,7 +113,7 @@ class TestSetupA(object):
             else:
                 self.speed_printing = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
-            self.argument = [round(x, 1) for x in self.speed_printing]
+            self.argument = [round(x,1) for x in self.speed_printing]
             self.values = self.argument
 
         elif test_name == 'extrusion multiplier':
@@ -129,7 +126,7 @@ class TestSetupA(object):
             else:
                 self.extrusion_multiplier = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
-            self.argument = [round(x, 3) for x in self.extrusion_multiplier]
+            self.argument = [round(x,3) for x in self.extrusion_multiplier]
             self.values = self.argument
 
         elif test_name == 'extrusion temperature':
@@ -142,7 +139,7 @@ class TestSetupA(object):
             else:
                 self.temperature_extruder = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
-            self.argument = [round(x, 1) for x in self.temperature_extruder]
+            self.argument = [round(x,0) for x in self.temperature_extruder]
             self.values = self.argument
 
         elif test_name == 'retraction distance':
@@ -178,7 +175,6 @@ class TestSetupA(object):
             print('Unknown test')
             raise ValueError("%s is not a valid test." % test_name)
 
-
         self.title = addtitle(test_name, material)
         self.comment1 = addcomment1(self.values, test_name, machine)
         self.comment2 = addcomment2(self.coef_h, self.coef_w, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine) # TODO
@@ -205,8 +201,6 @@ def addcomment1(values, test_name: str, machine: Machine):
         comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm/s'.format(k) for k in values) + ' ---')
     elif test_name == 'temperature':
         comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} degC'.format(k) for k in values) + ' ---')
-    elif test_name == 'first layer height':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in values) + ' ---')
     elif test_name == 'extrusion multiplier':
         comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f}'.format(k) for k in values) + ' ---')
     elif test_name == 'extrusion temperature':

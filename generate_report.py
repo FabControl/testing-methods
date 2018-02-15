@@ -55,11 +55,11 @@ elements.append(Paragraph(main_info, style=text_style))
 elements.append(Spacer(1, 0.5*inch))
 
 performed_tests = import_json_dict["session"]["previous_tests"]
-data = [["Test number", "Test name", "Units", "Tested values", "Selected value"]]
+data = [["Test number", "Test name", "Units", "Tested values", "Selected parameter value", "Selected printing speed"]]
 i = 1
 
 for k in performed_tests:
-    new_line = [str(i), k["test_name"], k["units"], ", ".join("{:.3f}".format(dummy) for dummy in k["tested_values"]), str(k["selected_value"])]
+    new_line = [str(i), k["test_name"], k["units"], ", ".join("{:}".format(dummy) for dummy in k["tested_values"]), str(k["selected_value"]), str(k["selected_speed_printing_value"])]
     data.append(new_line)
     i += 1
 
@@ -77,7 +77,7 @@ style = TableStyle([
 # s = s["BodyText"]
 # s.wordWrap = 'CJK'
 
-colwidths = (75, 90, 50, 240, 60)
+colwidths = (45, 90, 50, 240, 60, 60)
 data2 = [[Paragraph(cell, text_style) for cell in row] for row in data]
 t = Table(data2, colwidths)
 t.setStyle(style)

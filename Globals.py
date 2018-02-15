@@ -9,13 +9,13 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "Nylon",
-            "manufacturer": "Filakemp",
+            "name": "PC-Max",
+            "manufacturer": "PM",
             "id": "123456",
             "size_od": 1.75,
-            "temperature_melting": 210,
-            "temperature_destr": 300,
-            "temperature_vicat": 144
+            "temperature_melting": 220,
+            "temperature_destr": 310,
+            "temperature_vicat": 100
         },
         "machine": {
             "manufacturer": "Mass Portal",
@@ -26,30 +26,30 @@ except:
             "temperature_max": 300,
             "size_extruder_id": 1.95,
             "nozzle": {
-                "size_id": 0.80,
-                "size_od": 1.04,
+                "size_id": 0.60,
+                "size_od": 0.84,
                 "size_capillary_length": 5,
                 "size_angle": 60,
                 "metal": "brass"
             }
         },
         "settings": {
-            "temperature_printbed_raft": 110,
-            "temperature_printbed": 110,
-            "part_cooling": 100,
+            "temperature_printbed_raft": 80,
+            "temperature_printbed": 80,
+            "part_cooling": 0,
 
-            "raft_density": 95,
+            "raft_density": 75,
 
-            "temperature_extruder_raft": 240,
+            "temperature_extruder_raft": 230,
 
-            "path_height_raft": 0.4,
+            "path_height_raft": 0.3,
             "speed_printing_raft": 20,
 
-            "temperature_extruder": 240,
-            "speed_printing": 60,
+            "temperature_extruder": 250,
+            "speed_printing": 40,
 
-            "path_height": 0.4,
-            "path_width": 0.8,
+            "path_height": 0.3,
+            "path_width": 0.6,
 
             "extrusion_multiplier": 1.000,
 
@@ -68,7 +68,7 @@ except:
             "uid": 123456,
             "previous_tests": [],
             "test_type": 'A',
-            "test_name": 'path width'
+            "test_name": 'first layer height'
         }
     }
 
