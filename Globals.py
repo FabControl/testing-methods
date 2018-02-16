@@ -10,13 +10,13 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "Novamid ID1030",
-            "manufacturer": "Nexeo",
+            "name": "ABS",
+            "manufacturer": "Verbatim",
             "id": "123456",
             "size_od": 1.75,
-            "temperature_melting": 200,
-            "temperature_destr": 300,
-            "temperature_vicat": 144
+            "temperature_melting": 220,
+            "temperature_destr": 320,
+            "temperature_vicat": 104
         },
         "machine": {
             "manufacturer": "Mass Portal",
@@ -27,8 +27,8 @@ except:
             "temperature_max": 300,
             "size_extruder_id": 1.95,
             "nozzle": {
-                "size_id": 0.80,
-                "size_od": 1.04,
+                "size_id": 0.60,
+                "size_od": 0.84,
                 "size_capillary_length": 5,
                 "size_angle": 60,
                 "metal": "brass"
@@ -39,18 +39,18 @@ except:
             "temperature_printbed": 110,
             "part_cooling": 0,
 
-            "raft_density": 95,
+            "raft_density": 75,
 
             "temperature_extruder_raft": 260,
 
-            "path_height_raft": 0.4,
+            "path_height_raft": 0.2,
             "speed_printing_raft": 20,
 
-            "temperature_extruder": 240,
+            "temperature_extruder": 260,
             "speed_printing": 60,
 
-            "path_height": 0.4,
-            "path_width": 0.8,
+            "path_height": 0.385,
+            "path_width": 0.6,
 
             "extrusion_multiplier": 1.000,
 

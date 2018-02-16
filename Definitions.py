@@ -282,7 +282,11 @@ def minmax_path_width_height_raft(machine: Machine):
 
 def minmax_temperature(material: Material, machine: Machine):
     temperature_all = None
-    temperature_extruder_min = 0.975 * (machine.settings.temperature_extruder + 273.15) - 273.15
+    if machine.settings.temperature_extruder_raft is not None:
+        temperature_extruder_min = 0.975 * (machine.settings.temperature_extruder + 273.15) - 273.15
+    else:
+        temperature_extruder_min = machine.settings.temperature_extruder_raft
+
     temperature_extruder_max = 1.060 * (machine.settings.temperature_extruder + 273.15) - 273.15
 
     if material.temperature_destr < machine.temperature_max:

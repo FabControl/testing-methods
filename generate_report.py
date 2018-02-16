@@ -52,6 +52,8 @@ main_info = "Machine: " + import_json_dict["machine"]["model"]
 elements.append(Paragraph(main_info, style=text_style))
 main_info = "Nozzle: " + str(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm"
 elements.append(Paragraph(main_info, style=text_style))
+main_info = "Part cooling: " + str(import_json_dict["settings"]["part_cooling"]) + " %"
+elements.append(Paragraph(main_info, style=text_style))
 elements.append(Spacer(1, 0.5*inch))
 
 performed_tests = import_json_dict["session"]["previous_tests"]
@@ -70,12 +72,6 @@ style = TableStyle([
                        ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
                        ])
-
-
-# Configure style and word wrap
-# s = getSampleStyleSheet()
-# s = s["BodyText"]
-# s.wordWrap = 'CJK'
 
 colwidths = (45, 90, 50, 240, 60, 60)
 data2 = [[Paragraph(cell, text_style) for cell in row] for row in data]

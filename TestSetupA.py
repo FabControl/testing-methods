@@ -58,6 +58,8 @@ class TestSetupA(object):
 
         if min_max_speed_printing is not None:
             self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], 4).tolist()
+        else:
+            self.min_max_speed_printing = np.linspace(10, 60, 4).tolist()
             
         if test_name == 'first layer height':
             # FIRST LAYER HEIGHT test parameters
