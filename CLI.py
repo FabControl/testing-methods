@@ -3,7 +3,7 @@ MP MT Framework.
 
 Usage:
     CLI.py
-    CLI.py test [-v] [-q]
+    CLI.py test [-v] [-q] [--flash]
     CLI.py new-test
     CLI.py generate-report
 """
@@ -11,12 +11,13 @@ Usage:
 from docopt import docopt
 quiet = None
 verbose = None
-
+flash = False
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='MP Material Testing Suite')
 
     verbose = arguments["-v"]
     quiet = arguments["-q"]
+    flash = arguments["--flash"]
 
     if arguments["generate-report"]:
         import generate_report
@@ -30,26 +31,31 @@ from Plotting import plotting_mfr
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
 from Globals import machine, material, import_json_dict
-from CLI_helpers import evaluate
+from CLI_helpers import evaluate, clear, extruded_filament
 import time
 import os
 
 start = time.time()
 
 # from session_builder import *
-cwd = os.getcwd()
-gcode_folder = '\\gcodes'
+
+if flash:
+    cwd = 'F:'
+    gcode_folder = '\\tests'
+else:
+    cwd = os.getcwd()
+    gcode_folder = '\\gcodes'
 
 # Check compatibility
 check_compatibility(machine, material)
 
 # Checking some settings for better starting values
-if machine.settings.optimize_temperature_printbed == True:
+if machine.settings.optimize_temperature_printbed:
     check_printbed_temperature(material, machine)
 else:
     pass
 
-if machine.settings.optimize_speed_printing == True:
+if machine.settings.optimize_speed_printing:
     # Some calculations
     gamma_dot_estimate = shear_rate(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
     delta_p_estimate = pressure_drop(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
@@ -69,7 +75,7 @@ if machine.settings.optimize_speed_printing == True:
     check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
 
 if not verbose:
-    os.system('cls' if os.name == 'nt' else 'clear')
+    clear()
 
 if import_json_dict["session"]["test_type"] == "A":
     test = import_json_dict["session"]["test_name"] if quiet else input("Parameter to be tested ['first layer height', 'extrusion temperature', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance']: ")  #
@@ -104,9 +110,9 @@ if import_json_dict["session"]["test_type"] == "A":
         flat_test_single_parameter_vs_speed_printing(ts)
 
 elif import_json_dict["session"]["test_type"] == "B":
-    test = 'temperature' # 'overlap', 'path height']  # TODO
+    test = 'temperature'  # 'overlap', 'path height']  # TODO
     min_max_argument = [270, 300]
-    min_max_speed_printing = [30, 75] # check the jerk value
+    min_max_speed_printing = [30, 75]  # check the jerk value
 
     from DefinitionsTestsB import dimensional_test
 
@@ -127,7 +133,7 @@ elif import_json_dict["session"]["test_type"] == "B":
 
 if not quiet:
     if not verbose:
-        os.system('cls' if os.name == 'nt' else 'clear')
+        clear()
     print("Tested values:")
     print(ts.get_values())
     print("Printing speed values:")
@@ -148,15 +154,20 @@ else:
 if ts.test_name == "retraction distance":
     tested_speed_values = []
 
+extruded_filament = extruded_filament(cwd + gcode_folder + "\\" + ts.test_name + " test.gcode")
+
 current_test = {"test_name": ts.test_name,
                 "tested_values": ts.get_values(),
                 "tested_speed_values": tested_speed_values,
                 "selected_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
                 "selected_speed_printing_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
-                "units": ts.units}
+                "units": ts.units,
+                "extruded_filament": extruded_filament}
 
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
+
+
 
 for dummy in import_json_dict["session"]["previous_tests"]:
     if dummy["test_name"] == "printing speed": # TODO check conditions
@@ -171,6 +182,10 @@ for dummy in import_json_dict["session"]["previous_tests"]:
         import_json_dict["settings"]["extrusion_multiplier"] = dummy["selected_value"]
 
 with open(cwd + "\\jsons\\" + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
+    output = json.dumps(import_json_dict, indent=4, sort_keys=False)
+    file.write(output)
+
+with open(cwd + "\\persistence.json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)
     file.write(output)
 
