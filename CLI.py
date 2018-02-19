@@ -11,6 +11,7 @@ Usage:
 from docopt import docopt
 quiet = None
 verbose = None
+
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='MP Material Testing Suite')
 
@@ -71,7 +72,7 @@ if not verbose:
     os.system('cls' if os.name == 'nt' else 'clear')
 
 if import_json_dict["session"]["test_type"] == "A":
-    test = import_json_dict["session"]["test_name"] if quiet else input("Parameter to be tested ['first layer height', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance']: ")  #
+    test = import_json_dict["session"]["test_name"] if quiet else input("Parameter to be tested ['first layer height', 'extrusion temperature', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance']: ")  #
 
     min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else None
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
@@ -130,13 +131,13 @@ if not quiet:
     print("Tested values:")
     print(ts.get_values())
     print("Printing speed values:")
+    if min_max_speed_printing is None: min_max_speed_printing = ts.min_max_speed_printing
     print([round(k,1) for k in np.linspace(min_max_speed_printing[0],min_max_speed_printing[1],4).tolist()])
 
-# Add a step for selecting/approving of the result TODO
-## Working with buffered content
+# Add a step for selecting/approving of the result
 previous_tests = import_json_dict["session"]["previous_tests"]
 
-if ts.test_name == "printing speed": # TODO check conditions
+if ts.test_name == "printing speed":
     tested_speed_values = ts.get_values()
 else:
     if min_max_speed_printing is None:
@@ -157,7 +158,19 @@ current_test = {"test_name": ts.test_name,
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
 
-with open("persistence.json", mode="w") as file:
+for dummy in import_json_dict["session"]["previous_tests"]:
+    if dummy["test_name"] == "printing speed": # TODO check conditions
+        import_json_dict["settings"]["speed_printing"] = dummy["selected_value"]
+    elif dummy["test_name"] == "path height":
+        import_json_dict["settings"]["path_height"] = dummy["selected_value"]
+    elif dummy["test_name"] == "path width":
+        import_json_dict["settings"]["path_width"] = dummy["selected_value"]
+    elif dummy["test_name"] == "extrusion temperature":
+        import_json_dict["settings"]["temperature_extruder"] = dummy["selected_value"]
+    elif dummy["test_name"] == "extrusion multiplier":
+        import_json_dict["settings"]["extrusion_multiplier"] = dummy["selected_value"]
+
+with open(cwd + "\\jsons\\" + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)
     file.write(output)
 

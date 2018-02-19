@@ -1,0 +1,187 @@
+{
+    "material": {
+        "name": "ABS",
+        "manufacturer": "Verbatim",
+        "id": "123456",
+        "size_od": 1.75,
+        "temperature_melting": 220,
+        "temperature_destr": 320,
+        "temperature_vicat": 104
+    },
+    "machine": {
+        "manufacturer": "Mass Portal",
+        "model": "Pharaoh XD20",
+        "buildarea_maxdim1": 145,
+        "buildarea_maxdim2": 145,
+        "max_dimension_z": 200,
+        "temperature_max": 300,
+        "size_extruder_id": 1.95,
+        "nozzle": {
+            "size_id": 0.6,
+            "size_od": 0.84,
+            "size_capillary_length": 5,
+            "size_angle": 60,
+            "metal": "brass"
+        }
+    },
+    "settings": {
+        "temperature_printbed_raft": 110,
+        "temperature_printbed": 110,
+        "part_cooling": 0,
+        "raft_density": 75,
+        "temperature_extruder_raft": 260,
+        "path_height_raft": 0.283,
+        "speed_printing_raft": 23,
+        "temperature_extruder": 287,
+        "speed_printing": 55,
+        "path_height": 0.283,
+        "path_width": 0.59,
+        "extrusion_multiplier": 1.25,
+        "retraction_distance": 2.0,
+        "retraction_restart_distance": 0.45,
+        "coasting_distance": 0.0,
+        "overlap": 0,
+        "perimeter": 1,
+        "matrix_size": 3,
+        "layer_count": 15,
+        "safe_distance": 50,
+        "number_of_test_structures": 7,
+        "edges": 30
+    },
+    "session": {
+        "uid": 123456,
+        "previous_tests": [
+            {
+                "test_name": "first layer height",
+                "tested_values": [
+                    0.15,
+                    0.183,
+                    0.217,
+                    0.25,
+                    0.283,
+                    0.317,
+                    0.35
+                ],
+                "tested_speed_values": [
+                    10.0,
+                    16.666666666666668,
+                    23.333333333333336,
+                    30.0
+                ],
+                "selected_value": 0.283,
+                "selected_speed_printing_value": 23,
+                "units": "mm"
+            },
+            {
+                "test_name": "extrusion temperature",
+                "tested_values": [
+                    260.0,
+                    267.0,
+                    273.0,
+                    280.0,
+                    287.0,
+                    293.0,
+                    300.0
+                ],
+                "tested_speed_values": [
+                    20.0,
+                    36.66666666666667,
+                    53.333333333333336,
+                    70.0
+                ],
+                "selected_value": 287,
+                "selected_speed_printing_value": 53,
+                "units": "degC"
+            },
+            {
+                "test_name": "path height",
+                "tested_values": [
+                    0.2,
+                    0.242,
+                    0.283,
+                    0.325,
+                    0.367,
+                    0.408,
+                    0.45
+                ],
+                "tested_speed_values": [
+                    20.0,
+                    36.66666666666667,
+                    53.333333333333336,
+                    70.0
+                ],
+                "selected_value": 0.283,
+                "selected_speed_printing_value": 53,
+                "units": "mm"
+            },
+            {
+                "test_name": "path width",
+                "tested_values": [
+                    0.54,
+                    0.55,
+                    0.56,
+                    0.57,
+                    0.58,
+                    0.59,
+                    0.6
+                ],
+                "tested_speed_values": [
+                    20.0,
+                    36.66666666666667,
+                    53.333333333333336,
+                    70.0
+                ],
+                "selected_value": 0.59,
+                "selected_speed_printing_value": 53,
+                "units": "mm"
+            },
+            {
+                "test_name": "extrusion multiplier",
+                "tested_values": [
+                    0.75,
+                    0.875,
+                    1.0,
+                    1.125,
+                    1.25,
+                    1.375,
+                    1.5
+                ],
+                "tested_speed_values": [
+                    20.0,
+                    36.66666666666667,
+                    53.333333333333336,
+                    70.0
+                ],
+                "selected_value": 1.25,
+                "selected_speed_printing_value": 53,
+                "units": "-"
+            },
+            {
+                "test_name": "printing speed",
+                "tested_values": [
+                    45.0,
+                    50.0,
+                    55.0,
+                    60.0,
+                    65.0,
+                    70.0,
+                    75.0
+                ],
+                "tested_speed_values": [
+                    45.0,
+                    50.0,
+                    55.0,
+                    60.0,
+                    65.0,
+                    70.0,
+                    75.0
+                ],
+                "selected_value": 55,
+                "selected_speed_printing_value": 55,
+                "units": "mm/s"
+            }
+        ],
+        "test_type": "A",
+        "test_name": "first layer height"
+    }
+}

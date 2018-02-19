@@ -81,3 +81,7 @@ t.setStyle(style)
 # Send the data and build the file
 elements.append(t)
 doc.build(elements)
+
+with open("persistence.json", mode="w") as file:
+    output = json.dumps(import_json_dict, indent=4, sort_keys=False)
+    file.write(output)
