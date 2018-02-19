@@ -1,0 +1,122 @@
+{
+    "material": {
+        "name": "Arnitel ID2045",
+        "manufacturer": "Nexeo",
+        "id": "123456",
+        "size_od": 1.75,
+        "temperature_melting": 200,
+        "temperature_destr": 300,
+        "temperature_vicat": 144
+    },
+    "machine": {
+        "manufacturer": "Mass Portal",
+        "model": "Pharaoh XD20",
+        "buildarea_maxdim1": 145,
+        "buildarea_maxdim2": 145,
+        "max_dimension_z": 200,
+        "temperature_max": 300,
+        "size_extruder_id": 1.95,
+        "nozzle": {
+            "size_id": 0.4,
+            "size_od": 0.64,
+            "size_capillary_length": 5,
+            "size_angle": 60,
+            "metal": "brass"
+        }
+    },
+    "settings": {
+        "temperature_printbed_raft": 40,
+        "temperature_printbed": 40,
+        "part_cooling": 100,
+        "raft_density": 95,
+        "temperature_extruder_raft": 250,
+        "path_height_raft": 0.22,
+        "speed_printing_raft": 10,
+        "temperature_extruder": 252,
+        "speed_printing": 33,
+        "path_height": 0.183,
+        "path_width": 0.4,
+        "extrusion_multiplier": 1.0,
+        "retraction_distance": 2.0,
+        "retraction_restart_distance": 0,
+        "coasting_distance": 0.0,
+        "overlap": 0,
+        "perimeter": 1,
+        "matrix_size": 3,
+        "layer_count": 15,
+        "safe_distance": 50,
+        "number_of_test_structures": 7,
+        "edges": 30
+    },
+    "session": {
+        "uid": 123456,
+        "previous_tests": [
+            {
+                "test_name": "first layer height",
+                "tested_values": [
+                    0.119,
+                    0.136,
+                    0.153,
+                    0.169,
+                    0.186,
+                    0.203,
+                    0.22
+                ],
+                "tested_speed_values": [
+                    10.0,
+                    15.0,
+                    20.0,
+                    25.0
+                ],
+                "selected_value": 0.22,
+                "selected_speed_printing_value": 10,
+                "units": "mm"
+            },
+            {
+                "test_name": "extrusion temperature",
+                "tested_values": [
+                    237.0,
+                    242.0,
+                    247.0,
+                    252.0,
+                    257.0,
+                    262.0,
+                    268.0
+                ],
+                "tested_speed_values": [
+                    20.0,
+                    26.666666666666668,
+                    33.333333333333336,
+                    40.0
+                ],
+                "selected_value": 252,
+                "selected_speed_printing_value": 33,
+                "units": "degC"
+            },
+            {
+                "test_name": "path height",
+                "tested_values": [
+                    0.072,
+                    0.109,
+                    0.146,
+                    0.183,
+                    0.22,
+                    0.256,
+                    0.293
+                ],
+                "tested_speed_values": [
+                    20.0,
+                    26.666666666666668,
+                    33.333333333333336,
+                    40.0
+                ],
+                "selected_value": 0.183,
+                "selected_speed_printing_value": 40,
+                "units": "mm",
+                "extruded_filament": 929.9294490000061
+            }
+        ],
+        "test_type": "A",
+        "test_name": "first layer height"
+    }
+}
