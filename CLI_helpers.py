@@ -37,7 +37,7 @@ def extruded_filament(path):
     with open(path) as gcode:
         gcode = gcode.read()
 
-    extrusion_values = re.findall(r'(?<=E)[0-9.-]+(?=\n)', gcode)
+    extrusion_values = re.findall(r'(?<=E)[0-9.-]+(?=\s)', gcode)
 
     total_extrusion = 0
     for value in extrusion_values:
