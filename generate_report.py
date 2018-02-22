@@ -54,10 +54,17 @@ main_info = "Nozzle: " + str(import_json_dict["machine"]["nozzle"]["size_id"]) +
 elements.append(Paragraph(main_info, style=text_style))
 main_info = "Part cooling: " + str(import_json_dict["settings"]["part_cooling"]) + " %"
 elements.append(Paragraph(main_info, style=text_style))
+
+consumed_filament = 0
+for dummy in import_json_dict["session"]["previous_tests"]:
+    consumed_filament = consumed_filament + round(float(dummy["extruded_filament"]), 3)
+
+main_info = "Consumed filament: " + str(consumed_filament) + " mm"
+elements.append(Paragraph(main_info, style=text_style))
 elements.append(Spacer(1, 0.5*inch))
 
 performed_tests = import_json_dict["session"]["previous_tests"]
-data = [["Test number", "Test name", "Units", "Tested values", "Selected parameter value", "Selected printing speed"]]
+data = [[" ", "Test name", "Units", "Tested values", "Selected parameter value", "Selected printing speed"]]
 i = 1
 
 for k in performed_tests:

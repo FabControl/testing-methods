@@ -20,7 +20,6 @@ if __name__ == '__main__':
     flash = arguments["--flash"]
 
     if arguments["generate-report"]:
-        import generate_report
         quit()
 
 from Calculations import shear_rate, pressure_drop, rheology
@@ -82,10 +81,13 @@ if import_json_dict["session"]["test_type"] == "A":
 
     min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else None
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
-    min_max_speed_printing_input = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else None  # check the jerk value TODO
-    min_max_speed_printing = min_max_speed_printing_input if min_max_speed_printing_input != "" else None
+    if test != 'retraction distance':
+        min_max_speed_printing_input = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else None  # check the jerk value TODO
+        min_max_speed_printing = min_max_speed_printing_input if min_max_speed_printing_input != "" else None
+    else:
+        min_max_speed_printing = None
 
-    from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, flat_test_single_parameter, retraction_restart_distance_vs_coasting_distance, retraction_distance
+    from DefinitionsTestsA import flat_test_single_parameter, flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
     if test == 'retraction distance':
         path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
@@ -107,7 +109,10 @@ if import_json_dict["session"]["test_type"] == "A":
                         min_max_argument = min_max_argument,
                         min_max_speed_printing = min_max_speed_printing,
                         raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
-        flat_test_single_parameter_vs_speed_printing(ts)
+        if min_max_speed_printing_input is None:
+            flat_test_single_parameter(ts)
+        else:
+            flat_test_single_parameter_vs_speed_printing(ts)
 
 elif import_json_dict["session"]["test_type"] == "B":
     test = 'temperature'  # 'overlap', 'path height']  # TODO
@@ -136,9 +141,11 @@ if not quiet:
         clear()
     print("Tested values:")
     print(ts.get_values())
-    print("Printing speed values:")
-    if min_max_speed_printing is None: min_max_speed_printing = ts.min_max_speed_printing
-    print([round(k,1) for k in np.linspace(min_max_speed_printing[0],min_max_speed_printing[1],4).tolist()])
+
+    if min_max_speed_printing is not None or ts.test_name != 'retraction distance':
+        print("Printing speed values:")
+        min_max_speed_printing = ts.min_max_speed_printing
+        print([round(k,1) for k in np.linspace(min_max_speed_printing[0],min_max_speed_printing[1],4).tolist()])
 
 # Add a step for selecting/approving of the result
 previous_tests = import_json_dict["session"]["previous_tests"]
@@ -151,7 +158,7 @@ else:
     else:
         tested_speed_values = ts.min_max_speed_printing
 
-if ts.test_name == "retraction distance":
+if ts.test_name == "retraction distance" or min_max_speed_printing in None:
     tested_speed_values = []
 
 extruded_filament = extruded_filament(cwd + gcode_folder + "\\" + ts.test_name + " test.gcode")
@@ -167,8 +174,6 @@ current_test = {"test_name": ts.test_name,
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
 
-
-
 for dummy in import_json_dict["session"]["previous_tests"]:
     if dummy["test_name"] == "printing speed": # TODO check conditions
         import_json_dict["settings"]["speed_printing"] = dummy["selected_value"]
@@ -180,6 +185,8 @@ for dummy in import_json_dict["session"]["previous_tests"]:
         import_json_dict["settings"]["temperature_extruder"] = dummy["selected_value"]
     elif dummy["test_name"] == "extrusion multiplier":
         import_json_dict["settings"]["extrusion_multiplier"] = dummy["selected_value"]
+    elif dummy["test_name"] == "retraction distance":
+        import_json_dict["settings"]["retraction_distance"] = dummy["selected_value"]
 
 with open(cwd + "\\jsons\\" + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)

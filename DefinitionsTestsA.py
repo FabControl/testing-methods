@@ -191,45 +191,52 @@ def flat_test_single_parameter(ts: TestSetupA):
     g.write("; --- start to print the test structure ---")
     g.feed(machine.settings.speed_printing)  # respect the units: mm/min
 
+    if ts.test_name == 'first layer height':
+        number_of_layers = 1
+    else:
+        number_of_layers = 2
+
     for dummy1 in range(0, ts.number_of_test_structures):
-        g.set_extruder_temperature(ts.temperature_extruder[dummy1])
-        g.write(ts.comment2[dummy1])
-        g.abs_move(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
-                   y=+ts.test_structure_size / 2,
-                   z=+ts.abs_z[dummy1],
-                   extrude=False, extrusion_multiplier=0)
 
-        g.feed(ts.speed_printing[dummy1])  # respect the units: mm/min
+        for dummy0 in range(0,number_of_layers):
+            g.set_extruder_temperature(ts.temperature_extruder[dummy1])
+            g.write(ts.comment2[dummy1])
+            g.abs_move(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
+                       y=+ts.test_structure_size / 2,
+                       z=+ts.abs_z[dummy1] + dummy0*ts.coef_h[dummy1]*machine.nozzle.size_id,
+                       extrude=False, extrusion_multiplier=0)
 
-        for dummy2 in range(0, ts.number_of_lines):
-            step_x = ts.step_x[dummy1]
+            g.feed(ts.speed_printing[dummy1])  # respect the units: mm/min
 
-            g.move(x=-step_x,
-                   y=0,
-                   z=0,
-                   extrude=False, extrusion_multiplier=0)
-            g.move(x=0,
-                   y=((-1)**(dummy2+1))*ts.step_y,
-                   z=0,
-                   extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
+            for dummy2 in range(0, ts.number_of_lines):
+                step_x = ts.step_x[dummy1]
 
-        if ts.test_name == 'extrusion temperature':
-            g.move(x=0,
-                   y=+ts.test_structure_size / 5,
-                   z=0,
-                   extrude=False, extrusion_multiplier=0)
-
-            try:
-                g.set_extruder_temperature(ts.temperature_extruder[dummy1 + 1])
-                g.dwell(30)
-                output = "G1 F500 E" + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0], 2)) + "; extrude " + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0], 2)) + " mm of material"
-                g.write(output)
-                g.move(x=0,
-                       y=-ts.test_structure_size / 5,
+                g.move(x=-step_x,
+                       y=0,
                        z=0,
                        extrude=False, extrusion_multiplier=0)
-            except IndexError:
-                g.set_extruder_temperature(ts.temperature_extruder[-1])
+                g.move(x=0,
+                       y=((-1)**(dummy2+1))*ts.step_y,
+                       z=0,
+                       extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
+
+            if ts.test_name == 'extrusion temperature':
+                g.move(x=0,
+                       y=+ts.test_structure_size / 5,
+                       z=0,
+                       extrude=False, extrusion_multiplier=0)
+
+                try:
+                    g.set_extruder_temperature(ts.temperature_extruder[dummy1 + 1])
+                    g.dwell(30)
+                    output = "G1 F500 E" + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0], 2)) + "; extrude " + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0], 2)) + " mm of material"
+                    g.write(output)
+                    g.move(x=0,
+                           y=-ts.test_structure_size / 5,
+                           z=0,
+                           extrude=False, extrusion_multiplier=0)
+                except IndexError:
+                    g.set_extruder_temperature(ts.temperature_extruder[-1])
 
     g.write("; --- finish to print the test structure ---")
     g.teardown()
@@ -353,10 +360,9 @@ def retraction_distance(ts: TestSetupA):
         g.write(ts.comment2[dummy2])
 
         for dummy3 in range(0, 2): # layers
-
             g.abs_move(x=+ts.test_structure_size / 2 - (2 * dummy2 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
                        y=+ts.test_structure_size / 2,
-                       z=+(dummy3 + 1) * ts.coef_h[dummy2] * machine.nozzle.size_id + ts.coef_h_raft * machine.nozzle.size_id,
+                       z=+ts.abs_z[dummy2] + dummy3*ts.coef_h[dummy2] * machine.nozzle.size_id,
                        extrude=False, extrusion_multiplier=0)
 
             for dummy4 in range(0, ts.number_of_lines):

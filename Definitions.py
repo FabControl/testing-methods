@@ -327,9 +327,9 @@ def minmax_extrusion_multiplier(machine: Machine):
 
 
 def get_test_structure_size(machine):
-    if machine.nozzle.size_id > 0.4:
+    if machine.nozzle.size_id > 0.6:
         test_structure_size = 100
-    if 0.2<machine.nozzle.size_id <=0.4:
+    if 0.2<machine.nozzle.size_id <=0.6:
         test_structure_size = 75
     elif machine.nozzle.size_id <= 0.2:
         test_structure_size = 55

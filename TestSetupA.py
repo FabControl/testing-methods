@@ -36,7 +36,7 @@ class TestSetupA(object):
         self.extrusion_multiplier = [x * machine.settings.extrusion_multiplier for x in [1] * self.number_of_test_structures]
         self.temperature_extruder = [x * machine.settings.temperature_extruder for x in [1] * self.number_of_test_structures]
         self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
-        self.retraction_speed = 60
+        self.retraction_speed = 120
         self.retraction_distance = [x * machine.settings.retraction_distance for x in [1] * self.number_of_test_structures]
         self.retraction_restart_distance = [x * machine.settings.retraction_restart_distance for x in [1] * self.number_of_test_structures]
         self.coasting_distance = [x * machine.settings.coasting_distance for x in [1] * self.number_of_test_structures]
@@ -44,7 +44,7 @@ class TestSetupA(object):
         self.step_x = [x* np.mean(self.coef_w) * machine.nozzle.size_id for x in [1] * self.number_of_test_structures]
         self.step_y = self.test_structure_size - self.coef_w_raft * machine.nozzle.size_id / 2
 
-        self.number_of_lines = int(2*(self.test_structure_size / (2 * self.number_of_test_structures + 1))/(np.mean(self.coef_w) * machine.nozzle.size_id))
+        self.number_of_lines = int(1.2*(self.test_structure_size / (2 * self.number_of_test_structures + 1))/(np.mean(self.coef_w) * machine.nozzle.size_id))
 
         if self.number_of_lines % 4 == 0:
             pass
@@ -58,9 +58,7 @@ class TestSetupA(object):
 
         if min_max_speed_printing is not None:
             self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], 4).tolist()
-        else:
-            self.min_max_speed_printing = np.linspace(10, 60, 4).tolist()
-            
+
         if test_name == 'first layer height':
             # FIRST LAYER HEIGHT test parameters
 
@@ -108,8 +106,6 @@ class TestSetupA(object):
 
             self.units = 'mm/s'
 
-            self.number_of_lines = int(self.number_of_lines/2)
-
             if min_max_argument is None:
                 self.speed_printing = minmax_speed_printing(machine)
             else:
@@ -148,8 +144,6 @@ class TestSetupA(object):
             # RETRACTION DISTANCE test parameters
 
             self.units = 'mm'
-
-            self.number_of_lines = int(self.number_of_lines / 2)
 
             if min_max_argument is None:
                 self.retraction_distance = np.linspace(0.0, 4.0, self.number_of_test_structures).tolist()
