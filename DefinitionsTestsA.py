@@ -191,153 +191,152 @@ def flat_test_single_parameter(ts: TestSetupA):
     g.write("; --- start to print the test structure ---")
     g.feed(machine.settings.speed_printing)  # respect the units: mm/min
 
-    if ts.test_name == 'first layer height':
-        number_of_layers = 1
-    else:
-        number_of_layers = 2
-
     for dummy1 in range(0, ts.number_of_test_structures):
+        g.set_extruder_temperature(ts.temperature_extruder[dummy1])
+        g.write(ts.comment2[dummy1])
+        g.abs_move(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
+                   y=+ts.test_structure_size / 2,
+                   z=+ts.abs_z[dummy1],
+                   extrude=False, extrusion_multiplier=0)
 
-        for dummy0 in range(0,number_of_layers):
-            g.set_extruder_temperature(ts.temperature_extruder[dummy1])
-            g.write(ts.comment2[dummy1])
-            g.abs_move(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
-                       y=+ts.test_structure_size / 2,
-                       z=+ts.abs_z[dummy1] + dummy0*ts.coef_h[dummy1]*machine.nozzle.size_id,
-                       extrude=False, extrusion_multiplier=0)
+        g.feed(ts.speed_printing[dummy1])  # respect the units: mm/min
 
-            g.feed(ts.speed_printing[dummy1])  # respect the units: mm/min
+        for dummy2 in range(0, ts.number_of_lines):
+            step_x = ts.step_x[dummy1]
 
-            for dummy2 in range(0, ts.number_of_lines):
-                step_x = ts.step_x[dummy1]
+            g.move(x=-step_x,
+                   y=0,
+                   z=0,
+                   extrude=False, extrusion_multiplier=0)
+            g.move(x=0,
+                   y=((-1)**(dummy2+1))*ts.step_y,
+                   z=0,
+                   extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
 
-                g.move(x=-step_x,
-                       y=0,
-                       z=0,
-                       extrude=False, extrusion_multiplier=0)
+        if ts.test_name == 'extrusion temperature':
+            g.move(x=0,
+                   y=+ts.test_structure_size / 5,
+                   z=0,
+                   extrude=False, extrusion_multiplier=0)
+
+            try:
+                g.set_extruder_temperature(ts.temperature_extruder[dummy1 + 1])
+                g.dwell(30)
+                output = "G1 F500 E" + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0], 2)) + "; extrude " + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0], 2)) + " mm of material"
+                g.write(output)
                 g.move(x=0,
-                       y=((-1)**(dummy2+1))*ts.step_y,
-                       z=0,
-                       extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
-
-            if ts.test_name == 'extrusion temperature':
-                g.move(x=0,
-                       y=+ts.test_structure_size / 5,
+                       y=-ts.test_structure_size / 5,
                        z=0,
                        extrude=False, extrusion_multiplier=0)
-
-                try:
-                    g.set_extruder_temperature(ts.temperature_extruder[dummy1 + 1])
-                    g.dwell(30)
-                    output = "G1 F500 E" + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0], 2)) + "; extrude " + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0], 2)) + " mm of material"
-                    g.write(output)
-                    g.move(x=0,
-                           y=-ts.test_structure_size / 5,
-                           z=0,
-                           extrude=False, extrusion_multiplier=0)
-                except IndexError:
-                    g.set_extruder_temperature(ts.temperature_extruder[-1])
+            except IndexError:
+                g.set_extruder_temperature(ts.temperature_extruder[-1])
 
     g.write("; --- finish to print the test structure ---")
     g.teardown()
     return
 
 
+
+
 # GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER vs. PRINTING SPEED
 def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
     g = ts.g
 
+    number_of_substructures = 4
+
     if ts.test_name == 'printing speed':
-        flat_test_single_parameter(ts)
+        number_of_substructures = 1
+        ts.number_of_lines = ts.number_of_lines * 2
+
+    g.write(ts.title)
+    g.write(ts.comment1)
+    wipe(ts)
+    if ts.raft and ts.test_name != "first layer height":
+        print_raft(ts)  # print the raft to support the test structure
     else:
-        g.write(ts.title)
-        g.write(ts.comment1)
-        wipe(ts)
-        if ts.raft and ts.test_name != "first layer height":
-            print_raft(ts)  # print the raft to support the test structure
-        else:
-            raft_perimeter(ts)
-        g.write("; --- start to print the test structure ---")
-        g.feed(machine.settings.speed_printing)  # respect the units: mm/min
+        raft_perimeter(ts)
+    g.write("; --- start to print the test structure ---")
+    g.feed(machine.settings.speed_printing)  # respect the units: mm/min
 
-        for dummy1 in range(0, ts.number_of_test_structures):
-                g.write(ts.comment2[dummy1])
+    for dummy1 in range(0, ts.number_of_test_structures):
+            g.write(ts.comment2[dummy1])
 
-                g.abs_travel(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
-                             y=+ts.test_structure_size / 2,
-                             z=+ts.abs_z[dummy1],
-                             lift=1)
+            g.abs_travel(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
+                         y=+ts.test_structure_size / 2,
+                         z=+ts.abs_z[dummy1],
+                         lift=1)
 
-                if ts.test_name == 'extrusion temperature':  # TODO! Fix the movement, time, extra restart distance
-                    g.travel(x=0,
-                             y=+ts.test_structure_size / 5,
-                             z=+ts.abs_z[dummy1], retraction_speed=ts.retraction_speed, retraction_distance=ts.retraction_distance[dummy1])
-                    g.set_extruder_temperature(ts.temperature_extruder[dummy1])
-                    g.dwell(30)
-                    output = "G1 F500 E" + str(round(4 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + \
-                            "; extrude " + str(round(4 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + " mm of material"
-                    g.write(output)
-                    g.move(x=0,
-                           y=-ts.test_structure_size / 5,
-                           z=-ts.abs_z[dummy1], extrude=True)
+            if ts.test_name == 'extrusion temperature':  # TODO! Fix the movement, time, extra restart distance
+                g.travel(x=0,
+                         y=+ts.test_structure_size / 5,
+                         z=+ts.abs_z[dummy1], retraction_speed=ts.retraction_speed, retraction_distance=ts.retraction_distance[dummy1]) #  TODO disable retractions
+                g.set_extruder_temperature(ts.temperature_extruder[dummy1])
+                g.dwell(30)
+                output = "G1 F500 E" + str(round(4 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + \
+                        "; extrude " + str(round(4 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + " mm of material"
+                g.write(output)
+                g.move(x=0,
+                       y=-ts.test_structure_size / 5,
+                       z=-ts.abs_z[dummy1], extrude=True)
 
-                g.feed(ts.speed_printing[dummy1])  # respect the units: mm/min
+            g.feed(ts.speed_printing[dummy1])  # respect the units: mm/min
 
-                step_x = ts.step_x[dummy1]
+            step_x = ts.step_x[dummy1]
 
-                dummy2_range = range(4)
-                for dummy2 in dummy2_range:
-                    current_printing_speed = ts.min_max_speed_printing[dummy2]
-                    g.write('; --- testing the following printing speed value: %.3f mm/s' % (current_printing_speed))
+            dummy2_range = range(number_of_substructures)
+            for dummy2 in dummy2_range:
+                current_printing_speed = ts.min_max_speed_printing[dummy2]
+                g.write('; --- testing the following printing speed value: %.3f mm/s' % (current_printing_speed))
+
+                if ts.test_name == "printing speed":
+                    g.feed(ts.speed_printing[dummy1])
+                else:
                     g.feed(current_printing_speed)
 
-                    number_of_lines = int(ts.number_of_lines/2)
-                    dummy0_range = range(2 if ts.test_name != "first layer height" else 1)
-                    for dummy0 in dummy0_range: # layers
-                        dummy3_range = range(0, number_of_lines)
-                        if dummy0 != 0:
-                            g.move(z=ts.coef_h[dummy1] * machine.nozzle.size_id)  # move to the next floor
+                number_of_lines = int(ts.number_of_lines/2)
+                dummy0_range = range(2 if ts.test_name != "first layer height" else 1)
+                for dummy0 in dummy0_range: # layers
+                    dummy3_range = range(0, number_of_lines)
+                    if dummy0 != 0:
+                        g.move(z=ts.coef_h[dummy1] * machine.nozzle.size_id)  # move to the next floor
 
-                        for dummy3 in dummy3_range:
-                            if dummy0 % 2 != 0:
-                                g.move(x=(-1)**(dummy0 + 1) * step_x,
-                                       y=0,
-                                       z=0,
-                                       extrude=False)
-                                g.move(x=0,
-                                       y=(-1)**(dummy3 + 1) * ts.step_y/4,
-                                       z=0,
-                                       extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
-                            else:
-                                g.move(x=0,
-                                       y=(-1) ** (dummy3 + 1) * ts.step_y / 4,
-                                       z=0,
-                                       extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1],
-                                       coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
-                                g.move(x=(-1) ** (dummy0 + 1) * step_x,
-                                       y=0,
-                                       z=0,
-                                       extrude=False)
-                    g.move(x=0,
-                           y=-ts.step_y/4,
-                           extrude=False)  # Y step after substructure. Y and Z should be separated and staged
-                    if len(dummy0_range) % 2 != 0:  # check if even layer amount
-                        g.move(x=step_x * number_of_lines,
-                               extrude=False)
-                    g.move(z=-ts.coef_h[dummy1] * machine.nozzle.size_id * (len(dummy0_range)-1),
+                    for dummy3 in dummy3_range:
+                        if dummy0 % 2 != 0:
+                            g.move(x=(-1)**(dummy0 + 1) * step_x,
+                                   y=0,
+                                   z=0,
+                                   extrude=False)
+                            g.move(x=0,
+                                   y=(-1)**(dummy3 + 1) * ts.step_y/number_of_substructures,
+                                   z=0,
+                                   extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
+                        else:
+                            g.move(x=0,
+                                   y=(-1) ** (dummy3 + 1) * ts.step_y / number_of_substructures,
+                                   z=0,
+                                   extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1],
+                                   coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
+                            g.move(x=(-1) ** (dummy0 + 1) * step_x,
+                                   y=0,
+                                   z=0,
+                                   extrude=False)
+                g.move(x=0,
+                       y=-ts.step_y/number_of_substructures,
+                       extrude=False)  # Y step after substructure. Y and Z should be separated and staged
+                if len(dummy0_range) % 2 != 0:  # check if even layer amount
+                    g.move(x=step_x * number_of_lines,
                            extrude=False)
-                    if dummy2 != len(dummy2_range)-1:
-                        g.move(x=-step_x,
-                               y=0,
-                               z=0,
-                               extrude=False)  # small X step
-                    # g.move(z=+ts.coef_h[dummy1]*machine.nozzle.size_id,)
+                g.move(z=-ts.coef_h[dummy1] * machine.nozzle.size_id * (len(dummy0_range)-1),
+                       extrude=False)
+                if dummy2 != len(dummy2_range)-1:
+                    g.move(x=-step_x,
+                           y=0,
+                           z=0,
+                           extrude=False)  # small X step
+                # g.move(z=+ts.coef_h[dummy1]*machine.nozzle.size_id,)
 
-        g.write("; --- finish to print the test structure ---")
-        g.teardown()
-
-    return
-
+    g.write("; --- finish to print the test structure ---")
+    g.teardown()
 
 # RETRACTION DISTANCE at maximum RETRACTION SPEED
 def retraction_distance(ts: TestSetupA):
@@ -360,9 +359,10 @@ def retraction_distance(ts: TestSetupA):
         g.write(ts.comment2[dummy2])
 
         for dummy3 in range(0, 2): # layers
+
             g.abs_move(x=+ts.test_structure_size / 2 - (2 * dummy2 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
                        y=+ts.test_structure_size / 2,
-                       z=+ts.abs_z[dummy2] + dummy3*ts.coef_h[dummy2] * machine.nozzle.size_id,
+                       z=+(dummy3 + 1) * ts.coef_h[dummy2] * machine.nozzle.size_id + ts.coef_h_raft * machine.nozzle.size_id,
                        extrude=False, extrusion_multiplier=0)
 
             for dummy4 in range(0, ts.number_of_lines):
