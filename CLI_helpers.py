@@ -46,4 +46,4 @@ def extruded_filament(path):
         except:
             total_extrusion = total_extrusion + literal_eval(value)
 
-    return total_extrusion
+    return round(total_extrusion)

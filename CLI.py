@@ -2,7 +2,6 @@
 MP MT Framework.
 
 Usage:
-    CLI.py
     CLI.py test [-v] [-q] [--flash]
     CLI.py new-test
     CLI.py generate-report
@@ -20,6 +19,7 @@ if __name__ == '__main__':
     flash = arguments["--flash"]
 
     if arguments["generate-report"]:
+        import generate_report
         quit()
 
 from Calculations import shear_rate, pressure_drop, rheology
@@ -33,6 +33,8 @@ from Globals import machine, material, import_json_dict
 from CLI_helpers import evaluate, clear, extruded_filament
 import time
 import os
+
+session = import_json_dict["session"]
 
 start = time.time()
 
@@ -79,10 +81,10 @@ if not verbose:
 if import_json_dict["session"]["test_type"] == "A":
     test = import_json_dict["session"]["test_name"] if quiet else input("Parameter to be tested ['first layer height', 'extrusion temperature', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance']: ")  #
 
-    min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else None
+    min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"]
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
     if test != 'retraction distance':
-        min_max_speed_printing_input = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else None  # check the jerk value TODO
+        min_max_speed_printing_input = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else session["min_max_speed"]  # check the jerk value TODO
         min_max_speed_printing = min_max_speed_printing_input if min_max_speed_printing_input != "" else None
     else:
         min_max_speed_printing = None
@@ -158,7 +160,7 @@ else:
     else:
         tested_speed_values = ts.min_max_speed_printing
 
-if ts.test_name == "retraction distance" or min_max_speed_printing in None:
+if ts.test_name == "retraction distance" or min_max_speed_printing is None:
     tested_speed_values = []
 
 extruded_filament = extruded_filament(cwd + gcode_folder + "\\" + ts.test_name + " test.gcode")

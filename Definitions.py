@@ -212,6 +212,21 @@ class Machine(object):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
 
+class TestInfo(object):
+    def __init__(self, name, parameter, units):
+        self.name = name
+        self.parameter = parameter
+        self.units = units
+
+    def get_dict(self):
+        return {"test_name": self.name,
+                "parameter": self.parameter,
+                "units": self.units}
+
+    def get_tuple(self):
+        return tuple([self.name, self.parameter, self.units])
+
+
 def minmax_path_width(machine: Machine):
     coef_w_min = 0.90
 

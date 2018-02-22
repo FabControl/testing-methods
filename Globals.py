@@ -1,4 +1,4 @@
-from Definitions import Material, Settings, Machine, header, footer, minmax_path_width_height_raft
+from Definitions import Material, Settings, Machine, TestInfo, header, footer, minmax_path_width_height_raft
 from GcodeStuff import Gplus
 import json
 
@@ -69,11 +69,22 @@ except:
             "uid": 123456,
             "previous_tests": [],
             "test_type": 'A',
-            "test_name": 'first layer height'
+            "test_name": 'first layer height',
+            "min_max": [0.1, 0.3],
+            "min_max_speed": [10, 25]
+
         }
     }
 
-test_dictionary = []
+test_list = [TestInfo('first layer height', 'path_height_raft', 'mm'),  # 0
+             TestInfo('extrusion temperature', 'temperature_extruder', 'degC'),  # 1
+             TestInfo('path height', 'path_height', 'mm'),  # 2
+             TestInfo('path width', 'path_width', 'mm'),  # 3
+             TestInfo('printing speed', 'speed_printing', 'mm/s'),  # 4
+             TestInfo('extrusion multiplier', 'extrusion_multiplier', ''),  # 5
+             TestInfo('retraction distance', 'retraction_distance', 'mm')]  # 6
+
+tl = test_list  # convenience variable
 
 print("Loaded a testing session ID %d" % import_json_dict["session"]["uid"])
 
