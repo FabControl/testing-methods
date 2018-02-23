@@ -44,6 +44,7 @@ except:
             "temperature_extruder_raft": 260,
 
             "path_height_raft": 0.2,
+            "path_width_raft": 0.6,
             "speed_printing_raft": 20,
 
             "temperature_extruder": 260,
