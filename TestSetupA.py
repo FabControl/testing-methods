@@ -17,22 +17,28 @@ class TestSetupA(object):
 
         self.number_of_test_structures = machine.settings.number_of_test_structures
         self.test_name = test_name
-        self.coef_h_raft, self.coef_h_min_raft, self.coef_h_max_raft, self.coef_w_raft, self.coef_h_raft_all = minmax_path_width_height_raft(machine)
+        self.coef_h_raft, _, _, self.coef_w_raft, self.coef_h_raft_all = minmax_path_width_height_raft(machine)
 
         if machine.settings.path_height_raft != None:
             self.coef_h_raft = machine.settings.path_height_raft/machine.nozzle.size_id
+        if machine.settings.path_width_raft != None:
+            self.coef_w_raft = machine.settings.path_width_raft/machine.nozzle.size_id
 
         self.test_structure_size = get_test_structure_size(machine)
+
         self.speed_printing = [x*machine.settings.speed_printing for x in [1] * self.number_of_test_structures]
+        self.speed_printing_raft = [x * machine.settings.speed_printing_raft for x in [1] * self.number_of_test_structures]
+
         self.coef_h = [x * machine.settings.path_height / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
+        self.coef_w = [x * machine.settings.path_width / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
 
         self.raft = raft
+
         if raft is False:
             self.abs_z = [x * self.coef_h_raft * machine.nozzle.size_id for x in [1] * self.number_of_test_structures]
         else:
             self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
 
-        self.coef_w = [x * machine.settings.path_width / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
         self.extrusion_multiplier = [x * machine.settings.extrusion_multiplier for x in [1] * self.number_of_test_structures]
         self.temperature_extruder = [x * machine.settings.temperature_extruder for x in [1] * self.number_of_test_structures]
         self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
@@ -45,6 +51,9 @@ class TestSetupA(object):
         self.step_y = self.test_structure_size - self.coef_w_raft * machine.nozzle.size_id / 2
 
         self.number_of_lines = int(1.2*(self.test_structure_size / (2 * self.number_of_test_structures + 1))/(np.mean(self.coef_w) * machine.nozzle.size_id))
+
+        path_height = [round(x * machine.nozzle.size_id, 3) for x in self.coef_h]
+        path_width = [round(x * machine.nozzle.size_id, 3) for x in self.coef_w]
 
         if self.number_of_lines % 4 == 0:
             pass
@@ -73,6 +82,9 @@ class TestSetupA(object):
             self.argument = self.coef_h
             self.values = [round(x * machine.nozzle.size_id, 3) for x in self.argument]
 
+            path_height = self.values
+            path_width = [round(x * machine.nozzle.size_id, 3) for x in [self.coef_w_raft] * self.number_of_test_structures]
+
         elif test_name == 'path height':
             # PATH HEIGHT test parameters
 
@@ -87,6 +99,8 @@ class TestSetupA(object):
             self.argument = self.coef_h
             self.values = [round(x * machine.nozzle.size_id,3) for x in self.argument]
 
+            path_height = self.values
+
         elif test_name == 'path width':
             # PATH WIDTH test parameters
 
@@ -100,6 +114,8 @@ class TestSetupA(object):
             self.step_x = [x * machine.nozzle.size_id for x in self.coef_w]
             self.argument = self.coef_w
             self.values = [round(x * machine.nozzle.size_id, 3) for x in self.argument]
+
+            path_width = self.values
 
         elif test_name == 'printing speed':
             # PRINTING SPEED test parameters
@@ -171,9 +187,20 @@ class TestSetupA(object):
             print('Unknown test')
             raise ValueError("%s is not a valid test." % test_name)
 
+        q = []
+        q_row = []
+        for speed in self.min_max_speed_printing:
+            for dummy in range(0, self.number_of_test_structures):
+                value = round(q_v(path_height[dummy], path_width[dummy], speed, self.extrusion_multiplier[dummy]),3)
+                q_row.append(value)
+                if dummy == self.number_of_test_structures-1:
+                    q.append(q_row)
+                    q_row = []
+        self.q = q
+
         self.title = addtitle(test_name, material)
         self.comment1 = addcomment1(self.values, test_name, machine)
-        self.comment2 = addcomment2(self.coef_h, self.coef_w, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine) # TODO
+        self.comment2 = addcomment2(self.coef_h, self.coef_w, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine) # TODO add flow rate, brush up the comments!
 
         self.g = Gplus(material, machine,
                        outfile=path,

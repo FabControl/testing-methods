@@ -108,7 +108,7 @@ class Settings(object):
     retraction_distance - retraction distance (mm)
     """
 
-    def __init__(self, material=None, nozzle=None, path_width=None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
+    def __init__(self, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
                  temperature_printbed_raft=None, extrusion_multiplier_raft=None, speed_printing_raft=None, temperature_extruder=None,
                  temperature_printbed=None, extrusion_multiplier=None, speed_printing=None, retraction_distance = None, retraction_restart_distance = None,
                  coasting_distance = None, part_cooling=None, raft_density=None, number_of_test_structures = None, optimize_temperature_printbed = None, optimize_speed_printing = None, optimize_path_height = None, get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
@@ -120,8 +120,12 @@ class Settings(object):
 
         self.material = Material(None, None, None, 1.75)
         self.path_width = path_width  # respect the units: mm
+        self.path_width_raft = path_width_raft # respect the units: mm
         self.path_height = path_height  # respect the units: mm
         self.path_height_raft = path_height_raft
+        self.speed_printing = speed_printing  # respect the units: mm/s
+        self.speed_printing_raft = speed_printing / 2 if speed_printing_raft is None else speed_printing_raft  # respect the units: mm/s
+
         self.temperature_printbed_raft = temperature_printbed_raft
         self.temperature_extruder_raft = temperature_extruder_raft  # respect the units: degC
         self.extrusion_multiplier_raft = 1.15 if extrusion_multiplier_raft is None else extrusion_multiplier_raft
@@ -129,8 +133,7 @@ class Settings(object):
         self.temperature_extruder = temperature_extruder  # respect the units: degC
         self.temperature_printbed = temperature_printbed  # respect the units: degC
         self.extrusion_multiplier = 1 if extrusion_multiplier is None else extrusion_multiplier # 0...1
-        self.speed_printing = speed_printing  # respect the units: mm/s
-        self.speed_printing_raft = speed_printing/2 if speed_printing_raft is None else speed_printing_raft  # respect the units: mm/s
+
         self.retraction_distance = retraction_distance
         self.retraction_restart_distance = retraction_restart_distance
         self.coasting_distance = coasting_distance
@@ -147,11 +150,11 @@ class Settings(object):
         self.matrix_size = matrix_size
         self.layers = layers
 
-
         if material is None:
             self.material_name = None
         else:
             self.material_name = material.name
+
         self.nozzle = nozzle
 
     def print(self):
@@ -372,3 +375,10 @@ def write_json(name, surname, object, path = None):
     else:
         with open(str(path + '/' + file_name), mode='w') as file:
             file.write(jsonpickle.encode(object))
+
+def q_v(path_height, path_width, speed_printing, extrusion_multiplier = 1):
+    if path_height < path_width / (2 - math.pi / 2):
+        q_v = extrusion_multiplier * speed_printing * (path_height * (path_width - path_height) + math.pi * (path_height / 2) ** 2)
+    else:
+        q_v = extrusion_multiplier * speed_printing * path_height * path_width
+    return q_v

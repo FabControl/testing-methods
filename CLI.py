@@ -9,8 +9,9 @@ Usage:
 
 from docopt import docopt
 quiet = None
-verbose = None
+verbose = True
 flash = False
+
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='MP Material Testing Suite')
 
@@ -19,7 +20,7 @@ if __name__ == '__main__':
     flash = arguments["--flash"]
 
     if arguments["generate-report"]:
-        import generate_report
+        import generate_report # TODO feed persistence.json in, get pdf out and material.json
         quit()
 
 from Calculations import shear_rate, pressure_drop, rheology
@@ -35,7 +36,6 @@ import time
 import os
 
 session = import_json_dict["session"]
-
 start = time.time()
 
 # from session_builder import *
@@ -81,13 +81,13 @@ if not verbose:
 if import_json_dict["session"]["test_type"] == "A":
     test = import_json_dict["session"]["test_name"] if quiet else input("Parameter to be tested ['first layer height', 'extrusion temperature', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance']: ")  #
 
-    min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"]
+    min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"] # TODO check what happens when None, [] etc. Isn't it easier to restore a copy of a Session object?
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
     if test != 'retraction distance':
-        min_max_speed_printing_input = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else session["min_max_speed"]  # check the jerk value TODO
+        min_max_speed_printing_input = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else session["min_max_speed"]
         min_max_speed_printing = min_max_speed_printing_input if min_max_speed_printing_input != "" else None
     else:
-        min_max_speed_printing = None
+        min_max_speed_printing = []
 
     from DefinitionsTestsA import flat_test_single_parameter, flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
@@ -111,7 +111,7 @@ if import_json_dict["session"]["test_type"] == "A":
                         min_max_argument = min_max_argument,
                         min_max_speed_printing = min_max_speed_printing,
                         raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
-        if min_max_speed_printing_input is None:
+        if min_max_speed_printing_input is None: # TODO leave only one test routine
             flat_test_single_parameter(ts)
         else:
             flat_test_single_parameter_vs_speed_printing(ts)
@@ -141,8 +141,11 @@ elif import_json_dict["session"]["test_type"] == "B":
 if not quiet:
     if not verbose:
         clear()
-    print("Tested values:")
-    print(ts.get_values())
+    print("Tested Parameter values:")
+    print(ts.get_values()[::-1])
+    print("Corresponding Flow rate values (mm3/s):")
+    for x in ts.q:
+        print(x[::-1])
 
     if min_max_speed_printing is not None or ts.test_name != 'retraction distance':
         print("Printing speed values:")
@@ -168,10 +171,11 @@ extruded_filament = extruded_filament(cwd + gcode_folder + "\\" + ts.test_name +
 current_test = {"test_name": ts.test_name,
                 "tested_values": ts.get_values(),
                 "tested_speed_values": tested_speed_values,
-                "selected_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
-                "selected_speed_printing_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
+                "selected_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0, # TODO enter STRUCTURE NUMBER not VALUE, pass to FLOW RATE
+                "selected_speed_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
                 "units": ts.units,
-                "extruded_filament": extruded_filament}
+                "extruded_filament": extruded_filament,
+                "selected_flow_rate_value": evaluate(input("Enter the flow rate value which corresponds to the best parameter value: ")) if not quiet else 0}
 
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
@@ -181,14 +185,22 @@ for dummy in import_json_dict["session"]["previous_tests"]:
         import_json_dict["settings"]["speed_printing"] = dummy["selected_value"]
     elif dummy["test_name"] == "path height":
         import_json_dict["settings"]["path_height"] = dummy["selected_value"]
+        import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+    elif dummy["test_name"] == "first layer height":
+        import_json_dict["settings"]["path_height_raft"] = dummy["selected_value"]
+        import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "path width":
         import_json_dict["settings"]["path_width"] = dummy["selected_value"]
+        import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "extrusion temperature":
         import_json_dict["settings"]["temperature_extruder"] = dummy["selected_value"]
+        import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "extrusion multiplier":
         import_json_dict["settings"]["extrusion_multiplier"] = dummy["selected_value"]
+        import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "retraction distance":
         import_json_dict["settings"]["retraction_distance"] = dummy["selected_value"]
+        import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
 
 with open(cwd + "\\jsons\\" + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)
