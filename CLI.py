@@ -2,7 +2,7 @@
 MP MT Framework.
 
 Usage:
-    CLI.py test [-v] [-q] [--flash]
+    CLI.py [-v] [-q] [--flash]
     CLI.py new-test
     CLI.py generate-report
 """
@@ -83,7 +83,7 @@ if import_json_dict["session"]["test_type"] == "A":
     min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"] # TODO check what happens when None, [] etc. Isn't it easier to restore a copy of a Session object?
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
     if test == 'retraction distance':
-        min_max_speed_printing = None
+        min_max_speed_printing = [import_json_dict["settings"]["speed_printing"]] * 4
     elif test == 'printing speed':
         min_max_speed_printing = None
     else:

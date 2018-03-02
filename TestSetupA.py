@@ -65,9 +65,6 @@ class TestSetupA(object):
             if self.number_of_lines % 4 == 3:
                 self.number_of_lines = self.number_of_lines + 1
 
-        if min_max_speed_printing is not None:
-            self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], 4).tolist()
-
         if test_name == 'first layer height':
             # FIRST LAYER HEIGHT test parameters
 
@@ -97,7 +94,7 @@ class TestSetupA(object):
 
             self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
             self.argument = self.coef_h
-            self.values = [round(x * machine.nozzle.size_id,3) for x in self.argument]
+            self.values = [round(x * machine.nozzle.size_id, 3) for x in self.argument]
 
             path_height = self.values
 
@@ -187,13 +184,20 @@ class TestSetupA(object):
             print('Unknown test')
             raise ValueError("%s is not a valid test." % test_name)
 
+        if min_max_speed_printing is not None:
+            self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], 4).tolist()
+        elif self.test_name != "first layer height":
+            self.min_max_speed_printing = self.speed_printing
+        if self.test_name == "retraction distance":
+            self.min_max_speed_printing = [self.speed_printing[0]]
+
         q = []
         q_row = []
         for speed in self.min_max_speed_printing:
-            for dummy in range(0, self.number_of_test_structures):
+            for dummy in range(self.number_of_test_structures if test_name != "printing speed" else 1):
                 value = round(q_v(path_height[dummy], path_width[dummy], speed, self.extrusion_multiplier[dummy]),3)
                 q_row.append(value)
-                if dummy == self.number_of_test_structures-1:
+                if dummy == self.number_of_test_structures-1 or test_name == "printing speed":
                     q.append(q_row)
                     q_row = []
         self.q = q
