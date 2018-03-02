@@ -1,5 +1,5 @@
 from ast import literal_eval
-from os import system, name
+from os import system, name, listdir
 import re
 
 
@@ -70,10 +70,11 @@ def exclusive_write(path: str, output, limit=True):
     try:
         with open(path, "x") as file:
             file.write(output)
+
     except:
         split = re.split(r'(\d+(?=\.))*(\.[0-9a-zA-Z]+?$)', path)
-        if split[1] is not None and int(split[1]) > 999 and limit:
-            raise ValueError('%s%s is likely overflowing and has reached 1000 or more instances.' % (split[0], split[2]))
+        path = list(filter(lambda x: split[0] in x, listdir()))[-1]
+        split = re.split(r'(\d+(?=\.))*(\.[0-9a-zA-Z]+?$)', path)
         path = split[0] + str(int(split[1] if split[1] is not None else 0) + 1).zfill(3) + split[2]
         with open(path, "x") as file:
             file.write(output)
