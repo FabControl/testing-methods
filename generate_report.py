@@ -6,6 +6,7 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, 
 from reportlab.lib.styles import ParagraphStyle
 import json, os
 from datetime import datetime
+from CLI_helpers import *
 
 with open("persistence.json", mode="r") as file: # ./jsons/
     import_json_dict = json.load(file)
@@ -53,6 +54,10 @@ main_info = "Nozzle: " + str(import_json_dict["machine"]["nozzle"]["size_id"]) +
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Part cooling: " + str(import_json_dict["settings"]["part_cooling"]) + " %"
 elements.append(Paragraph(main_info, style=style_text))
+main_info = "Retraction distance: " + str(import_json_dict["settings"]["retraction_distance"]) + " mm"
+elements.append(Paragraph(main_info, style=style_text))
+main_info = "Retraction speed: " + str(import_json_dict["settings"]["retraction_speed"]) + " mm/s"
+elements.append(Paragraph(main_info, style=style_text))
 
 consumed_filament = 0
 for dummy in import_json_dict["session"]["previous_tests"]:
@@ -93,7 +98,7 @@ style = TableStyle([
                        ('VALIGN',(0, 0),(-1,-1),'MIDDLE'),
                        ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
                        ('BOX', (0,0), (-1,-1), 0.25, colors.black),
-                       ('SPAN',(3,0),(-3,0))
+                       ('SPAN',(3,0),(-4,0))
                        ])
 
 colwidths = [20, 110, 50]
@@ -103,7 +108,6 @@ colwidths.append(80)
 colwidths.append(80)
 colwidths.append(80)
 
-print(data)
 data2 = [[Paragraph(cell, style_text) for cell in row] for row in data]
 t = Table(data2, colwidths)
 t.setStyle(style)
@@ -112,6 +116,7 @@ t.setStyle(style)
 elements.append(t)
 doc.build(elements)
 
+exclusive_write("persistence.json", json.dumps(import_json_dict, indent=4, sort_keys=False), limit = True)
 # with open("persistence.json", mode="w") as file: # TODO "Save" option
 #     output = json.dumps(import_json_dict, indent=4, sort_keys=False)
 #     file.write(output)

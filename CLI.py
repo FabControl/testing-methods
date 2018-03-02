@@ -39,7 +39,6 @@ session = import_json_dict["session"]
 start = time.time()
 
 # from session_builder import *
-
 if flash:
     cwd = 'F:'
     gcode_folder = '\\tests'
@@ -83,13 +82,14 @@ if import_json_dict["session"]["test_type"] == "A":
 
     min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"] # TODO check what happens when None, [] etc. Isn't it easier to restore a copy of a Session object?
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
-    if test != 'retraction distance':
-        min_max_speed_printing_input = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else session["min_max_speed"]
-        min_max_speed_printing = min_max_speed_printing_input if min_max_speed_printing_input != "" else None
+    if test == 'retraction distance':
+        min_max_speed_printing = None
+    elif test == 'printing speed':
+        min_max_speed_printing = None
     else:
-        min_max_speed_printing = []
+        min_max_speed_printing = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else session["min_max_speed"]
 
-    from DefinitionsTestsA import flat_test_single_parameter, flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
+    from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
     if test == 'retraction distance':
         path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
@@ -111,10 +111,7 @@ if import_json_dict["session"]["test_type"] == "A":
                         min_max_argument = min_max_argument,
                         min_max_speed_printing = min_max_speed_printing,
                         raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
-        if min_max_speed_printing_input is None: # TODO leave only one test routine
-            flat_test_single_parameter(ts)
-        else:
-            flat_test_single_parameter_vs_speed_printing(ts)
+        flat_test_single_parameter_vs_speed_printing(ts)
 
 elif import_json_dict["session"]["test_type"] == "B":
     test = 'temperature'  # 'overlap', 'path height']  # TODO
@@ -147,10 +144,10 @@ if not quiet:
     for x in ts.q:
         print(x[::-1])
 
-    if min_max_speed_printing is not None or ts.test_name != 'retraction distance':
+    if min_max_speed_printing is not None:
         print("Printing speed values:")
         min_max_speed_printing = ts.min_max_speed_printing
-        print([round(k,1) for k in np.linspace(min_max_speed_printing[0],min_max_speed_printing[1],4).tolist()])
+        print([round(k, 1) for k in min_max_speed_printing])
 
 # Add a step for selecting/approving of the result
 previous_tests = import_json_dict["session"]["previous_tests"]
@@ -189,6 +186,7 @@ for dummy in import_json_dict["session"]["previous_tests"]:
     elif dummy["test_name"] == "first layer height":
         import_json_dict["settings"]["path_height_raft"] = dummy["selected_value"]
         import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
+        import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.nozzle.size_id,2)
     elif dummy["test_name"] == "path width":
         import_json_dict["settings"]["path_width"] = dummy["selected_value"]
         import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
@@ -201,6 +199,7 @@ for dummy in import_json_dict["session"]["previous_tests"]:
     elif dummy["test_name"] == "retraction distance":
         import_json_dict["settings"]["retraction_distance"] = dummy["selected_value"]
         import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+        import_json_dict["settings"]["retraction_speed"] = round(ts.retraction_speed,1)
 
 with open(cwd + "\\jsons\\" + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)
