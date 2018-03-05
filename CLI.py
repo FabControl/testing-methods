@@ -30,7 +30,7 @@ from OptimizeSettings import check_printbed_temperature, check_printing_speed_sh
 from Plotting import plotting_mfr
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
-from Globals import machine, material, import_json_dict
+from Globals import machine, material, import_json_dict, test_list
 from CLI_helpers import evaluate, clear, extruded_filament
 import time
 import os
@@ -78,10 +78,13 @@ if not verbose:
     clear()
 
 if import_json_dict["session"]["test_type"] == "A":
-    test = import_json_dict["session"]["test_name"] if quiet else input("Parameter to be tested ['first layer height', 'extrusion temperature', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance', 'retraction restart distance and coasting distance']: ")  #
+    test_number = import_json_dict["session"]["test_name"] if quiet else int(input("Parameter to be tested:\n 1 for 'first layer height',\n 2 for 'extrusion temperature',\n 3 for 'path height',\n 4 for 'path width',\n 5 for 'printing speed',\n 6 for 'extrusion multiplier',\n 7 for 'retraction distance',\n 8 for 'retraction restart distance and coasting distance': "))  #
 
-    min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"] # TODO check what happens when None, [] etc. Isn't it easier to restore a copy of a Session object?
+    test = test_list[test_number-1]
+
+    min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"]
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
+
     if test == 'retraction distance':
         min_max_speed_printing = [import_json_dict["settings"]["speed_printing"]] * 4
     elif test == 'printing speed':
@@ -91,26 +94,17 @@ if import_json_dict["session"]["test_type"] == "A":
 
     from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
+    path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
+    ts = TestSetupA(machine, material, test, path,
+                    min_max_argument=min_max_argument,
+                    min_max_speed_printing=min_max_speed_printing,
+                    raft=True if import_json_dict["settings"]["raft_density"] > 0 else False)
+
     if test == 'retraction distance':
-        path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
-        ts = TestSetupA(machine, material, test, path,
-                        min_max_argument = min_max_argument,
-                        min_max_speed_printing = min_max_speed_printing,
-                        raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
         retraction_distance(ts)
     elif test == 'retraction restart distance and coasting distance':
-        path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
-        ts = TestSetupA(machine, material, test, path,
-                        min_max_argument = min_max_argument,
-                        min_max_speed_printing = min_max_speed_printing,
-                        raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
         retraction_restart_distance_vs_coasting_distance(ts)
     else:
-        path = str(cwd + gcode_folder + '\\' + test + ' test'+ '.gcode')
-        ts = TestSetupA(machine, material, test, path,
-                        min_max_argument = min_max_argument,
-                        min_max_speed_printing = min_max_speed_printing,
-                        raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
         flat_test_single_parameter_vs_speed_printing(ts)
 
 elif import_json_dict["session"]["test_type"] == "B":

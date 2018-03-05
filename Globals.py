@@ -10,12 +10,12 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "ABS",
-            "manufacturer": "Verbatim",
+            "name": "PBS",
+            "manufacturer": "RTU",
             "id": "123456",
             "size_od": 1.75,
-            "temperature_melting": 220,
-            "temperature_destr": 320,
+            "temperature_melting": 200,
+            "temperature_destr": 300,
             "temperature_vicat": 104
         },
         "machine": {
@@ -77,13 +77,21 @@ except:
         }
     }
 
-test_list = [TestInfo('first layer height', 'path_height_raft', 'mm'),  # 0
-             TestInfo('extrusion temperature', 'temperature_extruder', 'degC'),  # 1
-             TestInfo('path height', 'path_height', 'mm'),  # 2
-             TestInfo('path width', 'path_width', 'mm'),  # 3
-             TestInfo('printing speed', 'speed_printing', 'mm/s'),  # 4
-             TestInfo('extrusion multiplier', 'extrusion_multiplier', ''),  # 5
-             TestInfo('retraction distance', 'retraction_distance', 'mm')]  # 6
+# test_list = [TestInfo('first layer height', 'path_height_raft', 'mm'),  # 0
+#              TestInfo('extrusion temperature', 'temperature_extruder', 'degC'),  # 1
+#              TestInfo('path height', 'path_height', 'mm'),  # 2
+#              TestInfo('path width', 'path_width', 'mm'),  # 3
+#              TestInfo('printing speed', 'speed_printing', 'mm/s'),  # 4
+#              TestInfo('extrusion multiplier', 'extrusion_multiplier', ''),  # 5
+#              TestInfo('retraction distance', 'retraction_distance', 'mm')]  # 6
+
+test_list = ['first layer height', #0
+             'extrusion temperature', #1
+             'path height', #2
+             'path width', #3
+             'printing speed', #4
+             'extrusion multiplier', #5
+             'retraction distance'] #6
 
 tl = test_list  # convenience variable
 
