@@ -70,10 +70,8 @@ class TestSetupA(object):
 
             self.units = ['mm']* self.number_of_test_structures
 
-            if min_max_argument is None:
-                self.coef_h = self.coef_h_raft_all
-            else:
-                self.coef_h = np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
+            self.coef_h = self.coef_h_raft_all if min_max_argument is None \
+                else np.linspace(min_max_argument[0]/machine.nozzle.size_id, min_max_argument[1]/machine.nozzle.size_id, self.number_of_test_structures).tolist()
 
             self.abs_z = [x * machine.nozzle.size_id for x in self.coef_h]
             self.argument = self.coef_h
@@ -87,10 +85,8 @@ class TestSetupA(object):
 
             self.units = ['mm']* self.number_of_test_structures
 
-            if min_max_argument is None:
-                self.coef_h, coef_h_mean = minmax_path_height(machine, self.number_of_test_structures)
-            else:
-                self.coef_h = np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
+            self.coef_h, _ = minmax_path_height(machine, self.number_of_test_structures) if min_max_argument is None \
+                else np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
 
             self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
             self.argument = self.coef_h
@@ -103,10 +99,8 @@ class TestSetupA(object):
 
             self.units = ['mm']* self.number_of_test_structures
 
-            if min_max_argument is None:
-                self.coef_w, coef_w_mean = minmax_path_width(machine)
-            else:
-                self.coef_w = np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
+            self.coef_w, coef_w_mean = minmax_path_width(machine) if min_max_argument is None \
+                else np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
 
             self.step_x = [x * machine.nozzle.size_id for x in self.coef_w]
             self.argument = self.coef_w
@@ -119,10 +113,8 @@ class TestSetupA(object):
 
             self.units = ['mm/s']* self.number_of_test_structures
 
-            if min_max_argument is None:
-                self.speed_printing = minmax_speed_printing(machine)
-            else:
-                self.speed_printing = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
+            self.speed_printing = minmax_speed_printing(machine) if min_max_argument is None  \
+                else np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
             self.argument = [round(x,1) for x in self.speed_printing]
             self.values = self.argument
@@ -132,10 +124,8 @@ class TestSetupA(object):
 
             self.units = ['-']* self.number_of_test_structures
 
-            if min_max_argument is None:
-                self.extrusion_multiplier = minmax_extrusion_multiplier(machine)
-            else:
-                self.extrusion_multiplier = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
+            self.extrusion_multiplier = minmax_extrusion_multiplier(machine) if min_max_argument is None \
+                else np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
             self.argument = [round(x,3) for x in self.extrusion_multiplier]
             self.values = self.argument
@@ -145,10 +135,8 @@ class TestSetupA(object):
 
             self.units = ['degC']* self.number_of_test_structures
 
-            if min_max_argument is None:
-                self.temperature_extruder = minmax_temperature(material, machine)
-            else:
-                self.temperature_extruder = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
+            self.temperature_extruder = minmax_temperature(material, machine) if min_max_argument is None \
+                else np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
             self.argument = [round(x,0) for x in self.temperature_extruder]
             self.values = self.argument
@@ -158,10 +146,8 @@ class TestSetupA(object):
 
             self.units = ['mm']* self.number_of_test_structures
 
-            if min_max_argument is None:
-                self.retraction_distance = np.linspace(0.0, 4.0, self.number_of_test_structures).tolist()
-            else:
-                self.retraction_distance = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
+            self.retraction_distance = np.linspace(0.0, 4.0, self.number_of_test_structures).tolist() if min_max_argument is None \
+                else np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
 
             self.argument = [round(x, 2) for x in self.retraction_distance]
             self.values = self.argument
@@ -203,7 +189,7 @@ class TestSetupA(object):
         self.q = q
 
         self.title = addtitle(test_name, material)
-        self.comment1 = addcomment1(self.values, self.units, test_name, machine)
+        self.comment1 = addcomment1(self.values, self.units, test_name)
         self.comment2 = addcomment2(self.coef_h, self.coef_w, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine) # TODO add flow rate, brush up the comments!
 
         self.g = Gplus(material, machine,
@@ -223,7 +209,7 @@ def addtitle(test_name: str, material: Material):
     return title
 
 
-def addcomment1(values, units, test_name: str, machine: Machine):
+def addcomment1(values, units, test_name: str):
     comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} {}'.format(*k) for k in zip(values, units)) + ' ---')
 
     return comment1

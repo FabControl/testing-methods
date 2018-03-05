@@ -157,9 +157,8 @@ def print_raft_new(ts: TestSetupA):
 
 # GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER vs. PRINTING SPEED
 def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
-    g = ts.g
-
     number_of_substructures = 1 if ts.test_name == "printing speed" else 4
+    number_of_layers = range(1 if ts.test_name == "first layer height" else 2)
 
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
@@ -181,7 +180,7 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
                         z=+ts.abs_z[dummy1],
                         lift=1)
 
-        if ts.test_name == 'extrusion temperature':  # TODO! Fix the movement, time, extra restart distance
+        if ts.test_name == 'extrusion temperature':  # TODO! time, extra restart distance
             ts.g.travel(x=0,
                      y=+ts.test_structure_size / 5,
                      z=+ts.abs_z[dummy1], retraction_speed=ts.retraction_speed, retraction_distance=ts.retraction_distance[dummy1]) #  TODO disable retractions
@@ -199,14 +198,10 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
 
         dummy2_range = range(number_of_substructures)
         for dummy2 in dummy2_range:
-            if ts.min_max_speed_printing is not None:
-                current_printing_speed = ts.min_max_speed_printing[dummy2]
-            else:
-                current_printing_speed = ts.speed_printing[dummy1]
+            current_printing_speed = ts.min_max_speed_printing[dummy2] if ts.min_max_speed_printing is not None else ts.speed_printing[dummy1]
             ts.g.write('; --- testing the following printing speed value: %.3f mm/s' % (current_printing_speed))
             ts.g.feed(current_printing_speed)
 
-            number_of_layers = range(1 if ts.test_name == "first layer height" else 2)
             for dummy0 in number_of_layers: # layers
                 dummy3_range = range(0, ts.number_of_lines)
                 if dummy0 != 0:
@@ -224,16 +219,17 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
                                   extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
                     else:
                         ts.g.move(x=0,
-                               y=(-1) ** (dummy3 + 1) * ts.step_y / number_of_substructures,
-                               z=0,
-                               extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1],
-                               coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
+                                  y=(-1) ** (dummy3 + 1) * ts.step_y / number_of_substructures,
+                                  z=0,
+                                  extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
                         ts.g.move(x=(-1) ** (dummy0 + 1) * step_x,
-                               y=0,
-                               z=0,
-                               extrude=False)
+                                  y=0,
+                                  z=0,
+                                  extrude=False)
+
             ts.g.move(x=0,
                       y=-ts.step_y/number_of_substructures,
+                      z=0,
                       extrude=False)  # Y step after substructure. Y and Z should be separated and staged
 
             if len(number_of_layers) % 2 != 0:  # check if even layer number
@@ -246,15 +242,15 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
                       y=0,
                       z=-ts.coef_h[dummy1] * machine.nozzle.size_id * (len(number_of_layers)-1),
                       extrude=False)
+
             if dummy2 != len(dummy2_range)-1:
                 ts.g.move(x=-step_x,
                           y=0,
                           z=0,
                           extrude=False)  # small X step
-                # g.move(z=+ts.coef_h[dummy1]*machine.nozzle.size_id,)
 
-    g.write("; --- finish to print the test structure ---")
-    g.teardown()
+    ts.g.write("; --- finish to print the test structure ---")
+    ts.g.teardown()
 
 
 # RETRACTION DISTANCE at maximum RETRACTION SPEED
