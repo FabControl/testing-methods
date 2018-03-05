@@ -8,280 +8,192 @@ from Globals import machine, material
 
 # WIPE
 def wipe(ts: TestSetupA or TestSetupB, full = True):
-    test_structure_size = ts.test_structure_size
-    coef_w_raft = ts.coef_w_raft
-    coef_h_raft = ts.coef_h_raft
-    g = ts.g
-
-    g.home()
-    g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
-    g.abs_move(x=-6 * test_structure_size / 10,
-               y=-6 * test_structure_size / 10,
-               z=+2 * coef_h_raft * machine.nozzle.size_id,
+    ts.g.home()
+    ts.g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
+    ts.g.abs_move(x=-6 * ts.test_structure_size / 10,
+               y=-6 * ts.test_structure_size / 10,
+               z=+2 * ts.coef_h_raft * machine.nozzle.size_id,
                extrude=False, extrusion_multiplier=0)
 
     if machine.settings.temperature_printbed is not None:
-        g.set_printbed_temperature(machine.settings.temperature_printbed)
+        ts.g.set_printbed_temperature(machine.settings.temperature_printbed)
 
-    g.write("; --- start to clean the nozzle ---")
-    g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
-    g.dwell(5)
+    ts.g.write("; --- start to clean the nozzle ---")
+    ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
+    ts.g.dwell(5)
     output = "G1 F1000 E5; extrude 5 mm of material"
-    g.write(output)
-    g.dwell(5)
-    g.feed(machine.settings.speed_printing_raft)  # print the raft
+    ts.g.write(output)
+    ts.g.dwell(5)
+    ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
     if isinstance(ts, TestSetupA):
-        g.abs_move(x=+6 * test_structure_size / 10,
-                   y=-6 * test_structure_size / 10,
-                   z=0,
-                   extrude=True, extrusion_multiplier=2.25, coef_h=coef_h_raft, coef_w=coef_w_raft)
-        g.move(x=0,
-               y=+test_structure_size / 10,
-               z=+coef_h_raft * machine.nozzle.size_id,
-               extrude=False, extrusion_multiplier=0)
-        g.move(x=-test_structure_size / 10,
-               y=0,
-               z=0,
-               extrude=False, extrusion_multiplier=0)
+        ts.g.abs_move(x=+6 * ts.test_structure_size / 10,
+                      y=-6 * ts.test_structure_size / 10,
+                      z=0,
+                      extrude=True, extrusion_multiplier=2.25, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
+        ts.g.move(x=0,
+                  y=+ts.test_structure_size / 10,
+                  z=+ts.coef_h_raft * machine.nozzle.size_id,
+                  extrude=False, extrusion_multiplier=0)
+        ts.g.move(x=-ts.test_structure_size / 10,
+                  y=0,
+                  z=0,
+                  extrude=False, extrusion_multiplier=0)
     elif isinstance(ts, TestSetupB):
-        g.abs_move(x=+6 * test_structure_size / 10,
-                   y=-6 * test_structure_size / 10,
-                   z=0,
-                   extrude=True, extrusion_multiplier=2.25, coef_h=coef_h_raft, coef_w=coef_w_raft)
-        g.move(x=0,
-               y=-test_structure_size / 10,
-               z=+coef_h_raft * machine.nozzle.size_id,
-               extrude=False, extrusion_multiplier=0)
-        g.move(x=-test_structure_size / 10,
-               y=0,
-               z=0,
-               extrude=False, extrusion_multiplier=0)
-    g.write("; --- end to clean the nozzle ---")
+        ts.g.abs_move(x=+6 * ts.test_structure_size / 10,
+                      y=-6 * ts.test_structure_size / 10,
+                      z=0,
+                      extrude=True, extrusion_multiplier=2.25, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
+        ts.g.move(x=0,
+                  y=-ts.test_structure_size / 10,
+                  z=+ts.coef_h_raft * machine.nozzle.size_id,
+                  extrude=False, extrusion_multiplier=0)
+        ts.g.move(x=-ts.test_structure_size / 10,
+                  y=0,
+                  z=0,
+                  extrude=False, extrusion_multiplier=0)
+    ts.g.write("; --- end to clean the nozzle ---")
 
 
 # RAFT PERIMETER
 def raft_perimeter(ts: TestSetupA):
-    test_structure_size = ts.test_structure_size
-    coef_w_raft = ts.coef_w_raft
-    coef_h_raft = ts.coef_h_raft
-    g = ts.g
+    ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
+    ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
 
-    g.feed(machine.settings.speed_printing_raft)  # print the raft
-    g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
-
-    g.write("; --- print the outer perimeter ---")
-    g.feed(machine.settings.speed_printing_raft / 3)  # print the outer perimeter of the raft
-    g.move(x=0,
-           y=+test_structure_size,
-           z=0,
-           extrude=True, extrusion_multiplier=1.5, coef_h=coef_h_raft, coef_w=coef_w_raft)
-    g.move(x=-test_structure_size,
-           y=0,
-           z=0,
-           extrude=True, extrusion_multiplier=1.5, coef_h=coef_h_raft, coef_w=coef_w_raft)
-    g.move(x=0,
-           y=-test_structure_size,
-           z=0,
-           extrude=True, extrusion_multiplier=1.5, coef_h=coef_h_raft, coef_w=coef_w_raft)
-    g.move(x=+test_structure_size,
-           y=0,
-           z=0,
-           extrude=True, extrusion_multiplier=1.5, coef_h=coef_h_raft, coef_w=coef_w_raft)
+    ts.g.write("; --- print the outer perimeter ---")
+    ts.g.feed(machine.settings.speed_printing_raft / 3)  # print the outer perimeter of the raft
+    ts.g.move(x=0,
+              y=+ts.test_structure_size,
+              z=0,
+              extrude=True, extrusion_multiplier=1.5, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
+    ts.g.move(x=-ts.test_structure_size,
+              y=0,
+              z=0,
+              extrude=True, extrusion_multiplier=1.5, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
+    ts.g.move(x=0,
+              y=-ts.test_structure_size,
+              z=0,
+              extrude=True, extrusion_multiplier=1.5, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
+    ts.g.move(x=+ts.test_structure_size,
+              y=0,
+              z=0,
+              extrude=True, extrusion_multiplier=1.5, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
 
 
 # PRINTING RAFT
 def print_raft(ts: TestSetupA):
-    test_structure_size = ts.test_structure_size
-    coef_w_raft = ts.coef_w_raft
-    coef_h_raft = ts.coef_h_raft
-    g = ts.g
-
-    g.feed(machine.settings.speed_printing_raft)  # print the raft
-    g.write("; --- start to print the raft ---")
-    g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
+    ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
+    ts.g.write("; --- start to print the raft ---")
+    ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
 
     raft_perimeter(ts)
 
     output = ("; --- print the infill with the fill density of %.f %% ---" % (machine.settings.raft_density))
 
-    g.feed(machine.settings.speed_printing_raft)  # print the raft
-    g.write(output)
+    ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
+    ts.g.write(output)
 
-    g.feed(machine.settings.speed_printing_raft)  # print the filling of the raft
+    ts.g.feed(machine.settings.speed_printing_raft)  # print the filling of the raft
 
     raft_density = machine.settings.raft_density / 100
-    step = coef_w_raft * machine.nozzle.size_id / raft_density  # step size
+    step = ts.coef_w_raft * machine.nozzle.size_id / raft_density  # step size
 
-    step_number = test_structure_size/(coef_w_raft * machine.nozzle.size_id / raft_density)
+    step_number = ts.test_structure_size/(ts.coef_w_raft * machine.nozzle.size_id / raft_density)
 
-    overlap = 1.1*(coef_w_raft * machine.nozzle.size_id)/(2*step_number**2 - step_number)
+    overlap = 1.1*(ts.coef_w_raft * machine.nozzle.size_id)/(2*step_number**2 - step_number)
 
     step_modified = (1-overlap)*step
 
-    g.move(x=-coef_w_raft * machine.nozzle.size_id/2,
-           y=0,
-           z=0,
-           extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
+    ts.g.move(x=-ts.coef_w_raft * machine.nozzle.size_id/2,
+              y=0,
+              z=0,
+              extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
 
     for dummy in range(0, int(step_number)):
-        g.move(x=0,
-               y=+step_modified,
-               z=0,
-               extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
-        g.move(x=(-1)**(dummy+1)*(test_structure_size-coef_w_raft * machine.nozzle.size_id),
-               y=0,
-               z=0,
-               extrude=True, extrusion_multiplier=machine.settings.extrusion_multiplier_raft, coef_h=coef_h_raft, coef_w=coef_w_raft)
+        ts.g.move(x=0,
+                  y=+step_modified,
+                  z=0,
+                  extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
+        ts.g.move(x=(-1)**(dummy+1)*(ts.test_structure_size-ts.coef_w_raft * machine.nozzle.size_id),
+                  y=0,
+                  z=0,
+                  extrude=True, extrusion_multiplier=machine.settings.extrusion_multiplier_raft, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
 
-    g.write("; --- finish to print the raft ---")
+    ts.g.write("; --- finish to print the raft ---")
 
-    g.move(x=0,
-           y=20,
-           z=0,
-           extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
+    ts.g.move(x=0,
+              y=20,
+              z=0,
+              extrude=False, extrusion_multiplier=0, coef_h=0, coef_w=0)
 
-    g.set_extruder_temperature(ts.temperature_extruder[0])
-    g.dwell(30)  # to unload the nozzle
+    ts.g.set_extruder_temperature(ts.temperature_extruder[0])
+    ts.g.dwell(30)  # to unload the nozzle
 
     if machine.settings.part_cooling is not None:
-        g.set_part_cooling(machine.settings.part_cooling)
+        ts.g.set_part_cooling(machine.settings.part_cooling)
 
     return
 
 
 def print_raft_new(ts: TestSetupA):
-    test_structure_size = ts.test_structure_size
-    coef_w_raft = ts.coef_w_raft
-    coef_h_raft = ts.coef_h_raft
-    g = ts.g
-
-    g.home()
-    g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
+    ts.g.home()
+    ts.g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
 
     if machine.settings.temperature_printbed is not None:
-        g.set_printbed_temperature(machine.settings.temperature_printbed)
-    g.abs_move(x=0,
-               y=0,
-               z=coef_h_raft * machine.nozzle.size_id,
-               extrude=False)
-    g.write("; --- start to clean the nozzle ---")
-    g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
-    g.dwell(5)
+        ts.g.set_printbed_temperature(machine.settings.temperature_printbed)
+        ts.g.abs_move(x=0,
+                      y=0,
+                      z=ts.coef_h_raft * machine.nozzle.size_id,
+                      extrude=False)
+    ts.g.write("; --- start to clean the nozzle ---")
+    ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
+    ts.g.dwell(5)
     output = "G1 F1000 E5; extrude 5 mm of material"
-    g.write(output)
-    g.dwell(5)
-    g.feed(machine.settings.speed_printing_raft)  # print the raft
-    sf.infill(sf.raft_structure(test_structure_size/2, structure="square"), outlines=2, g= g, coef_w= coef_w_raft, coef_h= coef_h_raft)
-    g.write("; --- finish to print the raft ---")
-
-#
-# # GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER
-# def flat_test_single_parameter(ts: TestSetupA):
-#     g = ts.g
-#
-#     g.write(ts.title)
-#     g.write(ts.comment1)
-#     wipe(ts)
-#
-#     if ts.raft == True and ts.test_name != 'first layer height':
-#         print_raft(ts)  # print the raft to support the test structure
-#     else:
-#         raft_perimeter(ts)
-#
-#     g.write("; --- start to print the test structure ---")
-#     g.feed(machine.settings.speed_printing)  # respect the units: mm/min
-#
-#     for dummy1 in range(0, ts.number_of_test_structures):
-#         g.set_extruder_temperature(ts.temperature_extruder[dummy1])
-#         g.write(ts.comment2[dummy1])
-#         g.abs_move(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
-#                    y=+ts.test_structure_size / 2,
-#                    z=+ts.abs_z[dummy1],
-#                    extrude=False, extrusion_multiplier=0)
-#
-#         g.feed(ts.speed_printing[dummy1])  # respect the units: mm/min
-#
-#         for dummy2 in range(0, ts.number_of_lines):
-#             step_x = ts.step_x[dummy1]
-#
-#             g.move(x=-step_x,
-#                    y=0,
-#                    z=0,
-#                    extrude=False, extrusion_multiplier=0)
-#             g.move(x=0,
-#                    y=((-1)**(dummy2+1))*ts.step_y,
-#                    z=0,
-#                    extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
-#
-#         if ts.test_name == 'extrusion temperature':
-#             g.move(x=0,
-#                    y=+ts.test_structure_size / 5,
-#                    z=0,
-#                    extrude=False, extrusion_multiplier=0)
-#
-#             try:
-#                 g.set_extruder_temperature(ts.temperature_extruder[dummy1 + 1])
-#                 g.dwell(30)
-#                 output = "G1 F500 E" + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0], 2)) + "; extrude " + str(round(2 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0], 2)) + " mm of material"
-#                 g.write(output)
-#                 g.move(x=0,
-#                        y=-ts.test_structure_size / 5,
-#                        z=0,
-#                        extrude=False, extrusion_multiplier=0)
-#             except IndexError:
-#                 g.set_extruder_temperature(ts.temperature_extruder[-1])
-#
-#     g.write("; --- finish to print the test structure ---")
-#     g.teardown()
-#     return
-
+    ts.g.write(output)
+    ts.g.dwell(5)
+    ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
+    sf.infill(sf.raft_structure(ts.test_structure_size/2, structure="square"), outlines=2, g= ts.g, coef_w= ts.coef_w_raft, coef_h= ts.coef_h_raft) # TODO
+    ts.g.write("; --- finish to print the raft ---")
 
 
 # GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER vs. PRINTING SPEED
 def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
     g = ts.g
 
-    number_of_substructures = 4
-    number_of_layers = 1
+    number_of_substructures = 1 if ts.test_name == "printing speed" else 4
 
-    if ts.test_name == 'printing speed':
-        number_of_substructures = 1
-        ts.number_of_lines = ts.number_of_lines * 1.5
-        number_of_layers = 2
-
-    g.write(ts.title)
-    g.write(ts.comment1)
+    ts.g.write(ts.title)
+    ts.g.write(ts.comment1)
     wipe(ts)
 
     if ts.raft and ts.test_name != "first layer height":
         print_raft(ts)  # print the raft to support the test structure
     else:
         raft_perimeter(ts)
-    g.write("; --- start to print the test structure ---")
-    g.feed(machine.settings.speed_printing)  # respect the units: mm/min
+    ts.g.write("; --- start to print the test structure ---")
+    ts.g.feed(machine.settings.speed_printing)  # respect the units: mm/min
 
     for dummy1 in range(0, ts.number_of_test_structures):
-        g.write(ts.comment2[dummy1])
-        g.feed(ts.speed_printing[dummy1])  # respect the units: mm/min
+        ts.g.write(ts.comment2[dummy1])
+        ts.g.feed(ts.speed_printing[dummy1])  # respect the units: mm/min
 
-        g.abs_travel(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
-                     y=+ts.test_structure_size / 2,
-                     z=+ts.abs_z[dummy1],
-                     lift=1)
+        ts.g.abs_travel(x=+ts.test_structure_size / 2 - (2 * dummy1 + 1) * ts.test_structure_size / (2 * ts.number_of_test_structures + 1),
+                        y=+ts.test_structure_size / 2,
+                        z=+ts.abs_z[dummy1],
+                        lift=1)
 
         if ts.test_name == 'extrusion temperature':  # TODO! Fix the movement, time, extra restart distance
-            g.travel(x=0,
+            ts.g.travel(x=0,
                      y=+ts.test_structure_size / 5,
                      z=+ts.abs_z[dummy1], retraction_speed=ts.retraction_speed, retraction_distance=ts.retraction_distance[dummy1]) #  TODO disable retractions
-            g.set_extruder_temperature(ts.temperature_extruder[dummy1])
-            g.dwell(30)
+            ts.g.set_extruder_temperature(ts.temperature_extruder[dummy1])
+            ts.g.dwell(30)
             output = "G1 F500 E" + str(round(4 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + \
                      "; extrude " + str(round(4 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + " mm of material"
-            g.write(output)
-            g.move(x=0,
-                   y=-ts.test_structure_size / 5,
-                   z=-ts.abs_z[dummy1],
-                   extrude=True)
+            ts.g.write(output)
+            ts.g.move(x=0,
+                      y=-ts.test_structure_size / 5,
+                      z=-ts.abs_z[dummy1],
+                      extrude=True)
 
         step_x = ts.step_x[dummy1]
 
@@ -291,54 +203,54 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
                 current_printing_speed = ts.min_max_speed_printing[dummy2]
             else:
                 current_printing_speed = ts.speed_printing[dummy1]
-            g.write('; --- testing the following printing speed value: %.3f mm/s' % (current_printing_speed))
+            ts.g.write('; --- testing the following printing speed value: %.3f mm/s' % (current_printing_speed))
+            ts.g.feed(current_printing_speed)
 
-            g.feed(current_printing_speed)
-
-            number_of_lines = int(ts.number_of_lines/2)
-            dummy0_range = range(1 if ts.test_name == "first layer height" else 2)
-            for dummy0 in dummy0_range: # layers
-                dummy3_range = range(0, number_of_lines)
+            number_of_layers = range(1 if ts.test_name == "first layer height" else 2)
+            for dummy0 in number_of_layers: # layers
+                dummy3_range = range(0, ts.number_of_lines)
                 if dummy0 != 0:
-                    g.move(z=ts.coef_h[dummy1] * machine.nozzle.size_id)  # move to the next floor
+                    ts.g.move(z=ts.coef_h[dummy1] * machine.nozzle.size_id)  # move to the next floor
 
                 for dummy3 in dummy3_range:
                     if dummy0 % 2 != 0:
-                        g.move(x=(-1)**(dummy0 + 1) * step_x,
-                               y=0,
-                               z=0,
-                               extrude=False)
-                        g.move(x=0,
-                               y=(-1)**(dummy3 + 1) * ts.step_y/number_of_substructures,
-                               z=0,
-                               extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
+                        ts.g.move(x=(-1)**(dummy0 + 1) * step_x,
+                                  y=0,
+                                  z=0,
+                                  extrude=False)
+                        ts.g.move(x=0,
+                                  y=(-1)**(dummy3 + 1) * ts.step_y/number_of_substructures,
+                                  z=0,
+                                  extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1], coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
                     else:
-                        g.move(x=0,
+                        ts.g.move(x=0,
                                y=(-1) ** (dummy3 + 1) * ts.step_y / number_of_substructures,
                                z=0,
                                extrude=True, extrusion_multiplier=ts.extrusion_multiplier[dummy1],
                                coef_h=ts.coef_h[dummy1], coef_w=ts.coef_w[dummy1])
-                        g.move(x=(-1) ** (dummy0 + 1) * step_x,
+                        ts.g.move(x=(-1) ** (dummy0 + 1) * step_x,
                                y=0,
                                z=0,
                                extrude=False)
-            g.move(x=0,
-                   y=-ts.step_y/number_of_substructures,
-                   extrude=False)  # Y step after substructure. Y and Z should be separated and staged
+            ts.g.move(x=0,
+                      y=-ts.step_y/number_of_substructures,
+                      extrude=False)  # Y step after substructure. Y and Z should be separated and staged
 
-            if len(dummy0_range) % 2 != 0:  # check if even layer amount
-                g.move(x=step_x * number_of_lines,
-                       extrude=False)
+            if len(number_of_layers) % 2 != 0:  # check if even layer number
+                ts.g.move(x=step_x * ts.number_of_lines,
+                          y=0,
+                          z=0,
+                          extrude=False)
 
-            g.move(x=0,
-                   y=0,
-                   z=-ts.coef_h[dummy1] * machine.nozzle.size_id * (len(dummy0_range)-1),
-                   extrude=False)
+            ts.g.move(x=0,
+                      y=0,
+                      z=-ts.coef_h[dummy1] * machine.nozzle.size_id * (len(number_of_layers)-1),
+                      extrude=False)
             if dummy2 != len(dummy2_range)-1:
-                g.move(x=-step_x,
-                       y=0,
-                       z=0,
-                       extrude=False)  # small X step
+                ts.g.move(x=-step_x,
+                          y=0,
+                          z=0,
+                          extrude=False)  # small X step
                 # g.move(z=+ts.coef_h[dummy1]*machine.nozzle.size_id,)
 
     g.write("; --- finish to print the test structure ---")
