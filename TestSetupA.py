@@ -50,7 +50,7 @@ class TestSetupA(object):
         self.step_x = [x* np.mean(self.coef_w) * machine.nozzle.size_id for x in [1] * self.number_of_test_structures]
         self.step_y = self.test_structure_size - self.coef_w_raft * machine.nozzle.size_id / 2
 
-        self.number_of_lines = int(1.2*(self.test_structure_size / (2 * self.number_of_test_structures + 1))/(np.mean(self.coef_w) * machine.nozzle.size_id))
+        self.number_of_lines = int(1.25*(self.test_structure_size / (2 * self.number_of_test_structures + 1))/(np.mean(self.coef_w) * machine.nozzle.size_id))
 
         path_height = [round(x * machine.nozzle.size_id, 3) for x in self.coef_h]
         path_width = [round(x * machine.nozzle.size_id, 3) for x in self.coef_w]
@@ -68,7 +68,7 @@ class TestSetupA(object):
         if test_name == 'first layer height':
             # FIRST LAYER HEIGHT test parameters
 
-            self.units = 'mm'
+            self.units = ['mm']* self.number_of_test_structures
 
             if min_max_argument is None:
                 self.coef_h = self.coef_h_raft_all
@@ -85,7 +85,7 @@ class TestSetupA(object):
         elif test_name == 'path height':
             # PATH HEIGHT test parameters
 
-            self.units = 'mm'
+            self.units = ['mm']* self.number_of_test_structures
 
             if min_max_argument is None:
                 self.coef_h, coef_h_mean = minmax_path_height(machine, self.number_of_test_structures)
@@ -101,7 +101,7 @@ class TestSetupA(object):
         elif test_name == 'path width':
             # PATH WIDTH test parameters
 
-            self.units = 'mm'
+            self.units = ['mm']* self.number_of_test_structures
 
             if min_max_argument is None:
                 self.coef_w, coef_w_mean = minmax_path_width(machine)
@@ -117,7 +117,7 @@ class TestSetupA(object):
         elif test_name == 'printing speed':
             # PRINTING SPEED test parameters
 
-            self.units = 'mm/s'
+            self.units = ['mm/s']* self.number_of_test_structures
 
             if min_max_argument is None:
                 self.speed_printing = minmax_speed_printing(machine)
@@ -130,7 +130,7 @@ class TestSetupA(object):
         elif test_name == 'extrusion multiplier':
             # EXTRUSION MULTIPLIER test parameters
 
-            self.units = '-'
+            self.units = ['-']* self.number_of_test_structures
 
             if min_max_argument is None:
                 self.extrusion_multiplier = minmax_extrusion_multiplier(machine)
@@ -143,7 +143,7 @@ class TestSetupA(object):
         elif test_name == 'extrusion temperature':
             # EXTRUSION TEMPERATURE test parameters
 
-            self.units = 'degC'
+            self.units = ['degC']* self.number_of_test_structures
 
             if min_max_argument is None:
                 self.temperature_extruder = minmax_temperature(material, machine)
@@ -156,7 +156,7 @@ class TestSetupA(object):
         elif test_name == 'retraction distance':
             # RETRACTION DISTANCE test parameters
 
-            self.units = 'mm'
+            self.units = ['mm']* self.number_of_test_structures
 
             if min_max_argument is None:
                 self.retraction_distance = np.linspace(0.0, 4.0, self.number_of_test_structures).tolist()
@@ -166,19 +166,19 @@ class TestSetupA(object):
             self.argument = [round(x, 2) for x in self.retraction_distance]
             self.values = self.argument
 
-        elif test_name == 'retraction restart distance and coasting distance':
-            # RETRACTION RESTART DISTANCE amd COASTING DISTANCE test parameters
-
-            self.units = 'mm'
-
-            if min_max_argument is None:
-                self.retraction_restart_distance = np.linspace(0.0, 3.0, self.number_of_test_structures).tolist()
-            else:
-                self.retraction_restart_distance = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
-
-            self.coasting_distance = np.linspace(0.00, 1.25, 4).tolist()
-            self.argument = [self.retraction_restart_distance, self.retraction_restart_distance]
-            self.values = self.argument
+        # elif test_name == 'retraction restart distance and coasting distance':
+        #     # RETRACTION RESTART DISTANCE amd COASTING DISTANCE test parameters
+        #
+        #     self.units = ['mm']* self.number_of_test_structures
+        #
+        #     if min_max_argument is None:
+        #         self.retraction_restart_distance = np.linspace(0.0, 3.0, self.number_of_test_structures).tolist()
+        #     else:
+        #         self.retraction_restart_distance = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
+        #
+        #     self.coasting_distance = np.linspace(0.00, 1.25, 4).tolist()
+        #     self.argument = [self.retraction_restart_distance, self.coasting_distance]
+        #     self.values = self.argument
 
         else:
             print('Unknown test')
@@ -203,7 +203,7 @@ class TestSetupA(object):
         self.q = q
 
         self.title = addtitle(test_name, material)
-        self.comment1 = addcomment1(self.values, test_name, machine)
+        self.comment1 = addcomment1(self.values, self.units, test_name, machine)
         self.comment2 = addcomment2(self.coef_h, self.coef_w, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine) # TODO add flow rate, brush up the comments!
 
         self.g = Gplus(material, machine,
@@ -223,21 +223,8 @@ def addtitle(test_name: str, material: Material):
     return title
 
 
-def addcomment1(values, test_name: str, machine: Machine):
-    if test_name == 'printing speed':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm/s'.format(k) for k in values) + ' ---')
-    elif test_name == 'temperature':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} degC'.format(k) for k in values) + ' ---')
-    elif test_name == 'extrusion multiplier':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f}'.format(k) for k in values) + ' ---')
-    elif test_name == 'extrusion temperature':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} degC'.format(k) for k in values) + ' ---')
-    elif test_name == 'retraction distance':
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in values) + ' ---')
-    elif test_name == 'retraction restart distance and coasting distance':
-        comment1 = str('; --- testing the following ' + test_name[:27] + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in values[0]) + ' and the following' + test_name[31:] + ' values: ' + ', '.join('{:.3f} mm'.format(j) for j in values[1]) + ' ---')
-    else:
-        comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} mm'.format(k) for k in [x for x in values]) + ' ---')
+def addcomment1(values, units, test_name: str, machine: Machine):
+    comment1 = str('; --- testing the following ' + test_name + ' values: ' + ', '.join('{:.3f} {}'.format(*k) for k in zip(values, units)) + ' ---')
 
     return comment1
 

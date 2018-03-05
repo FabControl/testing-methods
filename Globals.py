@@ -16,7 +16,7 @@ except:
             "size_od": 1.75,
             "temperature_melting": 200,
             "temperature_destr": 300,
-            "temperature_vicat": 104
+            "temperature_vicat": 101
         },
         "machine": {
             "manufacturer": "Mass Portal",
@@ -35,22 +35,22 @@ except:
             }
         },
         "settings": {
-            "temperature_printbed_raft": 110,
-            "temperature_printbed": 110,
+            "temperature_printbed_raft": 50,
+            "temperature_printbed": 50,
             "part_cooling": 0,
 
             "raft_density": 75,
 
-            "temperature_extruder_raft": 260,
+            "temperature_extruder_raft": 180,
 
             "path_height_raft": 0.2,
             "path_width_raft": 0.6,
             "speed_printing_raft": 20,
 
-            "temperature_extruder": 260,
-            "speed_printing": 60,
+            "temperature_extruder": 180,
+            "speed_printing": 40,
 
-            "path_height": 0.385,
+            "path_height": 0.3,
             "path_width": 0.6,
 
             "extrusion_multiplier": 1.000,

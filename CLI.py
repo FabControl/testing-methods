@@ -78,7 +78,9 @@ if not verbose:
     clear()
 
 if import_json_dict["session"]["test_type"] == "A":
-    test_number = import_json_dict["session"]["test_name"] if quiet else int(input("Parameter to be tested:\n 1 for 'first layer height',\n 2 for 'extrusion temperature',\n 3 for 'path height',\n 4 for 'path width',\n 5 for 'printing speed',\n 6 for 'extrusion multiplier',\n 7 for 'retraction distance',\n 8 for 'retraction restart distance and coasting distance': "))  #
+    # 'first layer height', 'extrusion temperature', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance'
+    test_number = ['1', '2', '3', '4', '5', '6', '7']
+    test_number = import_json_dict["session"]["test_name"] if quiet else int(input("Parameter to be tested:" + "".join("\n[{}] for '{}'".format(*k) for k in zip(test_number, test_list)) + ": "))
 
     test = test_list[test_number-1]
 
@@ -107,26 +109,20 @@ if import_json_dict["session"]["test_type"] == "A":
     else:
         flat_test_single_parameter_vs_speed_printing(ts)
 
-elif import_json_dict["session"]["test_type"] == "B":
+elif import_json_dict["session"]["test_type"] == "B": # 'perimeter', 'overlap', 'path height', 'temperature'
     test = 'temperature'  # 'overlap', 'path height']  # TODO
     min_max_argument = [270, 300]
     min_max_speed_printing = [30, 75]  # check the jerk value
 
     from DefinitionsTestsB import dimensional_test
 
-    if test == 'perimeter':
-            path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
-    elif test == 'overlap':
-            path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
-    elif test == 'path height':
-            path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
-    elif test == 'temperature':
-            path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
+    path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
 
     ts = TestSetupB(machine, material, test, path,
                     min_max_argument = min_max_argument,
                     min_max_speed_printing = min_max_speed_printing,
                     raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
+
     dimensional_test(ts)
 
 if not quiet:

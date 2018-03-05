@@ -275,8 +275,8 @@ def minmax_path_width_height_raft(machine: Machine):
         coef_h_min_raft = 0.30
         coef_h_max_raft = 0.66
     elif machine.nozzle.size_id == 0.8:
-        coef_h_min_raft = 0.416
-        coef_h_max_raft = 0.500 #  h_raft = 0.42 mm Original value of 0.5 doesn't work for FPU77D at 245 degC
+        coef_h_min_raft = 0.30
+        coef_h_max_raft = 0.50
     elif machine.nozzle.size_id == 1.0:
         coef_h_min_raft = 0.30
         coef_h_max_raft = 0.50
