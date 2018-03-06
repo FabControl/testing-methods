@@ -1,6 +1,6 @@
 from shapely.geometry import Polygon, LineString, LinearRing, MultiLineString, Point
 from shapely import affinity
-from Globals import machine, g
+from Globals import machine
 import numpy as np
 import math
 
@@ -206,7 +206,7 @@ def absolute_to_relative(points: list):
     return output
 
 
-def points_to_toolpaths(points, coef_w, coef_h, mode: str = "relative", g = g, rotation: bool = False):
+def points_to_toolpaths(points, coef_w, coef_h, g, mode: str = "relative", rotation: bool = False):
     """
     Takes a list of points, as a list of tuples with 3 fields - x coordinate, y coordinate and extrusion argument (True or False).
     If the extrusion argument is True, it extrudes at a previously defined feedrate.
@@ -215,6 +215,7 @@ def points_to_toolpaths(points, coef_w, coef_h, mode: str = "relative", g = g, r
     :param points:
     :param coef_w:
     :param coef_h:
+    :param g:
     :param mode:
     :param rotation:
     :return:
@@ -233,7 +234,7 @@ def points_to_toolpaths(points, coef_w, coef_h, mode: str = "relative", g = g, r
     g.extrude = False
 
 
-def infill(polygon: Polygon, coef_w_raft, coef_h_raft, g = g, outlines: int = 1, debug: bool = False):
+def infill(polygon: Polygon, coef_w_raft, coef_h_raft, g, outlines: int = 1, debug: bool = False):
 
     g.write("; Printing raft")
     def extrusion_switch(points: list):

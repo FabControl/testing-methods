@@ -5,6 +5,7 @@ Usage:
     CLI.py [-v] [-q] [--flash]
     CLI.py new-test
     CLI.py generate-report
+    CLI.py generate-config <slicer>
 """
 
 from docopt import docopt
@@ -22,6 +23,13 @@ if __name__ == '__main__':
     if arguments["generate-report"]:
         import generate_report # TODO feed persistence.json in, get pdf out and material.json
         quit()
+    if arguments["generate-config"]:
+        if str(arguments["<slicer>"]).lower() == 'prusa':
+            import config_writer
+        else:
+            raise ValueError("Slicer not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.")
+    quit()
+
 
 from Calculations import shear_rate, pressure_drop, rheology
 from CheckCompatibility import check_compatibility

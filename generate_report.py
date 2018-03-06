@@ -116,7 +116,7 @@ t.setStyle(style)
 elements.append(t)
 doc.build(elements)
 
-exclusive_write("persistence.json", json.dumps(import_json_dict, indent=4, sort_keys=False), limit = True)
+exclusive_write("persistence.json", json.dumps(import_json_dict, indent=4, sort_keys=False), limit=True)
 # with open("persistence.json", mode="w") as file: # TODO "Save" option
 #     output = json.dumps(import_json_dict, indent=4, sort_keys=False)
 #     file.write(output)
