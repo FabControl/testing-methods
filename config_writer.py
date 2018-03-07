@@ -11,10 +11,7 @@ def numeral_eval(value):
     :return:
     """
     try:
-        try:
-            return int(value)
-        except ValueError:
-            return float(value)
+        return float(value) if not float(value).is_integer() else int(value)
     except ValueError:
         return value
 
@@ -67,26 +64,25 @@ Writes a Prusa Slic3r config
 settings = json["settings"]
 material = json["material"]
 configuration = read_ini("config.ini")
-configuration["bed_temperature"]["value"] = settings["temperature_printbed"]
+configuration["bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed"])
 configuration["cooling"]["value"] = 1 if settings["part_cooling"] != 0 else 0
 configuration["fan_always_on"]["value"] = 1 if settings["part_cooling"] != 0 else 0
-configuration["extrusion_width"]["value"] = settings["path_width"]
-configuration["extrusion_multiplier"]["value"] = settings["extrusion_multiplier"]
-configuration["first_layer_bed_temperature"]["value"] = settings["temperature_printbed_raft"]
-configuration["first_layer_extrusion_width"]["value"] = settings["path_width_raft"]
-configuration["first_layer_height"]["value"] = settings["path_height_raft"]
-configuration["first_layer_speed"]["value"] = settings["speed_printing_raft"]
-configuration["first_layer_temperature"]["value"] = settings["temperature_extruder_raft"]
-configuration["layer_height"]["value"] = settings["path_height"]
-configuration["nozzle_diameter"]["value"] = json["machine"]["nozzle"]["size_id"]
-configuration["temperature"]["value"] = settings["temperature_extruder"]
-configuration["retract_restart_extra"]["value"] = settings["retraction_restart_distance"]
-configuration["retract_length"]["value"] = settings["retraction_distance"]
-configuration["perimeter_speed"]["value"] = settings["speed_printing"]
-configuration["solid_infill_speed"]["value"] = settings["speed_printing"]
-configuration["filament_diameter"]["value"] = material["size_od"]
+configuration["extrusion_width"]["value"] = numeral_eval(settings["path_width"])
+configuration["extrusion_multiplier"]["value"] = numeral_eval(settings["extrusion_multiplier"])
+configuration["first_layer_bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed_raft"])
+configuration["first_layer_extrusion_width"]["value"] = numeral_eval(settings["path_width_raft"])
+configuration["first_layer_height"]["value"] = numeral_eval(settings["path_height_raft"])
+configuration["first_layer_speed"]["value"] = numeral_eval(settings["speed_printing_raft"])
+configuration["first_layer_temperature"]["value"] = numeral_eval(settings["temperature_extruder_raft"])
+configuration["layer_height"]["value"] = numeral_eval(settings["path_height"])
+configuration["nozzle_diameter"]["value"] = numeral_eval(json["machine"]["nozzle"]["size_id"])
+configuration["temperature"]["value"] = numeral_eval(settings["temperature_extruder"])
+configuration["retract_restart_extra"]["value"] = numeral_eval(settings["retraction_restart_distance"])
+configuration["retract_length"]["value"] = numeral_eval(settings["retraction_distance"])
+configuration["perimeter_speed"]["value"] = numeral_eval(settings["speed_printing"])
+configuration["solid_infill_speed"]["value"] = numeral_eval(settings["speed_printing"])
+configuration["filament_diameter"]["value"] = numeral_eval(material["size_od"])
 output_name = "%s_%s_%s_%s.ini" % (material["manufacturer"], material["name"],
                                    str(material["size_od"]).format("%.2f").replace(".", "-"),
                                    str(json["machine"]["nozzle"]["size_id"]).format("%.1f").replace(".", "-"))
-
 exclusive_write(output_name, assemble_ini(configuration))

@@ -1,13 +1,16 @@
 """
-MP MT Framework.
-
+Mass Portal Material Testing Suite
+Command Line Interface
 Usage:
     CLI.py [-v] [-q] [--flash]
     CLI.py new-test
     CLI.py generate-report
     CLI.py generate-config <slicer>
+    CLI.py slice-iso <horizontal|vertical> <count>
+    CLI.py --help
 """
 
+import subprocess
 from docopt import docopt
 quiet = None
 verbose = True
@@ -23,12 +26,12 @@ if __name__ == '__main__':
     if arguments["generate-report"]:
         import generate_report # TODO feed persistence.json in, get pdf out and material.json
         quit()
-    if arguments["generate-config"]:
+    elif arguments["generate-config"]:
         if str(arguments["<slicer>"]).lower() == 'prusa':
             import config_writer
         else:
             raise ValueError("Slicer not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.")
-    quit()
+        quit()
 
 
 from Calculations import shear_rate, pressure_drop, rheology
@@ -43,6 +46,7 @@ from CLI_helpers import evaluate, clear, extruded_filament
 import time
 import os
 
+
 session = import_json_dict["session"]
 start = time.time()
 
@@ -53,6 +57,21 @@ if flash:
 else:
     cwd = os.getcwd()
     gcode_folder = '\\gcodes'
+
+slic3r_path = 'C:\\Users\\Maris\\Desktop\\Slic3r\\slic3r-console.exe'
+blender_path = 'C:\\Program Files\\Blender Foundation\\Blender\\blender.exe'
+iso_sample_path = cwd + '\\iso_samples\\'
+print(os.path.isfile(iso_sample_path))
+
+if arguments["slice"]:
+    config = 'RTU_PBS_1-75_0-4_003.ini'
+    output = 'ISO527A.gcode'
+    geometry = iso_sample_path + 'export.stl'
+    orientation = arguments["<orientation>"]
+    count = int(arguments["<count>"])
+    subprocess.run("%s -b -P %s -- %s %d %d %s" % (blender_path, str(iso_sample_path + "ISO527A_modifier.py"), "horizontal", 2, 0, iso_sample_path), stderr=open(os.devnull, 'wb'))
+    subprocess.run("%s --load %s -o %s --dont-arrange %s " % (slic3r_path, config, output, geometry))
+    quit()
 
 # Check compatibility
 check_compatibility(machine, material)
