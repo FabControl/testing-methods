@@ -41,7 +41,7 @@ class Material(object):
         self.manufacturer = manufacturer
         self.id = id
         self.size_od = size_od
-        self.temperature_melting =  temperature_melting
+        self.temperature_melting = temperature_melting
         self.temperature_destr = temperature_destr
         self.temperature_glass = temperature_glass
         self.temperature_vicat = temperature_vicat

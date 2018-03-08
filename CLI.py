@@ -1,11 +1,12 @@
 """
-Mass Portal Material Testing Suite
+Mass Portal Feedstock Testing Suite
 Command Line Interface
 Usage:
     CLI.py [-v] [-q] [--flash]
     CLI.py new-test
     CLI.py generate-report
     CLI.py generate-config <slicer>
+    CLI.py slice <geometry>
     CLI.py slice-iso <orientation> <count> <rotation>
     CLI.py --help
 """
@@ -17,16 +18,8 @@ quiet = None
 verbose = True
 flash = False
 
-# from session_builder import *
-if flash:
-    cwd = 'F:'
-    gcode_folder = '\\tests'
-else:
-    cwd = os.getcwd()
-    gcode_folder = '\\gcodes'
-
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='MP Material Testing Suite')
+    arguments = docopt(__doc__, version='MP Feedstock Testing Suite')
 
     verbose = arguments["-v"]
     quiet = arguments["-q"]
@@ -35,27 +28,11 @@ if __name__ == '__main__':
     if arguments["generate-report"]:
         import generate_report # TODO feed persistence.json in, get pdf out and material.json
         quit()
-    if arguments["generate-config"]:
+    elif arguments["generate-config"]:
         if str(arguments["<slicer>"]).lower() == 'prusa':
             import config_writer
         else:
             raise ValueError("Slicer not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.")
-        quit()
-    if arguments["slice-iso"]:
-        from paths import slic3r_path, blender_path, cwd, iso_sample_path
-
-        iso_sample_path = cwd + '\\iso_samples\\'
-        print(os.path.isfile(iso_sample_path))
-
-        config = 'RTU_PBS_1-75_0-4_003.ini'
-        output = 'ISO527A.gcode'
-        geometry = iso_sample_path + 'export.stl'
-        orientation = arguments["<orientation>"]
-        count = int(arguments["<count>"])
-        subprocess.run("%s -b -P %s -- %s %d %d %s" % (
-        blender_path, str(iso_sample_path + "ISO527A_modifier.py"), "horizontal", 2, 0, iso_sample_path),
-                       stderr=open(os.devnull, 'wb'))
-        subprocess.run("%s --load %s -o %s --dont-arrange %s " % (slic3r_path, config, output, geometry))
         quit()
 
 from Calculations import shear_rate, pressure_drop, rheology
@@ -66,11 +43,25 @@ from Plotting import plotting_mfr
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
 from Globals import machine, material, import_json_dict, test_list
-from CLI_helpers import evaluate, clear, extruded_filament
+from CLI_helpers import evaluate, clear, extruded_filament, spawn_iso_slicer, separator, spawn_slicer
+from paths import cwd, gcode_folder
 import time
+import os
 
 session = import_json_dict["session"]
 start = time.time()
+
+# TODO Adapt for unix
+
+if arguments["slice-iso"]:
+    config = "RTU_PBS_1-75_0-4_003.ini"
+    spawn_iso_slicer(arguments['<orientation>'], arguments['<count>'],arguments['<rotation>'],config)
+    quit()
+
+elif arguments["slice"]:
+    config = "RTU_PBS_1-75_0-4_003.ini"
+    output = arguments["<geometry>"][:-4]+".gcode"
+    spawn_slicer(config, output, arguments["<geometry>"])
 
 # Check compatibility
 check_compatibility(machine, material)
@@ -120,7 +111,7 @@ if import_json_dict["session"]["test_type"] == "A":
 
     from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
-    path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
+    path = str(cwd + gcode_folder + separator() + test + ' test' + '.gcode')
     ts = TestSetupA(machine, material, test, path,
                     min_max_argument=min_max_argument,
                     min_max_speed_printing=min_max_speed_printing,
@@ -140,7 +131,7 @@ elif import_json_dict["session"]["test_type"] == "B": # 'perimeter', 'overlap', 
 
     from DefinitionsTestsB import dimensional_test
 
-    path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
+    path = str(cwd + gcode_folder + separator() + test + ' test' + '.gcode')
 
     ts = TestSetupB(machine, material, test, path,
                     min_max_argument = min_max_argument,
@@ -175,7 +166,7 @@ else:
 if ts.test_name == "retraction distance" or min_max_speed_printing is None:
     tested_speed_values = []
 
-extruded_filament = extruded_filament(cwd + gcode_folder + "\\" + ts.test_name + " test.gcode")
+extruded_filament = extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode")
 
 current_test = {"test_name": ts.test_name,
                 "tested_values": ts.get_values(),
@@ -215,11 +206,11 @@ for dummy in import_json_dict["session"]["previous_tests"]:
 
 import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["path_height"]/import_json_dict["settings"]["path_width"])),0)
 
-with open(cwd + "\\jsons\\" + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
+with open(cwd + separator("jsons") + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)
     file.write(output)
 
-with open(cwd + "\\persistence.json", mode="w") as file:
+with open(cwd + separator() + "persistence.json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)
     file.write(output)
 

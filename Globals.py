@@ -10,14 +10,13 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "ABS",
-            "manufacturer": "Verbatim",
+            "name": "PBS",
+            "manufacturer": "RTU",
             "id": "123456",
             "size_od": 1.75,
             "temperature_melting": 200,
             "temperature_destr": 300,
-            "temperature_vicat": 101,
-            "temperature_glass": 94
+            "temperature_vicat": 101
         },
         "machine": {
             "manufacturer": "Mass Portal",
@@ -28,37 +27,36 @@ except:
             "temperature_max": 300,
             "size_extruder_id": 1.95,
             "nozzle": {
-                "size_id": 0.60,
-                "size_od": 0.84,
+                "size_id": 0.40,
+                "size_od": 0.64,
                 "size_capillary_length": 5,
                 "size_angle": 60,
                 "metal": "brass"
             }
         },
         "settings": {
-            "temperature_printbed_raft": 95,
-            "temperature_printbed": 95,
-            "part_cooling": 100,
+            "temperature_printbed_raft": 60,
+            "temperature_printbed": 60,
+            "part_cooling": 0,
 
             "raft_density": 75,
 
-            "temperature_extruder_raft": 230,
+            "temperature_extruder_raft": 210,
 
-            "path_height_raft": 0.3,
-            "path_width_raft": 0.6,
+            "path_height_raft": 0.2,
+            "path_width_raft": 0.15,
             "speed_printing_raft": 20,
 
-            "temperature_extruder": 250,
+            "temperature_extruder": 210,
             "speed_printing": 40,
 
-            "path_height": 0.3,
-            "path_width": 0.6,
+            "path_height": 0.15,
+            "path_width": 0.4,
 
             "extrusion_multiplier": 1.000,
 
             "retraction_distance": 2.00,
-            "retraction_restart_distance": 0.45,
-            "retraction_speed": 120,
+            "retraction_restart_distance": 0.0,
             "coasting_distance": 0.0,
             "overlap": 0,
             "perimeter": 1,
@@ -74,7 +72,8 @@ except:
             "test_type": 'A',
             "test_name": 'first layer height',
             "min_max": [0.1, 0.3],
-            "min_max_speed": [10, 25]
+            "min_max_speed": [10, 25],
+            "slicer": "Prusa Slic3r"
 
         }
     }
@@ -102,5 +101,4 @@ print("Loaded a testing session ID %d" % import_json_dict["session"]["uid"])
 material = Material(**import_json_dict["material"])
 machine = Machine(**import_json_dict["machine"])
 machine.settings = Settings(nozzle=machine.nozzle, material=material, **import_json_dict["settings"])
-g = Gplus(material, machine, outfile="placeholder.gcode", footer=footer, header=header, aerotech_include=False)
 coef_h_raft, coef_h_min_raft, coef_h_max_raft, coef_w_raft, coef_h_raft_all = minmax_path_width_height_raft(machine)
