@@ -7,11 +7,14 @@ import numpy as np
 class TestSetupB(object):
     def __init__(self, machine: Machine, material: Material, test_name: str, path: str, min_max_argument: list = None, min_max_speed_printing: list = None, raft: bool = True):
         """
+
         :param machine:
         :param material:
         :param test_name:
         :param path:
-        :param min_max:
+        :param min_max_argument:
+        :param min_max_speed_printing:
+        :param raft:
         """
 
         self.number_of_test_structures = machine.settings.matrix_size
@@ -76,7 +79,7 @@ class TestSetupB(object):
 
         self.title = addtitle(test_name, material)
         self.comment1 = addcomment1(self.argument_column, test_name, machine)
-        self.comment2 = addcomment2(self.coef_h, self.coef_w, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine) # TODO
+        self.comment2 = addcomment2(self.coef_h, self.coef_w, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine)  # TODO
 
         self.g = Gplus(material, machine,
                        outfile=path,
