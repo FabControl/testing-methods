@@ -11,11 +11,19 @@ Usage:
 """
 
 import subprocess
+import os
 from docopt import docopt
-
 quiet = None
 verbose = True
 flash = False
+
+# from session_builder import *
+if flash:
+    cwd = 'F:'
+    gcode_folder = '\\tests'
+else:
+    cwd = os.getcwd()
+    gcode_folder = '\\gcodes'
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='MP Material Testing Suite')
@@ -25,14 +33,29 @@ if __name__ == '__main__':
     flash = arguments["--flash"]
 
     if arguments["generate-report"]:
-        import generate_report  # TODO feed persistence.json in, get pdf out and material.json
-
+        import generate_report # TODO feed persistence.json in, get pdf out and material.json
         quit()
-    elif arguments["generate-config"]:
+    if arguments["generate-config"]:
         if str(arguments["<slicer>"]).lower() == 'prusa':
             import config_writer
         else:
             raise ValueError("Slicer not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.")
+        quit()
+    if arguments["slice-iso"]:
+        from paths import slic3r_path, blender_path, cwd, iso_sample_path
+
+        iso_sample_path = cwd + '\\iso_samples\\'
+        print(os.path.isfile(iso_sample_path))
+
+        config = 'RTU_PBS_1-75_0-4_003.ini'
+        output = 'ISO527A.gcode'
+        geometry = iso_sample_path + 'export.stl'
+        orientation = arguments["<orientation>"]
+        count = int(arguments["<count>"])
+        subprocess.run("%s -b -P %s -- %s %d %d %s" % (
+        blender_path, str(iso_sample_path + "ISO527A_modifier.py"), "horizontal", 2, 0, iso_sample_path),
+                       stderr=open(os.devnull, 'wb'))
+        subprocess.run("%s --load %s -o %s --dont-arrange %s " % (slic3r_path, config, output, geometry))
         quit()
 
 from Calculations import shear_rate, pressure_drop, rheology
@@ -44,43 +67,20 @@ from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
 from Globals import machine, material, import_json_dict, test_list
 from CLI_helpers import evaluate, clear, extruded_filament
-from paths import slic3r_path, blender_path, cwd, iso_sample_path
 import time
-import os
 
 session = import_json_dict["session"]
 start = time.time()
-
-if flash:
-    cwd = 'F:'
-    gcode_folder = '\\tests'
-else:
-    cwd = os.getcwd()
-    gcode_folder = '\\gcodes'
-
-# TODO Adapt for unix
-
-if arguments["slice-iso"]:
-    config = 'RTU_PBS_1-75_0-4_003.ini'
-    output = 'ISO527A.gcode'
-    geometry = iso_sample_path + 'export.stl'
-    orientation = arguments["<orientation>"]
-    count = int(arguments["<count>"])
-    subprocess.run("%s -b -P %s -- %s %d %d %s" % (blender_path, str(iso_sample_path + "ISO527A_modifier.py"), "horizontal", 2, 0, iso_sample_path), stderr=open(os.devnull, 'wb'))
-    subprocess.run("%s --load %s -o %s --dont-arrange %s " % (slic3r_path, config, output, geometry))
-    quit()
 
 # Check compatibility
 check_compatibility(machine, material)
 
 # Checking some settings for better starting values
-if machine.settings.optimize_temperature_printbed:
-    check_printbed_temperature(material, machine)
-else:
-    pass
+if machine.settings.optimize_temperature_printbed: check_printbed_temperature(material, machine)
 
+# Some calculations
 if machine.settings.optimize_speed_printing:
-    # Some calculations
+
     gamma_dot_estimate = shear_rate(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
     delta_p_estimate = pressure_drop(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
 
@@ -104,13 +104,11 @@ if not verbose:
 if import_json_dict["session"]["test_type"] == "A":
     # 'first layer height', 'extrusion temperature', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance'
     test_number = ['1', '2', '3', '4', '5', '6', '7']
-    test_number = import_json_dict["session"]["test_name"] if quiet else int(input(
-        "Parameter to be tested:" + "".join("\n[{}] for '{}'".format(*k) for k in zip(test_number, test_list)) + ": "))
+    test_number = import_json_dict["session"]["test_name"] if quiet else int(input("Parameter to be tested:" + "".join("\n[{}] for '{}'".format(*k) for k in zip(test_number, test_list)) + ": "))
 
-    test = test_list[test_number - 1]
+    test = test_list[test_number-1]
 
-    min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session[
-        "min_max"]
+    min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"]
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
 
     if test == 'retraction distance':
@@ -118,11 +116,9 @@ if import_json_dict["session"]["test_type"] == "A":
     elif test == 'printing speed':
         min_max_speed_printing = None
     else:
-        min_max_speed_printing = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else \
-        session["min_max_speed"]
+        min_max_speed_printing = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else session["min_max_speed"]
 
-    from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, \
-        retraction_restart_distance_vs_coasting_distance, retraction_distance
+    from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
     path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
     ts = TestSetupA(machine, material, test, path,
@@ -137,7 +133,7 @@ if import_json_dict["session"]["test_type"] == "A":
     else:
         flat_test_single_parameter_vs_speed_printing(ts)
 
-elif import_json_dict["session"]["test_type"] == "B":  # 'perimeter', 'overlap', 'path height', 'temperature'
+elif import_json_dict["session"]["test_type"] == "B": # 'perimeter', 'overlap', 'path height', 'temperature'
     test = 'temperature'  # 'overlap', 'path height']  # TODO
     min_max_argument = [270, 300]
     min_max_speed_printing = [30, 75]  # check the jerk value
@@ -147,9 +143,9 @@ elif import_json_dict["session"]["test_type"] == "B":  # 'perimeter', 'overlap',
     path = str(cwd + gcode_folder + '\\' + test + ' test' + '.gcode')
 
     ts = TestSetupB(machine, material, test, path,
-                    min_max_argument=min_max_argument,
-                    min_max_speed_printing=min_max_speed_printing,
-                    raft=True if import_json_dict["settings"]["raft_density"] > 0 else False)
+                    min_max_argument = min_max_argument,
+                    min_max_speed_printing = min_max_speed_printing,
+                    raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
 
     dimensional_test(ts)
 
@@ -159,8 +155,7 @@ if not quiet:
     print("Tested Parameter values:")
     print(ts.get_values()[::-1])
     print("Corresponding Flow rate values (mm3/s):")
-    for x in ts.q:
-        print(x[::-1])
+    [print(x[::-1]) for x in ts.q]
 
     if min_max_speed_printing is not None:
         print("Printing speed values:")
@@ -171,12 +166,11 @@ if not quiet:
 previous_tests = import_json_dict["session"]["previous_tests"]
 
 if ts.test_name == "printing speed":
-    tested_speed_values = ts.get_values()
+    tested_speed_values = ts.get_values() # TODO Really? Check conditions!
+elif ts.test_name == "retraction distance":
+    tested_speed_values = []
 else:
-    if min_max_speed_printing is None:
-        tested_speed_values = import_json_dict["settings"]["speed_printing"]
-    else:
-        tested_speed_values = ts.min_max_speed_printing
+    tested_speed_values = import_json_dict["settings"]["speed_printing"] if min_max_speed_printing is None else ts.min_max_speed_printing
 
 if ts.test_name == "retraction distance" or min_max_speed_printing is None:
     tested_speed_values = []
@@ -186,20 +180,17 @@ extruded_filament = extruded_filament(cwd + gcode_folder + "\\" + ts.test_name +
 current_test = {"test_name": ts.test_name,
                 "tested_values": ts.get_values(),
                 "tested_speed_values": tested_speed_values,
-                "selected_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
-                # TODO enter STRUCTURE NUMBER not VALUE, pass to FLOW RATE
-                "selected_speed_value": evaluate(input(
-                    "Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
-                "units": ts.units,
+                "selected_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0, # TODO enter STRUCTURE NUMBER not VALUE, pass to FLOW RATE
+                "selected_speed_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
+                "units": ts.units[0],
                 "extruded_filament": extruded_filament,
-                "selected_flow_rate_value": evaluate(input(
-                    "Enter the flow rate value which corresponds to the best parameter value: ")) if not quiet else 0}
+                "selected_flow_rate_value": evaluate(input("Enter the flow rate value which corresponds to the best parameter value: ")) if not quiet else 0}
 
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
 
 for dummy in import_json_dict["session"]["previous_tests"]:
-    if dummy["test_name"] == "printing speed":  # TODO check conditions
+    if dummy["test_name"] == "printing speed": # TODO check conditions
         import_json_dict["settings"]["speed_printing"] = dummy["selected_value"]
     elif dummy["test_name"] == "path height":
         import_json_dict["settings"]["path_height"] = dummy["selected_value"]
@@ -207,7 +198,7 @@ for dummy in import_json_dict["session"]["previous_tests"]:
     elif dummy["test_name"] == "first layer height":
         import_json_dict["settings"]["path_height_raft"] = dummy["selected_value"]
         import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
-        import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft * machine.nozzle.size_id, 2)
+        import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.nozzle.size_id,2)
     elif dummy["test_name"] == "path width":
         import_json_dict["settings"]["path_width"] = dummy["selected_value"]
         import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
@@ -220,10 +211,11 @@ for dummy in import_json_dict["session"]["previous_tests"]:
     elif dummy["test_name"] == "retraction distance":
         import_json_dict["settings"]["retraction_distance"] = dummy["selected_value"]
         import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
-        import_json_dict["settings"]["retraction_speed"] = round(ts.retraction_speed, 1)
+        import_json_dict["settings"]["retraction_speed"] = round(ts.retraction_speed,1)
 
-with open(cwd + "\\jsons\\" + material.manufacturer + " " + material.name + " " + str(
-        machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
+import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["path_height"]/import_json_dict["settings"]["path_width"])),0)
+
+with open(cwd + "\\jsons\\" + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)
     file.write(output)
 

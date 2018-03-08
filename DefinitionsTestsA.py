@@ -11,12 +11,11 @@ def wipe(ts: TestSetupA or TestSetupB, full = True):
     ts.g.home()
     ts.g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
     ts.g.abs_move(x=-6 * ts.test_structure_size / 10,
-               y=-6 * ts.test_structure_size / 10,
-               z=+2 * ts.coef_h_raft * machine.nozzle.size_id,
-               extrude=False, extrusion_multiplier=0)
+                  y=-6 * ts.test_structure_size / 10,
+                  z=+2 * ts.coef_h_raft * machine.nozzle.size_id,
+                  extrude=False, extrusion_multiplier=0)
 
-    if machine.settings.temperature_printbed is not None:
-        ts.g.set_printbed_temperature(machine.settings.temperature_printbed)
+    ts.g.set_printbed_temperature(machine.settings.temperature_printbed) if machine.settings.temperature_printbed is not None else ts.g.set_printbed_temperature(40)
 
     ts.g.write("; --- start to clean the nozzle ---")
     ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
@@ -96,7 +95,6 @@ def print_raft(ts: TestSetupA):
 
     raft_density = machine.settings.raft_density / 100
     step = ts.coef_w_raft * machine.nozzle.size_id / raft_density  # step size
-
     step_number = ts.test_structure_size/(ts.coef_w_raft * machine.nozzle.size_id / raft_density)
 
     overlap = 1.1*(ts.coef_w_raft * machine.nozzle.size_id)/(2*step_number**2 - step_number)
@@ -164,10 +162,8 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
     ts.g.write(ts.comment1)
     wipe(ts)
 
-    if ts.raft and ts.test_name != "first layer height":
-        print_raft(ts)  # print the raft to support the test structure
-    else:
-        raft_perimeter(ts)
+    print_raft(ts) if ts.raft and ts.test_name != "first layer height" else raft_perimeter(ts) # print the raft to support the test structure
+
     ts.g.write("; --- start to print the test structure ---")
     ts.g.feed(machine.settings.speed_printing)  # respect the units: mm/min
 

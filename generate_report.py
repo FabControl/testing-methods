@@ -35,7 +35,7 @@ elements = []
 cwd = os.getcwd()
 
 logo = cwd + '/MP-Logo-horiz-black.png'
-im = Image(logo, 1.5*inch, 0.35*inch)
+im = Image(logo, 2.14*inch, 0.35*inch)
 im.hAlign = 'LEFT'
 elements.append(im)
 
@@ -58,11 +58,20 @@ main_info = "Retraction distance: " + str(import_json_dict["settings"]["retracti
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Retraction speed: " + str(import_json_dict["settings"]["retraction_speed"]) + " mm/s"
 elements.append(Paragraph(main_info, style=style_text))
+main_info = "Critical overhang angle: " + str(import_json_dict["settings"]["critical_overhang_angle"]) + " deg"
+elements.append(Paragraph(main_info, style=style_text))
+main_info = "Extruder temperature (raft): " + str(import_json_dict["settings"]["temperature_extruder_raft"]) + " degC"
+elements.append(Paragraph(main_info, style=style_text))
+main_info = "Printbed temperature (raft): " + str(import_json_dict["settings"]["temperature_printbed_raft"]) + " degC"
+elements.append(Paragraph(main_info, style=style_text))
+main_info = "Path width (raft): " + str(import_json_dict["settings"]["path_width_raft"]) + " mm"
+elements.append(Paragraph(main_info, style=style_text))
+main_info = "Printbed temperature: " + str(import_json_dict["settings"]["temperature_printbed"]) + " degC"
+elements.append(Paragraph(main_info, style=style_text))
 
 consumed_filament = 0
 for dummy in import_json_dict["session"]["previous_tests"]:
     consumed_filament = consumed_filament + round(float(dummy["extruded_filament"]), 3)
-
 main_info = "Consumed filament: " + str(consumed_filament) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
 elements.append(Spacer(1, 0.5*inch))
@@ -92,14 +101,13 @@ for k in performed_tests:
     data.append(new_line)
     i += 1
 
-style = TableStyle([
-                       ('ALIGN',(0,0),(-1,-1),'CENTER'),
-                       ('TEXTCOLOR',(0,0),(-1,-1),colors.black),
-                       ('VALIGN',(0, 0),(-1,-1),'MIDDLE'),
-                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
-                       ('BOX', (0,0), (-1,-1), 0.25, colors.black),
-                       ('SPAN',(3,0),(-4,0))
-                       ])
+style = TableStyle([('ALIGN',(0,0),(-1,-1),'CENTER'),
+                    ('TEXTCOLOR',(0,0),(-1,-1),colors.black),
+                    ('VALIGN',(0, 0),(-1,-1),'MIDDLE'),
+                    ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+                    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+                    ('SPAN',(3,0),(-4,0))
+                    ])
 
 colwidths = [20, 110, 50]
 for dummy in range(import_json_dict["settings"]["number_of_test_structures"]):
@@ -107,6 +115,8 @@ for dummy in range(import_json_dict["settings"]["number_of_test_structures"]):
 colwidths.append(80)
 colwidths.append(80)
 colwidths.append(80)
+
+print(data)
 
 data2 = [[Paragraph(cell, style_text) for cell in row] for row in data]
 t = Table(data2, colwidths)

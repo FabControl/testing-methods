@@ -110,8 +110,9 @@ class Settings(object):
 
     def __init__(self, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
                  temperature_printbed_raft=None, extrusion_multiplier_raft=None, speed_printing_raft=None, temperature_extruder=None,
-                 temperature_printbed=None, extrusion_multiplier=None, speed_printing=None, retraction_distance = None, retraction_restart_distance = None,
-                 coasting_distance = None, part_cooling=None, raft_density=None, number_of_test_structures = None, optimize_temperature_printbed = None, optimize_speed_printing = None, optimize_path_height = None, get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
+                 temperature_printbed=None, extrusion_multiplier=None, speed_printing=None, retraction_distance = None, retraction_restart_distance = None, retraction_speed = None,
+                 coasting_distance = None, part_cooling=None, raft_density=None, number_of_test_structures = None, optimize_temperature_printbed = None, optimize_speed_printing = None,
+                 optimize_path_height = None, get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
         self.tests = []
         self.machines = []
         self.aesthetics = []  # aim for aesthetics
@@ -136,6 +137,7 @@ class Settings(object):
 
         self.retraction_distance = retraction_distance
         self.retraction_restart_distance = retraction_restart_distance
+        self.retraction_speed = retraction_speed
         self.coasting_distance = coasting_distance
         self.part_cooling = 0 if part_cooling is None else part_cooling  # (%)
         self.raft_density = 100 if raft_density is None else raft_density  # (%)
@@ -183,8 +185,7 @@ class Machine(object):
     """
 
     def __init__(self, id: str = None, manufacturer: str = None, model: str = None, sn: str = None, size_extruder_id: float = None,
-                 buildarea_maxdim1: float = None,
-                 buildarea_maxdim2: float = None, temperature_max: float = None, moment_max: float = None, gear_size_od: float = 12,
+                 buildarea_maxdim1: float = None, buildarea_maxdim2: float = None, temperature_max: float = None, moment_max: float = None, gear_size_od: float = 12,
                  heater_power: float = 80, settings = None, *args, **kwargs):
 
         self.id = id

@@ -10,13 +10,14 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "PBS",
-            "manufacturer": "RTU",
+            "name": "ABS",
+            "manufacturer": "Verbatim",
             "id": "123456",
             "size_od": 1.75,
             "temperature_melting": 200,
             "temperature_destr": 300,
-            "temperature_vicat": 101
+            "temperature_vicat": 101,
+            "temperature_glass": 94
         },
         "machine": {
             "manufacturer": "Mass Portal",
@@ -35,19 +36,19 @@ except:
             }
         },
         "settings": {
-            "temperature_printbed_raft": 50,
-            "temperature_printbed": 50,
-            "part_cooling": 0,
+            "temperature_printbed_raft": 95,
+            "temperature_printbed": 95,
+            "part_cooling": 100,
 
             "raft_density": 75,
 
-            "temperature_extruder_raft": 180,
+            "temperature_extruder_raft": 230,
 
-            "path_height_raft": 0.2,
+            "path_height_raft": 0.3,
             "path_width_raft": 0.6,
             "speed_printing_raft": 20,
 
-            "temperature_extruder": 180,
+            "temperature_extruder": 250,
             "speed_printing": 40,
 
             "path_height": 0.3,
@@ -57,6 +58,7 @@ except:
 
             "retraction_distance": 2.00,
             "retraction_restart_distance": 0.45,
+            "retraction_speed": 120,
             "coasting_distance": 0.0,
             "overlap": 0,
             "perimeter": 1,
