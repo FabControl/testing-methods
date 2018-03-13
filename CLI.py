@@ -25,14 +25,18 @@ if __name__ == '__main__':
     quiet = arguments["-q"]
     flash = arguments["--flash"]
 
+    from Globals import machine, material, import_json_dict, test_list
+
     if arguments["generate-report"]:
         import generate_report # TODO feed persistence.json in, get pdf out and material.json
         quit()
     elif arguments["generate-config"]:
-        if str(arguments["<slicer>"]).lower() == 'prusa':
+        slicer_arg = str(arguments["<slicer>"]).lower()
+        if slicer_arg == 'prusa' or slicer_arg == "simplify3d":
+            import_json_dict["session"]["slicer"] = slicer_arg
             import config_writer
         else:
-            raise ValueError("Slicer not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.")
+            raise ValueError("%s not recognized. Accepted slicers are 'Prusa', 'Simplify3D'." % slicer_arg)
         quit()
 
 from Calculations import shear_rate, pressure_drop, rheology
@@ -42,7 +46,6 @@ from OptimizeSettings import check_printbed_temperature, check_printing_speed_sh
 from Plotting import plotting_mfr
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
-from Globals import machine, material, import_json_dict, test_list
 from CLI_helpers import evaluate, clear, extruded_filament, spawn_iso_slicer, separator, spawn_slicer
 from paths import cwd, gcode_folder
 import time
@@ -50,8 +53,6 @@ import os
 
 session = import_json_dict["session"]
 start = time.time()
-
-# TODO Adapt for unix
 
 if arguments["slice-iso"]:
     config = "RTU_PBS_1-75_0-4_003.ini"

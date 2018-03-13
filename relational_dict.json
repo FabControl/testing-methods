@@ -1,0 +1,229 @@
+{
+    "coasting_distance": {
+        "kisslicer": "",
+        "prusa": "",
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "coastingDistance"
+        },
+        "slic3r": ""
+    },
+    "extrusion_multiplier": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "extrusion_multiplier"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "extrusionMultiplier"
+        },
+        "slic3r": ""
+    },
+    "overlap": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "infill_overlap"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "outlineOverlapPercentage"
+        },
+        "slic3r": ""
+    },
+    "part_cooling": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "1 if x != 0 else 0",
+            "parameter": "fan_always_on",
+            "parent_parameter": "",
+            "units": ""
+        },
+        "simplify3d": {
+            "modifier": "100 if x != 0 else 0",
+            "parameter": "fanSpeed",
+            "parent_parameter": "",
+            "units": ""
+        },
+        "slic3r": ""
+    },
+    "path_height": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "layer_height"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "layerHeight"
+        },
+        "slic3r": ""
+    },
+    "path_height_raft": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "first_layer_height"
+        },
+        "simplify3d": {
+            "modifier": "round(x/y*100)",
+            "parameter": "firstLayerHeightPercentage",
+            "parent_parameter": "path_height",
+            "units": "percentage"
+        },
+        "slic3r": ""
+    },
+    "path_width": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "extrusion_width"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "width"
+        },
+        "slic3r": ""
+    },
+    "path_width_raft": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "first_layer_extrusion_width"
+        },
+        "simplify3d": {
+            "modifier": "round(x/y*100)",
+            "parameter": "firstLayerWidthPercentage",
+            "parent_parameter": "path_width",
+            "units": "percentage"
+        },
+        "slic3r": ""
+    },
+    "perimeter": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "perimeters"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "perimeterOutlines"
+        },
+        "slic3r": ""
+    },
+    "retraction_distance": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "retract_length"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "retractionDistance"
+        },
+        "slic3r": ""
+    },
+    "retraction_restart_distance": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "retract_restart_extra"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "extraRestartDistance"
+        },
+        "slic3r": ""
+    },
+    "size_id": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "nozzle_diameter"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "diameter"
+        },
+        "slic3r": ""
+    },
+    "speed_printing": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "perimeter_speed",
+            "parent_parameter": "",
+            "units": ""
+        },
+        "simplify3d": {
+            "modifier": "x*60",
+            "parameter": "defaultSpeed",
+            "parent_parameter": "",
+            "units": "mm/min"
+        },
+        "slic3r": ""
+    },
+    "speed_printing_raft": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "first_layer_speed"
+        },
+        "simplify3d": {
+            "modifier": "round(x/y, 2)",
+            "parameter": "firstLayerUnderspeed",
+            "parent_parameter": "speed_printing",
+            "units": "mm/min"
+        },
+        "slic3r": ""
+    },
+    "temperature_extruder": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "temperature"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "Primary Extruder Temperature"
+        },
+        "slic3r": ""
+    },
+    "temperature_extruder_raft": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "first_layer_temperature"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": ""
+        },
+        "slic3r": ""
+    },
+    "temperature_printbed": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "bed_temperature"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "Heated Bed"
+        },
+        "slic3r": ""
+    },
+    "temperature_printbed_raft": {
+        "kisslicer": "",
+        "prusa": {
+            "modifier": "",
+            "parameter": "bed_temperature"
+        },
+        "simplify3d": {
+            "modifier": "",
+            "parameter": "Heated Bed"
+        },
+        "slic3r": ""
+    }
+}

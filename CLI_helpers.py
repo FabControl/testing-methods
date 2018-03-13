@@ -24,7 +24,7 @@ def evaluate(input):
 
 def clear():
     """
-    Clears the terminal screen. OS sensitive.
+    Clears the terminal screen. OS aware.
     :return:
     """
     system('cls' if name == 'nt' else 'clear')
@@ -115,7 +115,7 @@ def spawn_slicer(config: str, output:str, geometry:str):
 
 def separator(input = None):
     """
-    Takes an input value and separates it with an OS sensitive directory separator. Returns a separator if no input is given.
+    Takes an input value and separates it with an OS aware directory separator. Returns a separator if no input is given.
     :param input:
     :return:
     """

@@ -1,7 +1,11 @@
 import re
 from collections import OrderedDict
-from Globals import import_json_dict as json
+from Globals import import_json_dict as json_dict
 from CLI_helpers import exclusive_write
+import json
+import datetime
+
+slicer = str(json_dict["session"]["slicer"]).lower()
 
 
 def numeral_eval(value):
@@ -58,31 +62,90 @@ def assemble_ini(dictionary: OrderedDict):
     return outstring
 
 
-"""
-Writes a Prusa Slic3r config
-"""
-settings = json["settings"]
-material = json["material"]
-configuration = read_ini("config.ini")
-configuration["bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed"])
-configuration["cooling"]["value"] = 1 if settings["part_cooling"] != 0 else 0
-configuration["fan_always_on"]["value"] = 1 if settings["part_cooling"] != 0 else 0
-configuration["extrusion_width"]["value"] = numeral_eval(settings["path_width"])
-configuration["extrusion_multiplier"]["value"] = numeral_eval(settings["extrusion_multiplier"])
-configuration["first_layer_bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed_raft"])
-configuration["first_layer_extrusion_width"]["value"] = numeral_eval(settings["path_width_raft"])
-configuration["first_layer_height"]["value"] = numeral_eval(settings["path_height_raft"])
-configuration["first_layer_speed"]["value"] = numeral_eval(settings["speed_printing_raft"])
-configuration["first_layer_temperature"]["value"] = numeral_eval(settings["temperature_extruder_raft"])
-configuration["layer_height"]["value"] = numeral_eval(settings["path_height"])
-configuration["nozzle_diameter"]["value"] = numeral_eval(json["machine"]["nozzle"]["size_id"])
-configuration["temperature"]["value"] = numeral_eval(settings["temperature_extruder"])
-configuration["retract_restart_extra"]["value"] = numeral_eval(settings["retraction_restart_distance"])
-configuration["retract_length"]["value"] = numeral_eval(settings["retraction_distance"])
-configuration["perimeter_speed"]["value"] = numeral_eval(settings["speed_printing"])
-configuration["solid_infill_speed"]["value"] = numeral_eval(settings["speed_printing"])
-configuration["filament_diameter"]["value"] = numeral_eval(material["size_od"])
-output_name = "%s_%s_%s_%s.ini" % (material["manufacturer"], material["name"],
-                                   str(material["size_od"]).format("%.2f").replace(".", "-"),
-                                   str(json["machine"]["nozzle"]["size_id"]).format("%.1f").replace(".", "-"))
-exclusive_write(output_name, assemble_ini(configuration))
+def output_name(extension: str):
+    """
+    Creates a filename based on material manufacturer, name, outer diameter and nozzle diameter.
+    Accepts a file extension as an input parameter.
+    :param extension:
+    :return:
+    """
+    output = "%s_%s_%s_%s.%s" % (json_dict["material"]["manufacturer"],
+                                 json_dict["material"]["name"],
+                                 str(json_dict["material"]["size_od"]).format("%.2f").replace(".", "-"),
+                                 str(json_dict["machine"]["nozzle"]["size_id"]).format("%.1f").replace(".", "-"),
+                                 extension)
+    return output
+
+
+with open("relational_dict.json") as file:
+    relational_dict = json.load(file)
+
+if slicer == "prusa":
+    """
+    Writes a Prusa Slic3r config
+    """
+    settings = json_dict["settings"]
+    material = json_dict["material"]
+    configuration = read_ini("config.ini")
+    configuration["bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed"])
+    configuration["cooling"]["value"] = 1 if settings["part_cooling"] != 0 else 0
+    configuration["fan_always_on"]["value"] = 1 if settings["part_cooling"] != 0 else 0
+    configuration["extrusion_width"]["value"] = numeral_eval(settings["path_width"])
+    configuration["extrusion_multiplier"]["value"] = numeral_eval(settings["extrusion_multiplier"])
+    configuration["first_layer_bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed_raft"])
+    configuration["first_layer_extrusion_width"]["value"] = numeral_eval(settings["path_width_raft"])
+    configuration["first_layer_height"]["value"] = numeral_eval(settings["path_height_raft"])
+    configuration["first_layer_speed"]["value"] = numeral_eval(settings["speed_printing_raft"])
+    configuration["first_layer_temperature"]["value"] = numeral_eval(settings["temperature_extruder_raft"])
+    configuration["layer_height"]["value"] = numeral_eval(settings["path_height"])
+    configuration["nozzle_diameter"]["value"] = numeral_eval(json_dict["machine"]["nozzle"]["size_id"])
+    configuration["temperature"]["value"] = numeral_eval(settings["temperature_extruder"])
+    configuration["retract_restart_extra"]["value"] = numeral_eval(settings["retraction_restart_distance"])
+    configuration["retract_length"]["value"] = numeral_eval(settings["retraction_distance"])
+    configuration["perimeter_speed"]["value"] = numeral_eval(settings["speed_printing"])
+    configuration["solid_infill_speed"]["value"] = numeral_eval(settings["speed_printing"])
+    configuration["filament_diameter"]["value"] = numeral_eval(material["size_od"])
+    exclusive_write(output_name("ini"), assemble_ini(configuration))
+
+elif slicer == "simplify3d":
+    import xml.etree.ElementTree as ET
+
+    tree = ET.parse('simplify_config.fff')
+    root = tree.getroot()
+    root.attrib["name"] = "%s %s %s for %s mm nozzle" % (json_dict["material"]["manufacturer"],
+                                                         json_dict["material"]["name"],
+                                                         str(json_dict["material"]["size_od"]).format("%.2f"),
+                                                         str(json_dict["machine"]["nozzle"]["size_id"]).format("%.2f"))
+    root.attrib["version"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    for key, value in relational_dict.items():
+        foo = root.find(relational_dict[key]["simplify3d"]["parameter"])
+        if foo is None:
+            foo = root.find("extruder").find(relational_dict[key]["simplify3d"]["parameter"])
+        if "temperature" in key:
+            temp_controllers = root.findall("temperatureController")
+            for controller in temp_controllers:
+                if controller.attrib["name"] == relational_dict[key]["simplify3d"]["parameter"]:
+                    foo = controller.find("setpoint")
+        if key == "part_cooling":
+            foo = root.find("fanSpeed").findall("setpoint")[-1]
+
+        if foo is not None:
+            if value["simplify3d"]["modifier"] != "":
+                x = json_dict["settings"][key]
+                if value["simplify3d"]["parent_parameter"] != "":
+                    y = json_dict["settings"][value["simplify3d"]["parent_parameter"]]
+                new_val = numeral_eval(eval(value["simplify3d"]["modifier"]))
+            elif key == "size_id":
+                new_val = numeral_eval(json_dict["machine"]["nozzle"]["size_id"])
+            else:
+                new_val = numeral_eval(json_dict["settings"][key])
+            if foo.text is not None:
+                foo.text = str(new_val)
+            else:
+                if key == "part_cooling":
+                    foo.attrib["speed"] = str(new_val)
+                else:
+                    foo.attrib["temperature"] = str(new_val)
+    tree.write(output_name("fff"), xml_declaration=True, encoding="utf-8")
+    print("%s succesfully written" % output_name("fff"))
