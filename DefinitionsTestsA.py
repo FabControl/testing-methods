@@ -194,7 +194,7 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
 
         dummy2_range = range(number_of_substructures)
         for dummy2 in dummy2_range:
-            current_printing_speed = ts.min_max_speed_printing[dummy2] if ts.min_max_speed_printing is not None else ts.speed_printing[dummy1]
+            current_printing_speed = ts.min_max_speed_printing[(dummy2 if len(dummy2_range) > 1 else dummy1)] if ts.min_max_speed_printing is not None else ts.speed_printing[dummy1]
             ts.g.write('; --- testing the following printing speed value: %.3f mm/s' % (current_printing_speed))
             ts.g.feed(current_printing_speed)
 
