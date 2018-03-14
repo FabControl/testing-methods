@@ -103,8 +103,10 @@ class Gplus(G):
     def abs_move(self, x=None, y=None, z=None, rapid=False, extrude=None, extrusion_multiplier=None, **kwargs):
         """ Same as `move` method, but positions are interpreted as absolute.
         """
-        if extrude is not None: self.extrude = extrude
-        if extrusion_multiplier is not None: self.extrusion_multiplier = extrusion_multiplier
+        if extrude is not None:
+            self.extrude = extrude
+        if extrusion_multiplier is not None:
+            self.extrusion_multiplier = extrusion_multiplier
 
         if self.is_relative:
             self.absolute()
@@ -121,15 +123,17 @@ class Gplus(G):
         :param z:
         :param speed:
         :param lift:
+        :param retraction_speed:
+        :param retraction_distance:
         :param kwargs:
         :return:
         """
         temp_speed = self.speed/60 if speed is None else speed
         self.feed(temp_speed*2)
         self.write("G1 F" + str(retraction_speed * 60) + " E" + str(-retraction_distance))
-        self.move(z= lift)
-        self.move(x,y,z,extrude=False, **kwargs)
-        self.move(z= -lift)
+        self.move(z=lift)
+        self.move(x, y, z, extrude=False, **kwargs)
+        self.move(z=-lift)
         self.write("G1 F" + str(retraction_speed * 60) + " E" + str(retraction_distance))
         self.feed(temp_speed)
 
@@ -141,6 +145,8 @@ class Gplus(G):
         :param z:
         :param speed:
         :param lift:
+        :param retraction_speed:
+        :param retraction_distance:
         :param kwargs:
         :return:
         """
@@ -164,6 +170,3 @@ class Gplus(G):
         """
         self.write('G1 F{}'.format(rate * 60))
         self.speed = rate * 60
-
-    def arcplus(self, x, y,):
-        self.arc()

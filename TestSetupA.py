@@ -82,7 +82,7 @@ class TestSetupA(object):
 
             self.units = ['mm']* self.number_of_test_structures
 
-            self.coef_h, _ = minmax_path_height(machine, self.number_of_test_structures) if min_max_argument is None else np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
+            self.coef_h, _ = minmax_path_height(machine, self.number_of_test_structures) if min_max_argument is None else (np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist(), (min_max_argument[0] + min_max_argument[1]) / 2 / machine.nozzle.size_id)
 
             self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
             self.argument = [round(x,3) for x in self.coef_h]
@@ -95,7 +95,7 @@ class TestSetupA(object):
 
             self.units = ['mm']* self.number_of_test_structures
 
-            self.coef_w, coef_w_mean = minmax_path_width(machine) if min_max_argument is None else np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist()
+            self.coef_w, _ = minmax_path_width(machine) if min_max_argument is None else (np.linspace(min_max_argument[0] / machine.nozzle.size_id, min_max_argument[1] / machine.nozzle.size_id, self.number_of_test_structures).tolist(), (min_max_argument[0] + min_max_argument[1]) / 2 / machine.nozzle.size_id)
 
             self.step_x = [x * machine.nozzle.size_id for x in self.coef_w]
             self.argument = [round(x,3) for x in self.coef_w]
@@ -173,7 +173,7 @@ class TestSetupA(object):
         q_row = []
         for speed in self.min_max_speed_printing:
             for dummy in range(self.number_of_test_structures if test_name != "printing speed" else 1):
-                value = round(q_v(path_height[dummy], path_width[dummy], speed, self.extrusion_multiplier[dummy]),3)
+                value = round(q_v(path_height[dummy], path_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
                 q_row.append(value)
                 if dummy == self.number_of_test_structures-1 or test_name == "printing speed":
                     q.append(q_row)
@@ -192,7 +192,7 @@ class TestSetupA(object):
                        extrusion_multiplier=machine.settings.extrusion_multiplier_raft)
 
     def get_values(self):
-        return self.values
+        return [round(value, 3) for value in self.values]
 
 
 def addtitle(test_name: str, material: Material):

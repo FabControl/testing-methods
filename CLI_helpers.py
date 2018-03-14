@@ -129,3 +129,13 @@ def separator(input = None):
             return "\\%s\\" % str(input)
         else:
             return  "/%s/" % str(input)
+
+builtins_round = round
+def round(input: float, depth: int = 3):
+    """
+    A wrapper for the built-in round function which handles the datatype casting in a more intuitive fashion.
+    :param input:
+    :param depth:
+    :return:
+    """
+    return float(str(builtins_round(input, depth)))

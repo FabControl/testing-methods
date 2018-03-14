@@ -10,13 +10,13 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "PBS",
-            "manufacturer": "RTU",
+            "name": "Arnitel 2045",
+            "manufacturer": "DSM",
             "id": "123456",
             "size_od": 1.75,
             "temperature_melting": 200,
             "temperature_destr": 300,
-            "temperature_vicat": 101
+            "temperature_vicat": 20
         },
         "machine": {
             "manufacturer": "Mass Portal",
@@ -35,20 +35,20 @@ except:
             }
         },
         "settings": {
-            "temperature_printbed_raft": 60,
-            "temperature_printbed": 60,
-            "part_cooling": 0,
+            "temperature_printbed_raft": 25,
+            "temperature_printbed": 25,
+            "part_cooling": 100,
 
             "raft_density": 75,
 
-            "temperature_extruder_raft": 210,
+            "temperature_extruder_raft": 235,
 
             "path_height_raft": 0.2,
-            "path_width_raft": 0.15,
+            "path_width_raft": 0.4,
             "speed_printing_raft": 20,
 
-            "temperature_extruder": 210,
-            "speed_printing": 40,
+            "temperature_extruder": 235,
+            "speed_printing": 20,
 
             "path_height": 0.15,
             "path_width": 0.4,
@@ -57,6 +57,7 @@ except:
 
             "retraction_distance": 2.00,
             "retraction_restart_distance": 0.0,
+            "retraction_speed": 80,
             "coasting_distance": 0.0,
             "overlap": 0,
             "perimeter": 1,
@@ -65,36 +66,26 @@ except:
             "safe_distance": 50,
             "number_of_test_structures": 7,
             "edges": 30
-    },
+        },
         "session": {
-            "uid": 123456,
+            "uid": 20180313,
             "previous_tests": [],
             "test_type": 'A',
             "test_name": 'first layer height',
             "min_max": [0.1, 0.3],
             "min_max_speed": [10, 25],
-            "slicer": "Prusa Slic3r"
+            "slicer": "simplify3d"
 
         }
     }
 
-# test_list = [TestInfo('first layer height', 'path_height_raft', 'mm'),  # 0
-#              TestInfo('extrusion temperature', 'temperature_extruder', 'degC'),  # 1
-#              TestInfo('path height', 'path_height', 'mm'),  # 2
-#              TestInfo('path width', 'path_width', 'mm'),  # 3
-#              TestInfo('printing speed', 'speed_printing', 'mm/s'),  # 4
-#              TestInfo('extrusion multiplier', 'extrusion_multiplier', ''),  # 5
-#              TestInfo('retraction distance', 'retraction_distance', 'mm')]  # 6
-
-test_list = ['first layer height', #0
-             'extrusion temperature', #1
-             'path height', #2
-             'path width', #3
-             'printing speed', #4
-             'extrusion multiplier', #5
-             'retraction distance'] #6
-
-tl = test_list  # convenience variable
+test_list = ['first layer height',  # 0
+             'extrusion temperature',  # 1
+             'path height',  # 2
+             'path width',  # 3
+             'printing speed',  # 4
+             'extrusion multiplier',  # 5
+             'retraction distance']  # 6
 
 print("Loaded a testing session ID %d" % import_json_dict["session"]["uid"])
 

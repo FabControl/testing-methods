@@ -28,7 +28,7 @@ if __name__ == '__main__':
     from Globals import machine, material, import_json_dict, test_list
 
     if arguments["generate-report"]:
-        import generate_report # TODO feed persistence.json in, get pdf out and material.json
+        import generate_report  # TODO feed persistence.json in, get pdf out and material.json
         quit()
     elif arguments["generate-config"]:
         slicer_arg = str(arguments["<slicer>"]).lower()

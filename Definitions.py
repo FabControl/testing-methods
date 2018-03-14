@@ -377,6 +377,7 @@ def write_json(name, surname, object, path = None):
         with open(str(path + '/' + file_name), mode='w') as file:
             file.write(jsonpickle.encode(object))
 
+
 def q_v(path_height, path_width, speed_printing, extrusion_multiplier = 1):
     if path_height < path_width / (2 - math.pi / 2):
         q_v = extrusion_multiplier * speed_printing * (path_height * (path_width - path_height) + math.pi * (path_height / 2) ** 2)
