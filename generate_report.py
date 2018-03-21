@@ -11,9 +11,10 @@ from CLI_helpers import *
 with open("persistence.json", mode="r") as file: # ./jsons/
     import_json_dict = json.load(file)
 
-report_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' ' + str(import_json_dict["material"]["size_od"]) + ' mm'
+file_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' ' + str(import_json_dict["material"]["size_od"]) + ' mm'
+report_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' Ø' + str(import_json_dict["material"]["size_od"]) + ' mm'
 
-doc = SimpleDocTemplate(report_name + '.pdf',
+doc = SimpleDocTemplate(file_name + '.pdf',
                         pagesize=landscape(A4),
                         rightMargin=30,
                         leftMargin=25,
@@ -50,7 +51,7 @@ main_info = "Manufacturer: " + import_json_dict["material"]["manufacturer"]
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Machine: " + import_json_dict["machine"]["model"]
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Nozzle: " + str(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm"
+main_info = "Nozzle: " + str(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm, " + str(import_json_dict["machine"]["nozzle"]["metal"])
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Part cooling: " + str(import_json_dict["settings"]["part_cooling"]) + " %"
 elements.append(Paragraph(main_info, style=style_text))
@@ -115,8 +116,6 @@ for dummy in range(import_json_dict["settings"]["number_of_test_structures"]):
 colwidths.append(80)
 colwidths.append(80)
 colwidths.append(80)
-
-print(data)
 
 data2 = [[Paragraph(cell, style_text) for cell in row] for row in data]
 t = Table(data2, colwidths)

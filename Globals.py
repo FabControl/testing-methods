@@ -1,5 +1,4 @@
-from Definitions import Material, Settings, Machine, TestInfo, header, footer, minmax_path_width_height_raft
-from GcodeStuff import Gplus
+from Definitions import Material, Settings, Machine, TestInfo, minmax_path_width_height_raft
 import json
 
 try:
@@ -10,13 +9,14 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "Arnitel 2045",
-            "manufacturer": "DSM",
+            "name": "Ultrafuse 316LX",
+            "manufacturer": "BASF",
             "id": "123456",
             "size_od": 1.75,
-            "temperature_melting": 200,
-            "temperature_destr": 300,
-            "temperature_vicat": 20
+            "temperature_melting": 165,
+            "temperature_destr": 220,
+            "temperature_vicat": 50,
+            "temperature_glass": 50
         },
         "machine": {
             "manufacturer": "Mass Portal",
@@ -31,33 +31,33 @@ except:
                 "size_od": 0.64,
                 "size_capillary_length": 5,
                 "size_angle": 60,
-                "metal": "brass"
+                "metal": "steel"
             }
         },
         "settings": {
-            "temperature_printbed_raft": 25,
-            "temperature_printbed": 25,
+            "temperature_printbed_raft": 50,
+            "temperature_printbed": 50,
             "part_cooling": 100,
 
             "raft_density": 75,
 
-            "temperature_extruder_raft": 235,
+            "temperature_extruder_raft": 220,
 
             "path_height_raft": 0.2,
             "path_width_raft": 0.4,
             "speed_printing_raft": 20,
 
-            "temperature_extruder": 235,
-            "speed_printing": 20,
+            "temperature_extruder": 220,
+            "speed_printing": 40,
 
-            "path_height": 0.15,
+            "path_height": 0.2,
             "path_width": 0.4,
 
             "extrusion_multiplier": 1.000,
 
-            "retraction_distance": 2.00,
+            "retraction_distance": 0.00,
             "retraction_restart_distance": 0.0,
-            "retraction_speed": 80,
+            "retraction_speed": 120,
             "coasting_distance": 0.0,
             "overlap": 0,
             "perimeter": 1,
@@ -66,26 +66,35 @@ except:
             "safe_distance": 50,
             "number_of_test_structures": 7,
             "edges": 30
-        },
+    },
         "session": {
-            "uid": 20180313,
+            "uid": 123456,
             "previous_tests": [],
             "test_type": 'A',
             "test_name": 'first layer height',
             "min_max": [0.1, 0.3],
-            "min_max_speed": [10, 25],
-            "slicer": "simplify3d"
+            "min_max_speed": [10, 25], "slicer": "Prusa Slic3r"
 
         }
     }
 
-test_list = ['first layer height',  # 0
-             'extrusion temperature',  # 1
-             'path height',  # 2
-             'path width',  # 3
-             'printing speed',  # 4
-             'extrusion multiplier',  # 5
-             'retraction distance']  # 6
+# test_list = [TestInfo('first layer height', 'path_height_raft', 'mm'),  # 0
+#              TestInfo('extrusion temperature', 'temperature_extruder', 'degC'),  # 1
+#              TestInfo('path height', 'path_height', 'mm'),  # 2
+#              TestInfo('path width', 'path_width', 'mm'),  # 3
+#              TestInfo('printing speed', 'speed_printing', 'mm/s'),  # 4
+#              TestInfo('extrusion multiplier', 'extrusion_multiplier', ''),  # 5
+#              TestInfo('retraction distance', 'retraction_distance', 'mm')]  # 6
+
+test_list = ['first layer height', #0
+             'extrusion temperature', #1
+             'path height', #2
+             'path width', #3
+             'printing speed', #4
+             'extrusion multiplier', #5
+             'retraction distance'] #6
+
+tl = test_list  # convenience variable
 
 print("Loaded a testing session ID %d" % import_json_dict["session"]["uid"])
 
