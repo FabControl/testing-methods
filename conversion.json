@@ -1,0 +1,570 @@
+[
+  {
+    "py/object": "__main__.Param",
+    "name": "coasting distance",
+    "parameter": "coasting_distance",
+    "params": {
+      "py/object": "__main__.Params",
+      "_tests": {
+        "py/id": 0
+      }
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "coastingDistance",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 1
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "extrusion multiplier",
+    "parameter": "extrusion_multiplier",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "extrusion_multiplier",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 4
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "extrusionMultiplier",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 4
+      },
+      "units": null
+    },
+    "test": "extrusion multiplier test",
+    "units": null
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "overlap",
+    "parameter": "overlap",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "infill_overlap",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 7
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "outlineOverlapPercentage",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 7
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "percentage"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "part cooling",
+    "parameter": "part_cooling",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": "1 if x != 0 else 0",
+      "name": null,
+      "parameter": "fan_always_on",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 10
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": "100 if x != 0 else 0",
+      "name": null,
+      "parameter": "fanSpeed",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 10
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "percentage"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "path height",
+    "parameter": "path_height",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "layer_height",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 13
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "layerHeight",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 13
+      },
+      "units": null
+    },
+    "test": "path height test",
+    "units": "mm"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "first layer height",
+    "parameter": "path_height_raft",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "first_layer_height",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 16
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": "round(x/y*100)",
+      "name": null,
+      "parameter": "firstLayerHeightPercentage",
+      "parent_parameter": "path_height",
+      "root": {
+        "py/id": 16
+      },
+      "units": "percentage"
+    },
+    "test": "first layer height test",
+    "units": "mm"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "path width",
+    "parameter": "path_width",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "extrusion_width",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 19
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "width",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 19
+      },
+      "units": null
+    },
+    "test": "path width test",
+    "units": "mm"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "first layer path width",
+    "parameter": "path_width_raft",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "first_layer_extrusion_width",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 22
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": "round(x/y*100)",
+      "name": null,
+      "parameter": "firstLayerWidthPercentage",
+      "parent_parameter": "path_width",
+      "root": {
+        "py/id": 22
+      },
+      "units": "percentage"
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "perimeter",
+    "parameter": "perimeter",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "perimeters",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 25
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "perimeterOutlines",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 25
+      },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "retraction distance",
+    "parameter": "retraction_distance",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retract_length",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 28
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retractionDistance",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 28
+      },
+      "units": null
+    },
+    "test": "retraction distance test",
+    "units": "mm"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "retraction restart distance",
+    "parameter": "retraction_restart_distance",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retract_restart_extra",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 31
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "extraRestartDistance",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 31
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "nozzle inner diameter size",
+    "parameter": "size_id",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "nozzle_diameter",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 34
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "diameter",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 34
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "printing speed",
+    "parameter": "speed_printing",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "perimeter_speed",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 37
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": "x*60",
+      "name": null,
+      "parameter": "defaultSpeed",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 37
+      },
+      "units": "mm/min"
+    },
+    "test": "printing speed test",
+    "units": "mm/s"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "first layer printing speed",
+    "parameter": "speed_printing_raft",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "first_layer_speed",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 40
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": "round(x/y, 2)",
+      "name": null,
+      "parameter": "firstLayerUnderspeed",
+      "parent_parameter": "speed_printing",
+      "root": {
+        "py/id": 40
+      },
+      "units": "mm/min"
+    },
+    "test": "first layer height test",
+    "units": "mm/s"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "extrusion temperature",
+    "parameter": "temperature_extruder",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "temperature",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 43
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "Primary Extruder Temperature",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 43
+      },
+      "units": null
+    },
+    "test": "extrusion temperature test",
+    "units": "degC"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "first layer extrusion temperature",
+    "parameter": "temperature_extruder_raft",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "first_layer_temperature",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 46
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "root": {
+        "py/id": 46
+      },
+      "units": null
+    },
+    "test": "first layer height test",
+    "units": "degC"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "printbed temperature",
+    "parameter": "temperature_printbed",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "bed_temperature",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 49
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "Heated Bed",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 49
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "degC"
+  },
+  {
+    "py/object": "__main__.Param",
+    "name": "first layer printbed temperature",
+    "parameter": "temperature_printbed_raft",
+    "params": {
+      "py/id": 2
+    },
+    "prusa": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "bed_temperature",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 52
+      },
+      "units": null
+    },
+    "simplify3d": {
+      "py/object": "__main__.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "Heated Bed",
+      "parent_parameter": null,
+      "root": {
+        "py/id": 52
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "degC"
+  }
+]
