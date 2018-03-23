@@ -1,4 +1,11 @@
 #!/usr/local/bin/python
+"""
+Mass Portal Feedstock Testing Suite
+Test Report Generator
+
+Usage:
+    generate_report.py [json_path]
+"""
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, inch, landscape
@@ -7,8 +14,15 @@ from reportlab.lib.styles import ParagraphStyle
 import json, os
 from datetime import datetime
 from CLI_helpers import *
+from docopt import docopt
 
-with open("persistence.json", mode="r") as file: # ./jsons/
+arguments = docopt(__doc__)
+if arguments["[json_path]"] is not None:
+    json_path = arguments["[json_path]"]
+else:
+    json_path = "persistence.json"
+
+with open(json_path, mode="r") as file:  # ./jsons/
     import_json_dict = json.load(file)
 
 report_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' ' + str(import_json_dict["material"]["size_od"]) + ' mm'

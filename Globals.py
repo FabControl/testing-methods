@@ -6,6 +6,7 @@ try:
     print("Attempting to load the JSON")
     with open("persistence.json", mode="r") as file:
         import_json_dict = json.load(file)
+    print("Loaded a testing session ID %d from outer scope" % import_json_dict["session"]["uid"])
 except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
@@ -87,7 +88,6 @@ test_list = ['first layer height',  # 0
              'extrusion multiplier',  # 5
              'retraction distance']  # 6
 
-print("Loaded a testing session ID %d" % import_json_dict["session"]["uid"])
 
 material = Material(**import_json_dict["material"])
 machine = Machine(**import_json_dict["machine"])

@@ -4,7 +4,6 @@ Command Line Interface
 Usage:
     CLI.py [-v] [-q] [--flash]
     CLI.py new-test
-    CLI.py generate-report
     CLI.py generate-config <slicer>
     CLI.py slice <geometry>
     CLI.py slice-iso <orientation> <count> <rotation>
@@ -28,7 +27,7 @@ if __name__ == '__main__':
     from Globals import machine, material, import_json_dict, test_list
 
     if arguments["generate-report"]:
-        import generate_report  # TODO feed persistence.json in, get pdf out and material.json
+        import generate_report  # TODO feed persistence.json in as argument, get pdf out and material.json
         quit()
     elif arguments["generate-config"]:
         slicer_arg = str(arguments["<slicer>"]).lower()
@@ -55,12 +54,12 @@ session = import_json_dict["session"]
 start = time.time()
 
 if arguments["slice-iso"]:
-    config = "RTU_PBS_1-75_0-4_003.ini"
+    config = "RTU_PBS_1-75_0-4_003.ini" # TODO Can't be hardcoded
     spawn_iso_slicer(arguments['<orientation>'], arguments['<count>'],arguments['<rotation>'],config)
     quit()
 
 elif arguments["slice"]:
-    config = "RTU_PBS_1-75_0-4_003.ini"
+    config = "RTU_PBS_1-75_0-4_003.ini" # TODO Can't be hardcoded
     output = arguments["<geometry>"][:-4]+".gcode"
     spawn_slicer(config, output, arguments["<geometry>"])
 
@@ -168,6 +167,7 @@ if ts.test_name == "retraction distance" or min_max_speed_printing is None:
     tested_speed_values = []
 
 extruded_filament = extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode")
+import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.nozzle.size_id,2)
 
 current_test = {"test_name": ts.test_name,
                 "tested_values": ts.get_values(),
@@ -181,6 +181,8 @@ current_test = {"test_name": ts.test_name,
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
 
+
+# TODO Run as post hook
 for dummy in import_json_dict["session"]["previous_tests"]:
     if dummy["test_name"] == "printing speed": # TODO check conditions
         import_json_dict["settings"]["speed_printing"] = dummy["selected_value"]
@@ -190,7 +192,6 @@ for dummy in import_json_dict["session"]["previous_tests"]:
     elif dummy["test_name"] == "first layer height":
         import_json_dict["settings"]["path_height_raft"] = dummy["selected_value"]
         import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
-        import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.nozzle.size_id,2)
     elif dummy["test_name"] == "path width":
         import_json_dict["settings"]["path_width"] = dummy["selected_value"]
         import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
@@ -203,7 +204,6 @@ for dummy in import_json_dict["session"]["previous_tests"]:
     elif dummy["test_name"] == "retraction distance":
         import_json_dict["settings"]["retraction_distance"] = dummy["selected_value"]
         import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
-        import_json_dict["settings"]["retraction_speed"] = round(ts.retraction_speed,1)
 
 import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["path_height"]/import_json_dict["settings"]["path_width"])),0)
 
