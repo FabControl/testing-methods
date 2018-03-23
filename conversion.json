@@ -461,7 +461,7 @@
       "root": {
         "py/id": 40
       },
-      "units": "mm/min"
+      "units": "percentage"
     },
     "test": "first layer height test",
     "units": "mm/s"
