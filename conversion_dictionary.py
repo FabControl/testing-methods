@@ -74,8 +74,6 @@ def assign_modifiers():
             file.write(output)
 
 
-
-
 class Slicer(object):
     """
     Stores slicer specific information and value getter and setter methods
@@ -88,6 +86,7 @@ class Slicer(object):
         self.modifier = modifier
         self.units = units
         self.root = root
+        self.reverse_modifier = None
 
     def _slicer_modifier(self):
         """
@@ -105,7 +104,14 @@ class Slicer(object):
             return self.root.value
 
     def _reverse_modifier(self, value):
-        return value  # TODO
+        if self.reverse_modifier is not None:
+            x = value
+            if self.parent_parameter is not None:
+                y = self.root.params.get(self.parent_parameter).value
+            new_value = eval(self.reverse_modifier)
+            return new_value
+        else:
+            return value
 
     @property
     def value(self):
@@ -121,7 +127,8 @@ class Params(object):
         with open("conversion.json", mode="r") as file:
             self._tests = jsonpickle.loads(file.read())
 
-        # for x in self._tests:
+        for x in self._tests:
+            x.value = flat_values[x.parameter]
         #     slicers = []
         #     for attr in x.__dir__():
         #         if isinstance(x.__getattribute__(attr), Slicer):
@@ -167,12 +174,8 @@ class Param(object):
         self.test = None
         self.params = params
 
-    @property
-    def value(self):
-        return flat_values[self.parameter]
-
 
 if __name__ == "__main__":  # For testing
     params = Params()
-    print(params.get("size_id").simplify3d.value)
+    print(params.get("speed_printing_raft").simplify3d.value)
     pass

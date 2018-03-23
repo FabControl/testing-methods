@@ -15,6 +15,7 @@
       "name": null,
       "parameter": "coastingDistance",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 1
       },
@@ -36,6 +37,7 @@
       "name": null,
       "parameter": "extrusion_multiplier",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 4
       },
@@ -47,6 +49,7 @@
       "name": null,
       "parameter": "extrusionMultiplier",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 4
       },
@@ -68,6 +71,7 @@
       "name": null,
       "parameter": "infill_overlap",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 7
       },
@@ -79,6 +83,7 @@
       "name": null,
       "parameter": "outlineOverlapPercentage",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 7
       },
@@ -100,6 +105,7 @@
       "name": null,
       "parameter": "fan_always_on",
       "parent_parameter": null,
+      "reverse_modifier": "100 if x != 0 else 0",
       "root": {
         "py/id": 10
       },
@@ -111,6 +117,7 @@
       "name": null,
       "parameter": "fanSpeed",
       "parent_parameter": null,
+      "reverse_modifier": "100 if x != 0 else 0",
       "root": {
         "py/id": 10
       },
@@ -132,6 +139,7 @@
       "name": null,
       "parameter": "layer_height",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 13
       },
@@ -143,6 +151,7 @@
       "name": null,
       "parameter": "layerHeight",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 13
       },
@@ -164,6 +173,7 @@
       "name": null,
       "parameter": "first_layer_height",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 16
       },
@@ -175,6 +185,7 @@
       "name": null,
       "parameter": "firstLayerHeightPercentage",
       "parent_parameter": "path_height",
+      "reverse_modifier": "y*x/100",
       "root": {
         "py/id": 16
       },
@@ -196,6 +207,7 @@
       "name": null,
       "parameter": "extrusion_width",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 19
       },
@@ -207,6 +219,7 @@
       "name": null,
       "parameter": "width",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 19
       },
@@ -228,6 +241,7 @@
       "name": null,
       "parameter": "first_layer_extrusion_width",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 22
       },
@@ -239,6 +253,7 @@
       "name": null,
       "parameter": "firstLayerWidthPercentage",
       "parent_parameter": "path_width",
+      "reverse_modifier": "y*x/100",
       "root": {
         "py/id": 22
       },
@@ -260,6 +275,7 @@
       "name": null,
       "parameter": "perimeters",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 25
       },
@@ -271,6 +287,7 @@
       "name": null,
       "parameter": "perimeterOutlines",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 25
       },
@@ -292,6 +309,7 @@
       "name": null,
       "parameter": "retract_length",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 28
       },
@@ -303,6 +321,7 @@
       "name": null,
       "parameter": "retractionDistance",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 28
       },
@@ -324,6 +343,7 @@
       "name": null,
       "parameter": "retract_restart_extra",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 31
       },
@@ -335,6 +355,7 @@
       "name": null,
       "parameter": "extraRestartDistance",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 31
       },
@@ -356,6 +377,7 @@
       "name": null,
       "parameter": "nozzle_diameter",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 34
       },
@@ -367,6 +389,7 @@
       "name": null,
       "parameter": "diameter",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 34
       },
@@ -388,6 +411,7 @@
       "name": null,
       "parameter": "perimeter_speed",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 37
       },
@@ -399,6 +423,7 @@
       "name": null,
       "parameter": "defaultSpeed",
       "parent_parameter": null,
+      "reverse_modifier": "x/60",
       "root": {
         "py/id": 37
       },
@@ -420,6 +445,7 @@
       "name": null,
       "parameter": "first_layer_speed",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 40
       },
@@ -431,6 +457,7 @@
       "name": null,
       "parameter": "firstLayerUnderspeed",
       "parent_parameter": "speed_printing",
+      "reverse_modifier": "round(x*y, 2)",
       "root": {
         "py/id": 40
       },
@@ -452,6 +479,7 @@
       "name": null,
       "parameter": "temperature",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 43
       },
@@ -463,6 +491,7 @@
       "name": null,
       "parameter": "Primary Extruder Temperature",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 43
       },
@@ -484,6 +513,7 @@
       "name": null,
       "parameter": "first_layer_temperature",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 46
       },
@@ -495,6 +525,7 @@
       "name": null,
       "parameter": null,
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 46
       },
@@ -516,6 +547,7 @@
       "name": null,
       "parameter": "bed_temperature",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 49
       },
@@ -527,6 +559,7 @@
       "name": null,
       "parameter": "Heated Bed",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 49
       },
@@ -548,6 +581,7 @@
       "name": null,
       "parameter": "bed_temperature",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 52
       },
@@ -559,6 +593,7 @@
       "name": null,
       "parameter": "Heated Bed",
       "parent_parameter": null,
+      "reverse_modifier": null,
       "root": {
         "py/id": 52
       },
