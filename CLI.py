@@ -26,10 +26,7 @@ if __name__ == '__main__':
 
     from Globals import machine, material, import_json_dict, test_list
 
-    if arguments["generate-report"]:
-        import generate_report  # TODO feed persistence.json in as argument, get pdf out and material.json
-        quit()
-    elif arguments["generate-config"]:
+    if arguments["generate-config"]:
         slicer_arg = str(arguments["<slicer>"]).lower()
         if slicer_arg == 'prusa' or slicer_arg == "simplify3d":
             import_json_dict["session"]["slicer"] = slicer_arg
@@ -184,30 +181,31 @@ previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
 
 
-# TODO Run as post hook
-for dummy in import_json_dict["session"]["previous_tests"]:
-    if dummy["test_name"] == "printing speed": # TODO check conditions
-        import_json_dict["settings"]["speed_printing"] = dummy["selected_value"]
-    elif dummy["test_name"] == "path height":
-        import_json_dict["settings"]["path_height"] = dummy["selected_value"]
-        import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
-    elif dummy["test_name"] == "first layer height":
-        import_json_dict["settings"]["path_height_raft"] = dummy["selected_value"]
-        import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
-    elif dummy["test_name"] == "path width":
-        import_json_dict["settings"]["path_width"] = dummy["selected_value"]
-        import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
-    elif dummy["test_name"] == "extrusion temperature":
-        import_json_dict["settings"]["temperature_extruder"] = dummy["selected_value"]
-        import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
-    elif dummy["test_name"] == "extrusion multiplier":
-        import_json_dict["settings"]["extrusion_multiplier"] = dummy["selected_value"]
-        import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
-    elif dummy["test_name"] == "retraction distance":
-        import_json_dict["settings"]["retraction_distance"] = dummy["selected_value"]
-        import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+if not quiet:
+    # TODO Run as post hook
+    for dummy in import_json_dict["session"]["previous_tests"]:
+        if dummy["test_name"] == "printing speed": # TODO check conditions
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_value"]
+        elif dummy["test_name"] == "path height":
+            import_json_dict["settings"]["path_height"] = dummy["selected_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+        elif dummy["test_name"] == "first layer height":
+            import_json_dict["settings"]["path_height_raft"] = dummy["selected_value"]
+            import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
+        elif dummy["test_name"] == "path width":
+            import_json_dict["settings"]["path_width"] = dummy["selected_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+        elif dummy["test_name"] == "extrusion temperature":
+            import_json_dict["settings"]["temperature_extruder"] = dummy["selected_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+        elif dummy["test_name"] == "extrusion multiplier":
+            import_json_dict["settings"]["extrusion_multiplier"] = dummy["selected_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+        elif dummy["test_name"] == "retraction distance":
+            import_json_dict["settings"]["retraction_distance"] = dummy["selected_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
 
-import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["path_height"]/import_json_dict["settings"]["path_width"])),0)
+    import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["path_height"]/import_json_dict["settings"]["path_width"])),0)
 
 with open(cwd + separator("jsons") + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)
