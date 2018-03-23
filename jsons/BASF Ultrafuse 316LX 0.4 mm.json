@@ -1,0 +1,222 @@
+{
+    "material": {
+        "name": "Ultrafuse 316LX",
+        "manufacturer": "BASF",
+        "id": "123456",
+        "size_od": 1.75,
+        "temperature_melting": 165,
+        "temperature_destr": 220,
+        "temperature_vicat": 50,
+        "temperature_glass": 50
+    },
+    "machine": {
+        "manufacturer": "Mass Portal",
+        "model": "Pharaoh XD20",
+        "buildarea_maxdim1": 145,
+        "buildarea_maxdim2": 145,
+        "max_dimension_z": 200,
+        "temperature_max": 300,
+        "size_extruder_id": 1.95,
+        "nozzle": {
+            "size_id": 0.4,
+            "size_od": 0.64,
+            "size_capillary_length": 5,
+            "size_angle": 60,
+            "metal": "steel"
+        }
+    },
+    "settings": {
+        "temperature_printbed_raft": 50,
+        "temperature_printbed": 50,
+        "part_cooling": 100,
+        "raft_density": 75,
+        "temperature_extruder_raft": 220,
+        "path_height_raft": 0.16,
+        "path_width_raft": 0.4,
+        "speed_printing_raft": 10,
+        "temperature_extruder": 240,
+        "speed_printing": 30,
+        "path_height": 0.146,
+        "path_width": 0.417,
+        "extrusion_multiplier": 1.375,
+        "retraction_distance": 1.33,
+        "retraction_restart_distance": 0.0,
+        "retraction_speed": 120,
+        "coasting_distance": 0.0,
+        "overlap": 0,
+        "perimeter": 1,
+        "matrix_size": 3,
+        "layer_count": 15,
+        "safe_distance": 50,
+        "number_of_test_structures": 7,
+        "edges": 30,
+        "critical_overhang_angle": 35.0
+    },
+    "session": {
+        "uid": 123456,
+        "previous_tests": [
+            {
+                "test_name": "first layer height",
+                "tested_values": [
+                    0.119,
+                    0.136,
+                    0.153,
+                    0.169,
+                    0.186,
+                    0.203,
+                    0.22
+                ],
+                "tested_speed_values": [
+                    5.0,
+                    10.0,
+                    15.0,
+                    20.0
+                ],
+                "selected_value": 0.16,
+                "selected_speed_value": 10,
+                "units": "mm",
+                "extruded_filament": 233.082,
+                "selected_flow_rate_value": 0.724
+            },
+            {
+                "test_name": "extrusion temperature",
+                "tested_values": [
+                    220.0,
+                    227.0,
+                    233.0,
+                    240.0,
+                    247.0,
+                    253.0,
+                    260.0
+                ],
+                "tested_speed_values": [
+                    10.0,
+                    20.0,
+                    30.0,
+                    40.0
+                ],
+                "selected_value": 240,
+                "selected_speed_value": 20,
+                "units": "degC",
+                "extruded_filament": 808.619,
+                "selected_flow_rate_value": 1.428
+            },
+            {
+                "test_name": "path height",
+                "tested_values": [
+                    0.072,
+                    0.109,
+                    0.146,
+                    0.183,
+                    0.22,
+                    0.256,
+                    0.293
+                ],
+                "tested_speed_values": [
+                    10.0,
+                    20.0,
+                    30.0,
+                    40.0
+                ],
+                "selected_value": 0.146,
+                "selected_speed_value": 20,
+                "units": "mm",
+                "extruded_filament": 416.741,
+                "selected_flow_rate_value": 1.074
+            },
+            {
+                "test_name": "path width",
+                "tested_values": [
+                    0.375,
+                    0.396,
+                    0.417,
+                    0.438,
+                    0.458,
+                    0.479,
+                    0.5
+                ],
+                "tested_speed_values": [
+                    10.0,
+                    20.0,
+                    30.0,
+                    40.0
+                ],
+                "selected_value": 0.417,
+                "selected_speed_value": 20,
+                "units": "mm",
+                "extruded_filament": 395.929,
+                "selected_flow_rate_value": 1.126
+            },
+            {
+                "test_name": "extrusion multiplier",
+                "tested_values": [
+                    0.75,
+                    0.875,
+                    1.0,
+                    1.125,
+                    1.25,
+                    1.375,
+                    1.5
+                ],
+                "tested_speed_values": [
+                    10.0,
+                    20.0,
+                    30.0,
+                    40.0
+                ],
+                "selected_value": 1.375,
+                "selected_speed_value": 30,
+                "units": "-",
+                "extruded_filament": 411.413,
+                "selected_flow_rate_value": 2.323
+            },
+            {
+                "test_name": "printing speed",
+                "tested_values": [
+                    20.0,
+                    23.3,
+                    26.7,
+                    30.0,
+                    33.3,
+                    36.7,
+                    40.0
+                ],
+                "tested_speed_values": [],
+                "selected_value": 26.7,
+                "selected_speed_value": 27.6,
+                "units": "mm/s",
+                "extruded_filament": 465.294,
+                "selected_flow_rate_value": 2.065
+            },
+            {
+                "test_name": "retraction distance",
+                "tested_values": [
+                    0.0,
+                    0.67,
+                    1.33,
+                    2.0,
+                    2.67,
+                    3.33,
+                    4.0
+                ],
+                "tested_speed_values": [],
+                "selected_value": 1.33,
+                "selected_speed_value": 30,
+                "units": "mm",
+                "extruded_filament": 366.513,
+                "selected_flow_rate_value": 2.323
+            }
+        ],
+        "test_type": "A",
+        "test_name": "first layer height",
+        "min_max": [
+            0.1,
+            0.3
+        ],
+        "min_max_speed": [
+            10,
+            25
+        ],
+        "slicer": "Prusa Slic3r"
+    }
+}

@@ -51,6 +51,7 @@ import time
 import os
 
 session = import_json_dict["session"]
+
 start = time.time()
 
 if arguments["slice-iso"]:
@@ -64,7 +65,7 @@ elif arguments["slice"]:
     spawn_slicer(config, output, arguments["<geometry>"])
 
 # Check compatibility
-check_compatibility(machine, material)
+#check_compatibility(machine, material)
 
 # Checking some settings for better starting values
 if machine.settings.optimize_temperature_printbed: check_printbed_temperature(material, machine)
@@ -112,6 +113,7 @@ if import_json_dict["session"]["test_type"] == "A":
     from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
     path = str(cwd + gcode_folder + separator() + test + ' test' + '.gcode')
+
     ts = TestSetupA(machine, material, test, path,
                     min_max_argument=min_max_argument,
                     min_max_speed_printing=min_max_speed_printing,

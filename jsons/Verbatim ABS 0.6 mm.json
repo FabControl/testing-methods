@@ -31,9 +31,9 @@
         "part_cooling": 100,
         "raft_density": 75,
         "temperature_extruder_raft": 230,
-        "path_height_raft": 0.344,
+        "path_height_raft": 0.436,
         "path_width_raft": 0.6,
-        "speed_printing_raft": 20,
+        "speed_printing_raft": 18.3,
         "temperature_extruder": 299,
         "speed_printing": 50,
         "path_height": 0.3846,
@@ -50,7 +50,7 @@
         "safe_distance": 50,
         "number_of_test_structures": 7,
         "edges": 30,
-        "critical_overhang_angle": 52.5106870942223
+        "critical_overhang_angle": 53.0
     },
     "session": {
         "uid": 123456,
@@ -106,16 +106,16 @@
                 "tested_values": [
                     0.108,
                     0.1632,
-                    0.21839999999999998,
+                    0.218,
                     0.2742,
                     0.3294,
                     0.3846,
-                    0.43979999999999997
+                    0.439
                 ],
                 "tested_speed_values": [
                     20.0,
-                    33.333333333333336,
-                    46.66666666666667,
+                    33.3,
+                    46.7,
                     60.0
                 ],
                 "selected_value": 0.3846,
@@ -131,7 +131,7 @@
                     0.5502,
                     0.5598,
                     0.57,
-                    0.5801999999999999,
+                    0.58,
                     0.5898,
                     0.6
                 ],
@@ -164,6 +164,29 @@
                 "units": "mm/s",
                 "extruded_filament": 1666,
                 "selected_flow_rate_value": 9.77
+            },
+            {
+                "test_name": "first layer height",
+                "tested_values": [
+                    0.162,
+                    0.208,
+                    0.253,
+                    0.299,
+                    0.344,
+                    0.39,
+                    0.436
+                ],
+                "tested_speed_values": [
+                    5.0,
+                    11.666666666666668,
+                    18.333333333333336,
+                    25.0
+                ],
+                "selected_value": 0.436,
+                "selected_speed_value": 18.3,
+                "units": "mm",
+                "extruded_filament": 454.366,
+                "selected_flow_rate_value": 4.048
             }
         ],
         "test_type": "A",
