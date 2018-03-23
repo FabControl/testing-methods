@@ -19,7 +19,7 @@
       "root": {
         "py/id": 1
       },
-      "units": null
+      "units": "mm"
     },
     "test": null,
     "units": "mm"
@@ -75,7 +75,7 @@
       "root": {
         "py/id": 7
       },
-      "units": null
+      "units": "percentage"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -87,7 +87,7 @@
       "root": {
         "py/id": 7
       },
-      "units": null
+      "units": "percentage"
     },
     "test": null,
     "units": "percentage"
@@ -109,7 +109,7 @@
       "root": {
         "py/id": 10
       },
-      "units": null
+      "units": "percentage"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -121,7 +121,7 @@
       "root": {
         "py/id": 10
       },
-      "units": null
+      "units": "percentage"
     },
     "test": null,
     "units": "percentage"
@@ -143,7 +143,7 @@
       "root": {
         "py/id": 13
       },
-      "units": null
+      "units": "mm"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -155,7 +155,7 @@
       "root": {
         "py/id": 13
       },
-      "units": null
+      "units": "mm"
     },
     "test": "path height test",
     "units": "mm"
@@ -177,7 +177,7 @@
       "root": {
         "py/id": 16
       },
-      "units": null
+      "units": "mm"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -211,7 +211,7 @@
       "root": {
         "py/id": 19
       },
-      "units": null
+      "units": "mm"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -223,7 +223,7 @@
       "root": {
         "py/id": 19
       },
-      "units": null
+      "units": "mm"
     },
     "test": "path width test",
     "units": "mm"
@@ -245,7 +245,7 @@
       "root": {
         "py/id": 22
       },
-      "units": null
+      "units": "mm"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -313,7 +313,7 @@
       "root": {
         "py/id": 28
       },
-      "units": null
+      "units": "mm"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -325,7 +325,7 @@
       "root": {
         "py/id": 28
       },
-      "units": null
+      "units": "mm"
     },
     "test": "retraction distance test",
     "units": "mm"
@@ -347,7 +347,7 @@
       "root": {
         "py/id": 31
       },
-      "units": null
+      "units": "mm"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -359,7 +359,7 @@
       "root": {
         "py/id": 31
       },
-      "units": null
+      "units": "mm"
     },
     "test": null,
     "units": "mm"
@@ -381,7 +381,7 @@
       "root": {
         "py/id": 34
       },
-      "units": null
+      "units": "mm"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -393,7 +393,7 @@
       "root": {
         "py/id": 34
       },
-      "units": null
+      "units": "mm"
     },
     "test": null,
     "units": "mm"
@@ -415,7 +415,7 @@
       "root": {
         "py/id": 37
       },
-      "units": null
+      "units": "mm/s"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -449,7 +449,7 @@
       "root": {
         "py/id": 40
       },
-      "units": null
+      "units": "mm/s"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -483,7 +483,7 @@
       "root": {
         "py/id": 43
       },
-      "units": null
+      "units": "degC"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -495,7 +495,7 @@
       "root": {
         "py/id": 43
       },
-      "units": null
+      "units": "degC"
     },
     "test": "extrusion temperature test",
     "units": "degC"
@@ -517,7 +517,7 @@
       "root": {
         "py/id": 46
       },
-      "units": null
+      "units": "degC"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -529,7 +529,7 @@
       "root": {
         "py/id": 46
       },
-      "units": null
+      "units": "degC"
     },
     "test": "first layer height test",
     "units": "degC"
@@ -551,7 +551,7 @@
       "root": {
         "py/id": 49
       },
-      "units": null
+      "units": "degC"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -563,7 +563,7 @@
       "root": {
         "py/id": 49
       },
-      "units": null
+      "units": "degC"
     },
     "test": null,
     "units": "degC"
@@ -585,7 +585,7 @@
       "root": {
         "py/id": 52
       },
-      "units": null
+      "units": "degC"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -597,7 +597,7 @@
       "root": {
         "py/id": 52
       },
-      "units": null
+      "units": "degC"
     },
     "test": null,
     "units": "degC"
