@@ -105,6 +105,7 @@ if slicer == "prusa":
     configuration["perimeter_speed"]["value"] = numeral_eval(settings["speed_printing"])
     configuration["solid_infill_speed"]["value"] = numeral_eval(settings["speed_printing"])
     configuration["filament_diameter"]["value"] = numeral_eval(material["size_od"])
+    # configuration["max_volumetric_speed"]["value"] = TODO
     exclusive_write(output_name("ini"), assemble_ini(configuration))
 
 elif slicer == "simplify3d":

@@ -2,6 +2,7 @@ from __future__ import print_function
 from Definitions import *
 from GcodeStuff import Gplus
 import numpy as np
+from conversion_dictionary import Params
 
 
 class TestSetupA(object):

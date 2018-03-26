@@ -98,7 +98,7 @@ def spawn_iso_slicer(orientation: str, count: int, rotation: float or int, confi
     geometry = iso_sample_path + 'export.stl'
     subprocess.run(
         [blender_path, "-b", "-P", str(iso_sample_path + "ISO527A_modifier.py"), "--", orientation, str(count),
-         str(rotation), iso_sample_path], stderr=open(os.devnull, 'wb'))
+         str(rotation), iso_sample_path], stderr=open(devnull, 'wb'))
     subprocess.run([slic3r_path, "--load", config, "-o", output, "--dont-arrange", geometry])
 
 

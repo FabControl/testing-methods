@@ -5,13 +5,12 @@ Usage:
     CLI.py [-v] [-q] [--flash]
     CLI.py new-test
     CLI.py generate-config <slicer>
-    CLI.py slice <geometry>
-    CLI.py slice-iso <orientation> <count> <rotation>
+    CLI.py slice <geometry> <config>
+    CLI.py slice-iso <orientation> <count> <rotation> <config>
     CLI.py --help
 """
 
 import subprocess
-import os
 from docopt import docopt
 quiet = None
 verbose = True
@@ -45,19 +44,18 @@ from TestSetupB import TestSetupB
 from CLI_helpers import evaluate, clear, extruded_filament, spawn_iso_slicer, separator, spawn_slicer
 from paths import cwd, gcode_folder
 import time
-import os
 
 session = import_json_dict["session"]
 
 start = time.time()
 
 if arguments["slice-iso"]:
-    config = "RTU_PBS_1-75_0-4_003.ini" # TODO Can't be hardcoded
+    config = arguments["<config>"]
     spawn_iso_slicer(arguments['<orientation>'], arguments['<count>'],arguments['<rotation>'],config)
     quit()
 
 elif arguments["slice"]:
-    config = "RTU_PBS_1-75_0-4_003.ini" # TODO Can't be hardcoded
+    config = arguments["<config>"]
     output = arguments["<geometry>"][:-4]+".gcode"
     spawn_slicer(config, output, arguments["<geometry>"])
 
@@ -182,7 +180,6 @@ import_json_dict["session"]["previous_tests"] = previous_tests
 
 
 if not quiet:
-    # TODO Run as post hook
     for dummy in import_json_dict["session"]["previous_tests"]:
         if dummy["test_name"] == "printing speed": # TODO check conditions
             import_json_dict["settings"]["speed_printing"] = dummy["selected_value"]
@@ -207,9 +204,9 @@ if not quiet:
 
     import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["path_height"]/import_json_dict["settings"]["path_width"])),0)
 
-with open(cwd + separator("jsons") + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
-    output = json.dumps(import_json_dict, indent=4, sort_keys=False)
-    file.write(output)
+    with open(cwd + separator("jsons") + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
+        output = json.dumps(import_json_dict, indent=4, sort_keys=False)
+        file.write(output)
 
 with open(cwd + separator() + "persistence.json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)

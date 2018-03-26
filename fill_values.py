@@ -33,9 +33,9 @@ for dummy in persistence["session"]["previous_tests"]:
 
 persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*persistence["settings"]["path_height"]/persistence["settings"]["path_width"])),0)
 
-with open(paths.cwd + separator("jsons") + persistence["material"]["manufacturer"] + " " + persistence["material"]["name"] + " " + str(persistence["machine"]["nozzle"]["size_id"]) + " mm" + ".json", mode="w") as file:
-    output = json.dumps(persistence, indent=4, sort_keys=False)
-    file.write(output)
+# with open(paths.cwd + separator("jsons") + persistence["material"]["manufacturer"] + " " + persistence["material"]["name"] + " " + str(persistence["machine"]["nozzle"]["size_id"]) + " mm" + ".json", mode="w") as file:
+#     output = json.dumps(persistence, indent=4, sort_keys=False)
+#     file.write(output)
 
 with open(paths.cwd + separator() + "persistence.json", mode="w") as file:
     output = json.dumps(persistence, indent=4, sort_keys=False)

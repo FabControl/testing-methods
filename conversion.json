@@ -75,22 +75,22 @@
       "root": {
         "py/id": 7
       },
-      "units": "percentage"
+      "units": "percent"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "outlineOverlapPercentage",
+      "parameter": "outlineOverlappercent",
       "parent_parameter": null,
       "reverse_modifier": null,
       "root": {
         "py/id": 7
       },
-      "units": "percentage"
+      "units": "percent"
     },
     "test": null,
-    "units": "percentage"
+    "units": "percent"
   },
   {
     "py/object": "__main__.Param",
@@ -109,7 +109,7 @@
       "root": {
         "py/id": 10
       },
-      "units": "percentage"
+      "units": "percent"
     },
     "simplify3d": {
       "py/object": "__main__.Slicer",
@@ -121,10 +121,10 @@
       "root": {
         "py/id": 10
       },
-      "units": "percentage"
+      "units": "percent"
     },
     "test": null,
-    "units": "percentage"
+    "units": "percent"
   },
   {
     "py/object": "__main__.Param",
@@ -183,13 +183,13 @@
       "py/object": "__main__.Slicer",
       "modifier": "round(x/y*100)",
       "name": null,
-      "parameter": "firstLayerHeightPercentage",
+      "parameter": "firstLayerHeightpercent",
       "parent_parameter": "path_height",
       "reverse_modifier": "y*x/100",
       "root": {
         "py/id": 16
       },
-      "units": "percentage"
+      "units": "percent"
     },
     "test": "first layer height test",
     "units": "mm"
@@ -251,13 +251,13 @@
       "py/object": "__main__.Slicer",
       "modifier": "round(x/y*100)",
       "name": null,
-      "parameter": "firstLayerWidthPercentage",
+      "parameter": "firstLayerWidthpercent",
       "parent_parameter": "path_width",
       "reverse_modifier": "y*x/100",
       "root": {
         "py/id": 22
       },
-      "units": "percentage"
+      "units": "percent"
     },
     "test": null,
     "units": "mm"
@@ -461,7 +461,7 @@
       "root": {
         "py/id": 40
       },
-      "units": "percentage"
+      "units": "fraction"
     },
     "test": "first layer height test",
     "units": "mm/s"
