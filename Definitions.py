@@ -5,6 +5,7 @@ import os
 
 import jsonpickle
 import numpy as np
+from CLI_helpers import separator
 
 header = r'header'
 footer = r'footer'
@@ -56,13 +57,6 @@ class Material(object):
         self.load_mfr = load_mfr  # respect the units: kg
         self.heat_capacity = heat_capacity  # respect the units: J / K / g
 
-    def print(self):
-        print('This is %s filament. Its outer diameter is %.2f mm and its ID is %s' % (
-        self.name, self.size_od, self.id))
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
-
 
 class Nozzle(object):
     """
@@ -83,12 +77,6 @@ class Nozzle(object):
         self.size_angle = math.radians(size_angle)  # respect the units: conversion from angles to radians
         self.metal = metal
 
-    def print(self):
-        print('This is a %.1f mm %s nozzle.' % (self.size_id, self.metal))
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
-
 
 class Settings(object):
     """
@@ -108,16 +96,13 @@ class Settings(object):
     retraction_distance - retraction distance (mm)
     """
 
-    def __init__(self, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
+    def __init__(self, aim = None, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
                  temperature_printbed_raft=None, extrusion_multiplier_raft=None, speed_printing_raft=None, temperature_extruder=None,
                  temperature_printbed=None, extrusion_multiplier=None, speed_printing=None, retraction_distance = None, retraction_restart_distance = None, retraction_speed = None,
                  coasting_distance = None, part_cooling=None, raft_density=None, number_of_test_structures = None, optimize_temperature_printbed = None, optimize_speed_printing = None,
                  optimize_path_height = None, get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
-        self.tests = []
-        self.machines = []
-        self.aesthetics = []  # aim for aesthetics
-        self.speed = []  # aim for fast printing
-        self.strength = []  # aim for mechanical strength
+
+        self.aim = aim
 
         self.material = Material(None, None, None, 1.75)
         self.path_width = path_width  # respect the units: mm
@@ -159,14 +144,6 @@ class Settings(object):
 
         self.nozzle = nozzle
 
-    def print(self):
-        print(
-            'This is a %s material MP Material Test. It consists of %i separate tests, performed with %i machines. The tests are performed with %s.' % (
-            self.tests, len(self.tests), len(self.machines), self.material_name))
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
-
 
 class Machine(object):
     """
@@ -186,7 +163,7 @@ class Machine(object):
 
     def __init__(self, id: str = None, manufacturer: str = None, model: str = None, sn: str = None, size_extruder_id: float = None,
                  buildarea_maxdim1: float = None, buildarea_maxdim2: float = None, temperature_max: float = None, moment_max: float = None, gear_size_od: float = 12,
-                 heater_power: float = 80, settings = None, *args, **kwargs):
+                 heater_power: float = 80, *args, **kwargs):
 
         self.id = id
         self.manufacturer = manufacturer
@@ -202,18 +179,8 @@ class Machine(object):
         self.nozzle = Nozzle(**kwargs["nozzle"])
         self.settings = None
 
-    def getid(self):
-        return self.id
-
-    def print(self):
-        print('This is a %s %s machine (SN: %s). The maximum dimensions of the build area are %s mm x %s mm' % (
-            self.manufacturer, self.model, self.sn, self.buildarea_maxdim1, self.buildarea_maxdim2))
-
     def setnozzle(self, size_id: float, size_od: float, size_capillary_length: float, size_angle: float, metal: str):
         self.nozzle = Nozzle(size_id, size_od, size_capillary_length, size_angle, metal)
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
 
 class TestInfo(object):
@@ -354,28 +321,6 @@ def get_test_structure_size(machine):
         test_structure_size = 55
 
     return test_structure_size
-
-
-def json_to_obj(path):
-    # Creates a new object (Obj) instance with json dictionary (path) as attributes
-    with open(path) as file:
-        return jsonpickle.decode(file.read())
-
-
-def file_check(file):
-    # checks whether or not a file exists, returns boolean
-    return os.path.isfile(file)
-
-
-def write_json(name, surname, object, path = None):
-    # Encodes a Python object to a pickled JSON. Takes two parameters (name, surname) as file naming arguments
-    file_name = str('%s %s.json' % (name, surname))
-    if path is None:
-        with open(file_name, mode='w') as file:
-            file.write(jsonpickle.encode(object))
-    else:
-        with open(str(path + '/' + file_name), mode='w') as file:
-            file.write(jsonpickle.encode(object))
 
 
 def q_v(path_height, path_width, speed_printing, extrusion_multiplier = 1):

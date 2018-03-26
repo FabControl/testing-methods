@@ -5,7 +5,7 @@ try:
     print("Attempting to load the JSON")
     with open("persistence.json", mode="r") as file:
         import_json_dict = json.load(file)
-    print("Loaded a testing session ID %d from outer scope" % import_json_dict["session"]["uid"])
+    print("Loaded a testing session ID {:d} from outer scope".format(import_json_dict["session"]["uid"]))
 except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
@@ -36,6 +36,7 @@ except:
             }
         },
         "settings": {
+            "aim": "aesthetics",
             "temperature_printbed_raft": 50,
             "temperature_printbed": 50,
             "part_cooling": 100,
@@ -74,7 +75,8 @@ except:
             "test_type": 'A',
             "test_name": 'first layer height',
             "min_max": [0.1, 0.3],
-            "min_max_speed": [10, 25], "slicer": "Prusa Slic3r"
+            "min_max_speed": [10, 25],
+            "slicer": "Prusa Slic3r"
 
         }
     }
@@ -91,12 +93,9 @@ test_list = ['first layer height', #0
              'extrusion temperature', #1
              'path height', #2
              'path width', #3
-             'printing speed', #4
-             'extrusion multiplier', #5
+             'extrusion multiplier', #4
+             'printing speed', #5
              'retraction distance'] #6
-
-tl = test_list  # convenience variable
-
 
 material = Material(**import_json_dict["material"])
 machine = Machine(**import_json_dict["machine"])

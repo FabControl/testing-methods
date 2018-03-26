@@ -408,30 +408,73 @@ if __name__ == '__main__':
         skirt_xpoints, skirt_ypoints, skirt_zpoints = [], [], []
         segments_in_layer = dict()
 
+
     for layer_number in range(1, len(all_layers)):
-        fig, ax = plt.subplots()
+
+        from mpl_toolkits.mplot3d import axes3d
+        import matplotlib.pyplot as plt
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+
         plt.xlim((-40, 40))
         plt.ylim((-40, 40))
 
+
         try:
-            ax.plot(all_layers[str(layer_number)]['INFILL']['x'],
-                    all_layers[str(layer_number)]['INFILL']['y'], c='b', linewidth=0.3)
+            ax.plot_wireframe(all_layers[str(layer_number)]['INFILL']['x'][:-1],
+                    all_layers[str(layer_number)]['INFILL']['y'][:-1],
+                    all_layers[str(layer_number)]['INFILL']['z'][:-1], color='blue', linewidth = 0.2)
         except KeyError:
             pass
         try:
-            ax.plot(all_layers[str(layer_number)]['PERIMETER']['x'],
-                    all_layers[str(layer_number)]['PERIMETER']['y'], c='g', linewidth=0.3)
+            ax.plot_wireframe(all_layers[str(layer_number)]['PERIMETER']['x'][:-1],
+                    all_layers[str(layer_number)]['PERIMETER']['y'][:-1],
+                    all_layers[str(layer_number)]['PERIMETER']['z'][:-1], color='green', linewidth = 0.2)
         except KeyError:
             pass
         try:
-            ax.plot(all_layers[str(layer_number)]['SKIRT']['x'],
-                    all_layers[str(layer_number)]['SKIRT']['y'], c='r', linewidth=0.3)
+            ax.plot_wireframe(all_layers[str(layer_number)]['SKIRT']['x'][:-1],
+                    all_layers[str(layer_number)]['SKIRT']['y'][:-1],
+                    all_layers[str(layer_number)]['SKIRT']['z'][:-1], color='red', linewidth = 0.2)
         except KeyError:
             pass
 
+        ax.set_zlim((0, 30))
         ax.set_title('Layer No.' + str(layer_number) + ' of the parsed ' + filename + ' file')
         plt.gca().set_aspect('equal', adjustable='box')
         plt.savefig(str(layer_number)+'.png', orientation='portrait', transparent=False, frameon=None, dpi=500)
+
+        # from mpl_toolkits.mplot3d import axes3d
+        # import matplotlib.pyplot as plt
+        # from matplotlib import cm
+        #
+        # fig = plt.figure()
+        # ax = fig.gca(projection='3d')
+        #
+        # try:
+        #     ax.plot_surface(all_layers[str(layer_number)]['INFILL']['x'][:-1],
+        #             all_layers[str(layer_number)]['INFILL']['y'][:-1],
+        #             all_layers[str(layer_number)]['INFILL']['z'][:-1], color='blue')
+        # except ZeroDivisionError:
+        #     pass
+        # try:
+        #     ax.plot_surface(all_layers[str(layer_number)]['PERIMETER']['x'][:-1],
+        #             all_layers[str(layer_number)]['PERIMETER']['y'][:-1],
+        #             all_layers[str(layer_number)]['PERIMETER']['z'][:-1], color='green')
+        # except ZeroDivisionError:
+        #     pass
+        # try:
+        #     ax.plot_surface(all_layers[str(layer_number)]['SKIRT']['x'][:-1],
+        #             all_layers[str(layer_number)]['SKIRT']['y'][:-1],
+        #             all_layers[str(layer_number)]['SKIRT']['z'][:-1], color='red')
+        # except ZeroDivisionError:
+        #     pass
+        #
+        # plt.show()
+        # ax.set_title('Layer No.' + str(layer_number) + ' of the parsed ' + filename + ' file')
+        # plt.gca().set_aspect('equal', adjustable='box')
+        # plt.savefig(str(layer_number)+'.png', orientation='portrait', transparent=False, frameon=None, dpi=500)
+
 
     print(time.time() - t)
 

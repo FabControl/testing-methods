@@ -82,7 +82,7 @@ class Gplus(G):
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * ((self.coef_w - self.coef_h) * self.coef_h + (math.pi / 4) * (
                     self.coef_h) ** 2) * line_length * self.extrusion_multiplier
             else:
-                output = str('path height of %.3f mm is too thin' % (self.coef_h * self.nozzle_diameter))
+                output = str('path height of {.3f} mm is too thin'.format(self.coef_h * self.nozzle_diameter))
                 print(output)
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * (self.coef_w * self.coef_h) * line_length * self.extrusion_multiplier
 

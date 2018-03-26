@@ -16,7 +16,7 @@
         "buildarea_maxdim2": 145,
         "max_dimension_z": 200,
         "temperature_max": 300,
-        "size_extruder_id": 1.95,
+        "size_extruder_id": 1.9,
         "nozzle": {
             "size_id": 0.4,
             "size_od": 0.64,
