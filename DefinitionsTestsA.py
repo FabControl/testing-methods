@@ -15,12 +15,18 @@ def wipe(ts: TestSetupA or TestSetupB, full = True):
                   z=+2 * ts.coef_h_raft * machine.nozzle.size_id,
                   extrude=False, extrusion_multiplier=0)
 
-    ts.g.set_printbed_temperature(machine.settings.temperature_printbed) if machine.settings.temperature_printbed is not None else ts.g.set_printbed_temperature(40)
+    ts.g.set_printbed_temperature(machine.settings.temperature_printbed) if machine.settings.temperature_printbed is not None else ts.g.set_printbed_temperature(40) # TODO
 
     ts.g.write("; --- start to clean the nozzle ---")
     ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
     ts.g.dwell(5)
-    output = "G1 F1000 E5; extrude 5 mm of material"
+    if machine.nozzle.size_id <= 0.4:
+        output = "G1 F1000 E2.5; extrude 2.5 mm of material"
+    elif 0.4 < machine.nozzle.size_id <= 0.6:
+        output = "G1 F1000 E5; extrude 5 mm of material"
+    elif machine.nozzle.size_id > 0.6:
+        output = "G1 F1000 E7.5; extrude 7.5 mm of material"
+
     ts.g.write(output)
     ts.g.dwell(5)
     ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
@@ -86,7 +92,7 @@ def print_raft(ts: TestSetupA):
 
     raft_perimeter(ts)
 
-    output = ("; --- print the infill with the fill density of %.f %% ---" % (machine.settings.raft_density))
+    output = ("; --- print the infill with the fill density of {} %% ---".format(machine.settings.raft_density))
 
     ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
     ts.g.write(output)
@@ -195,7 +201,7 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
         dummy2_range = range(number_of_substructures)
         for dummy2 in dummy2_range:
             current_printing_speed = ts.min_max_speed_printing[(dummy2 if len(dummy2_range) > 1 else dummy1)] if ts.min_max_speed_printing is not None else ts.speed_printing[dummy1]
-            ts.g.write('; --- testing the following printing speed value: %.3f mm/s' % (current_printing_speed))
+            ts.g.write('; --- testing the following printing speed value: {:.3f} mm/s'.format(current_printing_speed))
             ts.g.feed(current_printing_speed)
 
             for dummy0 in number_of_layers: # layers
@@ -261,7 +267,7 @@ def retraction_distance(ts: TestSetupA):
     g.write("; --- start to print the test structure ---")
     g.feed(machine.settings.speed_printing)  # respect the units: mm/min
 
-    output = str("; --- testing the retraction speed value of %.3f mm/s ---" % (ts.retraction_speed))
+    output = str("; --- testing the retraction speed value of {:.3f} mm/s ---".format(ts.retraction_speed))
     g.write(output)
 
     for dummy2 in range(0, ts.number_of_test_structures):
@@ -337,7 +343,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
 
                     step_x = ts.step_x[dummy2]
 
-                    output = str("; --- testing the coasting distance value of %.3f mm ---" % (ts.coasting_distance[dummy5]))
+                    output = str("; --- testing the coasting distance value of {:.3f} mm ---".format(ts.coasting_distance[dummy5]))
                     g.write(output)
 
                     g.feed(ts.speed_printing[dummy2])
@@ -361,7 +367,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
                     g.write(output)
 
                     dummy5 = dummy5 + 1
-                    output = str("; --- testing the coasting distance value of %.3f mm ---" % (ts.coasting_distance[dummy5]))
+                    output = str("; --- testing the coasting distance value of {:.3f} mm ---".format(ts.coasting_distance[dummy5]))
                     g.write(output)
 
                     g.feed(ts.speed_printing[dummy2])
@@ -390,7 +396,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
                     g.write(output)
 
                     dummy5 = dummy5 + 1
-                    output = str("; --- testing the coasting distance value of %.3f mm ---" % (ts.coasting_distance[dummy5]))
+                    output = str("; --- testing the coasting distance value of {:.3f} mm ---".format(ts.coasting_distance[dummy5]))
                     g.write(output)
 
                     g.feed(ts.speed_printing[dummy2])
@@ -419,7 +425,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
                     g.write(output)
 
                     dummy5 = dummy5 + 1
-                    output = str("; --- testing the coasting distance value of %.3f mm ---" % (ts.coasting_distance[dummy5]))
+                    output = str("; --- testing the coasting distance value of {:.3f} mm ---".format(ts.coasting_distance[dummy5]))
                     g.write(output)
 
                     g.feed(ts.speed_printing[dummy2])

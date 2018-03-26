@@ -111,13 +111,13 @@ def fix_normals(mesh):
     fix_normals_direction(mesh)
 
 # load a file by name or from a buffer
-filename = 'out5.STL'
+filename = 'out4.STL'
 mesh = trimesh.load(filename)
 
 #fix_normals(mesh)
 direction = [0., 0., -1.0]
 alpha = []
-critical_angle = 30
+critical_angle = 52
 colors = linear_gradient(start_hex='#ff0000', finish_hex="#0000ff", n=critical_angle)  # Create a gradient color string for different lines (blue - critical, red - 0)
 
 for index in enumerate(mesh.face_normals):

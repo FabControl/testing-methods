@@ -5,6 +5,7 @@ import os
 
 import jsonpickle
 import numpy as np
+from CLI_helpers import separator
 
 header = r'header'
 footer = r'footer'
@@ -56,13 +57,6 @@ class Material(object):
         self.load_mfr = load_mfr  # respect the units: kg
         self.heat_capacity = heat_capacity  # respect the units: J / K / g
 
-    def print(self):
-        print('This is %s filament. Its outer diameter is %.2f mm and its ID is %s' % (
-        self.name, self.size_od, self.id))
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
-
 
 class Nozzle(object):
     """
@@ -83,12 +77,6 @@ class Nozzle(object):
         self.size_angle = math.radians(size_angle)  # respect the units: conversion from angles to radians
         self.metal = metal
 
-    def print(self):
-        print('This is a %.1f mm %s nozzle.' % (self.size_id, self.metal))
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
-
 
 class Settings(object):
     """
@@ -108,14 +96,13 @@ class Settings(object):
     retraction_distance - retraction distance (mm)
     """
 
-    def __init__(self, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
+    def __init__(self, aim = None, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
                  temperature_printbed_raft=None, extrusion_multiplier_raft=None, speed_printing_raft=None, temperature_extruder=None,
                  temperature_printbed=None, extrusion_multiplier=None, speed_printing=None, retraction_distance = None, retraction_restart_distance = None, retraction_speed = None,
                  coasting_distance = None, part_cooling=None, raft_density=None, number_of_test_structures = None, optimize_temperature_printbed = None, optimize_speed_printing = None,
                  optimize_path_height = None, get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
-        self.aesthetics = []  # aim for aesthetics
-        self.speed = []  # aim for fast printing
-        self.strength = []  # aim for mechanical strength
+
+        self.aim = aim
 
         self.material = Material(None, None, None, 1.75)
         self.path_width = path_width  # respect the units: mm
@@ -176,7 +163,7 @@ class Machine(object):
 
     def __init__(self, id: str = None, manufacturer: str = None, model: str = None, sn: str = None, size_extruder_id: float = None,
                  buildarea_maxdim1: float = None, buildarea_maxdim2: float = None, temperature_max: float = None, moment_max: float = None, gear_size_od: float = 12,
-                 heater_power: float = 80, settings = None, *args, **kwargs):
+                 heater_power: float = 80, *args, **kwargs):
 
         self.id = id
         self.manufacturer = manufacturer
@@ -331,7 +318,7 @@ def get_test_structure_size(machine):
     if 0.4<machine.nozzle.size_id <=0.6:
         test_structure_size = 75
     elif machine.nozzle.size_id <= 0.4:
-        test_structure_size = 75
+        test_structure_size = 55
 
     return test_structure_size
 

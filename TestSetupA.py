@@ -8,7 +8,6 @@ from conversion_dictionary import Params
 class TestSetupA(object):
     def __init__(self, machine: Machine, material: Material, test_name: str, path: str, min_max_argument: list = None, min_max_speed_printing: list = None, raft: bool = None):
         """
-
         :param machine:
         :param material:
         :param test_name:
@@ -161,7 +160,7 @@ class TestSetupA(object):
 
         else:
             print('Unknown test')
-            raise ValueError("%s is not a valid test." % test_name)
+            raise ValueError("{} is not a valid test.".format(test_name))
 
         if min_max_speed_printing is not None:
             self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], 4).tolist()
@@ -197,7 +196,7 @@ class TestSetupA(object):
 
 
 def addtitle(test_name: str, material: Material):
-    title = str("; --- 2D test for " + test_name + " of %s from %s (ID: %s) ---" % (material.name, material.manufacturer, material.id))
+    title = str("; --- 2D test for " + test_name + " of {} from {} (ID: {}) ---".format(material.name, material.manufacturer, material.id))
 
     return title
 
@@ -211,7 +210,13 @@ def addcomment1(values, units, test_name: str):
 def addcomment2(path_height, path_width, speed_printing, extrusion_multiplier, temperature_extruder, retraction_distance, retraction_restart_distance, machine):
     comment2 = []
     for dummy1 in range(0, machine.settings.number_of_test_structures):
-        addcomment2 = str("; --- path height: %.3f mm, path width: %.3f mm, printing speed: %.1f mm/s, extrusion multiplier: %.2f, extrusion temperature: %.0f degC, retraction distance: %.3f mm, retraction restart distance: %.3f mm  ---" % (round(path_height[dummy1], 3),
+        addcomment2 = str("; --- path height: {:.3f} mm, "
+                          "path width: {:.3f} mm, "
+                          "printing speed: {:.1f} mm/s, "
+                          "extrusion multiplier: {:.2f}, "
+                          "extrusion temperature: {:.0f} degC, "
+                          "retraction distance: {:.3f} mm, "
+                          "retraction restart distance: {:.3f} mm  ---".format(round(path_height[dummy1], 3),
                             round(path_width[dummy1], 3),
                             round(speed_printing[dummy1], 2),
                             round(extrusion_multiplier[dummy1], 2),

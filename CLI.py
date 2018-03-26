@@ -4,6 +4,7 @@ Command Line Interface
 Usage:
     CLI.py [-v] [-q] [--flash]
     CLI.py new-test
+    CLI.py generate-report
     CLI.py generate-config <slicer>
     CLI.py slice <geometry> <config>
     CLI.py slice-iso <orientation> <count> <rotation> <config>
@@ -31,7 +32,7 @@ if __name__ == '__main__':
             import_json_dict["session"]["slicer"] = slicer_arg
             import config_writer
         else:
-            raise ValueError("%s not recognized. Accepted slicers are 'Prusa', 'Simplify3D'." % slicer_arg)
+            raise ValueError("{} not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.".format(slicer_arg))
         quit()
 
 from Calculations import shear_rate, pressure_drop, rheology
@@ -91,7 +92,7 @@ if not verbose:
 if import_json_dict["session"]["test_type"] == "A":
     # 'first layer height', 'extrusion temperature', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance'
     test_number = ['1', '2', '3', '4', '5', '6', '7']
-    test_number = import_json_dict["session"]["test_name"] if quiet else int(input("Parameter to be tested:" + "".join("\n[{}] for '{}'".format(*k) for k in zip(test_number, test_list)) + ": "))
+    test_number = import_json_dict["session"]["test_name"] if quiet else int(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number, test_list)) + ": "))
 
     test = test_list[test_number-1]
 
@@ -169,7 +170,7 @@ import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.n
 current_test = {"test_name": ts.test_name,
                 "tested_values": ts.get_values(),
                 "tested_speed_values": tested_speed_values,
-                "selected_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0, # TODO enter STRUCTURE NUMBER not VALUE, pass to FLOW RATE
+                "selected_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
                 "selected_speed_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
                 "units": ts.units[0],
                 "extruded_filament": extruded_filament,
@@ -178,10 +179,9 @@ current_test = {"test_name": ts.test_name,
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
 
-
 if not quiet:
     for dummy in import_json_dict["session"]["previous_tests"]:
-        if dummy["test_name"] == "printing speed": # TODO check conditions
+        if dummy["test_name"] == "printing speed":
             import_json_dict["settings"]["speed_printing"] = dummy["selected_value"]
         elif dummy["test_name"] == "path height":
             import_json_dict["settings"]["path_height"] = dummy["selected_value"]
