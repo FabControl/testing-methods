@@ -17,13 +17,14 @@ from CLI_helpers import *
 from docopt import docopt
 
 arguments = docopt(__doc__)
-if arguments["[json_path]"] is not None:
-    json_path = arguments["[json_path]"]
+if arguments["json_path"]:
+    json_path = arguments["json_path"]
 else:
     json_path = "persistence.json"
 
-with open(json_path, mode="r") as file:  # ./jsons/
+with open(json_path, mode="r") as file:
     import_json_dict = json.load(file)
+
 
 file_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' ' + str(import_json_dict["material"]["size_od"]) + ' mm'
 report_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' Ø' + str(import_json_dict["material"]["size_od"]) + ' mm'
@@ -58,6 +59,8 @@ elements.append(Paragraph(report_name, style=style_heading))
 elements.append(Spacer(1, 0.5*inch))
 
 datetime_info = "Report generated on: " + datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+main_info = "Aim for: " + import_json_dict["settings"]["aim"]
+elements.append(Paragraph(main_info, style=style_text))
 elements.append(Paragraph(datetime_info, style=style_text))
 main_info = "Material: " + import_json_dict["material"]["name"]
 elements.append(Paragraph(main_info, style=style_text))

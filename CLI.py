@@ -10,7 +10,7 @@ Usage:
     CLI.py slice-iso <orientation> <count> <rotation>
     CLI.py --help
 """
-
+# infill before perimeters TODO
 import subprocess
 import os
 from docopt import docopt

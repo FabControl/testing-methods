@@ -260,6 +260,7 @@ def minmax_path_width_height_raft(machine: Machine):
 
     coef_h_raft = (coef_h_min_raft + coef_h_max_raft)/2
     coef_w_raft = (coef_w_min_raft + coef_w_max_raft)/2
+    print(coef_w_raft)
 
     coef_h_raft_all = np.linspace(0.9*coef_h_min_raft, 1.1*coef_h_max_raft, machine.settings.number_of_test_structures).tolist()
 

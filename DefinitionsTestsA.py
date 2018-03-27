@@ -182,10 +182,14 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
                         z=+ts.abs_z[dummy1],
                         lift=1)
 
+        print(ts.retraction_speed)
+
+        print(ts.retraction_distance)
+
         if ts.test_name == 'extrusion temperature':  # TODO! time, extra restart distance
             ts.g.travel(x=0,
-                     y=+ts.test_structure_size / 5,
-                     z=+ts.abs_z[dummy1], retraction_speed=ts.retraction_speed, retraction_distance=ts.retraction_distance[dummy1]) #  TODO disable retractions
+                        y=+ts.test_structure_size / 5,
+                        z=+ts.abs_z[dummy1], retraction_speed=ts.retraction_speed, retraction_distance=ts.retraction_distance[dummy1]) #  TODO disable retractions
             ts.g.set_extruder_temperature(ts.temperature_extruder[dummy1])
             ts.g.dwell(30)
             output = "G1 F500 E" + str(round(4 * ts.temperature_extruder[dummy1] / ts.temperature_extruder[0],2)) + \

@@ -10,26 +10,26 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "Ultrafuse 316LX",
-            "manufacturer": "BASF",
+            "name": "Arnitel ID2045",
+            "manufacturer": "Nexeo Solutions",
             "id": "123456",
             "size_od": 1.75,
-            "temperature_melting": 165,
-            "temperature_destr": 220,
-            "temperature_vicat": 50,
-            "temperature_glass": 50
+            "temperature_melting": 200,
+            "temperature_destr": 300,
+            "temperature_vicat": 144,
+            "temperature_glass": -30
         },
         "machine": {
             "manufacturer": "Mass Portal",
-            "model": "Pharaoh XD20",
+            "model": "Pharaoh D20",
             "buildarea_maxdim1": 145,
             "buildarea_maxdim2": 145,
             "max_dimension_z": 200,
             "temperature_max": 300,
             "size_extruder_id": 1.95,
             "nozzle": {
-                "size_id": 0.40,
-                "size_od": 0.64,
+                "size_id": 0.60,
+                "size_od": 0.84,
                 "size_capillary_length": 5,
                 "size_angle": 60,
                 "metal": "steel"
@@ -37,29 +37,21 @@ except:
         },
         "settings": {
             "aim": "aesthetics",
-            "temperature_printbed_raft": 50,
-            "temperature_printbed": 50,
+            "temperature_printbed_raft": 40,
+            "temperature_printbed": 40,
             "part_cooling": 100,
-
-            "raft_density": 75,
-
-            "temperature_extruder_raft": 220,
-
-            "path_height_raft": 0.2,
-            "path_width_raft": 0.4,
-            "speed_printing_raft": 20,
-
-            "temperature_extruder": 220,
-            "speed_printing": 40,
-
-            "path_height": 0.2,
-            "path_width": 0.4,
-
-            "extrusion_multiplier": 1.000,
-
-            "retraction_distance": 0.00,
-            "retraction_restart_distance": 0.0,
-            "retraction_speed": 120,
+            "raft_density": 90,
+            "temperature_extruder_raft": 250,
+            "path_height_raft": 0.3,
+            "speed_printing_raft": 10,
+            "temperature_extruder": 250,
+            "speed_printing": 30,
+            "path_height": 0.3,
+            "path_width": 0.6,
+            "extrusion_multiplier": 1.0,
+            "retraction_distance": 2.0,
+            "retraction_restart_distance": 0,
+            "retraction_speed": 80,
             "coasting_distance": 0.0,
             "overlap": 0,
             "perimeter": 1,

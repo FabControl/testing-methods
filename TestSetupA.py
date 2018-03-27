@@ -41,6 +41,7 @@ class TestSetupA(object):
         self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
         self.retraction_speed = machine.settings.retraction_speed
         self.retraction_distance = [x * machine.settings.retraction_distance for x in [1] * self.number_of_test_structures]
+        print(self.retraction_distance)
         self.retraction_restart_distance = [x * machine.settings.retraction_restart_distance for x in [1] * self.number_of_test_structures]
         self.coasting_distance = [x * machine.settings.coasting_distance for x in [1] * self.number_of_test_structures]
 
@@ -181,7 +182,7 @@ class TestSetupA(object):
 
         self.title = addtitle(test_name, material)
         self.comment1 = addcomment1(self.values, self.units, test_name)
-        self.comment2 = addcomment2(path_height, path_width, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine) # TODO add flow rate, brush up the comments!
+        self.comment2 = addcomment2(path_height, path_width, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, machine) # TODO add flow rate, brush up the comments!
 
         self.g = Gplus(material, machine,
                        outfile=path,
@@ -206,7 +207,7 @@ def addcomment1(values, units, test_name: str):
     return comment1
 
 
-def addcomment2(path_height, path_width, speed_printing, extrusion_multiplier, temperature_extruder, retraction_distance, retraction_restart_distance, machine):
+def addcomment2(path_height, path_width, speed_printing, extrusion_multiplier, temperature_extruder, retraction_distance, machine):
     comment2 = []
     for dummy1 in range(0, machine.settings.number_of_test_structures):
         addcomment2 = str("; --- path height: {:.3f} mm, "
@@ -214,14 +215,12 @@ def addcomment2(path_height, path_width, speed_printing, extrusion_multiplier, t
                           "printing speed: {:.1f} mm/s, "
                           "extrusion multiplier: {:.2f}, "
                           "extrusion temperature: {:.0f} degC, "
-                          "retraction distance: {:.3f} mm, "
-                          "retraction restart distance: {:.3f} mm  ---".format(round(path_height[dummy1], 3),
+                          "retraction distance: {:.3f} mm ---".format(round(path_height[dummy1], 3),
                             round(path_width[dummy1], 3),
                             round(speed_printing[dummy1], 2),
                             round(extrusion_multiplier[dummy1], 2),
                             round(temperature_extruder[dummy1], 0),
-                            round(retraction_distance[dummy1], 3),
-                            round(retraction_restart_distance[dummy1], 3)))
+                            round(retraction_distance[dummy1], 3)))
         comment2.append(addcomment2)
 
     return comment2
