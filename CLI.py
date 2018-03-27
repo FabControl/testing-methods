@@ -6,13 +6,12 @@ Usage:
     CLI.py new-test
     CLI.py generate-report
     CLI.py generate-config <slicer>
-    CLI.py slice <geometry>
-    CLI.py slice-iso <orientation> <count> <rotation>
+    CLI.py slice <geometry> <config>
+    CLI.py slice-iso <orientation> <count> <rotation> <config>
     CLI.py --help
 """
 # infill before perimeters TODO
 import subprocess
-import os
 from docopt import docopt
 quiet = None
 verbose = True
@@ -46,19 +45,18 @@ from TestSetupB import TestSetupB
 from CLI_helpers import evaluate, clear, extruded_filament, spawn_iso_slicer, separator, spawn_slicer
 from paths import cwd, gcode_folder
 import time
-import os
 
 session = import_json_dict["session"]
 
 start = time.time()
 
 if arguments["slice-iso"]:
-    config = "RTU_PBS_1-75_0-4_003.ini" # TODO Can't be hardcoded
+    config = arguments["<config>"]
     spawn_iso_slicer(arguments['<orientation>'], arguments['<count>'],arguments['<rotation>'],config)
     quit()
 
 elif arguments["slice"]:
-    config = "RTU_PBS_1-75_0-4_003.ini" # TODO Can't be hardcoded
+    config = arguments["<config>"]
     output = arguments["<geometry>"][:-4]+".gcode"
     spawn_slicer(config, output, arguments["<geometry>"])
 

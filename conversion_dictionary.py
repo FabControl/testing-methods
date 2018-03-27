@@ -104,6 +104,12 @@ class Slicer(object):
             return self.root.value
 
     def _reverse_modifier(self, value):
+        """
+        Helper function for changing value in root Param object and all other Slicer objects, if value is changed
+        in on of the Slicer objects. Enables value conversion.
+        :param value: the new value
+        :return: converted root value
+        """
         if self.reverse_modifier is not None:
             x = value
             if self.parent_parameter is not None:
@@ -124,7 +130,7 @@ class Slicer(object):
 
 class Params(object):
     def __init__(self):
-        with open("conversion.json", mode="r") as file:
+        with open("conversion.json", mode="r") as file:  # This holds the structure of the Param objects in _tests list
             self._tests = jsonpickle.loads(file.read())
 
         for x in self._tests:
@@ -177,5 +183,5 @@ class Param(object):
 
 if __name__ == "__main__":  # For testing
     params = Params()
-    print(params.get("speed_printing_raft").simplify3d.value)
+    print(params.get("path_height_raft").test)
     pass
