@@ -10,7 +10,9 @@ Usage:
     CLI.py slice-iso <orientation> <count> <rotation> <config> <path>
     CLI.py --help
 """
-# infill before perimeters TODO
+
+# TODO standardize function and scripts names! generate-report, generate-config, generate-gcode etc
+
 import subprocess
 from docopt import docopt
 quiet = None
@@ -123,7 +125,7 @@ if import_json_dict["session"]["test_type"] == "A":
         flat_test_single_parameter_vs_speed_printing(ts)
 
 elif import_json_dict["session"]["test_type"] == "B": # 'perimeter', 'overlap', 'path height', 'temperature'
-    test = 'temperature'  # 'overlap', 'path height']  # TODO
+    test = 'temperature'  # 'overlap', 'path height']  # TODO top bottom layers, infill?
     min_max_argument = [270, 300]
     min_max_speed_printing = [30, 75]  # check the jerk value
 

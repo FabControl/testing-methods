@@ -69,11 +69,11 @@ def output_name(extension: str):
     :param extension:
     :return:
     """
-    output = "%s_%s_%s_%s.%s" % (json_dict["material"]["manufacturer"],
-                                 json_dict["material"]["name"],
-                                 str(json_dict["material"]["size_od"]).format("%.2f").replace(".", "-"),
-                                 str(json_dict["machine"]["nozzle"]["size_id"]).format("%.1f").replace(".", "-"),
-                                 extension)
+    output = "{0}_{1}_{2}_{3}.{4}".format(json_dict["material"]["manufacturer"],
+                                          json_dict["material"]["name"],
+                                          str(json_dict["material"]["size_od"]).format("{:.2f}").replace(".", "-"),
+                                          str(json_dict["machine"]["nozzle"]["size_id"]).format("{:.1f}").replace(".", "-"),
+                                          extension)
     return output
 
 
@@ -86,11 +86,17 @@ if slicer == "prusa":
     """
     settings = json_dict["settings"]
     material = json_dict["material"]
+    session = json_dict["session"]
     configuration = read_ini("config.ini")
     configuration["bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed"])
     configuration["cooling"]["value"] = 1 if settings["part_cooling"] != 0 else 0
     configuration["fan_always_on"]["value"] = 1 if settings["part_cooling"] != 0 else 0
     configuration["extrusion_width"]["value"] = numeral_eval(settings["path_width"])
+    configuration["top_infill_extrusion_width"]["value"] = numeral_eval(1.05*settings["path_width"])
+    configuration["infill_extrusion_width"]["value"] = numeral_eval(settings["path_width"])
+    configuration["solid_infill_extrusion_width"]["value"] = numeral_eval(settings["path_width"])
+    configuration["perimeter_extrusion_width"]["value"] = numeral_eval(settings["path_width"])
+    configuration["external_perimeter_extrusion_width"]["value"] = numeral_eval(settings["path_width"])
     configuration["extrusion_multiplier"]["value"] = numeral_eval(settings["extrusion_multiplier"])
     configuration["first_layer_bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed_raft"])
     configuration["first_layer_extrusion_width"]["value"] = numeral_eval(settings["path_width_raft"])
@@ -102,10 +108,23 @@ if slicer == "prusa":
     configuration["temperature"]["value"] = numeral_eval(settings["temperature_extruder"])
     configuration["retract_restart_extra"]["value"] = numeral_eval(settings["retraction_restart_distance"])
     configuration["retract_length"]["value"] = numeral_eval(settings["retraction_distance"])
-    configuration["perimeter_speed"]["value"] = numeral_eval(settings["speed_printing"])
-    configuration["solid_infill_speed"]["value"] = numeral_eval(settings["speed_printing"])
+    configuration["retract_speed"]["value"] = numeral_eval(settings["retraction_speed"])
+    configuration["perimeter_speed"]["value"] = numeral_eval(0.95*settings["speed_printing"])
+    configuration["external_perimeter_speed"]["value"] = numeral_eval(0.9*settings["speed_printing"])
+    configuration["infill_speed"]["value"] = numeral_eval(0.9*settings["speed_printing"])
+    configuration["solid_infill_speed"]["value"] = numeral_eval(0.9*settings["speed_printing"])
+    configuration["top_solid_infill_speed"]["value"] = numeral_eval(0.9*settings["speed_printing"])
+    configuration["small_perimeter_speed"]["value"] = numeral_eval(0.33*settings["speed_printing"])
     configuration["filament_diameter"]["value"] = numeral_eval(material["size_od"])
-    # configuration["max_volumetric_speed"]["value"] = TODO
+    configuration["max_volumetric_speed"]["value"] = numeral_eval(session["previous_tests"][-1]["selected_flow_rate_value"]) # TODO is not recognized by slicer under filament settings - > advanced
+    configuration["max_print_speed"]["value"] = max(numeral_eval(settings["speed_printing"]),numeral_eval(settings["speed_printing_raft"]))
+    configuration["min_print_speed"]["value"] = min(numeral_eval(settings["speed_printing"]),numeral_eval(settings["speed_printing_raft"]))
+    configuration["max_layer_height"]["value"] = max(numeral_eval(settings["path_height"]),numeral_eval(settings["path_height_raft"]))
+    configuration["min_layer_height"]["value"] = min(numeral_eval(settings["path_height"]),numeral_eval(settings["path_height_raft"]))
+    configuration["support_material_threshold"]["value"] = numeral_eval(settings["critical_overhang_angle"])
+    configuration["external_perimeters_first"]["value"] = 1 if numeral_eval(settings["critical_overhang_angle"]) < 45 else 0
+    configuration["infill_first"]["value"] = 1 if numeral_eval(settings["critical_overhang_angle"]) < 45 else 0
+
     exclusive_write(output_name("ini"), assemble_ini(configuration))
 
 elif slicer == "simplify3d":
