@@ -42,7 +42,6 @@ class TestSetupA(object):
         self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
         self.retraction_speed = machine.settings.retraction_speed
         self.retraction_distance = [x * machine.settings.retraction_distance for x in [1] * self.number_of_test_structures]
-        print(self.retraction_distance)
         self.retraction_restart_distance = [x * machine.settings.retraction_restart_distance for x in [1] * self.number_of_test_structures]
         self.coasting_distance = [x * machine.settings.coasting_distance for x in [1] * self.number_of_test_structures]
 
