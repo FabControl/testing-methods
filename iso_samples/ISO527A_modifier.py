@@ -1,19 +1,18 @@
 """
 Usage:
 
-blender -b -P ISO527A_modifier.py <horizontal|vertical> <count> <rotation_Z> <cwd>
+blender -b -P ISO527A_modifier.py <horizontal|vertical> <count> <rotation_Z> <path> <cwd>
 """
 import bpy
 import math
 import sys
 
 
-
 argv = sys.argv
 argv = argv[argv.index("--") + 1:]
 
-object_path = "1A.stl"
-cwd = argv[3]
+object_path = argv[3]
+cwd = argv[4]
 placement = {"vertical": 90, "horizontal": 0}
 
 rotation_Z = float(argv[2])
@@ -29,13 +28,16 @@ imported_object =  bpy.ops.import_mesh.stl(filepath=cwd + object_path, global_sc
 obj.select = True  # select the empty object
 
 bpy.ops.object.modifier_add(type='ARRAY')
-bpy.context.object.modifiers["Array"].use_relative_offset = False
-bpy.context.object.modifiers["Array"].use_constant_offset = True
+bpy.context.object.modifiers["Array"].use_relative_offset = True
+bpy.context.object.modifiers["Array"].use_constant_offset = False
+bpy.context.object.modifiers["Array"].relative_offset_displace[0] = 0
 
 if orientation == "vertical":
     bpy.context.object.modifiers["Array"].constant_offset_displace[2] = 0.8
+    bpy.context.object.modifiers["Array"].relative_offset_displace[2] = 1.5
 else:
     bpy.context.object.modifiers["Array"].constant_offset_displace[1] = 2.5
+    bpy.context.object.modifiers["Array"].relative_offset_displace[1] = 1.2
 bpy.context.object.modifiers["Array"].count = count
 
 # Set rotation

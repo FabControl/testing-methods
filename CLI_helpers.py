@@ -85,24 +85,26 @@ def exclusive_write(path: str, output, limit=True):
         print("%s successfully saved." % (path))
 
 
-def spawn_iso_slicer(orientation: str, count: int, rotation: float or int, config: str):
+def spawn_iso_slicer(orientation: str, count: int, rotation: float or int, path: str, config: str):
     """
     Creates a subprocesses of Blender and Slic3r in order to generate an ISO527A test specimen geometry and slice it with an appropriate
     Slic3r configuration file.
     :param orientation:
     :param count:
     :param rotation:
+    :param path:
+    :param config:
     :return:
     """
     output = 'ISO527A.gcode'
     geometry = iso_sample_path + 'export.stl'
     subprocess.run(
         [blender_path, "-b", "-P", str(iso_sample_path + "ISO527A_modifier.py"), "--", orientation, str(count),
-         str(rotation), iso_sample_path], stderr=open(devnull, 'wb'))
+         str(rotation), path, iso_sample_path], stderr=open(devnull, 'wb'))
     subprocess.run([slic3r_path, "--load", config, "-o", output, "--dont-arrange", geometry])
 
 
-def spawn_slicer(config: str, output:str, geometry:str):
+def spawn_slicer(config: str, output: str, geometry: str):
     """
     Spawns a Slic3r subprocess and passes arguments to it.
     :param config:
@@ -113,7 +115,7 @@ def spawn_slicer(config: str, output:str, geometry:str):
     subprocess.run([slic3r_path, "--load", config, "-o", output, "--dont-arrange", geometry])
 
 
-def separator(input = None):
+def separator(input=None):
     """
     Takes an input value and separates it with an OS aware directory separator. Returns a separator if no input is given.
     :param input:

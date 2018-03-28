@@ -19,8 +19,10 @@ class TestSetupA(object):
         self.test_name = test_name
         self.coef_h_raft, _, _, self.coef_w_raft, self.coef_h_raft_all = minmax_path_width_height_raft(machine)
 
-        if machine.settings.path_height_raft != None: self.coef_h_raft = machine.settings.path_height_raft/machine.nozzle.size_id
-        if machine.settings.path_width_raft != None: self.coef_w_raft = machine.settings.path_width_raft/machine.nozzle.size_id
+        if machine.settings.path_height_raft is not None:
+            self.coef_h_raft = machine.settings.path_height_raft/machine.nozzle.size_id
+        if machine.settings.path_width_raft is not None:
+            self.coef_w_raft = machine.settings.path_width_raft/machine.nozzle.size_id
 
         self.test_structure_size = get_test_structure_size(machine)
 
@@ -42,7 +44,6 @@ class TestSetupA(object):
         self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
         self.retraction_speed = machine.settings.retraction_speed
         self.retraction_distance = [x * machine.settings.retraction_distance for x in [1] * self.number_of_test_structures]
-        print(self.retraction_distance)
         self.retraction_restart_distance = [x * machine.settings.retraction_restart_distance for x in [1] * self.number_of_test_structures]
         self.coasting_distance = [x * machine.settings.coasting_distance for x in [1] * self.number_of_test_structures]
 
@@ -101,7 +102,6 @@ class TestSetupA(object):
             self.step_x = [x * machine.nozzle.size_id for x in self.coef_w]
             self.argument = [round(x,3) for x in self.coef_w]
             self.values = [x * machine.nozzle.size_id for x in self.argument]
-            print(self.values)
 
             path_width = self.values
 

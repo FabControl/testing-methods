@@ -7,7 +7,7 @@ Usage:
     CLI.py generate-report
     CLI.py generate-config <slicer>
     CLI.py slice <geometry> <config>
-    CLI.py slice-iso <orientation> <count> <rotation> <config>
+    CLI.py slice-iso <orientation> <count> <rotation> <config> <path>
     CLI.py --help
 """
 # infill before perimeters TODO
@@ -52,7 +52,7 @@ start = time.time()
 
 if arguments["slice-iso"]:
     config = arguments["<config>"]
-    spawn_iso_slicer(arguments['<orientation>'], arguments['<count>'],arguments['<rotation>'],config)
+    spawn_iso_slicer(arguments['<orientation>'], arguments['<count>'],arguments['<rotation>'], arguments["<path>"], config)
     quit()
 
 elif arguments["slice"]:
@@ -165,7 +165,8 @@ if ts.test_name == "retraction distance" or min_max_speed_printing is None:
     tested_speed_values = []
 
 extruded_filament = extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode")
-import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.nozzle.size_id,2)
+import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.nozzle.size_id, 2)
+
 
 current_test = {"test_name": ts.test_name,
                 "tested_values": ts.get_values(),

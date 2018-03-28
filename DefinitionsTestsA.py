@@ -155,7 +155,8 @@ def print_raft_new(ts: TestSetupA):
     ts.g.write(output)
     ts.g.dwell(5)
     ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
-    sf.infill(sf.raft_structure(ts.test_structure_size/2, structure="square"), outlines=2, g= ts.g, coef_w= ts.coef_w_raft, coef_h= ts.coef_h_raft) # TODO
+    sf.infill(sf.raft_structure(ts.test_structure_size / 2, structure="square"), outlines=2, g=ts.g,
+              coef_w_raft=ts.coef_w_raft, coef_h_raft=ts.coef_h_raft)
     ts.g.write("; --- finish to print the raft ---")
 
 
