@@ -96,7 +96,7 @@ def spawn_iso_slicer(orientation: str, count: int, rotation: float or int, path:
     :param config:
     :return:
     """
-    output = 'ISO527A.gcode'
+    output = path.replace(".stl", ".gcode")
     geometry = iso_sample_path + 'export.stl'
     subprocess.run(
         [blender_path, "-b", "-P", str(iso_sample_path + "ISO527A_modifier.py"), "--", orientation, str(count),

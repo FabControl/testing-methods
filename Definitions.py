@@ -78,6 +78,39 @@ class Nozzle(object):
         self.metal = metal
 
 
+class Ventilators(object):
+    """
+    ventilator_part_cooling 
+    ventilator_entry
+    ventilator_exit
+    """
+
+    def __init__(self, ventilator_part_cooling: bool, ventilator_entry: bool, ventilator_exit: bool, *args, **kwargs):
+        self.part_cooling = ventilator_part_cooling
+        self.entry = ventilator_entry
+        self.exit = ventilator_exit
+
+
+class Software(object):
+    """
+    version
+    """
+
+    def __init__(self, version: str, *args, **kwargs):
+        self.version = version
+
+
+class Firmware(object):
+    """
+    fw_type
+    version
+    """
+
+    def __init__(self, fw_type: str, version: str, *args, **kwargs):
+        self.fw_type = fw_type
+        self.version = version
+
+
 class Settings(object):
     """
     definition of the user's settings:
@@ -97,10 +130,10 @@ class Settings(object):
     """
 
     def __init__(self, aim = None, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
-                 temperature_printbed_raft=None, extrusion_multiplier_raft=None, speed_printing_raft=None, temperature_extruder=None,
-                 temperature_printbed=None, extrusion_multiplier=None, speed_printing=None, retraction_distance = None, retraction_restart_distance = None, retraction_speed = None,
-                 coasting_distance = None, part_cooling=None, raft_density=None, number_of_test_structures = None, optimize_temperature_printbed = None, optimize_speed_printing = None,
-                 optimize_path_height = None, get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
+                 temperature_printbed_raft=None, extrusion_multiplier_raft=None, speed_printing_raft=None, temperature_extruder=None, temperature_printbed=None, extrusion_multiplier=None,
+                 speed_printing=None, retraction_distance = None, retraction_restart_distance = None, retraction_speed = None, coasting_distance = None, part_cooling=None, raft_density=None,
+                 number_of_test_structures = None, number_of_substructures = None, optimize_temperature_printbed = None, optimize_speed_printing = None, optimize_path_height = None,
+                 get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
 
         self.aim = aim
 
@@ -127,6 +160,7 @@ class Settings(object):
         self.part_cooling = 0 if part_cooling is None else part_cooling  # (%)
         self.raft_density = 100 if raft_density is None else raft_density  # (%)
         self.number_of_test_structures = number_of_test_structures  # number_of_test_structures (should be uneven)
+        self.number_of_substructures = number_of_substructures  # number_of_substructures
         self.optimize_temperature_printbed = optimize_temperature_printbed  # True if ones wants to optimize temperature_printbed
         self.optimize_speed_printing = optimize_speed_printing  # True if ones wants to optimize speed_printing
         self.optimize_path_height = optimize_path_height  # True if ones wants to optimize path_height
@@ -155,7 +189,7 @@ class Machine(object):
     size_extruder_id - ID of the extruder (mm)
     buildarea_maxdim1 - maximum buildarea in dimension 1 (mm)
     buildarea_maxdim2 - maximum buildarea in dimension 2 (mm)
-    temperature_max - maximum heating block temperature (degC)
+    temperature_extruder_max - maximum heating block temperature (degC)
     moment_max - maximum torque of the motor (N m)
     gear_size_od - gear OD (m)
     heater_power - total heaters power (W)
@@ -172,30 +206,41 @@ class Machine(object):
         self.size_extruder_id = size_extruder_id  # respect the units: mm
         self.buildarea_maxdim1 = buildarea_maxdim1  # respect the units: mm
         self.buildarea_maxdim2 = buildarea_maxdim2  # respect the units: mm
-        self.temperature_max = temperature_max  # the maximum achievable temperature: degC
+        self.temperature_extruder_max = temperature_max  # the maximum achievable temperature: degC
+
         if moment_max is not None: self.moment_max = moment_max  # maximum moment: N m
         if gear_size_od is not None: self.gear_size_od = gear_size_od  # gear radius: m
         if heater_power is not None: self.heater_power = heater_power
         self.nozzle = Nozzle(**kwargs["nozzle"])
+        self.ventilators = Ventilators(**kwargs["ventilators"])
         self.settings = None
+        self.software = Software(**kwargs["software"])
+        self.firmware = Firmware(**kwargs["firmware"])
+
 
     def setnozzle(self, size_id: float, size_od: float, size_capillary_length: float, size_angle: float, metal: str):
         self.nozzle = Nozzle(size_id, size_od, size_capillary_length, size_angle, metal)
 
+    def setventilators(self, ventilator_part_cooling: bool, ventilator_entry: bool, ventilator_exit: bool):
+        self.ventilators = Ventilators(ventilator_part_cooling, ventilator_entry, ventilator_exit)
+
+    def setsoftware(self, version: str):
+        self.software = Software(version)
+
+    def setfirmware(self, fw_type, version: str):
+        self.firmware = Firmware(fw_type, version)
+
 
 class TestInfo(object):
-    def __init__(self, name, parameter, units):
+    def __init__(self, number: str, name: str, parameter: str, units: str, precision: str, default_value: list = None):
+        self.number = number
         self.name = name
         self.parameter = parameter
         self.units = units
-
-    def get_dict(self):
-        return {"test_name": self.name,
-                "parameter": self.parameter,
-                "units": self.units}
-
-    def get_tuple(self):
-        return tuple([self.name, self.parameter, self.units])
+        self.precision = precision
+        if default_value is not None:
+            self.min_default = default_value[0]
+            self.max_default = default_value[1]
 
 
 def minmax_path_width(machine: Machine):
@@ -217,8 +262,8 @@ def minmax_path_height(machine: Machine, number_of_test_structures):
         coef_h_min = 0.10
         coef_h_max = 0.50
     else:
-        coef_h_min = 1 / 5
-        coef_h_max = 2 / 3
+        coef_h_min = 1./5.
+        coef_h_max = 2./3.
 
     coef_h_all = np.linspace(0.9*coef_h_min, 1.1*coef_h_max, number_of_test_structures).tolist()
     coef_h_mean = (coef_h_min + coef_h_max)/2
@@ -275,41 +320,24 @@ def minmax_temperature(material: Material, machine: Machine):
 
     temperature_extruder_max = 1.060 * (machine.settings.temperature_extruder + 273.15) - 273.15
 
-    if material.temperature_destr < machine.temperature_max:
+    if material.temperature_destr < machine.temperature_extruder_max:
         if temperature_extruder_max < material.temperature_destr:
             temperature_all = np.linspace(temperature_extruder_min,
                                           temperature_extruder_max, machine.settings.number_of_test_structures).tolist()
         else:
             temperature_all = np.linspace(temperature_extruder_min,
                                           0.975 * (material.temperature_destr + 273.15) - 273.15, machine.settings.number_of_test_structures).tolist()
-    elif material.temperature_destr >= machine.temperature_max:
-        if temperature_extruder_max < machine.temperature_max:
+    elif material.temperature_destr >= machine.temperature_extruder_max:
+        if temperature_extruder_max < machine.temperature_extruder_max:
             temperature_all = np.linspace(temperature_extruder_min,
                                           0.975 * (temperature_extruder_max + 273.15) - 273.15, machine.settings.number_of_test_structures).tolist()
-        elif temperature_extruder_max >= machine.temperature_max:
+        elif temperature_extruder_max >= machine.temperature_extruder_max:
             temperature_all = np.linspace(temperature_extruder_min,
                                           temperature_extruder_max, machine.settings.number_of_test_structures).tolist()
     else:
         pass
 
     return temperature_all
-
-
-def minmax_speed_printing(machine: Machine):
-
-    speed_printing_all = np.linspace(0.25 * machine.settings.speed_printing,
-                                     1.50 * machine.settings.speed_printing,
-                                     machine.settings.number_of_test_structures).tolist()
-
-    return speed_printing_all
-
-
-def minmax_extrusion_multiplier(machine: Machine):
-    extrusion_multiplier_all = np.linspace(0.75 * machine.settings.extrusion_multiplier,
-                                           1.50 * machine.settings.extrusion_multiplier,
-                                           machine.settings.number_of_test_structures).tolist()
-
-    return extrusion_multiplier_all
 
 
 def get_test_structure_size(machine):

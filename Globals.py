@@ -10,48 +10,63 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "Arnitel ID2045",
-            "manufacturer": "Nexeo Solutions",
+            "name": "Nanodiamond PLA B",
+            "manufacturer": "Carbodeon",
             "id": "123456",
             "size_od": 1.75,
-            "temperature_melting": 200,
-            "temperature_destr": 300,
-            "temperature_vicat": 144,
-            "temperature_glass": -30
+            "temperature_melting": 175,
+            "temperature_destr": 250,
+            "temperature_vicat": 60,
+            "temperature_glass": 70
         },
         "machine": {
             "manufacturer": "Mass Portal",
             "model": "Pharaoh D20",
+            "sn": 0,
             "buildarea_maxdim1": 145,
             "buildarea_maxdim2": 145,
             "max_dimension_z": 200,
-            "temperature_max": 300,
+            "temperature_extruder_max": 300,
             "size_extruder_id": 1.95,
             "nozzle": {
-                "size_id": 0.60,
-                "size_od": 0.84,
+                "size_id": 0.80,
+                "size_od": 1.04,
                 "size_capillary_length": 5,
                 "size_angle": 60,
                 "metal": "steel"
+            },
+            "ventilators": {
+                "ventilator_part_cooling": True,
+                "ventilator_entry": False,
+                "ventilator_exit": False
+            },
+            "software": {
+                "version": "2.1",
+            },
+            "firmware": {
+                "fw_type": "Repetier",
+                "version": "2.0",
             }
         },
         "settings": {
-            "aim": "aesthetics",
+            "aim": "strength",
             "temperature_printbed_raft": 40,
             "temperature_printbed": 40,
-            "part_cooling": 100,
+            "ventilator_part_cooling": 100,
+            "ventilator_entry": 0,
+            "ventilator_exit": 0,
             "raft_density": 90,
-            "temperature_extruder_raft": 250,
+            "temperature_extruder_raft": 230,
             "path_height_raft": 0.3,
             "speed_printing_raft": 10,
-            "temperature_extruder": 250,
+            "temperature_extruder": 230,
             "speed_printing": 30,
-            "path_height": 0.3,
-            "path_width": 0.6,
+            "path_height": 0.4,
+            "path_width": 0.8,
             "extrusion_multiplier": 1.0,
             "retraction_distance": 2.0,
             "retraction_restart_distance": 0,
-            "retraction_speed": 80,
+            "retraction_speed": 120,
             "coasting_distance": 0.0,
             "overlap": 0,
             "perimeter": 1,
@@ -59,6 +74,7 @@ except:
             "layer_count": 15,
             "safe_distance": 50,
             "number_of_test_structures": 7,
+            "number_of_substructures": 4,
             "edges": 30
     },
         "session": {
@@ -67,27 +83,28 @@ except:
             "test_type": 'A',
             "test_name": 'first layer height',
             "min_max": [0.1, 0.3],
-            "min_max_speed": [10, 25],
+            "min_max_speed": [10, 30],
             "slicer": "Prusa Slic3r"
 
         }
     }
 
-# test_list = [TestInfo('first layer height', 'path_height_raft', 'mm'),  # 0
-#              TestInfo('extrusion temperature', 'temperature_extruder', 'degC'),  # 1
-#              TestInfo('path height', 'path_height', 'mm'),  # 2
-#              TestInfo('path width', 'path_width', 'mm'),  # 3
-#              TestInfo('printing speed', 'speed_printing', 'mm/s'),  # 4
-#              TestInfo('extrusion multiplier', 'extrusion_multiplier', ''),  # 5
-#              TestInfo('retraction distance', 'retraction_distance', 'mm')]  # 6
+test_list = [TestInfo('1','first layer height', 'path_height_raft', 'mm', '{:.3f}'),
+             TestInfo('2','extrusion temperature', 'temperature_extruder', 'degC', '{:.0f}'),
+             TestInfo('3','path height', 'path_height', 'mm', '{:.3f}'),
+             TestInfo('4','path width', 'path_width', 'mm', '{:.3f}'),
+             TestInfo('5','extrusion multiplier', 'extrusion_multiplier', '-', '{:.3f}', [0.75, 1.50]),
+             TestInfo('6','printing speed', 'speed_printing', 'mm/s', '{:.1f}', [0.80, 1.75]),
+             TestInfo('7','retraction distance', 'retraction_distance', 'mm', '{:.3f}', [0., 4]),
+             TestInfo('8','retraction restart distance', 'retraction_restart_distance', 'mm', '{:.3f}', [0., 0.4])]
 
-test_list = ['first layer height', #0
-             'extrusion temperature', #1
-             'path height', #2
-             'path width', #3
-             'extrusion multiplier', #4
-             'printing speed', #5
-             'retraction distance'] #6
+test_number_list, test_name_list, test_precision_list, test_units_list = [], [], [], []
+
+for test in test_list:
+    test_number_list.append(test.number)
+    test_name_list.append(test.name)
+    test_precision_list.append(test.precision)
+    test_units_list.append(test.units)
 
 material = Material(**import_json_dict["material"])
 machine = Machine(**import_json_dict["machine"])

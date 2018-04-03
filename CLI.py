@@ -10,6 +10,7 @@ Usage:
     CLI.py slice-iso <orientation> <count> <rotation> <config> <path>
     CLI.py --help
 """
+#python CLI.py slice-iso horizontal 4 90 "Carbodeon_Nanodiamond PLA A_1-75_0-8.ini" ISO527-1A.stl
 
 # TODO standardize function and scripts names! generate-report, generate-config, generate-gcode etc
 
@@ -26,7 +27,7 @@ if __name__ == '__main__':
     quiet = arguments["-q"]
     flash = arguments["--flash"]
 
-    from Globals import machine, material, import_json_dict, test_list
+    from Globals import machine, material, import_json_dict
 
     if arguments["generate-config"]:
         slicer_arg = str(arguments["<slicer>"]).lower()
@@ -44,7 +45,7 @@ from OptimizeSettings import check_printbed_temperature, check_printing_speed_sh
 from Plotting import plotting_mfr
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
-from CLI_helpers import evaluate, clear, extruded_filament, spawn_iso_slicer, separator, spawn_slicer
+from CLI_helpers import evaluate, clear, extruded_filament, spawn_iso_slicer, separator, spawn_slicer, exclusive_write
 from paths import cwd, gcode_folder
 import time
 
@@ -54,7 +55,7 @@ start = time.time()
 
 if arguments["slice-iso"]:
     config = arguments["<config>"]
-    spawn_iso_slicer(arguments['<orientation>'], arguments['<count>'],arguments['<rotation>'], arguments["<path>"], config)
+    spawn_iso_slicer(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<path>"], config)
     quit()
 
 elif arguments["slice"]:
@@ -92,34 +93,32 @@ if not verbose:
     clear()
 
 if import_json_dict["session"]["test_type"] == "A":
-    # 'first layer height', 'extrusion temperature', 'path height', 'path width', 'printing speed', 'extrusion multiplier', 'retraction distance'
-    test_number = ['1', '2', '3', '4', '5', '6', '7']
-    test_number = import_json_dict["session"]["test_name"] if quiet else int(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number, test_list)) + ": "))
-
-    test = test_list[test_number-1]
+    from Globals import test_number_list, test_name_list, test_list
+    test_number = import_json_dict["session"]["test_name"] if quiet else int(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number_list, test_name_list)) + ": "))
+    test_info = test_list[test_number-1]
 
     min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"]
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
 
-    if test == 'retraction distance':
+    if test_info.name == 'retraction distance':
         min_max_speed_printing = [import_json_dict["settings"]["speed_printing"]] * 4
-    elif test == 'printing speed':
+    elif test_info.name == 'printing speed':
         min_max_speed_printing = None
     else:
         min_max_speed_printing = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else session["min_max_speed"]
 
     from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
 
-    path = str(cwd + gcode_folder + separator() + test + ' test' + '.gcode')
+    path = str(cwd + gcode_folder + separator() + test_info.name + ' test' + '.gcode')
 
-    ts = TestSetupA(machine, material, test, path,
+    ts = TestSetupA(machine, material, test_info, path,
                     min_max_argument=min_max_argument,
                     min_max_speed_printing=min_max_speed_printing,
                     raft=True if import_json_dict["settings"]["raft_density"] > 0 else False)
 
-    if test == 'retraction distance':
+    if test_info.name == 'retraction distance':
         retraction_distance(ts)
-    elif test == 'retraction restart distance and coasting distance':
+    elif test_info.name == 'retraction restart distance':
         retraction_restart_distance_vs_coasting_distance(ts)
     else:
         flat_test_single_parameter_vs_speed_printing(ts)
@@ -145,8 +144,8 @@ if not quiet:
         clear()
     print("Tested Parameter values:")
     print(ts.get_values()[::-1])
-    print("Corresponding Flow rate values (mm3/s):")
-    [print(x[::-1]) for x in ts.q]
+    print("Corresponding Volumetric flow rate values (mm3/s):")
+    [print(x[::-1]) for x in ts.volumetric_flow_rate]
 
     if min_max_speed_printing is not None:
         print("Printing speed values:")
@@ -157,7 +156,7 @@ if not quiet:
 previous_tests = import_json_dict["session"]["previous_tests"]
 
 if ts.test_name == "printing speed":
-    tested_speed_values = ts.get_values() # TODO Really? Check conditions!
+    tested_speed_values = ts.get_values()
 elif ts.test_name == "retraction distance":
     tested_speed_values = []
 else:
@@ -166,9 +165,7 @@ else:
 if ts.test_name == "retraction distance" or min_max_speed_printing is None:
     tested_speed_values = []
 
-extruded_filament = extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode")
 import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.nozzle.size_id, 2)
-
 
 current_test = {"test_name": ts.test_name,
                 "tested_values": ts.get_values(),
@@ -176,8 +173,8 @@ current_test = {"test_name": ts.test_name,
                 "selected_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
                 "selected_speed_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
                 "units": ts.units[0],
-                "extruded_filament": extruded_filament,
-                "selected_flow_rate_value": evaluate(input("Enter the flow rate value which corresponds to the best parameter value: ")) if not quiet else 0}
+                "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
+                "selected_volumetric_flow_rate_value": evaluate(input("Enter the volumetric flow rate value which corresponds to the best parameter value: ")) if not quiet else 0}
 
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
@@ -206,10 +203,11 @@ if not quiet:
             import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
 
     import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["path_height"]/import_json_dict["settings"]["path_width"])),0)
-
-    with open(cwd + separator("jsons") + material.manufacturer + " " + material.name + " " + str(machine.nozzle.size_id) + " mm" + ".json", mode="w") as file:
+    with open(cwd + separator("jsons") + material.manufacturer + " " + material.name + " " + "{:.0f}".format(machine.nozzle.size_id*1000) + " um" + ".json", mode="w") as file:
         output = json.dumps(import_json_dict, indent=4, sort_keys=False)
         file.write(output)
+
+    # exclusive_write(cwd + separator("jsons") + material.manufacturer + " " + material.name + " " + "{:.0f}".format(machine.nozzle.size_id*1000) + " um" + ".json", json.dumps(import_json_dict, indent=4, sort_keys=False), limit=True)
 
 with open(cwd + separator() + "persistence.json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)

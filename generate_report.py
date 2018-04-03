@@ -25,7 +25,6 @@ else:
 with open(json_path, mode="r") as file:
     import_json_dict = json.load(file)
 
-
 file_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' ' + str(import_json_dict["material"]["size_od"]) + ' mm'
 report_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' Ø' + str(import_json_dict["material"]["size_od"]) + ' mm'
 
@@ -66,11 +65,11 @@ main_info = "Material: " + import_json_dict["material"]["name"]
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Manufacturer: " + import_json_dict["material"]["manufacturer"]
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Machine: " + import_json_dict["machine"]["model"]
+main_info = "Machine: " + import_json_dict["machine"]["manufacturer"] + " " + import_json_dict["machine"]["model"]+ ", SN: " + str(import_json_dict["machine"]["sn"])
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Nozzle: " + str(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm, " + str(import_json_dict["machine"]["nozzle"]["metal"])
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Part cooling: " + str(import_json_dict["settings"]["part_cooling"]) + " %"
+main_info = "Part cooling: " + str(import_json_dict["settings"]["ventilator_part_cooling"]) + " %"
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Retraction distance: " + str(import_json_dict["settings"]["retraction_distance"]) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
@@ -99,8 +98,8 @@ data = [" ", "Test name", "Units"]
 for dummy in range(import_json_dict["settings"]["number_of_test_structures"]):
     data.append("Tested values")
 data.append("Selected parameter value")
-data.append("Selected printing speed (mm/s)")
-data.append("Selected flow rate (mm3/s)")
+data.append("Selected printing speed value (mm/s)")
+data.append("Selected volumetric flow rate value (mm3/s)")
 data = [data]
 
 i = 1
@@ -113,7 +112,7 @@ for k in performed_tests:
     new_line.append(str(k["selected_value"]))
     new_line.append(str(k["selected_speed_value"]))
     try:
-        new_line.append(str(k["selected_flow_rate_value"]))
+        new_line.append(str(k["selected_volumetric_flow_rate_value"]))
     except KeyError:
         pass
     data.append(new_line)

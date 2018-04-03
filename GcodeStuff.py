@@ -30,14 +30,29 @@ class Gplus(G):
         G.write(self,
                 "M190 S" + str(temperature) + " T0; set the printbed temperature and wait till it has been reached")
 
-    def set_part_cooling(self, part_cooling: float):
+    def set_part_cooling(self, part_cooling: float, ventilator: str = "part_cooling"):
         """Set the cooler power in percent"""
-        if part_cooling > 100:
-            cooling = 100
-        elif part_cooling < 0:
-            pass
-        # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-        output = "M106 S" + str(int(255 * (part_cooling / 100))) + "; set the cooler speed for part cooling"
+        if ventilator == "part_cooling":
+            if part_cooling > 100:
+                cooling = 100
+            elif part_cooling < 0:
+                pass
+            # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
+            output = "M106 S" + str(int(255 * (part_cooling / 100))) + "; set the cooler speed for part cooling"
+        elif ventilator == "exit":
+            if part_cooling > 100:
+                cooling = 100
+            elif part_cooling < 0:
+                pass
+            # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
+            output = "M106 P1 S" + str(int(255 * (part_cooling / 100))) + "; set the cooler speed for exit ventilator"
+        elif ventilator == "entry":
+            if part_cooling > 100:
+                cooling = 100
+            elif part_cooling < 0:
+                pass
+            # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
+            output = "M106 P2 S" + str(int(255 * (part_cooling / 100))) + "; set the cooler speed for entry ventilator"
         G.write(self, output)
 
     def dwell(self, time: int):
