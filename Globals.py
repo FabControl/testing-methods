@@ -89,19 +89,20 @@ except:
         }
     }
 
-test_list = [TestInfo('1','first layer height', 'path_height_raft', 'mm', '{:.3f}'),
-             TestInfo('2','extrusion temperature', 'temperature_extruder', 'degC', '{:.0f}'),
-             TestInfo('3','path height', 'path_height', 'mm', '{:.3f}'),
-             TestInfo('4','path width', 'path_width', 'mm', '{:.3f}'),
-             TestInfo('5','extrusion multiplier', 'extrusion_multiplier', '-', '{:.3f}', [0.75, 1.50]),
-             TestInfo('6','printing speed', 'speed_printing', 'mm/s', '{:.1f}', [0.80, 1.75]),
-             TestInfo('7','retraction distance', 'retraction_distance', 'mm', '{:.3f}', [0., 4]),
-             TestInfo('8','retraction restart distance', 'retraction_restart_distance', 'mm', '{:.3f}', [0., 0.4])]
+test_dict = {'1': TestInfo('first layer height', 'path_height_raft', 'mm', '{:.3f}'),
+             '2': TestInfo('extrusion temperature', 'temperature_extruder', 'degC', '{:.0f}'),
+             '3': TestInfo('path height', 'path_height', 'mm', '{:.3f}'),
+             '4': TestInfo('path width', 'path_width', 'mm', '{:.3f}'),
+             '5': TestInfo('extrusion multiplier', 'extrusion_multiplier', '-', '{:.3f}', [0.75, 1.50]),
+             '6': TestInfo('printing speed', 'speed_printing', 'mm/s', '{:.1f}', [0.80, 1.75]),
+             '7': TestInfo('retraction distance', 'retraction_distance', 'mm', '{:.3f}', [0., 4]),
+             '8': TestInfo('retraction restart distance', 'retraction_restart_distance', 'mm', '{:.3f}', [0., 0.4])}
 
-test_number_list, test_name_list, test_precision_list, test_units_list = [], [], [], []
+test_name_list, test_precision_list, test_units_list = [], [], []
+test_number_list = test_dict.keys()
 
-for test in test_list:
-    test_number_list.append(test.number)
+for test_number in test_number_list:
+    test = test_dict[test_number]
     test_name_list.append(test.name)
     test_precision_list.append(test.precision)
     test_units_list.append(test.units)

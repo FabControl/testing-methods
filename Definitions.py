@@ -232,8 +232,7 @@ class Machine(object):
 
 
 class TestInfo(object):
-    def __init__(self, number: str, name: str, parameter: str, units: str, precision: str, default_value: list = None):
-        self.number = number
+    def __init__(self, name: str, parameter: str, units: str, precision: str, default_value: list = None):
         self.name = name
         self.parameter = parameter
         self.units = units
