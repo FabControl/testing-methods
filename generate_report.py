@@ -106,13 +106,13 @@ i = 1
 
 for k in performed_tests:
     new_line = [str(i), k["test_name"], k["units"]]
-    for dummy in k["tested_values"]:
-        new_line.append(str(dummy))
+    for dummy in k["tested_parameter_values"]:
+        new_line.append(k["parameter_precision"].format(dummy))
 
-    new_line.append(str(k["selected_value"]))
-    new_line.append(str(k["selected_speed_value"]))
+    new_line.append(k["parameter_precision"].format(k["selected_parameter_value"]))
+    new_line.append("{:.1f}".format(k["selected_speed_value"]))
     try:
-        new_line.append(str(k["selected_volumetric_flow_rate_value"]))
+        new_line.append("{:.3f}".format(k["selected_volumetric_flow_rate_value"]))
     except KeyError:
         pass
     data.append(new_line)
@@ -140,6 +140,5 @@ t.setStyle(style)
 # Send the data and build the file
 elements.append(t)
 doc.build(elements)
-# TODO to foresee: fields for comments
-
-exclusive_write("persistence.json", json.dumps(import_json_dict, indent=4, sort_keys=False), limit=True)
+# TODO to foresee: fields for comments Reinis
+exclusive_write(json_path, json.dumps(import_json_dict, indent=4, sort_keys=False))

@@ -130,34 +130,38 @@ class Settings(object):
     """
 
     def __init__(self, aim = None, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
-                 temperature_printbed_raft=None, extrusion_multiplier_raft=None, speed_printing_raft=None, temperature_extruder=None, temperature_printbed=None, extrusion_multiplier=None,
-                 speed_printing=None, retraction_distance = None, retraction_restart_distance = None, retraction_speed = None, coasting_distance = None, part_cooling=None, raft_density=None,
-                 number_of_test_structures = None, number_of_substructures = None, optimize_temperature_printbed = None, optimize_speed_printing = None, optimize_path_height = None,
-                 get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
+                 temperature_printbed_raft=None, speed_printing_raft=None, temperature_extruder=None, temperature_printbed=None, extrusion_multiplier=None,
+                 speed_printing=None, retraction_distance = None, retraction_restart_distance = None, retraction_speed = None, coasting_distance = None, ventilator_part_cooling=None, ventilator_entry=None,
+                 ventilator_exit=None, raft_density=None, number_of_test_structures = None, number_of_substructures = None, optimize_temperature_printbed = None, optimize_speed_printing = None,
+                 optimize_path_height = None, get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
 
         self.aim = aim
 
         self.material = Material(None, None, None, 1.75)
-        self.path_width = path_width  # respect the units: mm
-        self.path_width_raft = path_width_raft # respect the units: mm
-        self.path_height = path_height  # respect the units: mm
+        self.path_width = path_width
+        self.path_width_raft = path_width_raft
+        self.path_height = path_height
         self.path_height_raft = path_height_raft
-        self.speed_printing = speed_printing  # respect the units: mm/s
-        self.speed_printing_raft = speed_printing / 2 if speed_printing_raft is None else speed_printing_raft  # respect the units: mm/s
+        self.speed_printing = speed_printing
+        self.speed_printing_raft = speed_printing / 2 if speed_printing_raft is None else speed_printing_raft
 
+        self.temperature_extruder_raft = temperature_extruder_raft
         self.temperature_printbed_raft = temperature_printbed_raft
-        self.temperature_extruder_raft = temperature_extruder_raft  # respect the units: degC
-        self.extrusion_multiplier_raft = 1.15 if extrusion_multiplier_raft is None else extrusion_multiplier_raft
+        self.extrusion_multiplier_raft = 1
 
-        self.temperature_extruder = temperature_extruder  # respect the units: degC
-        self.temperature_printbed = temperature_printbed  # respect the units: degC
-        self.extrusion_multiplier = 1 if extrusion_multiplier is None else extrusion_multiplier # 0...1
+        self.temperature_extruder = temperature_extruder
+        self.temperature_printbed = temperature_printbed
+        self.extrusion_multiplier = 1 if extrusion_multiplier is None else extrusion_multiplier
 
         self.retraction_distance = retraction_distance
         self.retraction_restart_distance = retraction_restart_distance
         self.retraction_speed = retraction_speed
         self.coasting_distance = coasting_distance
-        self.part_cooling = 0 if part_cooling is None else part_cooling  # (%)
+
+        self.ventilator_part_cooling = ventilator_part_cooling  # (%)
+        self.ventilator_entry = ventilator_entry  # (%)
+        self.ventilator_exit = ventilator_exit # (%)
+
         self.raft_density = 100 if raft_density is None else raft_density  # (%)
         self.number_of_test_structures = number_of_test_structures  # number_of_test_structures (should be uneven)
         self.number_of_substructures = number_of_substructures  # number_of_substructures
@@ -171,10 +175,7 @@ class Settings(object):
         self.matrix_size = matrix_size
         self.layers = layers
 
-        if material is None:
-            self.material_name = None
-        else:
-            self.material_name = material.name
+        self.material_name = None if material is None else material.name
 
         self.nozzle = nozzle
 
@@ -196,8 +197,8 @@ class Machine(object):
     """
 
     def __init__(self, id: str = None, manufacturer: str = None, model: str = None, sn: str = None, size_extruder_id: float = None,
-                 buildarea_maxdim1: float = None, buildarea_maxdim2: float = None, temperature_max: float = None, moment_max: float = None, gear_size_od: float = 12,
-                 heater_power: float = 80, *args, **kwargs):
+                 buildarea_maxdim1: float = None, buildarea_maxdim2: float = None, temperature_extruder_max: float = None, moment_max: float = None,
+                 gear_size_od: float = 12, heater_power: float = 80, *args, **kwargs):
 
         self.id = id
         self.manufacturer = manufacturer
@@ -206,7 +207,7 @@ class Machine(object):
         self.size_extruder_id = size_extruder_id  # respect the units: mm
         self.buildarea_maxdim1 = buildarea_maxdim1  # respect the units: mm
         self.buildarea_maxdim2 = buildarea_maxdim2  # respect the units: mm
-        self.temperature_extruder_max = temperature_max  # the maximum achievable temperature: degC
+        self.temperature_extruder_max = temperature_extruder_max  # the maximum achievable temperature: degC
 
         if moment_max is not None: self.moment_max = moment_max  # maximum moment: N m
         if gear_size_od is not None: self.gear_size_od = gear_size_od  # gear radius: m
@@ -232,11 +233,14 @@ class Machine(object):
 
 
 class TestInfo(object):
-    def __init__(self, name: str, parameter: str, units: str, precision: str, default_value: list = None):
+    def __init__(self, name: str, parameter: str, units: str, precision: str, number_of_layers: int, number_of_substructures: int = None, default_value: list = None):
         self.name = name
         self.parameter = parameter
         self.units = units
         self.precision = precision
+        self.number_of_layers = number_of_layers
+        self.number_of_substructures = number_of_substructures
+
         if default_value is not None:
             self.min_default = default_value[0]
             self.max_default = default_value[1]

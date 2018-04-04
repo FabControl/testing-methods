@@ -40,13 +40,13 @@ if __name__ == '__main__':
 
 from Calculations import shear_rate, pressure_drop, rheology
 from CheckCompatibility import check_compatibility
+from CLI_helpers import evaluate, clear, extruded_filament, spawn_iso_slicer, separator, spawn_slicer, exclusive_write
 from Definitions import *
 from OptimizeSettings import check_printbed_temperature, check_printing_speed_shear_rate, check_printing_speed_pressure
+from paths import cwd, gcode_folder
 from Plotting import plotting_mfr
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
-from CLI_helpers import evaluate, clear, extruded_filament, spawn_iso_slicer, separator, spawn_slicer, exclusive_write
-from paths import cwd, gcode_folder
 import time
 
 session = import_json_dict["session"]
@@ -71,7 +71,6 @@ if machine.settings.optimize_temperature_printbed: check_printbed_temperature(ma
 
 # Some calculations
 if machine.settings.optimize_speed_printing:
-
     gamma_dot_estimate = shear_rate(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
     delta_p_estimate = pressure_drop(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
 
@@ -79,7 +78,6 @@ if machine.settings.optimize_speed_printing:
 
     for dummy0 in range(0, number_of_iterations + 1):
         gamma_dot, visc, param_power_law = rheology(material, machine, delta_p_estimate)
-
         gamma_dot_out = shear_rate(machine, param_power_law[int(len(param_power_law) / 2)])
         delta_p_out = pressure_drop(machine, param_power_law[int(len(param_power_law) / 2)])
 
@@ -168,11 +166,12 @@ if ts.test_name == "retraction distance" or min_max_speed_printing is None:
 import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.nozzle.size_id, 2)
 
 current_test = {"test_name": ts.test_name,
-                "tested_values": ts.get_values(),
+                "tested_parameter_values": ts.get_values(),
                 "tested_speed_values": tested_speed_values,
-                "selected_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
+                "selected_parameter_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
                 "selected_speed_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
-                "units": ts.units[0],
+                "units": ts.test_info.units,
+                "parameter_precision": ts.test_info.precision,
                 "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
                 "selected_volumetric_flow_rate_value": evaluate(input("Enter the volumetric flow rate value which corresponds to the best parameter value: ")) if not quiet else 0}
 

@@ -10,12 +10,12 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
         "material": {
-            "name": "Nanodiamond PLA B",
-            "manufacturer": "Carbodeon",
+            "name": "ZYTEL 3D1000FL NC010",
+            "manufacturer": "DuPont",
             "id": "123456",
             "size_od": 1.75,
             "temperature_melting": 175,
-            "temperature_destr": 250,
+            "temperature_destr": 290,
             "temperature_vicat": 60,
             "temperature_glass": 70
         },
@@ -50,19 +50,20 @@ except:
         },
         "settings": {
             "aim": "strength",
-            "temperature_printbed_raft": 40,
-            "temperature_printbed": 40,
+            "temperature_printbed_raft": 85,
+            "temperature_printbed": 85,
             "ventilator_part_cooling": 100,
             "ventilator_entry": 0,
             "ventilator_exit": 0,
             "raft_density": 90,
-            "temperature_extruder_raft": 230,
-            "path_height_raft": 0.3,
+            "temperature_extruder_raft": 240,
+            "path_height_raft": 0.4,
+            "path_width_raft": 0.8,
             "speed_printing_raft": 10,
-            "temperature_extruder": 230,
-            "speed_printing": 30,
+            "temperature_extruder": 275,
             "path_height": 0.4,
             "path_width": 0.8,
+            "speed_printing": 30,
             "extrusion_multiplier": 1.0,
             "retraction_distance": 2.0,
             "retraction_restart_distance": 0,
@@ -88,15 +89,23 @@ except:
 
         }
     }
-
-test_dict = {'1': TestInfo('first layer height', 'path_height_raft', 'mm', '{:.3f}'),
-             '2': TestInfo('extrusion temperature', 'temperature_extruder', 'degC', '{:.0f}'),
-             '3': TestInfo('path height', 'path_height', 'mm', '{:.3f}'),
-             '4': TestInfo('path width', 'path_width', 'mm', '{:.3f}'),
-             '5': TestInfo('extrusion multiplier', 'extrusion_multiplier', '-', '{:.3f}', [0.75, 1.50]),
-             '6': TestInfo('printing speed', 'speed_printing', 'mm/s', '{:.1f}', [0.80, 1.75]),
-             '7': TestInfo('retraction distance', 'retraction_distance', 'mm', '{:.3f}', [0., 4]),
-             '8': TestInfo('retraction restart distance', 'retraction_restart_distance', 'mm', '{:.3f}', [0., 0.4])}
+# TODO Add to json for report generation
+test_dict = {'1': TestInfo('first layer height', 'path_height_raft', 'mm', '{:.3f}',
+                           number_of_layers = 1, number_of_substructures = import_json_dict["settings"]["number_of_substructures"]),
+             '2': TestInfo('extrusion temperature', 'temperature_extruder', 'degC', '{:.0f}',
+                           number_of_layers = 2, number_of_substructures = import_json_dict["settings"]["number_of_substructures"]),
+             '3': TestInfo('path height', 'path_height', 'mm', '{:.3f}',
+                           number_of_layers = 2, number_of_substructures = import_json_dict["settings"]["number_of_substructures"]),
+             '4': TestInfo('path width', 'path_width', 'mm', '{:.3f}',
+                           number_of_layers = 2, number_of_substructures = import_json_dict["settings"]["number_of_substructures"]),
+             '5': TestInfo('extrusion multiplier', 'extrusion_multiplier', '-', '{:.3f}',
+                           number_of_layers = 2, number_of_substructures = import_json_dict["settings"]["number_of_substructures"], default_value = [0.75, 1.50]),
+             '6': TestInfo('printing speed', 'speed_printing', 'mm/s', '{:.1f}',
+                           number_of_layers = 2, number_of_substructures = 1, default_value = [0.80, 1.75]),
+             '7': TestInfo('retraction distance', 'retraction_distance', 'mm', '{:.3f}',
+                           number_of_layers = 2, number_of_substructures = None, default_value = [0., 4]),
+             '8': TestInfo('retraction restart distance', 'retraction_restart_distance', 'mm', '{:.3f}',
+                           number_of_layers = 2, number_of_substructures = None, default_value = [0., 0.4])}
 
 test_name_list, test_precision_list, test_units_list = [], [], []
 test_number_list = test_dict.keys()

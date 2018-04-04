@@ -22,38 +22,44 @@ class Gplus(G):
 
     def set_extruder_temperature(self, temperature: float):
         """Set the liquefier temperature in degC"""
-        G.write(self,
-                "M109 S" + str(temperature) + " T0; set the extruder temperature and wait till it has been reached")
+        G.write(self, "M109 S{:.0f}".format(temperature) + " T0; set the extruder temperature and wait till it has been reached")
 
     def set_printbed_temperature(self, temperature: float):
         """Set the printbed temperature in degC"""
-        G.write(self,
-                "M190 S" + str(temperature) + " T0; set the printbed temperature and wait till it has been reached")
+        G.write(self, "M190 S{:.0f}".format(temperature) + " T0; set the printbed temperature and wait till it has been reached")
 
-    def set_part_cooling(self, part_cooling: float, ventilator: str = "part_cooling"):
+    def set_ventilator_part_cooling(self, cooling_power: float):
         """Set the cooler power in percent"""
-        if ventilator == "part_cooling":
-            if part_cooling > 100:
-                cooling = 100
-            elif part_cooling < 0:
-                pass
-            # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-            output = "M106 S" + str(int(255 * (part_cooling / 100))) + "; set the cooler speed for part cooling"
-        elif ventilator == "exit":
-            if part_cooling > 100:
-                cooling = 100
-            elif part_cooling < 0:
-                pass
-            # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-            output = "M106 P1 S" + str(int(255 * (part_cooling / 100))) + "; set the cooler speed for exit ventilator"
-        elif ventilator == "entry":
-            if part_cooling > 100:
-                cooling = 100
-            elif part_cooling < 0:
-                pass
-            # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-            output = "M106 P2 S" + str(int(255 * (part_cooling / 100))) + "; set the cooler speed for entry ventilator"
+        if cooling_power > 100:
+            cooling_power = 100
+        elif cooling_power < 0:
+            pass
+        # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
+        output = "M106 S{:.0f}".format(255 * (cooling_power / 100)) + "; set the cooler speed for part cooling"
         G.write(self, output)
+
+
+    def set_ventilator_exit(self, cooling_power: float):
+        """Set the cooler power in percent"""
+        if cooling_power > 100:
+            cooling_power = 100
+        elif cooling_power < 0:
+            pass
+        # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
+        output = "M106 P1 S{:.0f}".format(255 * (cooling_power / 100)) + "; set the speed for exit ventilator"
+        G.write(self, output)
+
+
+    def set_ventilator_entry(self, cooling_power: float):
+        """Set the cooler power in percent"""
+        if cooling_power > 100:
+            cooling_power = 100
+        elif cooling_power < 0:
+            pass
+        # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
+        output = "M106 P2 S{:.0f}".format(255 * (cooling_power / 100)) + "; set the speed for entry ventilator"
+        G.write(self, output)
+
 
     def dwell(self, time: int):
         """ Pause code executions for the given amount of time """
@@ -97,7 +103,7 @@ class Gplus(G):
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * ((self.coef_w - self.coef_h) * self.coef_h + (math.pi / 4) * (
                     self.coef_h) ** 2) * line_length * self.extrusion_multiplier
             else:
-                output = str('path height of {:.3f} mm is too thin'.format(self.coef_h * self.nozzle_diameter))
+                output = str('path height of {:.3f} mm is too thin'.format(self.coef_h * self.nozzle_diameter)) # TODO Reinis!!!
                 print(output)
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * (self.coef_w * self.coef_h) * line_length * self.extrusion_multiplier
 

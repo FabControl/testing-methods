@@ -1,4 +1,4 @@
-from paths import blender_path, slic3r_path, cwd, iso_sample_path
+from paths import blender_path, slic3r_path, cwd, test_sample_path
 import subprocess
 from os import system, name, listdir, devnull
 from ast import literal_eval
@@ -72,17 +72,17 @@ def exclusive_write(path: str, output, limit=True):
     try:
         with open(path, "x") as file:
             file.write(output)
-        print("%s successfully saved." % (path))
+        print("{} successfully saved.".format(path))
 
     except:
         split = re.split(r'(\d{3}(?=\.))*(\.[0-9a-zA-Z]+?$)', path)
-        path = list(filter(lambda x: split[0] in x, listdir()))[-1]
+        path = list(filter(lambda x: split[0] in x, listdir()))[-1] # TODO Chooses wrong file!
         split = re.split(r'(\d{3}(?=\.))*(\.[0-9a-zA-Z]+?$)', path)
         underscore = "_" if not split[0].endswith("_") else ""
         path = split[0] + underscore + str(int(split[1] if split[1] is not None else 0) + 1).zfill(3) + split[2]
         with open(path, "x") as file:
             file.write(output)
-        print("%s successfully saved." % (path))
+        print("{} successfully saved.".format(path))
 
 
 def spawn_iso_slicer(orientation: str, count: int, rotation: float or int, path: str, config: str):
@@ -97,10 +97,10 @@ def spawn_iso_slicer(orientation: str, count: int, rotation: float or int, path:
     :return:
     """
     output = path.replace(".stl", ".gcode")
-    geometry = iso_sample_path + 'export.stl'
+    geometry = test_sample_path + 'export.stl'
     subprocess.run(
-        [blender_path, "-b", "-P", str(iso_sample_path + "ISO527A_modifier.py"), "--", orientation, str(count),
-         str(rotation), path, iso_sample_path], stderr=open(devnull, 'wb'))
+        [blender_path, "-b", "-P", str(test_sample_path + "stl_modifier.py"), "--", orientation, str(count),
+         str(rotation), path, test_sample_path], stderr=open(devnull, 'wb'))
     subprocess.run([slic3r_path, "--load", config, "-o", output, "--dont-arrange", geometry])
 
 
@@ -128,9 +128,9 @@ def separator(input=None):
             return "/"
     else:
         if name == "nt":
-            return "\\%s\\" % str(input)
+            return "\\{}\\".format(input)
         else:
-            return  "/%s/" % str(input)
+            return  "/{}/".format(input)
 
 builtins_round = round
 def round(input: float, depth: int = 3):
