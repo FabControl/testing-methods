@@ -5,9 +5,8 @@ Usage:
     CLI.py [-v] [-q] [--flash]
     CLI.py new-test
     CLI.py generate-report
-    CLI.py generate-config <slicer>
-    CLI.py slice <geometry> <config>
-    CLI.py slice-iso <orientation> <count> <rotation> <config> <path>
+    CLI.py generate-configuration <slicer>
+    CLI.py generate-gcode-iso <orientation> <count> <rotation> <config> <path>
     CLI.py --help
 """
 #python CLI.py slice-iso horizontal 4 90 "Carbodeon_Nanodiamond PLA A_1-75_0-8.ini" ISO527-1A.stl
@@ -29,7 +28,7 @@ if __name__ == '__main__':
 
     from Globals import machine, material, import_json_dict
 
-    if arguments["generate-config"]:
+    if arguments["generate-configuration"]:
         slicer_arg = str(arguments["<slicer>"]).lower()
         if slicer_arg == 'prusa' or slicer_arg == "simplify3d":
             import_json_dict["session"]["slicer"] = slicer_arg
@@ -53,15 +52,10 @@ session = import_json_dict["session"]
 
 start = time.time()
 
-if arguments["slice-iso"]:
+if arguments["generate-gcode-iso"]:
     config = arguments["<config>"]
     spawn_iso_slicer(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<path>"], config)
     quit()
-
-elif arguments["slice"]:
-    config = arguments["<config>"]
-    output = arguments["<geometry>"][:-4]+".gcode"
-    spawn_slicer(config, output, arguments["<geometry>"])
 
 # Check compatibility
 #check_compatibility(machine, material)
