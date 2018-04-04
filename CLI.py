@@ -22,6 +22,7 @@ flash = False
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='MP Feedstock Testing Suite')
 
+
     verbose = arguments["-v"]
     quiet = arguments["-q"]
     flash = arguments["--flash"]
