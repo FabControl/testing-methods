@@ -76,7 +76,8 @@ def exclusive_write(path: str, output, limit=True):
 
     except:
         split = re.split(r'(\d{3}(?=\.))*(\.[0-9a-zA-Z]+?$)', path)
-        path = list(filter(lambda x: split[0] in x, listdir()))[-1]
+
+        path = list(filter(lambda x: str(x).startswith(split[0]), listdir()))[-1]
         split = re.split(r'(\d{3}(?=\.))*(\.[0-9a-zA-Z]+?$)', path)
         underscore = "_" if not split[0].endswith("_") else ""
         path = split[0] + underscore + str(int(split[1] if split[1] is not None else 0) + 1).zfill(3) + split[2]
