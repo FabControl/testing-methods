@@ -87,9 +87,9 @@ if not verbose:
     clear()
 
 if import_json_dict["session"]["test_type"] == "A":
-    from Globals import test_number_list, test_name_list, test_list
+    from Globals import test_number_list, test_name_list, test_dict
     test_number = import_json_dict["session"]["test_name"] if quiet else int(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number_list, test_name_list)) + ": "))
-    test_info = test_list[test_number-1]
+    test_info = test_dict[str(test_number)]
 
     min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"]
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
