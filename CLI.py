@@ -11,8 +11,6 @@ Usage:
 """
 #python CLI.py slice-iso horizontal 4 90 "Carbodeon_Nanodiamond PLA A_1-75_0-8.ini" ISO527-1A.stl
 
-# TODO standardize function and scripts names! generate-report, generate-config, generate-gcode etc
-
 import subprocess
 from docopt import docopt
 quiet = None
@@ -21,7 +19,6 @@ flash = False
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='MP Feedstock Testing Suite')
-
 
     verbose = arguments["-v"]
     quiet = arguments["-q"]
@@ -101,9 +98,7 @@ if import_json_dict["session"]["test_type"] == "A":
         min_max_speed_printing = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else session["min_max_speed"]
 
     from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
-
     path = str(cwd + gcode_folder + separator() + test_info.name + ' test' + '.gcode')
-
     ts = TestSetupA(machine, material, test_info, path,
                     min_max_argument=min_max_argument,
                     min_max_speed_printing=min_max_speed_printing,
@@ -122,7 +117,6 @@ elif import_json_dict["session"]["test_type"] == "B": # 'perimeter', 'overlap', 
     min_max_speed_printing = [30, 75]  # check the jerk value
 
     from DefinitionsTestsB import dimensional_test
-
     path = str(cwd + gcode_folder + separator() + test + ' test' + '.gcode')
 
     ts = TestSetupB(machine, material, test, path,
@@ -168,7 +162,8 @@ current_test = {"test_name": ts.test_name,
                 "units": ts.test_info.units,
                 "parameter_precision": ts.test_info.precision,
                 "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
-                "selected_volumetric_flow_rate_value": evaluate(input("Enter the volumetric flow rate value which corresponds to the best parameter value: ")) if not quiet else 0}
+                "selected_volumetric_flow_rate_value": evaluate(input("Enter the volumetric flow rate value which corresponds to the best parameter value: ")) if not quiet else 0,
+                "comments": input("Comments: ") if not quiet else 0}
 
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
@@ -176,24 +171,25 @@ import_json_dict["session"]["previous_tests"] = previous_tests
 if not quiet:
     for dummy in import_json_dict["session"]["previous_tests"]:
         if dummy["test_name"] == "printing speed":
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_parameter_value"]
         elif dummy["test_name"] == "path height":
-            import_json_dict["settings"]["path_height"] = dummy["selected_value"]
+            import_json_dict["settings"]["path_height"] = dummy["selected_parameter_value"]
             import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
         elif dummy["test_name"] == "first layer height":
-            import_json_dict["settings"]["path_height_raft"] = dummy["selected_value"]
+            import_json_dict["settings"]["path_height_raft"] = dummy["selected_parameter_value"]
+            import_json_dict["settings"]["path_width_raft"] = np.mean(ts.coef_w_raft) * machine.nozzle.size_id
             import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
         elif dummy["test_name"] == "path width":
-            import_json_dict["settings"]["path_width"] = dummy["selected_value"]
+            import_json_dict["settings"]["path_width"] = dummy["selected_parameter_value"]
             import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
         elif dummy["test_name"] == "extrusion temperature":
-            import_json_dict["settings"]["temperature_extruder"] = dummy["selected_value"]
+            import_json_dict["settings"]["temperature_extruder"] = dummy["selected_parameter_value"]
             import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
         elif dummy["test_name"] == "extrusion multiplier":
-            import_json_dict["settings"]["extrusion_multiplier"] = dummy["selected_value"]
+            import_json_dict["settings"]["extrusion_multiplier"] = dummy["selected_parameter_value"]
             import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
         elif dummy["test_name"] == "retraction distance":
-            import_json_dict["settings"]["retraction_distance"] = dummy["selected_value"]
+            import_json_dict["settings"]["retraction_distance"] = dummy["selected_parameter_value"]
             import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
 
     import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["path_height"]/import_json_dict["settings"]["path_width"])),0)

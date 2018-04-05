@@ -10,25 +10,26 @@ with open("persistence.json", mode='r') as file:
     persistence = json.load(file)
 
 for dummy in persistence["session"]["previous_tests"]:
-    if dummy["test_name"] == "printing speed": # TODO check conditions
-        persistence["settings"]["speed_printing"] = dummy["selected_value"]
+    if dummy["test_name"] == "printing speed":
+        persistence["settings"]["speed_printing"] = dummy["selected_parameter_value"]
     elif dummy["test_name"] == "path height":
-        persistence["settings"]["path_height"] = dummy["selected_value"]
+        persistence["settings"]["path_height"] = dummy["selected_parameter_value"]
         persistence["settings"]["speed_printing"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "first layer height":
-        persistence["settings"]["path_height_raft"] = dummy["selected_value"]
+        persistence["settings"]["path_height_raft"] = dummy["selected_parameter_value"]
+        persistence["settings"]["path_width_raft"] = np.mean(ts.coef_w_raft) * machine.nozzle.size_id #TODO
         persistence["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "path width":
-        persistence["settings"]["path_width"] = dummy["selected_value"]
+        persistence["settings"]["path_width"] = dummy["selected_parameter_value"]
         persistence["settings"]["speed_printing"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "extrusion temperature":
-        persistence["settings"]["temperature_extruder"] = dummy["selected_value"]
+        persistence["settings"]["temperature_extruder"] = dummy["selected_parameter_value"]
         persistence["settings"]["speed_printing"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "extrusion multiplier":
-        persistence["settings"]["extrusion_multiplier"] = dummy["selected_value"]
+        persistence["settings"]["extrusion_multiplier"] = dummy["selected_parameter_value"]
         persistence["settings"]["speed_printing"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "retraction distance":
-        persistence["settings"]["retraction_distance"] = dummy["selected_value"]
+        persistence["settings"]["retraction_distance"] = dummy["selected_parameter_value"]
         persistence["settings"]["speed_printing"] = dummy["selected_speed_value"]
 
 persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*persistence["settings"]["path_height"]/persistence["settings"]["path_width"])),0)

@@ -89,7 +89,7 @@ elements.append(Paragraph(main_info, style=style_text))
 consumed_filament = 0
 for dummy in import_json_dict["session"]["previous_tests"]:
     consumed_filament = consumed_filament + round(float(dummy["extruded_filament"]), 3)
-main_info = "Consumed filament: " + str(consumed_filament) + " mm"
+main_info = "Consumed filament: " + "{:.1f}".format(consumed_filament) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
 elements.append(Spacer(1, 0.5*inch))
 
@@ -111,6 +111,7 @@ for k in performed_tests:
 
     new_line.append(k["parameter_precision"].format(k["selected_parameter_value"]))
     new_line.append("{:.1f}".format(k["selected_speed_value"]))
+
     try:
         new_line.append("{:.3f}".format(k["selected_volumetric_flow_rate_value"]))
     except KeyError:

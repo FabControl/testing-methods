@@ -34,10 +34,9 @@ class Material(object):
     heat_capacity          - specific heat capacity (J/kg/K)
     """
 
-    def __init__(self, name, manufacturer, id = None, size_od: float = None,
-                 temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None,
-                 mvr=None, mfi=None, temperature_mfr=None, load_mfr=None, capillary_length_mfr=None,
-                 capillary_diameter_mfr=None, time_mfr=None, density_rt=None, lcte=None, heat_capacity=None, *args, **kwargs):
+    def __init__(self, name, manufacturer, id = None, size_od: float = None, temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None,
+                 mvr=None, mfi=None, temperature_mfr=None, load_mfr=None, capillary_length_mfr=None, capillary_diameter_mfr=None, time_mfr=None,
+                 density_rt=None, lcte=None, heat_capacity=None, *args, **kwargs):
         self.name = name
         self.manufacturer = manufacturer
         self.id = id
@@ -131,9 +130,10 @@ class Settings(object):
 
     def __init__(self, aim = None, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
                  temperature_printbed_raft=None, speed_printing_raft=None, temperature_extruder=None, temperature_printbed=None, extrusion_multiplier=None,
-                 speed_printing=None, retraction_distance = None, retraction_restart_distance = None, retraction_speed = None, coasting_distance = None, ventilator_part_cooling=None, ventilator_entry=None,
-                 ventilator_exit=None, raft_density=None, number_of_test_structures = None, number_of_substructures = None, optimize_temperature_printbed = None, optimize_speed_printing = None,
-                 optimize_path_height = None, get_path_width = None, get_path_height = None, perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
+                 speed_printing=None, retraction_distance = None, retraction_restart_distance = None, retraction_speed = None, coasting_distance = None,
+                 ventilator_part_cooling=None, ventilator_entry=None, ventilator_exit=None, raft_density=None,
+                 optimize_temperature_printbed = None, optimize_speed_printing = None, optimize_path_height = None, get_path_width = None, get_path_height = None,
+                 perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
 
         self.aim = aim
 
@@ -163,8 +163,6 @@ class Settings(object):
         self.ventilator_exit = ventilator_exit # (%)
 
         self.raft_density = 100 if raft_density is None else raft_density  # (%)
-        self.number_of_test_structures = number_of_test_structures  # number_of_test_structures (should be uneven)
-        self.number_of_substructures = number_of_substructures  # number_of_substructures
         self.optimize_temperature_printbed = optimize_temperature_printbed  # True if ones wants to optimize temperature_printbed
         self.optimize_speed_printing = optimize_speed_printing  # True if ones wants to optimize speed_printing
         self.optimize_path_height = optimize_path_height  # True if ones wants to optimize path_height
@@ -176,7 +174,6 @@ class Settings(object):
         self.layers = layers
 
         self.material_name = None if material is None else material.name
-
         self.nozzle = nozzle
 
 
@@ -233,12 +230,13 @@ class Machine(object):
 
 
 class TestInfo(object):
-    def __init__(self, name: str, parameter: str, units: str, precision: str, number_of_layers: int, number_of_substructures: int = None, default_value: list = None):
+    def __init__(self, name: str, parameter: str, units: str, precision: str, number_of_layers: int, number_of_test_structures: int, number_of_substructures: int = None, default_value: list = None):
         self.name = name
         self.parameter = parameter
         self.units = units
         self.precision = precision
         self.number_of_layers = number_of_layers
+        self.number_of_test_structures = number_of_test_structures
         self.number_of_substructures = number_of_substructures
 
         if default_value is not None:
@@ -246,7 +244,7 @@ class TestInfo(object):
             self.max_default = default_value[1]
 
 
-def minmax_path_width(machine: Machine):
+def minmax_path_width(machine: Machine, number_of_test_structures: int):
     coef_w_min = 0.90
 
     if machine.nozzle.size_id <= 0.6:
@@ -254,13 +252,13 @@ def minmax_path_width(machine: Machine):
     else:
         coef_w_max = machine.nozzle.size_od / machine.nozzle.size_id
 
-    coef_w_all = np.linspace(coef_w_min, coef_w_max, machine.settings.number_of_test_structures)
+    coef_w_all = np.linspace(coef_w_min, coef_w_max, number_of_test_structures)
     coef_w_mean = (coef_w_min + coef_w_max) / 2
 
     return coef_w_all, coef_w_mean
 
 
-def minmax_path_height(machine: Machine, number_of_test_structures):
+def minmax_path_height(machine: Machine, number_of_test_structures: int):
     if machine.nozzle.size_id == 0.1:
         coef_h_min = 0.10
         coef_h_max = 0.50
@@ -274,7 +272,7 @@ def minmax_path_height(machine: Machine, number_of_test_structures):
     return coef_h_all, coef_h_mean
 
 
-def minmax_path_width_height_raft(machine: Machine):
+def minmax_path_width_height_raft(machine: Machine, number_of_test_structures: int):
     coef_w_max_raft = machine.nozzle.size_od/machine.nozzle.size_id
     coef_w_min_raft = 1.0
 
@@ -309,12 +307,12 @@ def minmax_path_width_height_raft(machine: Machine):
     coef_h_raft = (coef_h_min_raft + coef_h_max_raft)/2
     coef_w_raft = (coef_w_min_raft + coef_w_max_raft)/2
 
-    coef_h_raft_all = np.linspace(0.9*coef_h_min_raft, 1.1*coef_h_max_raft, machine.settings.number_of_test_structures).tolist()
+    coef_h_raft_all = np.linspace(0.9*coef_h_min_raft, 1.1*coef_h_max_raft, number_of_test_structures).tolist()
 
-    return coef_h_raft, coef_h_min_raft, coef_h_max_raft, coef_w_raft, coef_h_raft_all
+    return coef_h_raft, coef_w_raft, coef_h_raft_all
 
 
-def minmax_temperature(material: Material, machine: Machine):
+def minmax_temperature(material: Material, machine: Machine, number_of_test_structures: int):
     temperature_all = None
     if machine.settings.temperature_extruder_raft is not None:
         temperature_extruder_min = 0.975 * (machine.settings.temperature_extruder + 273.15) - 273.15
@@ -326,17 +324,17 @@ def minmax_temperature(material: Material, machine: Machine):
     if material.temperature_destr < machine.temperature_extruder_max:
         if temperature_extruder_max < material.temperature_destr:
             temperature_all = np.linspace(temperature_extruder_min,
-                                          temperature_extruder_max, machine.settings.number_of_test_structures).tolist()
+                                          temperature_extruder_max, number_of_test_structures).tolist()
         else:
             temperature_all = np.linspace(temperature_extruder_min,
-                                          0.975 * (material.temperature_destr + 273.15) - 273.15, machine.settings.number_of_test_structures).tolist()
+                                          0.975 * (material.temperature_destr + 273.15) - 273.15, number_of_test_structures).tolist()
     elif material.temperature_destr >= machine.temperature_extruder_max:
         if temperature_extruder_max < machine.temperature_extruder_max:
             temperature_all = np.linspace(temperature_extruder_min,
-                                          0.975 * (temperature_extruder_max + 273.15) - 273.15, machine.settings.number_of_test_structures).tolist()
+                                          0.975 * (temperature_extruder_max + 273.15) - 273.15, number_of_test_structures).tolist()
         elif temperature_extruder_max >= machine.temperature_extruder_max:
             temperature_all = np.linspace(temperature_extruder_min,
-                                          temperature_extruder_max, machine.settings.number_of_test_structures).tolist()
+                                          temperature_extruder_max, number_of_test_structures).tolist()
     else:
         pass
 

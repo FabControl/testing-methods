@@ -58,7 +58,6 @@ except:
             "raft_density": 90,
             "temperature_extruder_raft": 240,
             "path_height_raft": 0.4,
-            "path_width_raft": 0.8,
             "speed_printing_raft": 10,
             "temperature_extruder": 275,
             "path_height": 0.4,
@@ -74,8 +73,6 @@ except:
             "matrix_size": 3,
             "layer_count": 15,
             "safe_distance": 50,
-            "number_of_test_structures": 7,
-            "number_of_substructures": 4,
             "edges": 30
     },
         "session": {
@@ -85,27 +82,28 @@ except:
             "test_name": 'first layer height',
             "min_max": [0.1, 0.3],
             "min_max_speed": [10, 30],
+            "number_of_test_structures": 7,
             "slicer": "Prusa Slic3r"
-
         }
     }
 # TODO Add to json for report generation
+# TODO Create a similar dict for B tests
 test_dict = {'1': TestInfo('first layer height', 'path_height_raft', 'mm', '{:.3f}',
-                           number_of_layers = 1, number_of_substructures = import_json_dict["settings"]["number_of_substructures"]),
+                           number_of_layers = 1, number_of_test_structures = import_json_dict["session"]["number_of_test_structures"], number_of_substructures = 4),
              '2': TestInfo('extrusion temperature', 'temperature_extruder', 'degC', '{:.0f}',
-                           number_of_layers = 2, number_of_substructures = import_json_dict["settings"]["number_of_substructures"]),
+                           number_of_layers = 2, number_of_test_structures = import_json_dict["session"]["number_of_test_structures"], number_of_substructures = 4),
              '3': TestInfo('path height', 'path_height', 'mm', '{:.3f}',
-                           number_of_layers = 2, number_of_substructures = import_json_dict["settings"]["number_of_substructures"]),
+                           number_of_layers = 2, number_of_test_structures = import_json_dict["session"]["number_of_test_structures"], number_of_substructures = 4),
              '4': TestInfo('path width', 'path_width', 'mm', '{:.3f}',
-                           number_of_layers = 2, number_of_substructures = import_json_dict["settings"]["number_of_substructures"]),
+                           number_of_layers = 2, number_of_test_structures = import_json_dict["session"]["number_of_test_structures"], number_of_substructures = 4),
              '5': TestInfo('extrusion multiplier', 'extrusion_multiplier', '-', '{:.3f}',
-                           number_of_layers = 2, number_of_substructures = import_json_dict["settings"]["number_of_substructures"], default_value = [0.75, 1.50]),
+                           number_of_layers = 2, number_of_test_structures = import_json_dict["session"]["number_of_test_structures"], number_of_substructures = 4, default_value = [0.75, 1.50]),
              '6': TestInfo('printing speed', 'speed_printing', 'mm/s', '{:.1f}',
-                           number_of_layers = 2, number_of_substructures = 1, default_value = [0.80, 1.75]),
+                           number_of_layers = 2, number_of_test_structures = import_json_dict["session"]["number_of_test_structures"], number_of_substructures = 1, default_value = [0.80, 1.75]),
              '7': TestInfo('retraction distance', 'retraction_distance', 'mm', '{:.3f}',
-                           number_of_layers = 2, number_of_substructures = None, default_value = [0., 4]),
+                           number_of_layers = 2, number_of_test_structures = import_json_dict["session"]["number_of_test_structures"], number_of_substructures = None, default_value = [0., 4]),
              '8': TestInfo('retraction restart distance', 'retraction_restart_distance', 'mm', '{:.3f}',
-                           number_of_layers = 2, number_of_substructures = None, default_value = [0., 0.4])}
+                           number_of_layers = 2, number_of_test_structures = import_json_dict["session"]["number_of_test_structures"], number_of_substructures = None, default_value = [0., 0.4])}
 
 test_name_list, test_precision_list, test_units_list = [], [], []
 test_number_list = test_dict.keys()
@@ -119,4 +117,4 @@ for test_number in test_number_list:
 material = Material(**import_json_dict["material"])
 machine = Machine(**import_json_dict["machine"])
 machine.settings = Settings(nozzle=machine.nozzle, material=material, **import_json_dict["settings"])
-coef_h_raft, coef_h_min_raft, coef_h_max_raft, coef_w_raft, coef_h_raft_all = minmax_path_width_height_raft(machine)
+#coef_h_raft, coef_w_raft, coef_h_raft_all = minmax_path_width_height_raft(machine) TODO was it needed for B tests?

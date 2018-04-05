@@ -24,12 +24,12 @@ class TestSetupA(object):
         self.ventilator_exit = machine.ventilators.exit
         if self.ventilator_exit: self.set_ventilator_exit = machine.settings.ventilator_exit
 
-        self.number_of_test_structures = machine.settings.number_of_test_structures
-        self.number_of_substructures = machine.settings.number_of_substructures
+        self.number_of_test_structures = test_info.number_of_test_structures
+        self.number_of_substructures = test_info.number_of_substructures
         self.number_of_layers = test_info.number_of_layers
 
         self.test_name = test_info.name
-        self.coef_h_raft, _, _, self.coef_w_raft, self.coef_h_raft_all = minmax_path_width_height_raft(machine)
+        self.coef_h_raft, self.coef_w_raft, self.coef_h_raft_all = minmax_path_width_height_raft(machine, self.number_of_test_structures)
 
         if machine.settings.path_height_raft is not None: self.coef_h_raft = machine.settings.path_height_raft/machine.nozzle.size_id
         if machine.settings.path_width_raft is not None: self.coef_w_raft = machine.settings.path_width_raft/machine.nozzle.size_id
@@ -93,7 +93,7 @@ class TestSetupA(object):
             elif self.test_name == 'extrusion temperature':
                 # EXTRUSION TEMPERATURE test parameters
                 if min_max_argument is None:
-                    self.temperature_extruder = minmax_temperature(material, machine)
+                    self.temperature_extruder = minmax_temperature(material, machine, self.number_of_test_structures)
                 else:
                     self.temperature_extruder = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
                 self.argument = [round(x,0) for x in self.temperature_extruder]
@@ -188,7 +188,7 @@ class TestSetupA(object):
 
         self.title = addtitle(test_info.name, material)
         self.comment1 = addcomment1(self.values, self.test_info)
-        self.comment2 = addcomment2(path_height, path_width, self.speed_printing, self.extrusion_multiplier, self.temperature_extruder, self.retraction_distance, self.retraction_restart_distance, machine)
+        self.comment2 = addcomment2([self.temperature_extruder, path_height, path_width, self.extrusion_multiplier, self.speed_printing, self.retraction_distance, self.retraction_restart_distance])
 
         self.g = Gplus(material, machine,
                        outfile=path,
@@ -203,28 +203,29 @@ class TestSetupA(object):
 
 def addtitle(test_name: str, material: Material):
     title = str("; --- 2D test for " + test_name + " of {0} from {1} (ID: {2}) ---".format(material.name, material.manufacturer, material.id))
-
     return title
 
 
 def addcomment1(values, test_info: TestInfo):
     comment1 = str('; --- testing the following ' + test_info.name + ' values: ' + ', '.join((test_info.precision + ' {}').format(*k) for k in zip(values, len(values)*[test_info.units])) + ' ---')
-
     return comment1
 
 
-def addcomment2(path_height, path_width, speed_printing, extrusion_multiplier, temperature_extruder, retraction_distance, retraction_restart_distance, machine):
+def addcomment2(argument_list):
     comment2 = []
     from Globals import test_name_list, test_precision_list, test_units_list
-    for dummy1 in range(0, machine.settings.number_of_test_structures):
-        addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_name_list[1:], test_precision_list[1:], test_units_list[1:])) + " ---").format(
-            temperature_extruder[dummy1],
-            path_height[dummy1],
-            path_width[dummy1],
-            extrusion_multiplier[dummy1],
-            speed_printing[dummy1],
-            retraction_distance[dummy1],
-            retraction_restart_distance[dummy1])
+    # Reshuffle values
+    argument_values = []
+    argument_test_structure = []
+    for index in range(0, len(argument_list[0])):
+        for list in argument_list:
+            argument_test_structure.append(list[index])
+            if list == argument_list[-1]:
+                argument_values.append(argument_test_structure)
+                argument_test_structure = []
+
+    for dummy1 in range(0, len(argument_list[0])):
+        addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_name_list[1:], test_precision_list[1:], test_units_list[1:])) + " ---").format(*argument_values[dummy1])
         comment2.append(addcomment2)
 
     return comment2

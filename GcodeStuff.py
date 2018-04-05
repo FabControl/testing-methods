@@ -38,7 +38,6 @@ class Gplus(G):
         output = "M106 S{:.0f}".format(255 * (cooling_power / 100)) + "; set the cooler speed for part cooling"
         G.write(self, output)
 
-
     def set_ventilator_exit(self, cooling_power: float):
         """Set the cooler power in percent"""
         if cooling_power > 100:
@@ -49,7 +48,6 @@ class Gplus(G):
         output = "M106 P1 S{:.0f}".format(255 * (cooling_power / 100)) + "; set the speed for exit ventilator"
         G.write(self, output)
 
-
     def set_ventilator_entry(self, cooling_power: float):
         """Set the cooler power in percent"""
         if cooling_power > 100:
@@ -59,7 +57,6 @@ class Gplus(G):
         # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
         output = "M106 P2 S{:.0f}".format(255 * (cooling_power / 100)) + "; set the speed for entry ventilator"
         G.write(self, output)
-
 
     def dwell(self, time: int):
         """ Pause code executions for the given amount of time """
