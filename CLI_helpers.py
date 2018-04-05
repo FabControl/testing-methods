@@ -85,7 +85,7 @@ def exclusive_write(path: str, output, limit=True):
         print("{} successfully saved.".format(path))
 
 
-def spawn_iso_slicer(orientation: str, count: int, rotation: float or int, path: str, config: str):
+def generate_gcode(orientation: str, count: int, rotation: float or int, path: str, config: str):
     """
     Creates a subprocesses of Blender and Slic3r in order to generate an ISO527A test specimen geometry and slice it with an appropriate
     Slic3r configuration file.
@@ -101,17 +101,6 @@ def spawn_iso_slicer(orientation: str, count: int, rotation: float or int, path:
     subprocess.run(
         [blender_path, "-b", "-P", str(test_sample_path + "stl_modifier.py"), "--", orientation, str(count),
          str(rotation), path, test_sample_path], stderr=open(devnull, 'wb'))
-    subprocess.run([slic3r_path, "--load", config, "-o", output, "--dont-arrange", geometry])
-
-
-def spawn_slicer(config: str, output: str, geometry: str):
-    """
-    Spawns a Slic3r subprocess and passes arguments to it.
-    :param config:
-    :param output:
-    :param geometry:
-    :return:
-    """
     subprocess.run([slic3r_path, "--load", config, "-o", output, "--dont-arrange", geometry])
 
 

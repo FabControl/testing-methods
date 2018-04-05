@@ -7,7 +7,7 @@ import numpy as np
 class TestSetupB(object):
     def __init__(self, machine: Machine, material: Material, test_name: str, path: str, min_max_argument: list = None, min_max_speed_printing: list = None, raft: bool = True):
         """
-
+        
         :param machine:
         :param material:
         :param test_name:
@@ -22,7 +22,7 @@ class TestSetupB(object):
 
         self.raft = raft
 
-        self.coef_h_raft, _, _, self.coef_w_raft, _ = minmax_path_width_height_raft(machine)
+        self.coef_h_raft, _, self.coef_w_raft = minmax_path_width_height_raft(machine)
 
         # if machine.settings.path_height_raft != None:
         #     self.coef_h_raft = machine.settings.path_height_raft/machine.nozzle.size_id

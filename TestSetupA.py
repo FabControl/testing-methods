@@ -166,7 +166,6 @@ class TestSetupA(object):
                 print('Unknown test')
                 raise ValueError("{} is not a valid test.".format(test_info.name))
 
-
         if min_max_speed_printing is not None:
             self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], 4).tolist()
         elif self.test_name != "first layer height":

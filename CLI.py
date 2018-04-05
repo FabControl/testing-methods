@@ -30,14 +30,14 @@ if __name__ == '__main__':
         slicer_arg = str(arguments["<slicer>"]).lower()
         if slicer_arg == 'prusa' or slicer_arg == "simplify3d":
             import_json_dict["session"]["slicer"] = slicer_arg
-            import config_writer
+            import generate_configuration
         else:
             raise ValueError("{} not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.".format(slicer_arg))
         quit()
 
 from Calculations import shear_rate, pressure_drop, rheology
 from CheckCompatibility import check_compatibility
-from CLI_helpers import evaluate, clear, extruded_filament, spawn_iso_slicer, separator, spawn_slicer, exclusive_write
+from CLI_helpers import evaluate, clear, extruded_filament, generate_gcode, separator, exclusive_write
 from Definitions import *
 from OptimizeSettings import check_printbed_temperature, check_printing_speed_shear_rate, check_printing_speed_pressure
 from paths import cwd, gcode_folder
@@ -52,7 +52,7 @@ start = time.time()
 
 if arguments["generate-gcode-iso"]:
     config = arguments["<config>"]
-    spawn_iso_slicer(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<path>"], config)
+    generate_gcode(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<path>"], config)
     quit()
 
 # Check compatibility

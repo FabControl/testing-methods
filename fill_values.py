@@ -4,7 +4,6 @@ from CLI_helpers import separator
 import paths
 from pprint import pprint
 
-
 # Load persistence
 with open("persistence.json", mode='r') as file:
     persistence = json.load(file)
