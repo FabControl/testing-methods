@@ -1,5 +1,6 @@
 from mecode import G
 from Definitions import *
+from paths import gcode_folder
 
 path_list = []
 
@@ -18,7 +19,7 @@ class Gplus(G):
         self.coef_w = machine.settings.path_width / machine.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
 
-        self.path_list = []
+        self.path_list = [] # TODO Is it used?
 
     def set_extruder_temperature(self, temperature: float):
         """Set the liquefier temperature in degC"""
@@ -100,8 +101,7 @@ class Gplus(G):
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * ((self.coef_w - self.coef_h) * self.coef_h + (math.pi / 4) * (
                     self.coef_h) ** 2) * line_length * self.extrusion_multiplier
             else:
-                output = str('path height of {:.3f} mm is too thin'.format(self.coef_h * self.nozzle_diameter)) # TODO Reinis!!!
-                print(output)
+                print('path height of {:.3f} mm is too thin'.format(self.coef_h * self.nozzle_diameter)) # TODO Reinis!!!
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * (self.coef_w * self.coef_h) * line_length * self.extrusion_multiplier
 
             kwargs['E'] = filament_length + current_extruder_position

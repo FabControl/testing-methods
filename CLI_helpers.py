@@ -96,10 +96,10 @@ def generate_gcode(orientation: str, count: int, rotation: float or int, file: s
     :param config:
     :return:
     """
-    output = gcode_folder + file.replace(".stl", ".gcode")
-    geometry = test_sample_path + 'export.stl'
+    output = cwd + gcode_folder + separator() + file.replace(".stl", ".gcode")
+    geometry = cwd + test_sample_path + separator() + 'export.stl'
     subprocess.run([blender_path, "-b", "-P", str(cwd + "stl_modifier.py"), "--", orientation, str(count),
-         str(rotation), file, test_sample_path], stderr=open(devnull, 'wb'))
+         str(rotation), cwd + test_sample_path + separator() + file, cwd + separator() + test_sample_path], stderr=open(devnull, 'wb'))
     subprocess.run([slic3r_path, "--load", config, "-o", output, "--dont-arrange", geometry])
 
 

@@ -94,9 +94,9 @@ def print_raft(ts: TestSetupA):
     ts.g.feed(ts.speed_printing_raft)  # print the filling of the raft
     raft_density = machine.settings.raft_density / 100
     step = ts.coef_w_raft * machine.nozzle.size_id / raft_density  # step size
-    step_number = ts.test_structure_size/(ts.coef_w_raft * machine.nozzle.size_id / raft_density)
+    step_number = ts.test_structure_size/step
     #overlap = ts.coef_w_raft * machine.nozzle.size_id/(2*step_number**2 - step_number)
-    step_modified = step
+
     ts.g.move(x=-ts.coef_w_raft * machine.nozzle.size_id/2,
               y=0,
               z=0,
@@ -104,7 +104,7 @@ def print_raft(ts: TestSetupA):
 
     for dummy in range(0, int(step_number)):
         ts.g.move(x=0,
-                  y=+step_modified,
+                  y=+step,
                   z=0,
                   extrude=False, extrusion_multiplier=0)
         ts.g.move(x=(-1)**(dummy+1)*(ts.test_structure_size-ts.coef_w_raft * machine.nozzle.size_id),

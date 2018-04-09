@@ -3,6 +3,13 @@ from Calculations import flow_rate
 
 
 def check_printing_speed_shear_rate(machine, gamma_dot, quiet: bool):
+    """
+    Checks 
+	:param machine: 
+	:param gamma_dot: 
+	:param quiet: 
+	:return: 
+	"""
     gamma_dot_out = [0, 0]
     del gamma_dot[-1:]
     gamma_dot_out[0] = max(gamma_dot)  # max shear rate in the polymer melt going through the given nozzle (with the set path width, path height, printing speed)

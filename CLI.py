@@ -11,7 +11,7 @@ Usage:
 """
 #python CLI.py generate-gcode-iso horizontal 4 90 "Carbodeon_Nanodiamond PLA A_1-75_0-8.ini" ISO527-1A.stl
 
-import regex
+import regex, subprocess
 from docopt import docopt
 from Globals import machine, material, import_json_dict
 from Calculations import shear_rate, pressure_drop, rheology
@@ -75,8 +75,6 @@ if machine.settings.optimize_speed_printing:
 
     check_printing_speed_shear_rate(machine, gamma_dot_out, quiet)
     #check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
-
-from OptimizeSettings import feeder_speed
 
 if not verbose:
     clear()
