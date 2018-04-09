@@ -55,7 +55,7 @@ def assemble_ini(dictionary: OrderedDict):
     for key, values in dictionary.items():
         value = values["value"]
         percentage = values["percentage"]
-        line_start = "%s = %s" % (key, str(value) if value is not None else "")
+        line_start = "{0} = {1}".format(key, str(value) if value is not None else "")
         line_end = "%\n" if percentage else "\n"
         outstring += line_start + line_end
 
@@ -71,8 +71,8 @@ def output_name(extension: str):
     """
     output = "{0}_{1}_{2}_{3}.{4}".format(json_dict["material"]["manufacturer"],
                                           json_dict["material"]["name"],
-                                          str(json_dict["material"]["size_od"]).format("{:.2f}").replace(".", "-"),
-                                          str(json_dict["machine"]["nozzle"]["size_id"]).format("{:.1f}").replace(".", "-"),
+                                          "{:.2f}".format(json_dict["material"]["size_od"]).replace(".", "-"),
+                                          "{:.0f} um".format(json_dict["machine"]["nozzle"]["size_id"]*1000).replace(".", "-"),
                                           extension)
     return output
 

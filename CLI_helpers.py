@@ -1,4 +1,4 @@
-from paths import blender_path, slic3r_path, cwd, test_sample_path
+from paths import blender_path, slic3r_path, cwd, test_sample_path, gcode_folder
 import subprocess
 from os import system, name, listdir, devnull
 from ast import literal_eval
@@ -85,22 +85,21 @@ def exclusive_write(path: str, output, limit=True):
         print("{} successfully saved.".format(path))
 
 
-def generate_gcode(orientation: str, count: int, rotation: float or int, path: str, config: str):
+def generate_gcode(orientation: str, count: int, rotation: float or int, file: str, config: str):
     """
-    Creates a subprocesses of Blender and Slic3r in order to generate an ISO527A test specimen geometry and slice it with an appropriate
+    Creates a subprocesses of Blender and Slic3r in order to generate an ISO527 test specimen geometry and slice it with an appropriate
     Slic3r configuration file.
     :param orientation:
     :param count:
     :param rotation:
-    :param path:
+    :param file:
     :param config:
     :return:
     """
-    output = path.replace(".stl", ".gcode")
+    output = gcode_folder + file.replace(".stl", ".gcode")
     geometry = test_sample_path + 'export.stl'
-    subprocess.run(
-        [blender_path, "-b", "-P", str(test_sample_path + "stl_modifier.py"), "--", orientation, str(count),
-         str(rotation), path, test_sample_path], stderr=open(devnull, 'wb'))
+    subprocess.run([blender_path, "-b", "-P", str(cwd + "stl_modifier.py"), "--", orientation, str(count),
+         str(rotation), file, test_sample_path], stderr=open(devnull, 'wb'))
     subprocess.run([slic3r_path, "--load", config, "-o", output, "--dont-arrange", geometry])
 
 

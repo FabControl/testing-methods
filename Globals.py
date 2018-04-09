@@ -5,75 +5,77 @@ try:
     print("Attempting to load the JSON")
     with open("persistence.json", mode="r") as file:
         import_json_dict = json.load(file)
-    print("Loaded a testing session ID {:d} from outer scope".format(import_json_dict["session"]["uid"]))
+    print("Loaded a testing session ID {} from outer scope".format(import_json_dict["session"]["uid"]))
 except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
-        "material": {
-            "name": "ZYTEL 3D1000FL NC010",
-            "manufacturer": "DuPont",
-            "id": "123456",
-            "size_od": 1.75,
-            "temperature_melting": 175,
-            "temperature_destr": 290,
-            "temperature_vicat": 60,
-            "temperature_glass": 70
+    "material": {
+        "name": "Arnitel ID2045",
+        "manufacturer": "Nexeo Solutions",
+        "id": "123456",
+        "size_od": 1.75,
+        "temperature_melting": 158,
+        "temperature_destr": 300,
+        "temperature_vicat": 90,
+        "temperature_glass": -35,
+    },
+    "machine": {
+        "manufacturer": "Mass Portal",
+        "model": "Pharaoh D20",
+        "sn": 0,
+        "buildarea_maxdim1": 145,
+        "buildarea_maxdim2": 145,
+        "max_dimension_z": 200,
+        "temperature_extruder_max": 300,
+        "size_extruder_id": 1.95,
+        "nozzle": {
+            "size_id": 0.6,
+            "size_od": 0.84,
+            "size_capillary_length": 5,
+            "size_angle": 60,
+            "metal": "steel"
         },
-        "machine": {
-            "manufacturer": "Mass Portal",
-            "model": "Pharaoh D20",
-            "sn": 0,
-            "buildarea_maxdim1": 145,
-            "buildarea_maxdim2": 145,
-            "max_dimension_z": 200,
-            "temperature_extruder_max": 300,
-            "size_extruder_id": 1.95,
-            "nozzle": {
-                "size_id": 0.80,
-                "size_od": 1.04,
-                "size_capillary_length": 5,
-                "size_angle": 60,
-                "metal": "steel"
+        "ventilators": {
+             "ventilator_part_cooling": True,
+             "ventilator_entry": False,
+             "ventilator_exit": False
             },
-            "ventilators": {
-                "ventilator_part_cooling": True,
-                "ventilator_entry": False,
-                "ventilator_exit": False
-            },
-            "software": {
-                "version": "2.1",
-            },
-            "firmware": {
-                "fw_type": "Repetier",
-                "version": "2.0",
-            }
+        "software": {
+             "version": "2.1"
         },
-        "settings": {
-            "aim": "strength",
-            "temperature_printbed_raft": 85,
-            "temperature_printbed": 85,
-            "ventilator_part_cooling": 100,
-            "ventilator_entry": 0,
-            "ventilator_exit": 0,
-            "raft_density": 90,
-            "temperature_extruder_raft": 240,
-            "path_height_raft": 0.4,
-            "speed_printing_raft": 10,
-            "temperature_extruder": 275,
-            "path_height": 0.4,
-            "path_width": 0.8,
-            "speed_printing": 30,
-            "extrusion_multiplier": 1.0,
-            "retraction_distance": 2.0,
-            "retraction_restart_distance": 0,
-            "retraction_speed": 120,
-            "coasting_distance": 0.0,
-            "overlap": 0,
-            "perimeter": 1,
-            "matrix_size": 3,
-            "layer_count": 15,
-            "safe_distance": 50,
-            "edges": 30
+        "firmware": {
+            "fw_type": "Repetier",
+            "version": "2.0"
+        }
+    },
+    "settings": {
+        "aim": "aesthetics",
+        "temperature_printbed_raft": 50,
+        "temperature_printbed": 50,
+        "ventilator_part_cooling": 100,
+        "ventilator_entry": 0,
+        "ventilator_exit": 0,
+        "raft_density": 90,
+        "temperature_extruder_raft": 250,
+        "path_height_raft": 0.3,
+        "speed_printing_raft": 15,
+        "temperature_extruder": 275,
+        "speed_printing": 52.5,
+        "path_height": 0.2,
+        "path_width": 0.6,
+        "extrusion_multiplier": 1,
+        "retraction_distance": 5,
+        "retraction_restart_distance": 0.0,
+        "retraction_speed": 120,
+        "coasting_distance": 0.0,
+        "overlap": 0,
+        "perimeter": 1,
+        "matrix_size": 3,
+        "layer_count": 15,
+        "safe_distance": 50,
+        "edges": 30,
+        "path_width_raft": 0.72,
+        "critical_overhang_angle": 36.0
     },
         "session": {
             "uid": 123456,

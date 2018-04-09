@@ -6,14 +6,26 @@ Usage:
     CLI.py new-test
     CLI.py generate-report
     CLI.py generate-configuration <slicer>
-    CLI.py generate-gcode-iso <orientation> <count> <rotation> <config> <path>
+    CLI.py generate-gcode-iso <orientation> <count> <rotation> <config> <file>
     CLI.py --help
 """
-#python CLI.py slice-iso horizontal 4 90 "Carbodeon_Nanodiamond PLA A_1-75_0-8.ini" ISO527-1A.stl
+#python CLI.py generate-gcode-iso horizontal 4 90 "Carbodeon_Nanodiamond PLA A_1-75_0-8.ini" ISO527-1A.stl
 
-import subprocess
+import regex
 from docopt import docopt
-quiet = None
+from Globals import machine, material, import_json_dict
+from Calculations import shear_rate, pressure_drop, rheology
+from CheckCompatibility import check_compatibility
+from CLI_helpers import evaluate, clear, extruded_filament, generate_gcode, separator, exclusive_write
+from Definitions import *
+from OptimizeSettings import check_printing_speed_shear_rate, check_printing_speed_pressure
+from paths import cwd, gcode_folder
+from Plotting import plotting_mfr
+from TestSetupA import TestSetupA
+from TestSetupB import TestSetupB
+import time
+
+quiet = True
 verbose = True
 flash = False
 
@@ -24,8 +36,6 @@ if __name__ == '__main__':
     quiet = arguments["-q"]
     flash = arguments["--flash"]
 
-    from Globals import machine, material, import_json_dict
-
     if arguments["generate-configuration"]:
         slicer_arg = str(arguments["<slicer>"]).lower()
         if slicer_arg == 'prusa' or slicer_arg == "simplify3d":
@@ -35,49 +45,38 @@ if __name__ == '__main__':
             raise ValueError("{} not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.".format(slicer_arg))
         quit()
 
-from Calculations import shear_rate, pressure_drop, rheology
-from CheckCompatibility import check_compatibility
-from CLI_helpers import evaluate, clear, extruded_filament, generate_gcode, separator, exclusive_write
-from Definitions import *
-from OptimizeSettings import check_printbed_temperature, check_printing_speed_shear_rate, check_printing_speed_pressure
-from paths import cwd, gcode_folder
-from Plotting import plotting_mfr
-from TestSetupA import TestSetupA
-from TestSetupB import TestSetupB
-import time
-
 session = import_json_dict["session"]
-
 start = time.time()
 
 if arguments["generate-gcode-iso"]:
     config = arguments["<config>"]
-    generate_gcode(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<path>"], config)
+    generate_gcode(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<file>"], config)
     quit()
 
 # Check compatibility
 #check_compatibility(machine, material)
 
-# Checking some settings for better starting values
-if machine.settings.optimize_temperature_printbed: check_printbed_temperature(material, machine)
-
 # Some calculations
 if machine.settings.optimize_speed_printing:
     gamma_dot_estimate = shear_rate(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
-    delta_p_estimate = pressure_drop(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
+    delta_p_estimate, _ = pressure_drop(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
 
     number_of_iterations = 5
 
     for dummy0 in range(0, number_of_iterations + 1):
-        gamma_dot, visc, param_power_law = rheology(material, machine, delta_p_estimate)
+        gamma_dot, visc, param_power_law = rheology(material, machine, delta_p_estimate, session["number_of_test_structures"])
         gamma_dot_out = shear_rate(machine, param_power_law[int(len(param_power_law) / 2)])
-        delta_p_out = pressure_drop(machine, param_power_law[int(len(param_power_law) / 2)])
+        delta_p_out, comment = pressure_drop(machine, param_power_law[int(len(param_power_law) / 2)])
 
         if dummy0 == number_of_iterations:
-            plotting_mfr(material, machine, gamma_dot, visc, param_power_law)
+            if quiet:
+                print(comment)
+            plotting_mfr(material, machine, gamma_dot, visc, param_power_law, session["number_of_test_structures"] )
 
-    check_printing_speed_shear_rate(machine, gamma_dot_out)
-    check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
+    check_printing_speed_shear_rate(machine, gamma_dot_out, quiet)
+    #check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
+
+from OptimizeSettings import feeder_speed
 
 if not verbose:
     clear()
@@ -120,8 +119,8 @@ elif import_json_dict["session"]["test_type"] == "B": # 'perimeter', 'overlap', 
     path = str(cwd + gcode_folder + separator() + test + ' test' + '.gcode')
 
     ts = TestSetupB(machine, material, test, path,
-                    min_max_argument = min_max_argument,
-                    min_max_speed_printing = min_max_speed_printing,
+                    min_max_argument=min_max_argument,
+                    min_max_speed_printing=min_max_speed_printing,
                     raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
 
     dimensional_test(ts)
@@ -130,7 +129,7 @@ if not quiet:
     if not verbose:
         clear()
     print("Tested Parameter values:")
-    print(ts.get_values()[::-1])
+    print([round(k,int(regex.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()[::-1]])
     print("Corresponding Volumetric flow rate values (mm3/s):")
     [print(x[::-1]) for x in ts.volumetric_flow_rate]
 
@@ -155,8 +154,8 @@ if ts.test_name == "retraction distance" or min_max_speed_printing is None:
 import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.nozzle.size_id, 2)
 
 current_test = {"test_name": ts.test_name,
-                "tested_parameter_values": ts.get_values(),
-                "tested_speed_values": tested_speed_values,
+                "tested_parameter_values": [round(k, int(regex.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
+                "tested_speed_values": [round(k, 1) for k in tested_speed_values],
                 "selected_parameter_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
                 "selected_speed_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
                 "units": ts.test_info.units,
@@ -196,8 +195,6 @@ if not quiet:
     with open(cwd + separator("jsons") + material.manufacturer + " " + material.name + " " + "{:.0f}".format(machine.nozzle.size_id*1000) + " um" + ".json", mode="w") as file:
         output = json.dumps(import_json_dict, indent=4, sort_keys=False)
         file.write(output)
-
-    # exclusive_write(cwd + separator("jsons") + material.manufacturer + " " + material.name + " " + "{:.0f}".format(machine.nozzle.size_id*1000) + " um" + ".json", json.dumps(import_json_dict, indent=4, sort_keys=False), limit=True)
 
 with open(cwd + separator() + "persistence.json", mode="w") as file:
     output = json.dumps(import_json_dict, indent=4, sort_keys=False)

@@ -267,12 +267,11 @@ def minmax_path_height(machine: Machine, number_of_test_structures: int):
         coef_h_max = 2./3.
 
     coef_h_all = np.linspace(0.9*coef_h_min, 1.1*coef_h_max, number_of_test_structures).tolist()
-    coef_h_mean = (coef_h_min + coef_h_max)/2
 
-    return coef_h_all, coef_h_mean
+    return coef_h_all
 
 
-def minmax_path_width_height_raft(machine: Machine, number_of_test_structures: int):
+def minmax_path_width_height_raft(machine: Machine, number_of_test_structures = None):
     coef_w_max_raft = machine.nozzle.size_od/machine.nozzle.size_id
     coef_w_min_raft = 1.0
 
@@ -307,9 +306,11 @@ def minmax_path_width_height_raft(machine: Machine, number_of_test_structures: i
     coef_h_raft = (coef_h_min_raft + coef_h_max_raft)/2
     coef_w_raft = (coef_w_min_raft + coef_w_max_raft)/2
 
-    coef_h_raft_all = np.linspace(0.9*coef_h_min_raft, 1.1*coef_h_max_raft, number_of_test_structures).tolist()
-
-    return coef_h_raft, coef_w_raft, coef_h_raft_all
+    if number_of_test_structures is not None:
+        coef_h_raft_all = np.linspace(0.9*coef_h_min_raft, 1.1*coef_h_max_raft, number_of_test_structures).tolist()
+        return coef_h_raft, coef_w_raft, coef_h_raft_all
+    else:
+        return coef_h_raft, coef_w_raft
 
 
 def minmax_temperature(material: Material, machine: Machine, number_of_test_structures: int):
@@ -352,9 +353,11 @@ def get_test_structure_size(machine):
     return test_structure_size
 
 
-def q_v(path_height, path_width, speed_printing, extrusion_multiplier = 1):
-    if path_height < path_width / (2 - math.pi / 2):
-        q_v = extrusion_multiplier * speed_printing * (path_height * (path_width - path_height) + math.pi * (path_height / 2) ** 2)
+def flow_rate(height, width, speed_printing, extrusion_multiplier = 1):
+    if height < width / (2 - math.pi / 2):
+        flow_rate = extrusion_multiplier * speed_printing * (height * (width - height) + math.pi * (height / 2) ** 2)
     else:
-        q_v = extrusion_multiplier * speed_printing * path_height * path_width
-    return q_v
+        flow_rate = extrusion_multiplier * speed_printing * height * width
+    return flow_rate
+
+
