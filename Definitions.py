@@ -34,12 +34,12 @@ class Material(object):
     heat_capacity          - specific heat capacity (J/kg/K)
     """
 
-    def __init__(self, name, manufacturer, id = None, size_od: float = None, temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None,
+    def __init__(self, name, manufacturer, id=None, size_od: float=None, temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None,
                  mvr=None, mfi=None, temperature_mfr=None, load_mfr=None, capillary_length_mfr=None, capillary_diameter_mfr=None, time_mfr=None,
                  density_rt=None, lcte=None, heat_capacity=None, *args, **kwargs):
-        self.name = name
-        self.manufacturer = manufacturer
-        self.id = id
+        self.name=name
+        self.manufacturer=manufacturer
+        self.id=id
         self.size_od = size_od
         self.temperature_melting = temperature_melting
         self.temperature_destr = temperature_destr
@@ -68,13 +68,14 @@ class Nozzle(object):
     metal - nozzle metal (e.g. brass or steel)
     """
 
-    def __init__(self, size_id, size_od, size_capillary_length, size_angle, metal, *args, **kwargs):
+    def __init__(self, size_id: float, size_od: float, size_capillary_length: float, size_angle: float, metal: str, size_extruder_id: float, *args, **kwargs):
 
         self.size_id = size_id  # respect the units: mm
         self.size_od = size_od  # respect the units: mm
         self.size_capillary_length = size_capillary_length  # respect the units: mm
         self.size_angle = math.radians(size_angle)  # respect the units: conversion from angles to radians
         self.metal = metal
+        self.size_extruder_id = size_extruder_id  # respect the units: mm
 
 
 class Ventilators(object):
@@ -128,12 +129,12 @@ class Settings(object):
     retraction_distance - retraction distance (mm)
     """
 
-    def __init__(self, aim = None, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft = None, temperature_extruder_raft=None,
-                 temperature_printbed_raft=None, speed_printing_raft=None, temperature_extruder=None, temperature_printbed=None, extrusion_multiplier=None,
-                 speed_printing=None, retraction_distance = None, retraction_restart_distance = None, retraction_speed = None, coasting_distance = None,
+    def __init__(self, aim=None, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft=None, temperature_extruder_raft=None,
+                 speed_printing_raft=None, temperature_extruder=None, temperature_printbed=None, extrusion_multiplier=None,
+                 speed_printing=None, retraction_distance=None, retraction_restart_distance=None, retraction_speed=None, coasting_distance=None,
                  ventilator_part_cooling=None, ventilator_entry=None, ventilator_exit=None, raft_density=None,
-                 optimize_temperature_printbed = None, optimize_speed_printing = None, optimize_path_height = None, get_path_width = None, get_path_height = None,
-                 perimeter = None, overlap = None, matrix_size = None, layers = None, *args, **kwargs):
+                 optimize_temperature_printbed=None, optimize_speed_printing=None, optimize_path_height=None, get_path_width=None, get_path_height=None,
+                 perimeter=None, overlap=None, matrix_size=None, layers=None, *args, **kwargs):
 
         self.aim = aim
 
@@ -143,15 +144,15 @@ class Settings(object):
         self.path_height = path_height
         self.path_height_raft = path_height_raft
         self.speed_printing = speed_printing
-        self.speed_printing_raft = speed_printing / 2 if speed_printing_raft is None else speed_printing_raft
+        self.speed_printing_raft = speed_printing/2 if speed_printing_raft is None else speed_printing_raft
 
         self.temperature_extruder_raft = temperature_extruder_raft
-        self.temperature_printbed_raft = temperature_printbed_raft
-        self.extrusion_multiplier_raft = 1
+        self.temperature_printbed = temperature_printbed
 
         self.temperature_extruder = temperature_extruder
-        self.temperature_printbed = temperature_printbed
         self.extrusion_multiplier = 1 if extrusion_multiplier is None else extrusion_multiplier
+
+        self.extrusion_multiplier_raft = self.extrusion_multiplier
 
         self.retraction_distance = retraction_distance
         self.retraction_restart_distance = retraction_restart_distance
@@ -193,28 +194,31 @@ class Machine(object):
     heater_power - total heaters power (W)
     """
 
-    def __init__(self, id: str = None, manufacturer: str = None, model: str = None, sn: str = None, size_extruder_id: float = None,
-                 buildarea_maxdim1: float = None, buildarea_maxdim2: float = None, temperature_extruder_max: float = None, moment_max: float = None,
-                 gear_size_od: float = 12, heater_power: float = 80, *args, **kwargs):
+    def __init__(self, id: str=None, manufacturer: str=None, model: str=None, sn: str=None, buildarea_maxdim1: float=None, buildarea_maxdim2: float=None,
+                 temperature_extruder_max: float=None, temperature_extruder_min: float=None,
+                 temperature_printbed_max: float = None, temperature_printbed_min: float = None, moment_max: float=None,
+                 gear_size_od: float=12, heater_power: float=80, *args, **kwargs):
 
         self.id = id
         self.manufacturer = manufacturer
         self.model = model
         self.sn = sn
-        self.size_extruder_id = size_extruder_id  # respect the units: mm
         self.buildarea_maxdim1 = buildarea_maxdim1  # respect the units: mm
         self.buildarea_maxdim2 = buildarea_maxdim2  # respect the units: mm
         self.temperature_extruder_max = temperature_extruder_max  # the maximum achievable temperature: degC
+        self.temperature_extruder_min = temperature_extruder_min  # the minimum achievable temperature: degC
+        self.temperature_printbed_max = temperature_printbed_max  # the maximum achievable temperature: degC
+        self.temperature_printbed_min = temperature_printbed_min  # the minimum achievable temperature: degC
 
         if moment_max is not None: self.moment_max = moment_max  # maximum moment: N m
         if gear_size_od is not None: self.gear_size_od = gear_size_od  # gear radius: m
         if heater_power is not None: self.heater_power = heater_power
+
         self.nozzle = Nozzle(**kwargs["nozzle"])
         self.ventilators = Ventilators(**kwargs["ventilators"])
         self.settings = None
         self.software = Software(**kwargs["software"])
         self.firmware = Firmware(**kwargs["firmware"])
-
 
     def setnozzle(self, size_id: float, size_od: float, size_capillary_length: float, size_angle: float, metal: str):
         self.nozzle = Nozzle(size_id, size_od, size_capillary_length, size_angle, metal)
@@ -230,7 +234,7 @@ class Machine(object):
 
 
 class TestInfo(object):
-    def __init__(self, name: str, parameter: str, units: str, precision: str, number_of_layers: int, number_of_test_structures: int, number_of_substructures: int = None, default_value: list = None):
+    def __init__(self, name: str, parameter: str, units: str, precision: str, number_of_layers: int, number_of_test_structures: int, raft: bool=True, number_of_substructures: int=None, default_value: list=None):
         self.name = name
         self.parameter = parameter
         self.units = units
@@ -238,6 +242,7 @@ class TestInfo(object):
         self.number_of_layers = number_of_layers
         self.number_of_test_structures = number_of_test_structures
         self.number_of_substructures = number_of_substructures
+        self.raft = raft
 
         if default_value is not None:
             self.min_default = default_value[0]
@@ -271,7 +276,7 @@ def minmax_path_height(machine: Machine, number_of_test_structures: int):
     return coef_h_all
 
 
-def minmax_path_width_height_raft(machine: Machine, number_of_test_structures = None):
+def minmax_path_width_height_raft(machine: Machine, number_of_test_structures=None):
     coef_w_max_raft = machine.nozzle.size_od/machine.nozzle.size_id
     coef_w_min_raft = 1.0
 
@@ -308,7 +313,8 @@ def minmax_path_width_height_raft(machine: Machine, number_of_test_structures = 
 
     if number_of_test_structures is not None:
         coef_h_raft_all = np.linspace(0.9*coef_h_min_raft, 1.1*coef_h_max_raft, number_of_test_structures).tolist()
-        return coef_h_raft, coef_w_raft, coef_h_raft_all
+        coef_w_raft_all = np.linspace(0.9*coef_w_min_raft, 1.0*coef_w_max_raft, number_of_test_structures).tolist()
+        return coef_h_raft, coef_w_raft, coef_h_raft_all, coef_w_raft_all
     else:
         return coef_h_raft, coef_w_raft
 
@@ -353,11 +359,18 @@ def get_test_structure_size(machine):
     return test_structure_size
 
 
-def flow_rate(height, width, speed_printing, extrusion_multiplier = 1):
+def flow_rate(height, width, speed_printing, extrusion_multiplier=1):
     if height < width / (2 - math.pi / 2):
         flow_rate = extrusion_multiplier * speed_printing * (height * (width - height) + math.pi * (height / 2) ** 2)
     else:
         flow_rate = extrusion_multiplier * speed_printing * height * width
     return flow_rate
 
+def sum_of_list_elements(some_list, index):
+    result = 0
+    for i, el in enumerate(some_list):
+        result = el + result
+        if i==index:
+            break
+    return result
 

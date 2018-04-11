@@ -11,7 +11,7 @@ Usage:
 """
 #python CLI.py generate-gcode-iso horizontal 4 90 "Carbodeon_Nanodiamond PLA A_1-75_0-8.ini" ISO527-1A.stl
 
-import regex, subprocess
+import re, subprocess
 from docopt import docopt
 from Globals import machine, material, import_json_dict
 from Calculations import shear_rate, pressure_drop, rheology
@@ -54,27 +54,26 @@ if arguments["generate-gcode-iso"]:
     quit()
 
 # Check compatibility
-#check_compatibility(machine, material)
+check_compatibility(machine, material)
 
-# Some calculations
-if machine.settings.optimize_speed_printing:
-    gamma_dot_estimate = shear_rate(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
-    delta_p_estimate, _ = pressure_drop(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
-
-    number_of_iterations = 5
-
-    for dummy0 in range(0, number_of_iterations + 1):
-        gamma_dot, visc, param_power_law = rheology(material, machine, delta_p_estimate, session["number_of_test_structures"])
-        gamma_dot_out = shear_rate(machine, param_power_law[int(len(param_power_law) / 2)])
-        delta_p_out, comment = pressure_drop(machine, param_power_law[int(len(param_power_law) / 2)])
-
-        if dummy0 == number_of_iterations:
-            if quiet:
-                print(comment)
-            plotting_mfr(material, machine, gamma_dot, visc, param_power_law, session["number_of_test_structures"] )
-
-    check_printing_speed_shear_rate(machine, gamma_dot_out, quiet)
-    #check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
+# # Some calculations
+# if machine.settings.optimize_speed_printing:
+#     gamma_dot_estimate = shear_rate(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
+#     delta_p_estimate, _ = pressure_drop(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
+#
+#     number_of_iterations = 5
+#
+#     for dummy0 in range(0, number_of_iterations + 1):
+#         gamma_dot, visc, param_power_law = rheology(material, machine, delta_p_estimate, session["number_of_test_structures"])
+#         gamma_dot_out = shear_rate(machine, param_power_law[int(len(param_power_law) / 2)])
+#         delta_p_out, comment = pressure_drop(machine, param_power_law[int(len(param_power_law) / 2)])
+#
+#         if dummy0 == number_of_iterations:
+#             print(comment)
+#             plotting_mfr(material, machine, gamma_dot, visc, param_power_law, session["number_of_test_structures"] )
+#
+#     check_printing_speed_shear_rate(machine, gamma_dot_out, quiet)
+#     check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
 
 if not verbose:
     clear()
@@ -98,8 +97,7 @@ if import_json_dict["session"]["test_type"] == "A":
     path = str(cwd + gcode_folder + separator() + test_info.name + ' test' + '.gcode')
     ts = TestSetupA(machine, material, test_info, path,
                     min_max_argument=min_max_argument,
-                    min_max_speed_printing=min_max_speed_printing,
-                    raft=True if import_json_dict["settings"]["raft_density"] > 0 else False)
+                    min_max_speed_printing=min_max_speed_printing)
 
     if test_info.name == 'retraction distance':
         retraction_distance(ts)
@@ -119,7 +117,7 @@ elif import_json_dict["session"]["test_type"] == "B": # 'perimeter', 'overlap', 
     ts = TestSetupB(machine, material, test, path,
                     min_max_argument=min_max_argument,
                     min_max_speed_printing=min_max_speed_printing,
-                    raft = True if import_json_dict["settings"]["raft_density"] > 0 else False)
+                    raft=True if import_json_dict["settings"]["raft_density"] > 0 else False)
 
     dimensional_test(ts)
 
@@ -127,7 +125,7 @@ if not quiet:
     if not verbose:
         clear()
     print("Tested Parameter values:")
-    print([round(k,int(regex.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()[::-1]])
+    print([round(k,int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()[::-1]])
     print("Corresponding Volumetric flow rate values (mm3/s):")
     [print(x[::-1]) for x in ts.volumetric_flow_rate]
 
@@ -149,10 +147,8 @@ else:
 if ts.test_name == "retraction distance" or min_max_speed_printing is None:
     tested_speed_values = []
 
-import_json_dict["settings"]["path_width_raft"] = round(ts.coef_w_raft*machine.nozzle.size_id, 2)
-
 current_test = {"test_name": ts.test_name,
-                "tested_parameter_values": [round(k, int(regex.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
+                "tested_parameter_values": [round(k, int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
                 "tested_speed_values": [round(k, 1) for k in tested_speed_values],
                 "selected_parameter_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
                 "selected_speed_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
@@ -176,6 +172,10 @@ if not quiet:
             import_json_dict["settings"]["path_height_raft"] = dummy["selected_parameter_value"]
             import_json_dict["settings"]["path_width_raft"] = np.mean(ts.coef_w_raft) * machine.nozzle.size_id
             import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
+        elif dummy["test_name"] == "first layer width":
+            import_json_dict["settings"]["path_height_raft"] = np.mean(ts.coef_h_raft) * machine.nozzle.size_id
+            import_json_dict["settings"]["path_width_raft"] = dummy["selected_parameter_value"]
+            import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
         elif dummy["test_name"] == "path width":
             import_json_dict["settings"]["path_width"] = dummy["selected_parameter_value"]
             import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
@@ -190,7 +190,8 @@ if not quiet:
             import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
 
     import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["path_height"]/import_json_dict["settings"]["path_width"])),0)
-    with open(cwd + separator("jsons") + material.manufacturer + " " + material.name + " " + "{:.0f}".format(machine.nozzle.size_id*1000) + " um" + ".json", mode="w") as file:
+
+    with open(cwd + separator("jsons") + material.manufacturer + "_" + material.name + "_" + "{:.0f}".format(machine.nozzle.size_id*1000) + "_um" + ".json", mode="w") as file:
         output = json.dumps(import_json_dict, indent=4, sort_keys=False)
         file.write(output)
 

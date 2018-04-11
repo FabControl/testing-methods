@@ -6,7 +6,7 @@ from conversion_dictionary import Params
 
 
 class TestSetupA(object):
-    def __init__(self, machine: Machine, material: Material, test_info: TestInfo, path: str, min_max_argument: list = None, min_max_speed_printing: list = None, raft: bool = None):
+    def __init__(self, machine: Machine, material: Material, test_info: TestInfo, path: str, min_max_argument: list=None, min_max_speed_printing: list=None):
         """
         :param machine:
         :param material:
@@ -32,7 +32,7 @@ class TestSetupA(object):
         self.number_of_layers = test_info.number_of_layers
         self.test_name = test_info.name
 
-        self.coef_h_raft, self.coef_w_raft, self.coef_h_raft_all = minmax_path_width_height_raft(machine, self.number_of_test_structures)
+        self.coef_h_raft, self.coef_w_raft, self.coef_h_raft_all, self.coef_w_raft_all = minmax_path_width_height_raft(machine, self.number_of_test_structures) # TODO
 
         if machine.settings.path_height_raft is not None:
             self.coef_h_raft = machine.settings.path_height_raft/machine.nozzle.size_id
@@ -47,15 +47,17 @@ class TestSetupA(object):
         self.coef_h = [x * machine.settings.path_height / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
         self.coef_w = [x * machine.settings.path_width / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
 
-        self.raft = raft
+        self.raft = test_info.raft
 
-        if raft is False:
+        if self.raft is False:
             self.abs_z = [x * self.coef_h_raft * machine.nozzle.size_id for x in [1] * self.number_of_test_structures]
         else:
             self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
 
         self.extrusion_multiplier = [x * machine.settings.extrusion_multiplier for x in [1] * self.number_of_test_structures]
-        self.extrusion_multiplier_raft = machine.settings.extrusion_multiplier_raft
+        self.extrusion_multiplier_raft = machine.settings.extrusion_multiplier
+
+        self.temperature_printbed = machine.settings.temperature_printbed
         self.temperature_extruder = [x * machine.settings.temperature_extruder for x in [1] * self.number_of_test_structures]
         self.temperature_extruder_raft = machine.settings.temperature_extruder_raft
         self.retraction_speed = machine.settings.retraction_speed
@@ -94,6 +96,21 @@ class TestSetupA(object):
                 self.values = [x * machine.nozzle.size_id for x in self.argument]
                 path_height = self.values
                 path_width = [x * machine.nozzle.size_id for x in [self.coef_w_raft] * self.number_of_test_structures]
+
+            elif self.test_name == 'first layer width':
+                # FIRST LAYER WIDTH test parameters
+                if min_max_argument is None:
+                    self.coef_w = self.coef_w_raft_all
+                else:
+                    self.coef_w = np.linspace(min_max_argument[0]/machine.nozzle.size_id, min_max_argument[1]/machine.nozzle.size_id, self.number_of_test_structures).tolist()
+                self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
+                self.temperature_extruder = self.temperature_extruder_raft
+
+                self.step_x = [x * machine.nozzle.size_id for x in self.coef_w]
+                self.argument = self.coef_w
+                self.values = [x * machine.nozzle.size_id for x in self.argument]
+                path_width = self.values
+                path_height = [x * machine.nozzle.size_id for x in [self.coef_h_raft] * self.number_of_test_structures]
 
             elif self.test_name == 'extrusion temperature':
                 # EXTRUSION TEMPERATURE test parameters
@@ -227,7 +244,7 @@ def addcomment2(argument_list):
                 argument_test_structure = []
 
     for dummy1 in range(0, len(argument_list[0])):
-        addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_name_list[1:], test_precision_list[1:], test_units_list[1:])) + " ---").format(*argument_values[dummy1])
+        addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_name_list[2:], test_precision_list[2:], test_units_list[2:])) + " ---").format(*argument_values[dummy1])
         comment2.append(addcomment2)
 
     return comment2
