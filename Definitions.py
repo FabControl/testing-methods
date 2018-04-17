@@ -1,11 +1,9 @@
-# based on gcodeTools
-import json
-import math
-import os
-
-import jsonpickle
-import numpy as np
 from CLI_helpers import separator
+import json
+import jsonpickle
+import math
+import numpy as np
+import os
 
 header = r'header'
 footer = r'footer'
@@ -366,11 +364,7 @@ def flow_rate(height, width, speed_printing, extrusion_multiplier=1):
         flow_rate = extrusion_multiplier * speed_printing * height * width
     return flow_rate
 
-def sum_of_list_elements(some_list, index):
-    result = 0
-    for i, el in enumerate(some_list):
-        result = el + result
-        if i==index:
-            break
-    return result
 
+def sum_of_list_elements(my_list, index):
+    sum_of_elements = [sum(my_list[0:x + 1]) for x in range(0, index + 1)]
+    return sum_of_elements[-1]

@@ -1,8 +1,8 @@
-from paths import blender_path, slic3r_path, cwd, test_sample_path, gcode_folder
-import subprocess
-from os import system, name, listdir, devnull
 from ast import literal_eval
+from os import system, name, listdir, devnull
+from paths import blender_path, slic3r_path, cwd, test_sample_path, gcode_folder
 import re
+import subprocess
 
 
 def evaluate(input):
@@ -97,7 +97,7 @@ def generate_gcode(orientation: str, count: int, rotation: float or int, file: s
     :return:
     """
     output = cwd + gcode_folder + separator() + file.replace(".stl", ".gcode")
-    geometry = cwd + test_sample_path + separator() + 'export.stl'
+    geometry = cwd + test_sample_path + separator() + file
     subprocess.run([blender_path, "-b", "-P", str(cwd + "stl_modifier.py"), "--", orientation, str(count),
          str(rotation), cwd + test_sample_path + separator() + file, cwd + separator() + test_sample_path], stderr=open(devnull, 'wb'))
     subprocess.run([slic3r_path, "--load", config, "-o", output, "--dont-arrange", geometry])

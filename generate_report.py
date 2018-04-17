@@ -7,14 +7,14 @@ Usage:
     generate_report.py [json_path]
 """
 
+from CLI_helpers import *
+from datetime import datetime
+from docopt import docopt
+import json, os
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, inch, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib.styles import ParagraphStyle
-import json, os
-from datetime import datetime
-from CLI_helpers import *
-from docopt import docopt
 
 arguments = docopt(__doc__)
 if arguments["json_path"]:
@@ -25,7 +25,7 @@ else:
 with open(json_path, mode="r") as file:
     import_json_dict = json.load(file)
 
-file_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' ' + str(import_json_dict["material"]["size_od"]) + ' mm'
+file_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' ' + str(import_json_dict["material"]["size_od"]*1000) + ' um'
 report_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' Ø' + str(import_json_dict["material"]["size_od"]) + ' mm'
 
 doc = SimpleDocTemplate(file_name + '.pdf',

@@ -1,8 +1,9 @@
 from __future__ import print_function
+from conversion_dictionary import Params
 from Definitions import *
 from GcodeStuff import Gplus
+from Globals import test_name_list, test_precision_list, test_units_list
 import numpy as np
-from conversion_dictionary import Params
 
 
 class TestSetupA(object):
@@ -206,8 +207,9 @@ class TestSetupA(object):
         self.volumetric_flow_rate = volumetric_flow_rate
 
         self.title = addtitle(test_info.name, material)
-        self.comment1 = addcomment1(self.values, self.test_info)
-        self.comment2 = addcomment2([self.temperature_extruder, path_height, path_width, self.extrusion_multiplier, self.speed_printing, self.retraction_distance, self.retraction_restart_distance])
+        self.comment1 = addcomment1(self.test_info, self.values)
+        argument_list = [self.temperature_extruder, path_height, path_width, self.extrusion_multiplier, self.speed_printing, self.retraction_distance, self.retraction_restart_distance]
+        self.comment2 = addcomment2(self.test_info, argument_list)
 
         self.g = Gplus(material, machine,
                        outfile=path,
@@ -225,26 +227,17 @@ def addtitle(test_name: str, material: Material):
     return title
 
 
-def addcomment1(values, test_info: TestInfo):
+def addcomment1(test_info: TestInfo, values: list):
     comment1 = str('; --- testing the following ' + test_info.name + ' values: ' + ', '.join((test_info.precision + ' {}').format(*k) for k in zip(values, len(values)*[test_info.units])) + ' ---')
     return comment1
 
 
-def addcomment2(argument_list):
+def addcomment2(test_info: TestInfo, argument_list: list):
     comment2 = []
-    from Globals import test_name_list, test_precision_list, test_units_list
-    # Reshuffle values
-    argument_values = []
-    argument_test_structure = []
-    for index in range(0, len(argument_list[0])):
-        for list in argument_list:
-            argument_test_structure.append(list[index])
-            if list == argument_list[-1]:
-                argument_values.append(argument_test_structure)
-                argument_test_structure = []
 
-    for dummy1 in range(0, len(argument_list[0])):
-        addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_name_list[2:], test_precision_list[2:], test_units_list[2:])) + " ---").format(*argument_values[dummy1])
+    for dummy1 in range(0, test_info.number_of_test_structures):
+        addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_name_list[2:], test_precision_list[2:], test_units_list[2:])) +
+                          " ---").format(*list(map(list, zip(*argument_list)))[dummy1])
         comment2.append(addcomment2)
 
     return comment2

@@ -1,9 +1,9 @@
-import re
-from collections import OrderedDict
-from Globals import import_json_dict as json_dict
 from CLI_helpers import exclusive_write
-import json
+from collections import OrderedDict
 import datetime
+from Globals import import_json_dict as json_dict
+import json
+import re
 
 slicer = str(json_dict["session"]["slicer"]).lower()
 
@@ -135,10 +135,10 @@ elif slicer == "simplify3d":
 
     tree = ET.parse('simplify_config.fff')
     root = tree.getroot()
-    root.attrib["name"] = "{0} {1} {2} for {3} mm nozzle".format(json_dict["material"]["manufacturer"],
+    root.attrib["name"] = "{0} {1} {2} for {3} um nozzle".format(json_dict["material"]["manufacturer"],
                                                                  json_dict["material"]["name"],
                                                                  str(json_dict["material"]["size_od"]).format("{:.2f}"),
-                                                                 str(json_dict["machine"]["nozzle"]["size_id"]).format("{:.2f}"))
+                                                                 str(json_dict["machine"]["nozzle"]["size_id"]*1000))
     root.attrib["version"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     for key, value in relational_dict.items():

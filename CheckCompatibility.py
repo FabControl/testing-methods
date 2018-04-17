@@ -1,5 +1,3 @@
-# hot to implement?
-
 def check_compatibility(machine, material):
 
     if abs(machine.nozzle.size_extruder_id - material.size_od) > 0.2: # Stratasys patent

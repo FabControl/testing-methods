@@ -11,16 +11,14 @@ Usage:
 """
 #python CLI.py generate-gcode-iso horizontal 4 90 "Carbodeon_Nanodiamond PLA A_1-75_0-8.ini" ISO527-1A.stl
 
-import re, subprocess
-from docopt import docopt
-from Globals import machine, material, import_json_dict
-from Calculations import shear_rate, pressure_drop, rheology
 from CheckCompatibility import check_compatibility
 from CLI_helpers import evaluate, clear, extruded_filament, generate_gcode, separator, exclusive_write
 from Definitions import *
-from OptimizeSettings import check_printing_speed_shear_rate, check_printing_speed_pressure
+from datetime import datetime
+from docopt import docopt
+from Globals import machine, material, import_json_dict
 from paths import cwd, gcode_folder
-from Plotting import plotting_mfr
+import re, subprocess
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
 import time
@@ -45,18 +43,22 @@ if __name__ == '__main__':
             raise ValueError("{} not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.".format(slicer_arg))
         quit()
 
-session = import_json_dict["session"]
-start = time.time()
-
 if arguments["generate-gcode-iso"]:
     config = arguments["<config>"]
     generate_gcode(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<file>"], config)
     quit()
 
+session = import_json_dict["session"]
+start = time.time()
+
 # Check compatibility
 check_compatibility(machine, material)
 
 # # Some calculations
+# these functions work, but they need MVI data for them to work
+# from Calculations import shear_rate, pressure_drop, rheology
+# from OptimizeSettings import check_printing_speed_shear_rate, check_printing_speed_pressure
+# from Plotting import plotting_mfr
 # if machine.settings.optimize_speed_printing:
 #     gamma_dot_estimate = shear_rate(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
 #     delta_p_estimate, _ = pressure_drop(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
@@ -156,12 +158,13 @@ current_test = {"test_name": ts.test_name,
                 "parameter_precision": ts.test_info.precision,
                 "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
                 "selected_volumetric_flow_rate_value": evaluate(input("Enter the volumetric flow rate value which corresponds to the best parameter value: ")) if not quiet else 0,
-                "comments": input("Comments: ") if not quiet else 0}
+                "comments": input("Comments: ") if not quiet else 0,
+                "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 previous_tests.append(current_test)
 import_json_dict["session"]["previous_tests"] = previous_tests
 
-if not quiet:
+if not quiet: # TODO Update fill_values.py
     for dummy in import_json_dict["session"]["previous_tests"]:
         if dummy["test_name"] == "printing speed":
             import_json_dict["settings"]["speed_printing"] = dummy["selected_parameter_value"]

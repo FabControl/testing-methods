@@ -111,7 +111,7 @@ test_dict = {'1': TestInfo('first layer height', 'path_height_raft', 'mm', '{:.3
              '5': TestInfo('path width', 'path_width', 'mm', '{:.3f}',
                            number_of_layers=2, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=4, raft=True),
              '6': TestInfo('extrusion multiplier', 'extrusion_multiplier', '-', '{:.3f}',
-                           number_of_layers=2, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=4, raft=True, default_value=[0.75, 1.50]),
+                           number_of_layers=2, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=4, raft=True, default_value=[0.80, 1.40]),
              '7': TestInfo('printing speed', 'speed_printing', 'mm/s', '{:.1f}',
                            number_of_layers=2, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=1, raft=True, default_value=[0.80, 1.75]),
              '8': TestInfo('retraction distance', 'retraction_distance', 'mm', '{:.3f}',
