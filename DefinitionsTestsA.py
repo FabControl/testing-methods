@@ -21,10 +21,8 @@ def wipe(ts: TestSetupA or TestSetupB, full = True):
     ts.g.dwell(5)
     if machine.nozzle.size_id <= 0.4:
         output = "G1 F1000 E2.5; extrude 2.5 mm of material"
-    elif 0.4 < machine.nozzle.size_id <= 0.6:
-        output = "G1 F1000 E5; extrude 5 mm of material"
-    elif machine.nozzle.size_id > 0.6:
-        output = "G1 F1000 E7.5; extrude 7.5 mm of material"
+    else:
+        output = "G1 F1000 E5.0; extrude 5 mm of material"
 
     ts.g.write(output)
     ts.g.dwell(5)

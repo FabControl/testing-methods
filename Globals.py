@@ -10,12 +10,12 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
     "material": {
-        "name": "Arnitel ID2045",
+        "name": "Novamid ID1030",
         "manufacturer": "Nexeo Solutions",
         "id": "123456",
         "size_od": 1.75,
-        "temperature_melting": 158,
-        "temperature_destr": 300,
+        "temperature_melting": 200,
+        "temperature_destr": 320,
         "temperature_vicat": 90, # optional
         "temperature_glass": -35, # optional
         "mvr": 10, # optional
@@ -24,7 +24,7 @@ except:
         "capillary_diameter_mfr": 4, # optional
         "capillary_length_mfr": 8, # optional
         "time_mfr": 10, # optional
-        "density_rt": 1 # optional
+        "density_rt": 1.13 # optional
     },
     "machine": {
         "manufacturer": "Mass Portal",
@@ -33,17 +33,17 @@ except:
         "buildarea_maxdim1": 145,
         "buildarea_maxdim2": 145,
         "max_dimension_z": 200,
-        "temperature_extruder_max": 300,
+        "temperature_extruder_max": 320,
         "temperature_extruder_min": 190,
         "temperature_printbed_max": 115,
         "temperature_printbed_min": 40,
         "nozzle": {
-            "size_id": 0.6,
-            "size_od": 0.84,
-            "size_capillary_length": 5,
-            "size_angle": 60,
+            "size_id": 1.0,
+            "size_od": 1.24,
+            "size_capillary_length": 5, # optional
+            "size_angle": 60, # optional
             "size_extruder_id": 1.95,
-            "metal": "steel"
+            "type": "steel"
         },
         "ventilators": {
              "ventilator_part_cooling": True,
@@ -64,16 +64,16 @@ except:
         "ventilator_part_cooling": 100,
         "ventilator_entry": 0,
         "ventilator_exit": 0,
-        "raft_density": 90,
-        "temperature_printbed": 50,
-        "temperature_extruder_raft": 250,
-        "path_height_raft": 0.3,
-        "path_width_raft": 0.72,
-        "speed_printing_raft": 15,
-        "temperature_extruder": 275,
-        "path_height": 0.2,
-        "path_width": 0.6,
-        "speed_printing": 52.5,
+        "raft_density": 100,
+        "temperature_printbed": 80,
+        "temperature_extruder_raft": 255,
+        "path_height_raft": 0.4,
+        "path_width_raft": 1.0,
+        "speed_printing_raft": 20,
+        "temperature_extruder": 245,
+        "path_height": 0.4,
+        "path_width": 1.0,
+        "speed_printing": 50,
         "extrusion_multiplier": 1,
         "retraction_distance": 5,
         "retraction_restart_distance": 0.0,

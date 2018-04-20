@@ -22,7 +22,7 @@ orientation = argv[0]
 scene = bpy.context.scene
 
 mesh = bpy.data.meshes.new("mesh") # make a new empty mesh
-obj = bpy.data.objects.new("ISO527A", mesh) # link the mesh to an object
+obj = bpy.data.objects.new("ISO527A", mesh) # link the mesh to an object # TODO rename!!!
 scene.objects.link(obj) # link the object to the scene
 imported_object =  bpy.ops.import_mesh.stl(filepath=cwd + object_path, global_scale=0.1) # get the stl file
 obj.select = True  # select the empty object

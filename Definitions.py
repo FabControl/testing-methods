@@ -66,13 +66,13 @@ class Nozzle(object):
     metal - nozzle metal (e.g. brass or steel)
     """
 
-    def __init__(self, size_id: float, size_od: float, size_capillary_length: float, size_angle: float, metal: str, size_extruder_id: float, *args, **kwargs):
+    def __init__(self, size_id: float, size_od: float, size_capillary_length: float, size_angle: float, type: str, size_extruder_id: float, *args, **kwargs):
 
         self.size_id = size_id  # respect the units: mm
         self.size_od = size_od  # respect the units: mm
         self.size_capillary_length = size_capillary_length  # respect the units: mm
         self.size_angle = math.radians(size_angle)  # respect the units: conversion from angles to radians
-        self.metal = metal
+        self.type = type
         self.size_extruder_id = size_extruder_id  # respect the units: mm
 
 
@@ -248,12 +248,19 @@ class TestInfo(object):
 
 
 def minmax_path_width(machine: Machine, number_of_test_structures: int):
-    coef_w_min = 0.90
 
     if machine.nozzle.size_id <= 0.6:
+        coef_w_min = 0.90
         coef_w_max = 1
-    else:
+    if machine.nozzle.size_id > 0.6:
+        coef_w_min = 0.90
         coef_w_max = machine.nozzle.size_od / machine.nozzle.size_id
+    if machine.nozzle.size_id >= 0.8:
+        coef_w_min = 1.0
+        coef_w_max = 1.5 * machine.nozzle.size_od / machine.nozzle.size_id
+    if machine.nozzle.size_id >= 1.0:
+        coef_w_min = 0.9
+        coef_w_max = 1.3 * machine.nozzle.size_od / machine.nozzle.size_id
 
     coef_w_all = np.linspace(coef_w_min, coef_w_max, number_of_test_structures)
     coef_w_mean = (coef_w_min + coef_w_max) / 2
@@ -293,15 +300,11 @@ def minmax_path_width_height_raft(machine: Machine, number_of_test_structures=No
     elif machine.nozzle.size_id == 0.8:
         coef_h_min_raft = 0.30
         coef_h_max_raft = 0.50
-    elif machine.nozzle.size_id == 1.0:
+    elif machine.nozzle.size_id >= 1.0:
+        coef_w_min_raft = 1.0
+        coef_w_max_raft = 2.0
         coef_h_min_raft = 0.30
-        coef_h_max_raft = 0.50
-    elif machine.nozzle.size_id == 1.2:
-        coef_h_min_raft = 0.30
-        coef_h_max_raft = 0.50
-    elif machine.nozzle.size_id == 1.4:
-        coef_h_min_raft = 0.28
-        coef_h_max_raft = 0.50
+        coef_h_max_raft = 0.75
     else:
         coef_h_min_raft = 1 / 4
         coef_h_max_raft = 1 / 2
@@ -347,12 +350,15 @@ def minmax_temperature(material: Material, machine: Machine, number_of_test_stru
 
 
 def get_test_structure_size(machine):
-    if machine.nozzle.size_id > 0.6:
-        test_structure_size = 100
-    if 0.4<machine.nozzle.size_id <=0.6:
+    test_structure_size = 55
+    if machine.nozzle.size_id > 0.3:
         test_structure_size = 75
-    elif machine.nozzle.size_id <= 0.4:
-        test_structure_size = 55
+        if machine.nozzle.size_id > 0.4:
+            test_structure_size = 100
+            # if machine.nozzle.size_id > 0.6:
+            #     test_structure_size = 125
+            #     if machine.nozzle.size_id > 1.0:
+            #         test_structure_size = 150
 
     return test_structure_size
 

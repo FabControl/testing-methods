@@ -67,7 +67,7 @@ main_info = "Manufacturer: " + import_json_dict["material"]["manufacturer"]
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Machine: " + import_json_dict["machine"]["manufacturer"] + " " + import_json_dict["machine"]["model"]+ ", SN: " + str(import_json_dict["machine"]["sn"])
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Nozzle: " + str(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm, " + str(import_json_dict["machine"]["nozzle"]["metal"])
+main_info = "Nozzle: " + str(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm, " + str(import_json_dict["machine"]["nozzle"]["type"])
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Part cooling: " + str(import_json_dict["settings"]["ventilator_part_cooling"]) + " %"
 elements.append(Paragraph(main_info, style=style_text))
@@ -104,16 +104,16 @@ data = [data]
 
 i = 1
 
-for k in performed_tests:
-    new_line = [str(i), k["test_name"], k["units"]]
-    for dummy in k["tested_parameter_values"]:
-        new_line.append(k["parameter_precision"].format(dummy))
+for single_test in performed_tests:
+    new_line = [str(i), single_test["test_name"], single_test["units"]]
+    for dummy in single_test["tested_parameter_values"]:
+        new_line.append(single_test["parameter_precision"].format(dummy))
 
-    new_line.append(k["parameter_precision"].format(k["selected_parameter_value"]))
-    new_line.append("{:.1f}".format(k["selected_speed_value"]))
+    new_line.append(single_test["parameter_precision"].format(single_test["selected_parameter_value"]))
+    new_line.append("{:.1f}".format(single_test["selected_speed_value"]))
 
     try:
-        new_line.append("{:.3f}".format(k["selected_volumetric_flow_rate_value"]))
+        new_line.append("{:.3f}".format(single_test["selected_volumetric_flow_rate_value"]))
     except KeyError:
         pass
     data.append(new_line)

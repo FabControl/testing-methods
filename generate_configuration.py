@@ -100,7 +100,7 @@ if slicer == "prusa":
     configuration["perimeter_extrusion_width"]["value"] = numeral_eval(settings["path_width"])
     configuration["external_perimeter_extrusion_width"]["value"] = numeral_eval(settings["path_width"])
     configuration["extrusion_multiplier"]["value"] = numeral_eval(settings["extrusion_multiplier"])
-    configuration["first_layer_bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed_raft"])
+    configuration["first_layer_bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed"])
     configuration["first_layer_extrusion_width"]["value"] = numeral_eval(settings["path_width_raft"])
     configuration["first_layer_height"]["value"] = numeral_eval(settings["path_height_raft"])
     configuration["first_layer_speed"]["value"] = numeral_eval(settings["speed_printing_raft"])
