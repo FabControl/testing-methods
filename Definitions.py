@@ -76,6 +76,16 @@ class Nozzle(object):
         self.size_extruder_id = size_extruder_id  # respect the units: mm
 
 
+class Printbed(object):
+    """
+    printbed_heatable
+    """
+    def __init__(self, printbed_heatable: bool, temperature_printbed_max: float, temperature_printbed_min: float, *args, **kwargs):
+        self.printbed_heatable = printbed_heatable
+        self.temperature_printbed_max = temperature_printbed_max
+        self.temperature_printbed_min = temperature_printbed_min
+
+
 class Ventilators(object):
     """
     ventilator_part_cooling 
@@ -136,7 +146,7 @@ class Settings(object):
 
         self.aim = aim
 
-        self.material = Material(None, None, None, 1.75)
+        self.material = Material(None, None, None, 1.75) # TODO why 1.75
         self.path_width = path_width
         self.path_width_raft = path_width_raft
         self.path_height = path_height
@@ -217,18 +227,7 @@ class Machine(object):
         self.settings = None
         self.software = Software(**kwargs["software"])
         self.firmware = Firmware(**kwargs["firmware"])
-
-    def setnozzle(self, size_id: float, size_od: float, size_capillary_length: float, size_angle: float, metal: str):
-        self.nozzle = Nozzle(size_id, size_od, size_capillary_length, size_angle, metal)
-
-    def setventilators(self, ventilator_part_cooling: bool, ventilator_entry: bool, ventilator_exit: bool):
-        self.ventilators = Ventilators(ventilator_part_cooling, ventilator_entry, ventilator_exit)
-
-    def setsoftware(self, version: str):
-        self.software = Software(version)
-
-    def setfirmware(self, fw_type, version: str):
-        self.firmware = Firmware(fw_type, version)
+        self.printbed = Printbed(**kwargs["printbed"])
 
 
 class TestInfo(object):
@@ -314,7 +313,7 @@ def minmax_path_width_height_raft(machine: Machine, number_of_test_structures=No
 
     if number_of_test_structures is not None:
         coef_h_raft_all = np.linspace(0.9*coef_h_min_raft, 1.1*coef_h_max_raft, number_of_test_structures).tolist()
-        coef_w_raft_all = np.linspace(0.9*coef_w_min_raft, 1.0*coef_w_max_raft, number_of_test_structures).tolist()
+        coef_w_raft_all = np.linspace(0.95*coef_w_min_raft, 1.15*coef_w_max_raft, number_of_test_structures).tolist()
         return coef_h_raft, coef_w_raft, coef_h_raft_all, coef_w_raft_all
     else:
         return coef_h_raft, coef_w_raft

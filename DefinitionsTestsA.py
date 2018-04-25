@@ -14,7 +14,8 @@ def wipe(ts: TestSetupA or TestSetupB, full = True):
                   z=+2 * ts.coef_h_raft * machine.nozzle.size_id,
                   extrude=False, extrusion_multiplier=0)
 
-    ts.g.set_printbed_temperature(ts.temperature_printbed) if ts.temperature_printbed is not None else ts.g.set_printbed_temperature(40)
+    if hasattr(ts, 'temperature_printbed'):
+        ts.g.set_printbed_temperature(ts.temperature_printbed)
 
     ts.g.write("; --- start to clean the nozzle ---")
     ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
@@ -27,6 +28,7 @@ def wipe(ts: TestSetupA or TestSetupB, full = True):
     ts.g.write(output)
     ts.g.dwell(5)
     ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
+
     if isinstance(ts, TestSetupA):
         ts.g.abs_move(x=+6 * ts.test_structure_size/10,
                       y=-6 * ts.test_structure_size/10,
@@ -96,7 +98,6 @@ def print_raft(ts: TestSetupA):
     raft_density = machine.settings.raft_density/100
     step = ts.coef_w_raft * machine.nozzle.size_id/raft_density  # step size
     step_number = ts.test_structure_size/step
-    #overlap = ts.coef_w_raft * machine.nozzle.size_id/(2*step_number**2 - step_number)
 
     ts.g.move(x=-ts.coef_w_raft * machine.nozzle.size_id/2,
               y=0,
@@ -136,8 +137,9 @@ def print_raft_new(ts: TestSetupA):
     ts.g.home()
     ts.g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
 
-    if ts.temperature_printbed is not None:
+    if hasattr(ts, 'temperature_printbed'):
         ts.g.set_printbed_temperature(ts.temperature_printbed)
+
     ts.g.abs_move(x=0,
                   y=0,
                   z=ts.coef_h_raft * machine.nozzle.size_id,

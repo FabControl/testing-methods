@@ -101,23 +101,23 @@ except:
 # TODO Add to json for report generation
 # TODO Create a similar dict for B tests
 test_dict = {'1': TestInfo('first layer height', 'path_height_raft', 'mm', '{:.3f}',
-                           number_of_layers=1, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=4, raft=False),
+                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=False),
              '2': TestInfo('first layer width', 'path_width_raft', 'mm', '{:.3f}',
-                           number_of_layers=1, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=4, raft=False),
+                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=False),
              '3': TestInfo('extrusion temperature', 'temperature_extruder', 'degC', '{:.0f}',
-                           number_of_layers=2, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=4, raft=True),
+                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
              '4': TestInfo('path height', 'path_height', 'mm', '{:.3f}',
-                           number_of_layers=2, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=4, raft=True),
+                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
              '5': TestInfo('path width', 'path_width', 'mm', '{:.3f}',
-                           number_of_layers=2, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=4, raft=True),
+                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
              '6': TestInfo('extrusion multiplier', 'extrusion_multiplier', '-', '{:.3f}',
-                           number_of_layers=2, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=4, raft=True, default_value=[0.80, 1.40]),
+                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0.80, 1.40]),
              '7': TestInfo('printing speed', 'speed_printing', 'mm/s', '{:.1f}',
-                           number_of_layers=2, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=1, raft=True, default_value=[0.80, 1.75]),
+                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0.80, 1.75]),
              '8': TestInfo('retraction distance', 'retraction_distance', 'mm', '{:.3f}',
-                           number_of_layers=2, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=None, raft=True, default_value=[0., 4]),
+                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=None, raft=True, default_value=[0., 4]),
              '9': TestInfo('retraction restart distance', 'retraction_restart_distance', 'mm', '{:.3f}',
-                           number_of_layers=1, number_of_test_structures=import_json_dict["session"]["number_of_test_structures"], number_of_substructures=4, raft=True, default_value=[0., 0.4])}
+                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0., 0.4])}
 
 test_name_list, test_precision_list, test_units_list = [], [], []
 test_number_list = test_dict.keys()

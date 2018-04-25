@@ -58,7 +58,9 @@ class TestSetupA(object):
         self.extrusion_multiplier = [x * machine.settings.extrusion_multiplier for x in [1] * self.number_of_test_structures]
         self.extrusion_multiplier_raft = machine.settings.extrusion_multiplier
 
-        self.temperature_printbed = machine.settings.temperature_printbed
+        if machine.printbed.printbed_heatable:
+            self.temperature_printbed = machine.settings.temperature_printbed
+
         self.temperature_extruder = [x * machine.settings.temperature_extruder for x in [1] * self.number_of_test_structures]
         self.temperature_extruder_raft = machine.settings.temperature_extruder_raft
 
