@@ -79,8 +79,6 @@ main_info = "Critical overhang angle: " + str(import_json_dict["settings"]["crit
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Extruder temperature (raft): " + str(import_json_dict["settings"]["temperature_extruder_raft"]) + " degC"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Printbed temperature (raft): " + str(import_json_dict["settings"]["temperature_printbed_raft"]) + " degC"
-elements.append(Paragraph(main_info, style=style_text))
 main_info = "Path width (raft): " + str(import_json_dict["settings"]["path_width_raft"]) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Printbed temperature: " + str(import_json_dict["settings"]["temperature_printbed"]) + " degC"
@@ -95,7 +93,7 @@ elements.append(Spacer(1, 0.5*inch))
 
 performed_tests = import_json_dict["session"]["previous_tests"]
 data = [" ", "Test name", "Units"]
-for dummy in range(import_json_dict["settings"]["number_of_test_structures"]):
+for dummy in range(import_json_dict["session"]["number_of_test_structures"]):
     data.append("Tested values")
 data.append("Selected parameter value")
 data.append("Selected printing speed value (mm/s)")
@@ -128,7 +126,7 @@ style = TableStyle([('ALIGN',(0,0),(-1,-1),'CENTER'),
                     ])
 
 colwidths = [20, 110, 50]
-for dummy in range(import_json_dict["settings"]["number_of_test_structures"]):
+for dummy in range(import_json_dict["session"]["number_of_test_structures"]):
     colwidths.append(45)
 colwidths.append(80)
 colwidths.append(80)

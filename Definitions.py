@@ -32,9 +32,7 @@ class Material(object):
     heat_capacity          - specific heat capacity (J/kg/K)
     """
 
-    def __init__(self, name, manufacturer, id=None, size_od: float=None, temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None,
-                 mvr=None, mfi=None, temperature_mfr=None, load_mfr=None, capillary_length_mfr=None, capillary_diameter_mfr=None, time_mfr=None,
-                 density_rt=None, lcte=None, heat_capacity=None, *args, **kwargs):
+    def __init__(self, name, manufacturer, id=None, size_od: float=None, temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None, mvr=None, mfi=None, temperature_mfr=None, load_mfr=None, capillary_length_mfr=None, capillary_diameter_mfr=None, time_mfr=None, density_rt=None, lcte=None, heat_capacity=None, price_eur_per_kg=None, *args, **kwargs):
         self.name=name
         self.manufacturer=manufacturer
         self.id=id
@@ -53,7 +51,7 @@ class Material(object):
         self.lcte = lcte
         self.load_mfr = load_mfr  # respect the units: kg
         self.heat_capacity = heat_capacity  # respect the units: J / K / g
-
+        self.price_eur_per_kg = price_eur_per_kg
 
 class Nozzle(object):
     """
@@ -202,10 +200,8 @@ class Machine(object):
     heater_power - total heaters power (W)
     """
 
-    def __init__(self, id: str=None, manufacturer: str=None, model: str=None, sn: str=None, buildarea_maxdim1: float=None, buildarea_maxdim2: float=None,
-                 temperature_extruder_max: float=None, temperature_extruder_min: float=None,
-                 temperature_printbed_max: float = None, temperature_printbed_min: float = None, moment_max: float=None,
-                 gear_size_od: float=12, heater_power: float=80, *args, **kwargs):
+    def __init__(self, id: str=None, manufacturer: str=None, model: str=None, sn: str=None, buildarea_maxdim1: float=None, buildarea_maxdim2: float=None, temperature_extruder_max: float=None, temperature_extruder_min: float=None,
+                 temperature_printbed_max: float = None, temperature_printbed_min: float = None, moment_max: float=None, gear_size_od: float=12, heater_power: float=80, *args, **kwargs):
 
         self.id = id
         self.manufacturer = manufacturer
@@ -247,7 +243,6 @@ class TestInfo(object):
 
 
 def minmax_path_width(machine: Machine, number_of_test_structures: int):
-
     if machine.nozzle.size_id <= 0.6:
         coef_w_min = 0.90
         coef_w_max = 1
@@ -256,7 +251,7 @@ def minmax_path_width(machine: Machine, number_of_test_structures: int):
         coef_w_max = machine.nozzle.size_od / machine.nozzle.size_id
     if machine.nozzle.size_id >= 0.8:
         coef_w_min = 1.0
-        coef_w_max = 1.5 * machine.nozzle.size_od / machine.nozzle.size_id
+        coef_w_max = 1.15 * machine.nozzle.size_od / machine.nozzle.size_id
     if machine.nozzle.size_id >= 1.0:
         coef_w_min = 0.9
         coef_w_max = 1.3 * machine.nozzle.size_od / machine.nozzle.size_id

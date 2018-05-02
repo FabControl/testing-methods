@@ -74,8 +74,8 @@ class TestSetupA(object):
 
         self.number_of_lines = int(1.25*(self.test_structure_size / (2 * self.number_of_test_structures + 1))/(np.mean(self.coef_w) * machine.nozzle.size_id))
 
-        path_height = [x * machine.nozzle.size_id for x in self.coef_h]
-        path_width = [x * machine.nozzle.size_id for x in self.coef_w]
+        self.path_height = [x * machine.nozzle.size_id for x in self.coef_h]
+        self.path_width = [x * machine.nozzle.size_id for x in self.coef_w]
 
         if self.number_of_lines % 4 == 0:
             pass
@@ -100,9 +100,9 @@ class TestSetupA(object):
             self.argument = self.coef_h
             self.values = [x * machine.nozzle.size_id for x in self.argument]
 
-            path_height = self.values
-            path_width = [x * machine.nozzle.size_id for x in [self.coef_w_raft] * self.number_of_test_structures]
-            self.step_x = path_width
+            self.path_height = self.values
+            self.path_width = [x * machine.nozzle.size_id for x in [self.coef_w_raft] * self.number_of_test_structures]
+            self.step_x = self.path_width
 
         elif self.test_name == 'first layer width':
             # FIRST LAYER WIDTH test parameters
@@ -116,8 +116,8 @@ class TestSetupA(object):
             self.argument = self.coef_w
             self.values = [x * machine.nozzle.size_id for x in self.argument]
 
-            path_width = self.values
-            path_height = [x * machine.nozzle.size_id for x in [self.coef_h_raft] * self.number_of_test_structures]
+            self.path_width = self.values
+            self.path_height = [x * machine.nozzle.size_id for x in [self.coef_h_raft] * self.number_of_test_structures]
             self.step_x = [x * machine.nozzle.size_id for x in self.coef_w]
 
         elif self.test_name == 'extrusion temperature':
@@ -138,7 +138,7 @@ class TestSetupA(object):
             self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
             self.argument = self.coef_h
             self.values = [x * machine.nozzle.size_id for x in self.argument]
-            path_height = self.values
+            self.path_height = self.values
 
         elif self.test_name == 'path width':
             # PATH WIDTH test parameters
@@ -149,7 +149,7 @@ class TestSetupA(object):
             self.step_x = [x * machine.nozzle.size_id for x in self.coef_w]
             self.argument = self.coef_w
             self.values = [x * machine.nozzle.size_id for x in self.argument]
-            path_width = self.values
+            self.path_width = self.values
 
         elif self.test_name == 'extrusion multiplier':
             # EXTRUSION MULTIPLIER test parameters
@@ -190,6 +190,13 @@ class TestSetupA(object):
             self.argument = self.retraction_restart_distance
             self.values = self.argument
 
+        elif self.test_name == 'bridging':
+            # BRIDGING test parameters
+            self.extrusion_multiplier_bridging = np.linspace(0.75*np.mean(self.extrusion_multiplier), 1.25*np.mean(self.extrusion_multiplier), self.number_of_test_structures).tolist()
+            self.speed_printing_bridging = np.linspace(0.75 * np.mean(self.speed_printing), 1.25 * np.mean(self.speed_printing), self.number_of_substructures).tolist()
+            self.argument = self.retraction_restart_distance
+            self.values = self.argument
+
         else:
             print('Unknown test')
             raise ValueError("{} is not a valid test.".format(test_info.name))
@@ -206,7 +213,7 @@ class TestSetupA(object):
 
         for speed in self.min_max_speed_printing:
             for dummy in range(self.number_of_test_structures if self.test_name != "printing speed" else 1):
-                value = round(flow_rate(path_height[dummy], path_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
+                value = round(flow_rate(self.path_height[dummy], self.path_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
                 volumetric_flow_rate_row.append(value)
                 if dummy == self.number_of_test_structures-1 or self.test_name == "printing speed":
                     volumetric_flow_rate.append(volumetric_flow_rate_row)
@@ -215,7 +222,7 @@ class TestSetupA(object):
 
         self.title = addtitle(test_info.name, material)
         self.comment1 = addcomment1(self.test_info, self.values)
-        argument_list = [self.temperature_extruder, path_height, path_width, self.extrusion_multiplier, self.speed_printing, self.retraction_distance, self.retraction_restart_distance]
+        argument_list = [self.temperature_extruder, self.path_height, self.path_width, self.extrusion_multiplier, self.speed_printing, self.retraction_distance, self.retraction_restart_distance]
         self.comment2 = addcomment2(self.test_info, argument_list)
 
         self.g = Gplus(material, machine,
@@ -243,7 +250,7 @@ def addcomment2(test_info: TestInfo, argument_list: list):
     comment2 = []
 
     for dummy1 in range(0, test_info.number_of_test_structures):
-        addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_name_list[2:], test_precision_list[2:], test_units_list[2:])) +
+        addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_name_list[2:-1], test_precision_list[2:-1], test_units_list[2:-1])) +
                           " ---").format(*list(map(list, zip(*argument_list)))[dummy1])
         comment2.append(addcomment2)
 

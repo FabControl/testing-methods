@@ -32,7 +32,7 @@
         },
         "slic3r": ""
     },
-    "part_cooling": {
+    "ventilator_part_cooling": {
         "kisslicer": "",
         "prusa": {
             "modifier": "1 if x != 0 else 0",
@@ -203,18 +203,6 @@
         "slic3r": ""
     },
     "temperature_printbed": {
-        "kisslicer": "",
-        "prusa": {
-            "modifier": "",
-            "parameter": "bed_temperature"
-        },
-        "simplify3d": {
-            "modifier": "",
-            "parameter": "Heated Bed"
-        },
-        "slic3r": ""
-    },
-    "temperature_printbed_raft": {
         "kisslicer": "",
         "prusa": {
             "modifier": "",

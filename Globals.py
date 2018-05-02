@@ -94,8 +94,8 @@ except:
         "test_name": 'first layer height',
         "min_max": [0.1, 0.3],
         "min_max_speed": [10, 30],
-        "number_of_test_structures": 7,
-        "slicer": "Prusa Slic3r"
+        "slicer": "Prusa Slic3r",
+        "number_of_test_structures": 7
         }
     }
 # TODO Add to json for report generation
@@ -117,6 +117,8 @@ test_dict = {'1': TestInfo('first layer height', 'path_height_raft', 'mm', '{:.3
              '8': TestInfo('retraction distance', 'retraction_distance', 'mm', '{:.3f}',
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=None, raft=True, default_value=[0., 4]),
              '9': TestInfo('retraction restart distance', 'retraction_restart_distance', 'mm', '{:.3f}',
+                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0., 0.4]),
+             '10': TestInfo('bridging', 'retraction_restart_distance', '-', '{:.3f}',
                            number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0., 0.4])}
 
 test_name_list, test_precision_list, test_units_list = [], [], []

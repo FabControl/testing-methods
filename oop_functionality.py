@@ -2,7 +2,7 @@ import math
 import numpy as np
 
 import slicing_functionality as sf
-from Globals import machine, g
+from Globals import machine
 
 path = "gcode.gcode"
 tests = {}

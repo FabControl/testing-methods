@@ -14,9 +14,12 @@ Usage:
 from CheckCompatibility import check_compatibility
 from CLI_helpers import evaluate, clear, extruded_filament, generate_gcode, separator, exclusive_write
 from Definitions import *
+from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance, bridging_test
+#from DefinitionsTestsB import dimensional_test TODO not working at all
 from datetime import datetime
 from docopt import docopt
 from Globals import machine, material, import_json_dict
+from Globals import test_number_list, test_name_list, test_dict
 from paths import cwd, gcode_folder
 import re, subprocess
 from TestSetupA import TestSetupA
@@ -26,6 +29,33 @@ import time
 quiet = True
 verbose = True
 flash = False
+
+def initialize_test():
+    path = str(cwd + gcode_folder + separator() + test_info.name + ' test' + '.gcode')
+
+    if import_json_dict["session"]["test_type"] == "A":
+        ts = TestSetupA(machine, material, test_info, path,
+                        min_max_argument=min_max_argument,
+                        min_max_speed_printing=min_max_speed_printing)
+
+        if test_info.name == 'retraction distance':
+            retraction_distance(ts)
+        elif test_info.name == 'retraction restart distance':
+            retraction_restart_distance_vs_coasting_distance(ts)
+        elif test_info.name == 'bridging':
+            bridging_test(ts)
+        else:
+            flat_test_single_parameter_vs_speed_printing(ts)
+
+    elif import_json_dict["session"]["test_type"] == "B":  # 'perimeter', 'overlap', 'path height', 'temperature'
+        ts = TestSetupB(machine, material, test_info, path,
+                        min_max_argument=min_max_argument,
+                        min_max_speed_printing=min_max_speed_printing,
+                        raft=True if import_json_dict["settings"]["raft_density"] > 0 else False)
+
+        dimensional_test(ts)
+
+    return ts
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='MP Feedstock Testing Suite')
@@ -80,51 +110,64 @@ check_compatibility(machine, material)
 if not verbose:
     clear()
 
-if import_json_dict["session"]["test_type"] == "A":
-
-    from Globals import test_number_list, test_name_list, test_dict
-    test_number = import_json_dict["session"]["test_name"] if quiet else int(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number_list, test_name_list)) + ": "))
-    test_info = test_dict[str(test_number)]
-
-    min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: ")) if not quiet else session["min_max"]
-    min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
+if quiet:
+    test_info = test_dict[str(import_json_dict["session"]["test_name"])]
+    min_max_argument = session["min_max"] if session["min_max"] != "" else None
+    session["number_of_test_structures"] = test_info.number_of_test_structures
 
     if test_info.name == 'retraction distance':
         min_max_speed_printing = [import_json_dict["settings"]["speed_printing"]] * 4
     elif test_info.name == 'printing speed':
         min_max_speed_printing = None
     else:
-        min_max_speed_printing = evaluate(input("Printing speed range values [min, max] or None: ")) if not quiet else session["min_max_speed"]
+        min_max_speed_printing = session["min_max_speed"]
 
-    from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance
-    path = str(cwd + gcode_folder + separator() + test_info.name + ' test' + '.gcode')
-    ts = TestSetupA(machine, material, test_info, path,
-                    min_max_argument=min_max_argument,
-                    min_max_speed_printing=min_max_speed_printing)
+    ts = initialize_test()
+
+    # Add a step for selecting/approving of the result
+    previous_tests = import_json_dict["session"]["previous_tests"]
+
+    if ts.test_name == "printing speed":
+        tested_speed_values = ts.get_values()
+    elif ts.test_name == "retraction distance":
+        tested_speed_values = []
+    else:
+        tested_speed_values = import_json_dict["settings"][
+            "speed_printing"] if min_max_speed_printing is None else ts.min_max_speed_printing
+
+    if ts.test_name == "retraction distance" or min_max_speed_printing is None:
+        tested_speed_values = []
+
+    current_test = {"test_name": ts.test_name,
+                    "tested_parameter_values": [round(k, int(re.search("[0-9]", ts.test_info.precision).group())) for k in ts.get_values()],
+                    "tested_speed_values": [round(k, 1) for k in tested_speed_values],
+                    "selected_parameter_value": 0,
+                    "selected_speed_value": 0,
+                    "units": ts.test_info.units,
+                    "parameter_precision": ts.test_info.precision,
+                    "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
+                    "selected_volumetric_flow_rate_value": 0,
+                    "comments": 0,
+                    "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+    previous_tests.append(current_test)
+    import_json_dict["session"]["previous_tests"] = previous_tests
+
+else:
+    test_info = test_dict[str(int(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number_list, test_name_list)) + ": ")))]
+    min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: "))
+    min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
+    session["number_of_test_structures"] = test_info.number_of_test_structures
 
     if test_info.name == 'retraction distance':
-        retraction_distance(ts)
-    elif test_info.name == 'retraction restart distance':
-        retraction_restart_distance_vs_coasting_distance(ts)
+        min_max_speed_printing = [import_json_dict["settings"]["speed_printing"]] * 4
+    elif test_info.name == 'printing speed':
+        min_max_speed_printing = None
     else:
-        flat_test_single_parameter_vs_speed_printing(ts)
+        min_max_speed_printing = evaluate(input("Printing speed range values [min, max] or None: "))
 
-elif import_json_dict["session"]["test_type"] == "B": # 'perimeter', 'overlap', 'path height', 'temperature'
-    test = 'temperature'  # 'overlap', 'path height']  # TODO top bottom layers, infill?
-    min_max_argument = [270, 300]
-    min_max_speed_printing = [30, 75]  # check the jerk value
+    ts = initialize_test()
 
-    from DefinitionsTestsB import dimensional_test
-    path = str(cwd + gcode_folder + separator() + test + ' test' + '.gcode')
-
-    ts = TestSetupB(machine, material, test, path,
-                    min_max_argument=min_max_argument,
-                    min_max_speed_printing=min_max_speed_printing,
-                    raft=True if import_json_dict["settings"]["raft_density"] > 0 else False)
-
-    dimensional_test(ts)
-
-if not quiet:
     if not verbose:
         clear()
     print("Tested Parameter values:")
@@ -137,35 +180,34 @@ if not quiet:
         min_max_speed_printing = ts.min_max_speed_printing
         print([round(k, 1) for k in min_max_speed_printing])
 
-# Add a step for selecting/approving of the result
-previous_tests = import_json_dict["session"]["previous_tests"]
+    # Add a step for selecting/approving of the result
+    previous_tests = import_json_dict["session"]["previous_tests"]
 
-if ts.test_name == "printing speed":
-    tested_speed_values = ts.get_values()
-elif ts.test_name == "retraction distance":
-    tested_speed_values = []
-else:
-    tested_speed_values = import_json_dict["settings"]["speed_printing"] if min_max_speed_printing is None else ts.min_max_speed_printing
+    if ts.test_name == "printing speed":
+        tested_speed_values = ts.get_values()
+    elif ts.test_name == "retraction distance":
+        tested_speed_values = []
+    else:
+        tested_speed_values = import_json_dict["settings"]["speed_printing"] if min_max_speed_printing is None else ts.min_max_speed_printing
 
-if ts.test_name == "retraction distance" or min_max_speed_printing is None:
-    tested_speed_values = []
+    if ts.test_name == "retraction distance" or min_max_speed_printing is None:
+        tested_speed_values = []
 
-current_test = {"test_name": ts.test_name,
-                "tested_parameter_values": [round(k, int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
-                "tested_speed_values": [round(k, 1) for k in tested_speed_values],
-                "selected_parameter_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
-                "selected_speed_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
-                "units": ts.test_info.units,
-                "parameter_precision": ts.test_info.precision,
-                "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
-                "selected_volumetric_flow_rate_value": evaluate(input("Enter the volumetric flow rate value which corresponds to the best parameter value: ")) if not quiet else 0,
-                "comments": input("Comments: ") if not quiet else 0,
-                "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+    current_test = {"test_name": ts.test_name,
+                    "tested_parameter_values": [round(k, int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
+                    "tested_speed_values": [round(k, 1) for k in tested_speed_values],
+                    "selected_parameter_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
+                    "selected_speed_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
+                    "units": ts.test_info.units,
+                    "parameter_precision": ts.test_info.precision,
+                    "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
+                    "selected_volumetric_flow_rate_value": evaluate(input("Enter the volumetric flow rate value which corresponds to the best parameter value: ")) if not quiet else 0,
+                    "comments": input("Comments: ") if not quiet else 0,
+                    "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-previous_tests.append(current_test)
-import_json_dict["session"]["previous_tests"] = previous_tests
+    previous_tests.append(current_test)
+    import_json_dict["session"]["previous_tests"] = previous_tests
 
-if not quiet: # TODO Update fill_values.py
     for dummy in import_json_dict["session"]["previous_tests"]:
         if dummy["test_name"] == "printing speed":
             import_json_dict["settings"]["speed_printing"] = dummy["selected_parameter_value"]

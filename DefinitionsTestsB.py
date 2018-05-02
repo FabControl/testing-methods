@@ -1,4 +1,3 @@
-import Definitions
 from TestSetupB import TestSetupB
 import slicing_functionality as sf
 from Definitions import *

@@ -397,3 +397,90 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
     ts.g.teardown()
 
     return
+
+
+# GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER vs. PRINTING SPEED
+def bridging_test(ts: TestSetupA):
+    ts.g.write(ts.title)
+    ts.g.write(ts.comment1)
+    wipe(ts)
+
+    if ts.raft:
+        print_raft(ts)  # print the raft to support the test structure
+
+    ts.g.write("; --- start to print the test structure ---")
+    ts.g.feed(machine.settings.speed_printing)
+
+    angle = 45
+    perimeter = 4
+    height = 3
+    number_of_layers = int(height/np.mean(ts.path_height))
+    step_x = ts.test_structure_size/((ts.number_of_test_structures + 1)/2)/2
+    step_y = ts.test_structure_size/ts.number_of_substructures - perimeter*np.mean(ts.path_width)/np.cos(np.deg2rad(angle))
+
+    # Building support structures
+    for current_layer in range(number_of_layers):
+        ts.g.abs_travel(x=+ts.test_structure_size/2,
+                        y=-ts.test_structure_size/2,
+                        z=+np.mean(ts.abs_z)+current_layer*np.mean(ts.path_height), lift=1)
+        for current_substructure in range(ts.number_of_substructures):
+            for current_perimeter_line in range(perimeter):
+                for current_l_structure in range(int((ts.number_of_test_structures + 1)/2)):
+                    ts.g.move(x=(-1)**(current_perimeter_line + 1)*step_x,
+                              y=+step_y,
+                              z=0,
+                              extrude=True, extrusion_multiplier=np.mean(ts.extrusion_multiplier))
+                    ts.g.move(x=(-1)**(current_perimeter_line + 1)*step_x,
+                              y=-step_y,
+                              z=0,
+                              extrude=True, extrusion_multiplier=np.mean(ts.extrusion_multiplier))
+                if current_perimeter_line != range(perimeter)[-1]:
+                    ts.g.move(x=0,
+                              y=+np.mean(ts.path_width)/np.sin(np.deg2rad(angle)),
+                              z=0,
+                              extrude=False, extrusion_multiplier=0)
+            if current_substructure != range(ts.number_of_substructures)[-1]:
+                ts.g.move(x=0,
+                          y=+step_y,
+                          z=0,
+                          extrude=False, extrusion_multiplier=0)
+
+    ts.g.move(x=0,
+              y=-perimeter*np.mean(ts.path_width)/np.cos(np.deg2rad(angle))/4,
+              z=np.mean(ts.path_height),
+              extrude=False, extrusion_multiplier=0)
+
+    ts.g.write("starting")
+
+    # Printing bridges
+    for current_speed_value in ts.speed_printing_bridging:
+        ts.g.feed(current_speed_value)
+        for index, current_extrusion_multiplier_value in enumerate(ts.extrusion_multiplier_bridging):
+            for step in range(int(step_y/np.mean(ts.path_width))):
+                ts.g.move(x=(-1)**(step + 1)*2*step_x*((step_y - step*np.mean(ts.path_width))/step_y),
+                          y=0,
+                          z=0,
+                          extrude=True, extrusion_multiplier=current_extrusion_multiplier_value)
+                if step != range(int(step_y/np.mean(ts.path_width)))[-1]:
+                    ts.g.move(x=0,
+                              y=(-1)**(index)*np.mean(ts.path_width),
+                              z=0,
+                              extrude=False, extrusion_multiplier=current_extrusion_multiplier_value)
+                    ts.g.move(x=(-1)**step*np.mean(ts.path_width)*step_x/step_y,
+                              y=0,
+                              z=0,
+                              extrude=False, extrusion_multiplier=current_extrusion_multiplier_value)
+                else:
+                    ts.g.move(x=(-1)**(step)*2*step_x*((step_y - step*np.mean(ts.path_width))/step_y)/2,
+                              y=0,
+                              z=0,
+                              extrude=True, extrusion_multiplier=current_extrusion_multiplier_value)
+        ts.g.travel(x=+ts.number_of_test_structures*step_x,
+                    y=-2*step_y-perimeter*np.mean(ts.path_width)/np.cos(np.deg2rad(angle))/2,
+                    z=0,
+                    lift=1,
+                    retraction_speed=ts.retraction_speed,
+                    retraction_distance=np.mean(ts.retraction_distance),
+                    extrude=False, extrusion_multiplier=0)
+
+    return
