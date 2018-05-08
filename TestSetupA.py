@@ -192,9 +192,12 @@ class TestSetupA(object):
 
         elif self.test_name == 'bridging':
             # BRIDGING test parameters
-            self.extrusion_multiplier_bridging = np.linspace(0.75*np.mean(self.extrusion_multiplier), 1.25*np.mean(self.extrusion_multiplier), self.number_of_test_structures).tolist()
-            self.speed_printing_bridging = np.linspace(0.75 * np.mean(self.speed_printing), 1.25 * np.mean(self.speed_printing), self.number_of_substructures).tolist()
-            self.argument = self.retraction_restart_distance
+            if min_max_argument is None:
+                self.extrusion_multiplier_bridging = np.linspace(test_info.min_default, test_info.max_default, self.number_of_test_structures).tolist()
+            else:
+                self.extrusion_multiplier_bridging = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
+
+            self.argument = self.extrusion_multiplier_bridging
             self.values = self.argument
 
         else:
@@ -202,9 +205,7 @@ class TestSetupA(object):
             raise ValueError("{} is not a valid test.".format(test_info.name))
 
         if min_max_speed_printing is not None:
-            self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], 4).tolist()
-        elif self.test_name != "first layer height":
-            self.min_max_speed_printing = self.speed_printing
+            self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], self.number_of_substructures).tolist()
         if self.test_name == "retraction distance":
             self.min_max_speed_printing = [self.speed_printing[0]]
 
@@ -220,9 +221,9 @@ class TestSetupA(object):
                     volumetric_flow_rate_row = []
         self.volumetric_flow_rate = volumetric_flow_rate
 
-        self.title = addtitle(test_info.name, material)
+        self.title = addtitle(test_info, material, machine)
         self.comment1 = addcomment1(self.test_info, self.values)
-        argument_list = [self.temperature_extruder, self.path_height, self.path_width, self.extrusion_multiplier, self.speed_printing, self.retraction_distance, self.retraction_restart_distance]
+        argument_list = [self.temperature_extruder, self.path_height, self.path_width, self.extrusion_multiplier, self.speed_printing, self.retraction_distance, self.retraction_restart_distance, self.extrusion_multiplier_bridging]
         self.comment2 = addcomment2(self.test_info, argument_list)
 
         self.g = Gplus(material, machine,
@@ -236,13 +237,13 @@ class TestSetupA(object):
         return [round(value, 3) for value in self.values]
 
 
-def addtitle(test_name: str, material: Material):
-    title = str("; --- 2D test for " + test_name + " of {0} from {1} (ID: {2}) ---".format(material.name, material.manufacturer, material.id))
+def addtitle(test_info: TestInfo, material: Material, machine: Machine):
+    title = str("; --- 2D test for " + test_info.parameter + " of {0} from {1} (ID: {2}) using {3} {4} (SN: {5}) and {6} mm {7} nozzle---".format(material.name, material.manufacturer, material.id, machine.manufacturer, machine.model, machine.sn, machine.nozzle.size_id, machine.nozzle.type))
     return title
 
 
 def addcomment1(test_info: TestInfo, values: list):
-    comment1 = str('; --- testing the following ' + test_info.name + ' values: ' + ', '.join((test_info.precision + ' {}').format(*k) for k in zip(values, len(values)*[test_info.units])) + ' ---')
+    comment1 = str('; --- testing the following ' + test_info.parameter + ' values: ' + ', '.join((test_info.precision + ' {}').format(*k) for k in zip(values, len(values)*[test_info.units])) + ' ---')
     return comment1
 
 
@@ -250,7 +251,7 @@ def addcomment2(test_info: TestInfo, argument_list: list):
     comment2 = []
 
     for dummy1 in range(0, test_info.number_of_test_structures):
-        addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_name_list[2:-1], test_precision_list[2:-1], test_units_list[2:-1])) +
+        addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_name_list[2:], test_precision_list[2:], test_units_list[2:])) +
                           " ---").format(*list(map(list, zip(*argument_list)))[dummy1])
         comment2.append(addcomment2)
 

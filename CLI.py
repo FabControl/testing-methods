@@ -27,7 +27,7 @@ from TestSetupB import TestSetupB
 import time
 
 quiet = True
-verbose = True
+verbose = False
 flash = False
 
 def initialize_test():

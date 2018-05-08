@@ -269,7 +269,7 @@ def retraction_distance(ts: TestSetupA):
     print_raft(ts) # print the raft to support the test structure
 
     ts.g.write("; --- start to print the test structure ---")
-    ts.g.feed(machine.settings.speed_printing)
+    ts.g.feed(np.mean(ts.speed_printing))
 
     output = str("; --- testing the retraction speed value of {:.3f} mm/s ---".format(ts.retraction_speed))
     ts.g.write(output)
@@ -440,47 +440,52 @@ def bridging_test(ts: TestSetupA):
                               z=0,
                               extrude=False, extrusion_multiplier=0)
             if current_substructure != range(ts.number_of_substructures)[-1]:
-                ts.g.move(x=0,
-                          y=+step_y,
-                          z=0,
-                          extrude=False, extrusion_multiplier=0)
+                ts.g.travel(x=0,
+                            y=+step_y,
+                            z=0,
+                            lift=1,
+                            retraction_speed=ts.retraction_speed,
+                            retraction_distance=np.mean(ts.retraction_distance))
 
-    ts.g.move(x=0,
-              y=-perimeter*np.mean(ts.path_width)/np.cos(np.deg2rad(angle))/4,
-              z=np.mean(ts.path_height),
-              extrude=False, extrusion_multiplier=0)
+    ts.g.travel(x=0,
+                y=-perimeter*np.mean(ts.path_width)/np.cos(np.deg2rad(angle))/4,
+                z=np.mean(ts.path_height),
+                lift=1,
+                retraction_speed=ts.retraction_speed,
+                retraction_distance=np.mean(ts.retraction_distance))
 
     ts.g.write("starting")
 
     # Printing bridges
-    for current_speed_value in ts.speed_printing_bridging:
+    for current_speed_value in ts.min_max_speed_printing:
+        ts.g.write('; --- testing the following bridging speed value: {:.1f} mm/s'.format(current_speed_value))
         ts.g.feed(current_speed_value)
         for index, current_extrusion_multiplier_value in enumerate(ts.extrusion_multiplier_bridging):
+            ts.g.write(ts.comment2[index])
             for step in range(int(step_y/np.mean(ts.path_width))):
-                ts.g.move(x=(-1)**(step + 1)*2*step_x*((step_y - step*np.mean(ts.path_width))/step_y),
+                ts.g.move(x=(-1)**(step + 1)*2*(step_y - step*np.mean(ts.path_width))*step_x/step_y,
                           y=0,
                           z=0,
                           extrude=True, extrusion_multiplier=current_extrusion_multiplier_value)
                 if step != range(int(step_y/np.mean(ts.path_width)))[-1]:
                     ts.g.move(x=0,
-                              y=(-1)**(index)*np.mean(ts.path_width),
+                              y=(-1)**index*np.mean(ts.path_width),
                               z=0,
-                              extrude=False, extrusion_multiplier=current_extrusion_multiplier_value)
+                              extrude=False, extrusion_multiplier=0)
                     ts.g.move(x=(-1)**step*np.mean(ts.path_width)*step_x/step_y,
                               y=0,
                               z=0,
-                              extrude=False, extrusion_multiplier=current_extrusion_multiplier_value)
+                              extrude=False, extrusion_multiplier=0)
                 else:
-                    ts.g.move(x=(-1)**(step)*2*step_x*((step_y - step*np.mean(ts.path_width))/step_y)/2,
+                    ts.g.move(x=(-1)**step*(step_y - step*np.mean(ts.path_width))*step_x/step_y,
                               y=0,
                               z=0,
-                              extrude=True, extrusion_multiplier=current_extrusion_multiplier_value)
+                              extrude=False, extrusion_multiplier=0)
         ts.g.travel(x=+ts.number_of_test_structures*step_x,
                     y=-2*step_y-perimeter*np.mean(ts.path_width)/np.cos(np.deg2rad(angle))/2,
                     z=0,
                     lift=1,
                     retraction_speed=ts.retraction_speed,
-                    retraction_distance=np.mean(ts.retraction_distance),
-                    extrude=False, extrusion_multiplier=0)
+                    retraction_distance=np.mean(ts.retraction_distance))
 
     return
