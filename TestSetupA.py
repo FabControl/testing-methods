@@ -69,6 +69,8 @@ class TestSetupA(object):
         self.retraction_restart_distance = [x * machine.settings.retraction_restart_distance for x in [1] * self.number_of_test_structures]
         self.coasting_distance = [x * machine.settings.coasting_distance for x in [1] * self.number_of_test_structures]
 
+        self.extrusion_multiplier_bridging = [x * 1.0 for x in [1] * self.number_of_test_structures]
+
         self.step_x = [x* np.mean(self.coef_w) * machine.nozzle.size_id for x in [1] * self.number_of_test_structures]
         self.step_y = self.test_structure_size - self.coef_w_raft * machine.nozzle.size_id / 2
 

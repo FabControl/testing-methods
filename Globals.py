@@ -56,6 +56,11 @@ except:
         "firmware": {
             "fw_type": "Repetier",
             "version": "2.0"
+        },
+        "printbed": {
+            "printbed_heatable": False,
+            "temperature_printbed_max": 0,
+            "temperature_printbed_min": 0
         }
     },
     "settings": {
