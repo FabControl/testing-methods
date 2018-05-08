@@ -19,21 +19,21 @@ except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
     "material": {
-        "name": "Novamid ID1030",
-        "manufacturer": "Nexeo Solutions",
+        "name": "PC Plus",
+        "manufacturer": "Polymaker",
         "id": "123456",
         "size_od": 1.75,
-        "temperature_melting": 200,
+        "temperature_melting": 230,
         "temperature_destr": 320,
-        "temperature_vicat": 90, # optional
-        "temperature_glass": -35, # optional
-        "mvr": 10, # optional
+        "temperature_vicat": 130, # optional
+        "temperature_glass": 112, # optional
+        "mvr": 32, # optional
         "load_mfr": 1, # optional
         "temperature_mfr": 220, # optional
         "capillary_diameter_mfr": 4, # optional
         "capillary_length_mfr": 8, # optional
         "time_mfr": 10, # optional
-        "density_rt": 1.13 # optional
+        "density_rt": 1.2 # optional
     },
     "machine": {
         "manufacturer": "Mass Portal",
@@ -44,20 +44,18 @@ except:
         "max_dimension_z": 200,
         "temperature_extruder_max": 320,
         "temperature_extruder_min": 190,
-        "temperature_printbed_max": 115,
-        "temperature_printbed_min": 40,
         "nozzle": {
-            "size_id": 1.0,
-            "size_od": 1.24,
+            "size_id": 0.6,
+            "size_od": 0.84,
             "size_capillary_length": 5, # optional
             "size_angle": 60, # optional
             "size_extruder_id": 1.95,
-            "type": "steel"
+            "type": "brass"
         },
         "ventilators": {
              "ventilator_part_cooling": True,
-             "ventilator_entry": False,
-             "ventilator_exit": False
+             "ventilator_entry": True,
+             "ventilator_exit": True
             },
         "software": {
              "version": "2.1"
@@ -67,29 +65,29 @@ except:
             "version": "2.0"
         },
         "printbed": {
-            "printbed_heatable": False,
-            "temperature_printbed_max": 0,
-            "temperature_printbed_min": 0
+            "printbed_heatable": True,
+            "temperature_printbed_max": 40,
+            "temperature_printbed_min": 115
         }
     },
     "settings": {
         "aim": "aesthetics",
         "optimize_speed_printing": True, # optional
-        "ventilator_part_cooling": 100,
+        "ventilator_part_cooling": 0,
         "ventilator_entry": 0,
         "ventilator_exit": 0,
         "raft_density": 100,
-        "temperature_printbed": 80,
-        "temperature_extruder_raft": 255,
-        "path_height_raft": 0.4,
-        "path_width_raft": 1.0,
-        "speed_printing_raft": 20,
-        "temperature_extruder": 245,
-        "path_height": 0.4,
-        "path_width": 1.0,
-        "speed_printing": 50,
+        "temperature_printbed": 115,
+        "temperature_extruder_raft": 280,
+        "path_height_raft": 0.3,
+        "path_width_raft": 0.6,
+        "speed_printing_raft": 10,
+        "temperature_extruder": 280,
+        "path_height": 0.3,
+        "path_width": 0.6,
+        "speed_printing": 20,
         "extrusion_multiplier": 1,
-        "retraction_distance": 5,
+        "retraction_distance": 4,
         "retraction_restart_distance": 0.0,
         "retraction_speed": 120,
         "coasting_distance": 0.0,
@@ -102,11 +100,11 @@ except:
         "critical_overhang_angle": 36.0
     },
     "session": {
-        "uid": 123456,
+        "uid": 20180508,
         "previous_tests": [],
         "test_type": 'A',
         "test_name": 1,
-        "min_max": [0.1, 0.3],
+        "min_max": None,
         "min_max_speed": [10, 30],
         "slicer": "Prusa Slic3r",
         "number_of_test_structures": 7
