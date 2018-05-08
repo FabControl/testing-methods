@@ -1,11 +1,20 @@
 from Definitions import Material, Settings, Machine, TestInfo, minmax_path_width_height_raft
 import json
+from session_loader import session_id
 
 try:
-    print("Attempting to load the JSON")
-    with open("persistence.json", mode="r") as file:
-        import_json_dict = json.load(file)
-    print("Loaded a testing session ID {} from outer scope".format(import_json_dict["session"]["uid"]))
+    try:
+        print("Attempting to load the persistence file with ID {}".format(session_id))
+        with open("persistence_" + session_id + ".json", mode="r") as file:
+            import_json_dict = json.load(file)
+        print("Loaded a testing session ID {} from outer scope".format(import_json_dict["session"]["uid"]))
+        file.close()
+    except:
+        print("Attempting to load the persistence file without an ID".format(session_id))
+        with open("persistence.json", mode="r") as file:
+            import_json_dict = json.load(file)
+        print("Loaded a testing session ID {} from outer scope".format(import_json_dict["session"]["uid"]))
+        file.close()
 except:
     print("falling back to hardcoded JSON")
     import_json_dict = {
@@ -96,7 +105,7 @@ except:
         "uid": 123456,
         "previous_tests": [],
         "test_type": 'A',
-        "test_name": 'first layer height',
+        "test_name": 1,
         "min_max": [0.1, 0.3],
         "min_max_speed": [10, 30],
         "slicer": "Prusa Slic3r",

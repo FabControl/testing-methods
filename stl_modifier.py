@@ -1,7 +1,7 @@
 """
 Usage:
 
-blender -b -P ISO527A_modifier.py <horizontal|vertical> <count> <rotation_Z> <path> <cwd>
+blender -b -P stl_modifier.py <horizontal|vertical> <count> <rotation_Z> <object_path> <cwd>
 """
 import bpy
 import math

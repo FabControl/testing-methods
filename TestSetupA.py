@@ -1,5 +1,4 @@
 from __future__ import print_function
-from conversion_dictionary import Params
 from Definitions import *
 from GcodeStuff import Gplus
 from Globals import test_name_list, test_precision_list, test_units_list

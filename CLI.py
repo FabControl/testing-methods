@@ -2,7 +2,8 @@
 Mass Portal Feedstock Testing Suite
 Command Line Interface
 Usage:
-    CLI.py [-v] [-q] [--flash]
+    CLI.py [-v] [-q]
+    CLI.py <session-id> [-v] [-q]
     CLI.py new-test
     CLI.py generate-report
     CLI.py generate-configuration <slicer>
@@ -24,11 +25,11 @@ from paths import cwd, gcode_folder
 import re, subprocess
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
+import session_loader
 import time
 
 quiet = True
 verbose = False
-flash = False
 
 def initialize_test():
     path = str(cwd + gcode_folder + separator() + test_info.name + ' test' + '.gcode')
@@ -62,7 +63,7 @@ if __name__ == '__main__':
 
     verbose = arguments["-v"]
     quiet = arguments["-q"]
-    flash = arguments["--flash"]
+    session_id = arguments["<session-id>"]
 
     if arguments["generate-configuration"]:
         slicer_arg = str(arguments["<slicer>"]).lower()
@@ -241,9 +242,14 @@ else:
         output = json.dumps(import_json_dict, indent=4, sort_keys=False)
         file.write(output)
 
-with open(cwd + separator() + "persistence.json", mode="w") as file:
-    output = json.dumps(import_json_dict, indent=4, sort_keys=False)
-    file.write(output)
+if session_id is not None:
+    with open(cwd + separator() + "persistence_" + str(import_json_dict["session"]["uid"]) + ".json", mode="w") as file:
+        output = json.dumps(import_json_dict, indent=4, sort_keys=False)
+        file.write(output)
+else:
+    with open(cwd + separator() + "persistence.json", mode="w") as file:
+        output = json.dumps(import_json_dict, indent=4, sort_keys=False)
+        file.write(output)
 
 end = time.time()
 time_elapsed = end - start
