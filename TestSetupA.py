@@ -170,6 +170,7 @@ class TestSetupA(object):
             else:
                 self.speed_printing = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
             self.argument = self.speed_printing
+            self.min_max_speed_printing = self.speed_printing
             self.values = self.argument
 
         elif self.test_name == 'retraction distance':

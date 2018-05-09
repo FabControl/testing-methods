@@ -28,6 +28,6 @@ def check_compatibility(machine, material):
         if machine.settings.temperature_printbed > machine.printbed.temperature_printbed_max:
             # Compare the preset extrusion temperature and the destruction temperature:
             output = ("The set printbed temperature of {:0.0f} degC is higher than the maximum achievable printbed temperature of {:0.0f} degC"
-                .format(machine.settings.temperature_printbed,machine.temperature_printbed_max))
+                .format(machine.settings.temperature_printbed,machine.printbed.temperature_printbed_max))
             print("Compatibility issue: " + output)
             quit()
