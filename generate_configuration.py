@@ -1,11 +1,15 @@
-from CLI_helpers import exclusive_write
-from collections import OrderedDict
-import datetime
-from Globals import import_json_dict as json_dict
-import json
 import re
+from collections import OrderedDict
+from Globals import import_json_dict as persistence
+from CLI_helpers import exclusive_write
+import json
+import datetime
+from conversion_dictionary import Slicer, Param, Params
 
-slicer = str(json_dict["session"]["slicer"]).lower()
+slicer = str(persistence["session"]["slicer"]).lower()
+
+persistence_flat = dict(persistence["settings"], **persistence["machine"]["nozzle"])
+persistence_flat["material_name"] = persistence["material"]["name"]
 
 
 def numeral_eval(value):
@@ -20,34 +24,33 @@ def numeral_eval(value):
         return value
 
 
-def read_ini(path):
+def read_ini(path: str, output_type: object = OrderedDict):
     """
     Parses an ini file and returns an ordered dictionary with parameters as keys.
     Dict item contains a value and a percentage flag.
-    :param path:
-    :return:
+    :rtype: OrderedDict
+    :param path: path to the ini file to read
+    :return: returns an ordered dict
     """
     with open(path, mode='r') as file:
-        file = file.read()
-        config = re.findall(r'(.+) = ([^%\n]*)(%)?', file)
-        del file
+        config_string = file.read()
+        config = re.findall(r'(.+) = ([^%\n]*)(%)?', config_string)
+        file.close()
 
-    dictionary = OrderedDict()
+    dictionary = OrderedDict() if output_type == OrderedDict else {}
     for x in config:
         dictionary[x[0]] = {"value": numeral_eval(x[1])}
         dictionary[x[0]]["percentage"] = True if "%" in x else False
 
-    config = dictionary
-    del dictionary
-
-    return config
+    return dictionary
 
 
 def assemble_ini(dictionary: OrderedDict):
     """
     Accepts an OrderedDict object, and writes it line by line by iterating through the OrderedDict.
-    :param dictionary:
+    :param dictionary: read_ini()
     :return:
+    :rtype: str
     """
     outstring = ""
     outstring += "# Created with Mass Portal Material Testing Suite\n"
@@ -69,64 +72,36 @@ def output_name(extension: str):
     :param extension:
     :return:
     """
-    output = "{0}_{1}_{2}_{3}.{4}".format(json_dict["material"]["manufacturer"],
-                                          json_dict["material"]["name"],
-                                          "{:.2f}".format(json_dict["material"]["size_od"]).replace(".", "-"),
-                                          "{:.0f} um".format(json_dict["machine"]["nozzle"]["size_id"]*1000).replace(".", "-"),
+    output = "{0}_{1}_{2}_{3}.{4}".format(persistence["material"]["manufacturer"],
+                                          persistence["material"]["name"],
+                                          "{:.2f}".format(persistence["material"]["size_od"]).replace(".", "-"),
+                                          "{:.0f} um".format(persistence["machine"]["nozzle"]["size_id"] * 1000).replace(".", "-"),
                                           extension)
     return output
 
 
-with open("relational_dict.json") as file:
-    relational_dict = json.load(file)
+params = Params("conversion.json")
+defaults = read_ini("config.ini", output_type=dict)
+for key, value in defaults.items():
+    defaults[key] = value["value"]
+params.populate(defaults, auto=True)
+params.populate(persistence_flat, auto=True)
 
-if slicer == "prusa":
+
+if "prusa" in slicer.lower():
     """
     Writes a Prusa Slic3r config
     """
-    settings = json_dict["settings"]
-    material = json_dict["material"]
-    session = json_dict["session"]
+    settings = persistence["settings"]
+    material = persistence["material"]
+    session = persistence["session"]
 
     configuration = read_ini("config.ini")
 
-    configuration["bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed"])
-    configuration["cooling"]["value"] = 1 if settings["ventilator_part_cooling"] != 0 else 0
-    configuration["fan_always_on"]["value"] = 1 if settings["ventilator_part_cooling"] != 0 else 0
-    configuration["extrusion_width"]["value"] = numeral_eval(settings["path_width"])
-    configuration["top_infill_extrusion_width"]["value"] = numeral_eval(1.05*settings["path_width"])
-    configuration["infill_extrusion_width"]["value"] = numeral_eval(settings["path_width"])
-    configuration["solid_infill_extrusion_width"]["value"] = numeral_eval(settings["path_width"])
-    configuration["perimeter_extrusion_width"]["value"] = numeral_eval(settings["path_width"])
-    configuration["external_perimeter_extrusion_width"]["value"] = numeral_eval(settings["path_width"])
-    configuration["extrusion_multiplier"]["value"] = numeral_eval(settings["extrusion_multiplier"])
-    configuration["first_layer_bed_temperature"]["value"] = numeral_eval(settings["temperature_printbed"])
-    configuration["first_layer_extrusion_width"]["value"] = numeral_eval(settings["path_width_raft"])
-    configuration["first_layer_height"]["value"] = numeral_eval(settings["path_height_raft"])
-    configuration["first_layer_speed"]["value"] = numeral_eval(settings["speed_printing_raft"])
-    configuration["first_layer_temperature"]["value"] = numeral_eval(settings["temperature_extruder_raft"])
-    configuration["layer_height"]["value"] = numeral_eval(settings["path_height"])
-    configuration["nozzle_diameter"]["value"] = numeral_eval(json_dict["machine"]["nozzle"]["size_id"])
-    configuration["temperature"]["value"] = numeral_eval(settings["temperature_extruder"])
-    configuration["retract_restart_extra"]["value"] = numeral_eval(settings["retraction_restart_distance"])
-    configuration["retract_length"]["value"] = numeral_eval(settings["retraction_distance"])
-    configuration["retract_speed"]["value"] = numeral_eval(settings["retraction_speed"])
-    configuration["deretract_speed"]["value"] = numeral_eval(settings["retraction_speed"])
-    configuration["perimeter_speed"]["value"] = numeral_eval(0.95*settings["speed_printing"])
-    configuration["external_perimeter_speed"]["value"] = numeral_eval(0.90*settings["speed_printing"])
-    configuration["infill_speed"]["value"] = numeral_eval(0.90*settings["speed_printing"])
-    configuration["solid_infill_speed"]["value"] = numeral_eval(0.90*settings["speed_printing"])
-    configuration["top_solid_infill_speed"]["value"] = numeral_eval(0.90*settings["speed_printing"])
-    configuration["small_perimeter_speed"]["value"] = numeral_eval(0.33*settings["speed_printing"])
-    configuration["filament_diameter"]["value"] = numeral_eval(material["size_od"])
-    configuration["max_volumetric_speed"]["value"] = numeral_eval(session["previous_tests"][-1]["selected_volumetric_flow_rate_value"]) # TODO is not recognized by slicer under filament settings - > advanced
-    configuration["max_print_speed"]["value"] = max(numeral_eval(settings["speed_printing"]),numeral_eval(settings["speed_printing_raft"]))
-    configuration["min_print_speed"]["value"] = min(numeral_eval(settings["speed_printing"]),numeral_eval(settings["speed_printing_raft"]))
-    configuration["max_layer_height"]["value"] = max(numeral_eval(settings["path_height"]),numeral_eval(settings["path_height_raft"]))
-    configuration["min_layer_height"]["value"] = min(numeral_eval(settings["path_height"]),numeral_eval(settings["path_height_raft"]))
-    configuration["support_material_threshold"]["value"] = numeral_eval(settings["critical_overhang_angle"])
-    configuration["external_perimeters_first"]["value"] = 0 if numeral_eval(settings["critical_overhang_angle"]) < 45 else 1
-    configuration["infill_first"]["value"] = 1 if numeral_eval(settings["critical_overhang_angle"]) < 45 else 0
+    for item in configuration:
+        param = params.get(item, mode="prusa")
+        if param is not None:
+            configuration[item]["value"] = param.prusa.value
 
     exclusive_write(output_name("ini"), assemble_ini(configuration))
 
@@ -135,40 +110,23 @@ elif slicer == "simplify3d":
 
     tree = ET.parse('simplify_config.fff')
     root = tree.getroot()
-    root.attrib["name"] = "{0} {1} {2} for {3} um nozzle".format(json_dict["material"]["manufacturer"],
-                                                                 json_dict["material"]["name"],
-                                                                 str(json_dict["material"]["size_od"]).format("{:.2f}"),
-                                                                 str(json_dict["machine"]["nozzle"]["size_id"]*1000))
+    root.attrib["name"] = "{0} {1} {2} for {3} mm nozzle".format(persistence["material"]["manufacturer"],
+                                                                 persistence["material"]["name"],
+                                                                 str(persistence["material"]["size_od"]).format("{:.2f}"),
+                                                                 str(persistence["machine"]["nozzle"]["size_id"]*1000))
     root.attrib["version"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    for key, value in relational_dict.items():
-        foo = root.find(relational_dict[key]["simplify3d"]["parameter"])
+    for param in params.parameters:
+        foo = root.find(param.simplify3d.parameter)
         if foo is None:
-            foo = root.find("extruder").find(relational_dict[key]["simplify3d"]["parameter"])
-        if "temperature" in key:
+            foo = root.find("extruder").find(param.simplify3d.parameter)
+        if "temperature" in param.parameter:
             temp_controllers = root.findall("temperatureController")
             for controller in temp_controllers:
-                if controller.attrib["name"] == relational_dict[key]["simplify3d"]["parameter"]:
+                if controller.attrib["name"] == param.simplify3d.parameter:
                     foo = controller.find("setpoint")
-        if key == "part_cooling":
+        if param.parameter == "part_cooling":
             foo = root.find("fanSpeed").findall("setpoint")[-1]
 
-        if foo is not None:
-            if value["simplify3d"]["modifier"] != "":
-                x = json_dict["settings"][key]
-                if value["simplify3d"]["parent_parameter"] != "":
-                    y = json_dict["settings"][value["simplify3d"]["parent_parameter"]]
-                new_val = numeral_eval(eval(value["simplify3d"]["modifier"]))
-            elif key == "size_id":
-                new_val = numeral_eval(json_dict["machine"]["nozzle"]["size_id"])
-            else:
-                new_val = numeral_eval(json_dict["settings"][key])
-            if foo.text is not None:
-                foo.text = str(new_val)
-            else:
-                if key == "part_cooling":
-                    foo.attrib["speed"] = str(new_val)
-                else:
-                    foo.attrib["temperature"] = str(new_val)
     tree.write(output_name("fff"), xml_declaration=True, encoding="utf-8")
     print("{} succesfully written".format(output_name("fff")))

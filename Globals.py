@@ -127,7 +127,7 @@ test_dict = {'1': TestInfo('first layer height', 'first layer height', 'mm', '{:
              '7': TestInfo('printing speed', 'printing speed', 'mm/s', '{:.1f}',
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0.80, 1.75]),
              '8': TestInfo('retraction distance', 'retraction distance', 'mm', '{:.3f}',
-                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=None, raft=True, default_value=[0., 4]),
+                           number_of_layers=8, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0., 4.]),
              '9': TestInfo('retraction restart distance', 'retraction restart distance', 'mm', '{:.3f}',
                            number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0., 0.4]),
              '10': TestInfo('bridging', 'bridging extrusion multiplier', '-', '{:.3f}',

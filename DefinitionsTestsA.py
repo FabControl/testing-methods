@@ -285,7 +285,7 @@ def retraction_distance(ts: TestSetupA):
         for current_layer in range(0, ts.number_of_layers): # layers
             ts.g.abs_travel(x=+ts.test_structure_size/2 - (sum_of_list_elements(test_structure_width, current_test_structure) + (current_test_structure + 1) * test_structure_separation),
                             y=+ts.test_structure_size/2,
-                            z=+ts.abs_z[current_test_structure],
+                            z=+ts.abs_z[current_test_structure]+current_layer*ts.path_height[current_test_structure],
                             lift=1)
 
             for current_line in range(ts.number_of_lines):

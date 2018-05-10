@@ -1,28 +1,47 @@
-from pprint import pprint
-import pickle
+"""
+Conversion dictionary management tool.
+Usage:
+    conversion_dictionary.py
+    conversion_dictionary.py add-slicer <slicer>
+    conversion_dictionary.py parameter (add <parameter> | modify <parameter> [<slicer>])
+"""
 import json
 import gc
-from CLI_helpers import clear
+from CLI_helpers import clear, round
 import jsonpickle
-from Globals import import_json_dict as values
+from docopt import docopt
 
 gc.enable()  # Enable garbage collection
 with open("relational_dict.json") as file:
     relational_dict = json.load(file)
-    del file
+    file.close()
 
-flat_values = dict(values["settings"], **values["machine"]["nozzle"])  # Needed to unify all relevant values in a single list for convenience
+with open("persistence.json") as file:
+    persistence = json.load(file)
+    file.close()
+
+# Needed to unify all relevant values in a single list for convenience
+flat_values = dict(persistence["settings"], **persistence["machine"]["nozzle"])
+flat_values["material_name"] = persistence["material"]["name"]
+
+"""
+Utility Methods
+"""
 
 
 def numeral_eval(value):
     """
-    Attempts to parse int and float values. Leaves the other values as they are
+    Attempts to parse int and float values. Leaves the other values as they are.
     :param value:
     :return:
     """
     try:
-        return float(value) if not float(value).is_integer() else int(value)
+        return round(float(value)) if not float(value).is_integer() else int(value)
     except ValueError:
+        if value == "":
+            return None
+        return value
+    except:
         return value
 
 
@@ -41,14 +60,15 @@ def generate_dict_entry():
     Generate a dict entry for each value in settings
     """
     new_dictionary = []
-    for key, value in values["settings"]:
-        values[key] = {"prusa": input("%s in %s: " % (key, "prusa")),
-                       "slic3r": "",
-                       "simplify3d": input("%s in %s: " % (key, "simplify3d")),
-                       "kissslicer": ""}
+    for key, value in persistence["settings"]:
+        persistence[key] = {"prusa": input("%s in %s: " % (key, "prusa")),
+                            "slic3r": "",
+                            "simplify3d": input("%s in %s: " % (key, "simplify3d")),
+                            "kissslicer": ""}
         with open("relational_dict.json", mode="w") as file:
             output = json.dumps(new_dictionary, indent=4, sort_keys=True)
             file.write(output)
+            file.close()
 
 
 def assign_modifiers():
@@ -57,6 +77,7 @@ def assign_modifiers():
     """
     with open("relational_dict.json", mode="r") as file:
         input_json = json.load(file)
+        file.close()
 
     for param in input_json:
         for slicer in input_json[param]:
@@ -64,7 +85,8 @@ def assign_modifiers():
                 parameter = input_json[param][slicer]
                 input_json[param][slicer] = {
                     "parameter": input_json[param][slicer],
-                    "modifier": input("%s modifier for %s to derive from %s: " % (param, parameter, values["settings"][param]))}
+                    "modifier": input(
+                        "%s modifier for %s to derive from %s: " % (param, parameter, persistence["settings"][param]))}
                 if input_json[param][slicer]["modifier"] != "":
                     if "y" in input_json[param][slicer]["modifier"]:
                         input_json[param][slicer]["parent_parameter"] = input("Key of the parent parameter: ")
@@ -72,31 +94,36 @@ def assign_modifiers():
         with open("relational_dict2.json", mode="w") as file:
             output = json.dumps(input_json, indent=4, sort_keys=True)
             file.write(output)
+            file.close()
+
+
+"""
+Object constructors
+"""
 
 
 class Slicer(object):
     """
-    Stores slicer specific information and value getter and setter methods
+    A slicer interpreter object. Stores slicer specific information and value getter and setter methods
     """
-
-    def __init__(self, name=None, parameter=None, parent_parameter=None, modifier=None, units=None, root=None, **kwargs):
+    def __init__(self, name: str = None, parameter: str = None, parent_parameter: str = None, modifier: str = None,
+                 units: str = None, root: object = None, reverse_modifier: str = None, **kwargs):
         self.name = name
         self.parameter = parameter
         self.parent_parameter = parent_parameter
         self.modifier = modifier
         self.units = units
         self.root = root
-        self.reverse_modifier = None
+        self.reverse_modifier = reverse_modifier
 
     def _slicer_modifier(self):
         """
         Helper function for returning a modified value, depending on the slicer type.
         :return:
         """
-
-        if self.modifier is not None:
+        if hasattr(self, "modifier") and self.modifier is not None:
             x = self.root.value
-            if self.parent_parameter is not None:
+            if hasattr(self, "parent_parameter") and self.parent_parameter is not None:
                 y = self.root.params.get(self.parent_parameter).value
             result = eval(self.modifier)
             return result
@@ -105,14 +132,13 @@ class Slicer(object):
 
     def _reverse_modifier(self, value):
         """
-        Helper function for changing value in root Param object and all other Slicer objects, if value is changed
-        in on of the Slicer objects. Enables value conversion.
+        Converts root object's value back to root object's respective format.
         :param value: the new value
         :return: converted root value
         """
-        if self.reverse_modifier is not None:
+        if hasattr(self, "reverse_modifier") and self.reverse_modifier is not None:
             x = value
-            if self.parent_parameter is not None:
+            if hasattr(self, "parent_parameter") and self.parent_parameter is not None:
                 y = self.root.params.get(self.parent_parameter).value
             new_value = eval(self.reverse_modifier)
             return new_value
@@ -129,44 +155,210 @@ class Slicer(object):
 
 
 class Params(object):
-    def __init__(self):
-        with open("conversion.json", mode="r") as file:  # This holds the structure of the Param objects in _tests list
-            self._tests = jsonpickle.loads(file.read())
-
-        for x in self._tests:
-            x.value = flat_values[x.parameter]
-        #     slicers = []
-        #     for attr in x.__dir__():
-        #         if isinstance(x.__getattribute__(attr), Slicer):
-        #             slicers.append(x.__getattribute__(attr))
-        #
-        #     print(slicers)
-        #     for slicer in slicers:
-        #         slicer.value = None
-
-        # for x in self._tests:
-        #     del x.value
-        # with open("conversion.json", mode="w") as file:
-        #     file.write(jsonpickle.dumps(self._tests))
+    """
+    Contains all the parameters and methods to retrieve them
+    """
+    def __init__(self, dictionary_path: str):
+        self.supported_slicers = ["prusa", "simplify3d"]
+        self.parameters = []
+        self.load(dictionary_path)
 
     def get(self, keyword: str, mode: str = "parameter"):
         """
-        Returns a Param object if keyword is found in Param.name
+        Returns a Param object if keyword is found in Param.parameter
         :param keyword: a string to look for
         :param mode: attribute in which to look for the keyword
         :return: Param object matching a keyword
         """
-        for x in self._tests:
+        for x in self.parameters:
             if mode == "name":
                 if keyword in x.name:
                     return x
             elif mode == "parameter":
-                if keyword in x.parameter:
+                if keyword == x.parameter:
                     return x
+            elif mode in self.supported_slicers:
+                if hasattr(x, mode):
+                    if keyword == getattr(x, mode).parameter:
+                        return x
             else:
-
-                raise ValueError("%s is not a valid mode" % mode)
+                raise ValueError(
+                    "{} is not a valid search mode. Valid modes are 'parameter', 'name', ".format(mode) + ", ".join(
+                        ["'{}'".format(x) for x in self.supported_slicers]) + ".")
         return None
+
+    def add_parameter(self, parameter: str):
+        """
+        A CLI interface for adding a new parameter and its respective slicer interpretations.
+        Slicers listed in self.supported_slicers are offered.
+        :param parameter:
+        :return:
+        """
+        param = Param(parameter, self)
+        for slicer in self.supported_slicers:
+            clear()
+            temp_slicer = Slicer(root=param)
+            print("Creating a {} interpretation for {}.".format(slicer, parameter))
+            # Set new slicer attributes.
+            temp_slicer.parameter = numeral_input(
+                "Enter {} parameteric equivalent in {}. Press Enter if none: ".format(parameter, slicer))
+            if temp_slicer.parameter is None:
+                temp_slicer.name = None
+                temp_slicer.modifier = None
+                temp_slicer.reverse_modifier = None
+                temp_slicer.parent_parameter = None
+                temp_slicer.units = None
+                param.__setattr__(slicer, temp_slicer)
+                continue
+            temp_slicer.name = numeral_input("Human readable name of the parameter in {}: ".format(slicer))
+            temp_slicer.modifier = numeral_input("Modifier: ")
+            if temp_slicer.modifier is not None:
+                temp_slicer.reverse_modifier = numeral_input("Reverse modifier: ")
+                if "y" in temp_slicer.modifier:
+                    temp_slicer.parent_parameter = numeral_input("Parent parameter: ")
+            temp_slicer.units = numeral_eval("Units: ")
+
+            param.__setattr__(slicer, temp_slicer)
+        self.parameters.append(Param(parameter, self))
+
+    def add_slicer(self, slicer: str):
+        """
+        A CLI interface for adding a new slicer. Utilizes lower-level children object methods.
+        :param slicer:
+        :return:
+        """
+        self.supported_slicers.append(slicer)
+
+        for parameter in self.parameters:
+            clear()
+            print("Curent working parameter: {}.".format(parameter.parameter))
+            parameter._add_slicer(slicer)
+            _slicer = parameter.__getattribute__(slicer)
+            _slicer.parameter = input("{} equivalent of {} parameter: ".format(slicer, parameter.parameter))
+            if _slicer.parameter is None:
+                continue
+            _slicer.modifier = numeral_input("Modifier: ")
+            if _slicer.modifier is not None:
+                _slicer.reverse_modifier = numeral_input("Reverse modifier: ")
+                if "y" in _slicer.modifier:
+                    _slicer.parent_parameter = numeral_input("Parent parameter: ")
+            else:
+                _slicer.reverse_modifier = None
+                _slicer.parent_parameter = None
+
+    def dump(self, filename: str):
+        """
+        Dumps parameters and list of supported slicers to a json file.
+        :param filename:
+        :return:
+        """
+        output = [self.parameters, self.supported_slicers]
+
+        # Enforce .json file extension
+        if not filename.endswith(".json"):
+            filename = filename + ".json"
+        jsonpickle.set_encoder_options(name='simplejson', sort_keys=True)
+        with open(filename, mode="w") as file:
+            file.write(jsonpickle.dumps(output))
+            file.close()
+
+    def load(self, filename: str):
+        """
+        Loads parameters from a dumped json file.
+        :param filename:
+        :return:
+        """
+        if not filename.endswith(".json"):
+            raise ValueError("{} is not a JSON file.".format(filename))
+        with open(filename, mode="r") as file:
+            loaded = jsonpickle.loads(file.read())
+            file.close()
+        self.parameters = loaded[0]
+        self.supported_slicers = loaded[1]
+
+        # Enforce correct parent/children hierarchy upon loading
+        for param in self.parameters:
+            param.params = self
+            param_slicers = []
+            for supported_slicer in self.supported_slicers:
+                try:
+                    param_slicers.append(param.__getattribute__(supported_slicer))
+                except AttributeError:
+                    setattr(param, supported_slicer, Slicer(root=param))
+                    param_slicers.append(param.__getattribute__(supported_slicer))
+            for slicer in param_slicers:
+                slicer.root = param
+
+    def populate(self, input_dictionary: dict, auto=False, *args):
+        """
+        Assigns a value to all parameters found in self.parameters.
+        Independent (parent) parameters are assigned first in order to escape conflicts.
+        :param input_dictionary: a dictionary with parameter/value as key/value
+        :return:
+        """
+
+        def map_values(parameters: list, look_in_slicers: bool = False):
+            """
+            Helper method for cycling through keys from an input dict, and mapping them to corresponding params
+            :param parameters:
+            :param look_in_slicers:
+            :return:
+            """
+            if not look_in_slicers:
+                for param in parameters:
+                    if param.parameter in input_dictionary:
+                        param.value = input_dictionary.pop(param.parameter)
+            else:
+                for slicer in self.supported_slicers:
+                    for param in parameters:
+                        if hasattr(param, slicer):
+                            if getattr(param, slicer).parameter in input_dictionary:
+                                getattr(param, slicer).value = input_dictionary.pop(getattr(param, slicer).parameter)
+
+        children = []  # A placeholder for params which have a parent object
+        parents = []  # A placeholder for params which do not have parent objects
+
+        # Append all the additional dictionaries in args to the input dict
+        for lst in args:
+            if isinstance(lst, dict):
+                input_dictionary = input_dictionary + lst
+
+        # Sort parameters based on their dependencies
+        for param in self.parameters:
+            if param.parent is not None:
+                children.append(param)
+            else:
+                parents.append(param)
+
+        # Map parent parameters to their respective names at a base level
+        map_values(parents)
+
+        # Map parent parameters to their respective names at a slicer level
+        # (if the name could not be found at the base level)
+        map_values(parents, look_in_slicers=True)
+
+        if not auto:
+            # Map child parameters to their respective names at a base level
+            map_values(children)
+
+            # Map child parameters to their respective names at a slicer level
+            # (if the name could not be found at the base level)
+            map_values(children, look_in_slicers=True)
+
+        # Print leftover/unassigned values if any.
+        if len(input_dictionary) > 0:
+            print("The following keys were not mapped to any parameters:\n{}".format(", ".join(input_dictionary)))
+
+    def generate_defaults(self, output: str):
+        defaults = []
+        for param in self.parameters:
+            parameter = param.parameter
+            units = param.units
+            value = numeral_input("Default value for {}, units {}".format(parameter, units))
+            defaults.append([parameter, value, units])
+        output = output + ".json" if not output.endswith(".json") else output
+        with open(output, mode="w") as file:
+            file.write(json.dumps(defaults, indent=4, sort_keys=True))
 
 
 class Param(object):
@@ -178,10 +370,91 @@ class Param(object):
         self.parameter = parameter
         self.units = None
         self.test = None
+        self.parent = None
+        self.modifier = None
+        self.reverse_modifier = None
         self.params = params
+        self._value = None
+        self._manual = False  # If True, modifier will no longer be used
+
+    def _parameter_modifier(self):
+        if self._value is None:
+            if hasattr(self, "modifier") and self.modifier is not None:
+                x = self._value
+                if hasattr(self, "parent") and self.parent is not None:
+                    y = self.params.get(self.parent).value
+                print("Evaluating the following modifier: {}".format(self.modifier))
+                return numeral_eval(eval(self.modifier))
+            elif hasattr(self, "_value") and self._value is not None:
+                return self._value
+        else:
+            return self._value
+
+    @property
+    def value(self):
+        return self._parameter_modifier()
+
+    @value.setter
+    def value(self, new_value):
+        self._value = new_value
+        if not self._manual:
+            print("{} now uses a manual value selection mode, and won't use its modifier.".format(self.parameter))
+        self._manual = True
+
+    def _add_slicer(self, slicer: str, name: str = None, parameter: str = None, parent_parameter: str = None,
+                    modifier: str = None, reverse_modifier: str = None, units: str = None, **kwargs):
+        """
+        Add a new slicer interpreter to the parameter. Private method, only meant to be called from superclass.
+        :param slicer: name of the slicer software to add
+        :param name:
+        :param parameter:
+        :param parent_parameter:
+        :param modifier:
+        :param reverse_modifier:
+        :param units:
+        :param kwargs:
+        :return:
+        """
+        if slicer not in self.params.supported_slicers:
+            raise ValueError("{} not listed among supported slicers. Supported slicers are {}".format(slicer, ', '.join(
+                self.params.supported_slicers)))
+        self.__setattr__(slicer, Slicer(name, parameter, parent_parameter, modifier, units, self, reverse_modifier, **kwargs))
+
+    def _del_slicer(self, slicer: str):
+        """
+        Delete a slicer parameter interpretation.
+        :param slicer:
+        :return:
+        """
+        if hasattr(self, slicer):
+            attribute = self.__getattribute__(slicer)
+            del attribute
+
+        else:
+            raise ValueError("{} does not have a Slicer attribute named {}.".format(self.parameter, slicer))
+
+    def auto(self):
+        print("{} now uses a generated value.".format(self.parameter))
+        self._manual = False
+        self._value = None
 
 
-if __name__ == "__main__":  # For testing
-    params = Params()
-    print(params.get("path_height_raft").test)
-    pass
+if __name__ == "__main__":
+    """
+    Conversion dictionary management tool.
+    Usage:
+        conversion_dictionary.py
+        conversion_dictionary.py add-slicer <slicer>
+        conversion_dictionary.py parameter (add <parameter> | modify <parameter> [<slicer>])
+    """
+
+    arguments = docopt(__doc__, version="Conversion dictionary tool 0.3")
+    params = Params("conversion.json")
+
+    if arguments["add-slicer"]:
+        params.add_slicer(arguments["<slicer>"])
+
+    elif arguments["parameter"]:
+        if arguments["[add]"]:
+            params.add_parameter(arguments["<parameter>"])
+
