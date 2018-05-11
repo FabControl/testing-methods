@@ -141,7 +141,7 @@
         "name": null,
         "parameter": "fan_always_on",
         "parent_parameter": null,
-        "reverse_modifier": "100 if x != 0 else 0",
+        "reverse_modifier": null,
         "root": {
           "py/id": 13
         },
@@ -150,7 +150,7 @@
       "reverse_modifier": null,
       "simplify3d": {
         "py/object": "conversion_dictionary.Slicer",
-        "modifier": "100 if x != 0 else 0",
+        "modifier": null,
         "name": null,
         "parameter": "fanSpeed",
         "parent_parameter": null,
@@ -306,11 +306,11 @@
       "reverse_modifier": null,
       "simplify3d": {
         "py/object": "conversion_dictionary.Slicer",
-        "modifier": "round(x/y*100)",
+        "modifier": "int(x/y*100)",
         "name": null,
-        "parameter": "firstLayerWidthpercent",
+        "parameter": "firstLayerWidthPercentage",
         "parent_parameter": "path_width",
-        "reverse_modifier": "y*x/100",
+        "reverse_modifier": "round(y*x/100)",
         "root": {
           "py/id": 25
         },
@@ -698,7 +698,7 @@
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
         "name": null,
-        "parameter": "Heated Bed",
+        "parameter": null,
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
@@ -1047,11 +1047,11 @@
       "reverse_modifier": null,
       "simplify3d": {
         "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
+        "modifier": "x.capitalize()",
         "name": null,
         "parameter": "internalInfillPattern",
         "parent_parameter": null,
-        "reverse_modifier": null,
+        "reverse_modifier": "x.lower()",
         "root": {
           "py/id": 82
         },
@@ -1086,7 +1086,7 @@
       "reverse_modifier": null,
       "simplify3d": {
         "py/object": "conversion_dictionary.Slicer",
-        "modifier": "round(x/y*100)",
+        "modifier": "int(x/y*100)",
         "name": null,
         "parameter": "infillExtrusionWidthPercentage",
         "parent_parameter": "path_width",
@@ -1203,11 +1203,11 @@
       "reverse_modifier": null,
       "simplify3d": {
         "py/object": "conversion_dictionary.Slicer",
-        "modifier": "x*60",
+        "modifier": "int(x*60)",
         "name": null,
         "parameter": "defaultSpeed",
         "parent_parameter": null,
-        "reverse_modifier": "x/60",
+        "reverse_modifier": "int(x/60)",
         "root": {
           "py/id": 94
         },
@@ -1300,7 +1300,7 @@
       "_value": null,
       "modifier": null,
       "name": null,
-      "parameter": "overhang_threshold",
+      "parameter": "critical_overhang_angle",
       "params": {
         "py/id": 3
       },
@@ -1593,11 +1593,11 @@
       "reverse_modifier": null,
       "simplify3d": {
         "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
+        "modifier": "1 if self.root.parameter.lower() == 'random' else 2",
         "name": null,
         "parameter": "startPointOption",
         "parent_parameter": null,
-        "reverse_modifier": null,
+        "reverse_modifier": "'Aligned' if x == 2 else 'Random'",
         "root": {
           "py/id": 124
         },
@@ -1710,7 +1710,7 @@
       "reverse_modifier": null,
       "simplify3d": {
         "py/object": "conversion_dictionary.Slicer",
-        "modifier": "s",
+        "modifier": null,
         "name": null,
         "parameter": "minSpeedLayerTime",
         "parent_parameter": null,
@@ -2453,7 +2453,7 @@
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
         "name": null,
-        "parameter": null,
+        "parameter": "printMaterial",
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {

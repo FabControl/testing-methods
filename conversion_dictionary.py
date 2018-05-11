@@ -123,6 +123,8 @@ class Slicer(object):
         """
         if hasattr(self, "modifier") and self.modifier is not None:
             x = self.root.value
+            if x is None:
+                x = 1
             if hasattr(self, "parent_parameter") and self.parent_parameter is not None:
                 y = self.root.params.get(self.parent_parameter).value
             result = eval(self.modifier)
@@ -140,7 +142,10 @@ class Slicer(object):
             x = value
             if hasattr(self, "parent_parameter") and self.parent_parameter is not None:
                 y = self.root.params.get(self.parent_parameter).value
-            new_value = eval(self.reverse_modifier)
+            try:
+                new_value = eval(self.reverse_modifier)
+            except ZeroDivisionError:
+                return 0
             return new_value
         else:
             return value

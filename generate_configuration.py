@@ -22,7 +22,8 @@ def numeral_eval(value):
         return float(value) if not float(value).is_integer() else int(value)
     except ValueError:
         return value
-
+    except TypeError:
+        return value
 
 def read_ini(path: str, output_type: object = OrderedDict):
     """
@@ -84,6 +85,7 @@ params = Params("conversion.json")
 defaults = read_ini("config.ini", output_type=dict)
 for key, value in defaults.items():
     defaults[key] = value["value"]
+    del key, value
 params.populate(defaults, auto=True)
 params.populate(persistence_flat, auto=True)
 
@@ -117,16 +119,27 @@ elif slicer == "simplify3d":
     root.attrib["version"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     for param in params.parameters:
-        foo = root.find(param.simplify3d.parameter)
-        if foo is None:
-            foo = root.find("extruder").find(param.simplify3d.parameter)
-        if "temperature" in param.parameter:
-            temp_controllers = root.findall("temperatureController")
-            for controller in temp_controllers:
-                if controller.attrib["name"] == param.simplify3d.parameter:
-                    foo = controller.find("setpoint")
-        if param.parameter == "part_cooling":
-            foo = root.find("fanSpeed").findall("setpoint")[-1]
+        if param.simplify3d.parameter is not None:
+            element = root.find(param.simplify3d.parameter)
+            if element is None:
+                element = root.find("extruder").find(param.simplify3d.parameter)
+            if "temperature" in param.parameter:
+                temp_controllers = root.findall("temperatureController")
+                for controller in temp_controllers:
+                    if controller.attrib["name"] == param.simplify3d.parameter:
+                        element = controller.find("setpoint")
+                        element.attrib["temperature"] = str(param.simplify3d.value)
+                continue
+            if param.parameter == "ventilator_part_cooling":
+                element = root.find("fanSpeed").findall("setpoint")[-1]
+                element.attrib["speed"] = str(param.simplify3d.value)
+                continue
+            if element is not None:
+                if element.text is not None:
+                    element.text = str(numeral_eval(param.simplify3d.value))
+                elif param.parameter == "":
+                    element.attrib = str(numeral_eval(param.simplify3d.value))
 
     tree.write(output_name("fff"), xml_declaration=True, encoding="utf-8")
     print("{} succesfully written".format(output_name("fff")))
+
