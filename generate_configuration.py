@@ -10,6 +10,7 @@ slicer = str(persistence["session"]["slicer"]).lower()
 
 persistence_flat = dict(persistence["settings"], **persistence["machine"]["nozzle"])
 persistence_flat["material_name"] = persistence["material"]["name"]
+persistence_flat["density_rt"] = persistence["material"]["density_rt"]
 
 
 def numeral_eval(value):
@@ -25,12 +26,14 @@ def numeral_eval(value):
     except TypeError:
         return value
 
+
 def read_ini(path: str, output_type: object = OrderedDict):
     """
     Parses an ini file and returns an ordered dictionary with parameters as keys.
     Dict item contains a value and a percentage flag.
     :rtype: OrderedDict
     :param path: path to the ini file to read
+    :param output_type:
     :return: returns an ordered dict
     """
     with open(path, mode='r') as file:
