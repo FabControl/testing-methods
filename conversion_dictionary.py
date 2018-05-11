@@ -359,6 +359,7 @@ class Params(object):
         output = output + ".json" if not output.endswith(".json") else output
         with open(output, mode="w") as file:
             file.write(json.dumps(defaults, indent=4, sort_keys=True))
+            file.close()
 
 
 class Param(object):
