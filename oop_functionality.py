@@ -26,7 +26,7 @@ class Prism(object):
 
         g.feed(speed_printing)
 
-        g.abs_travel(x, y, z if not raft else z + 2 * machine.settings.path_height, speed=400, rapid=True)
+        g.abs_travel(x, y, z if not raft else z + 2 * machine.settings.track_height, speed=400, rapid=True)
 
         g.set_part_cooling(cooling)
 

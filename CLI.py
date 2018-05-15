@@ -32,7 +32,7 @@ quiet = True
 verbose = False
 
 def initialize_test():
-    path = str(cwd + gcode_folder + separator() + test_info.name + ' test' + '.gcode')
+    path = str(cwd + gcode_folder + separator() + test_info.parameter + ' test' + '.gcode')
 
     if import_json_dict["session"]["test_type"] == "A":
         ts = TestSetupA(machine, material, test_info, path,
@@ -113,6 +113,7 @@ if not verbose:
 
 if quiet:
     test_info = test_dict[str(import_json_dict["session"]["test_name"])]
+    print(test_info.name)
     min_max_argument = session["min_max"] if session["min_max"] != "" else None
     session["number_of_test_structures"] = test_info.number_of_test_structures
 
@@ -133,21 +134,21 @@ if quiet:
     elif ts.test_name == "retraction distance":
         tested_speed_values = []
     else:
-        tested_speed_values = import_json_dict["settings"][
-            "speed_printing"] if min_max_speed_printing is None else ts.min_max_speed_printing
+        tested_speed_values = import_json_dict["settings"]["speed_printing"] if min_max_speed_printing is None else ts.min_max_speed_printing
 
     if ts.test_name == "retraction distance" or min_max_speed_printing is None:
         tested_speed_values = []
 
     current_test = {"test_name": ts.test_name,
                     "tested_parameter_values": [round(k, int(re.search("[0-9]", ts.test_info.precision).group())) for k in ts.get_values()],
-                    "tested_speed_values": [round(k, 1) for k in tested_speed_values],
+                    "tested_printing-speed_values": [round(k, 1) for k in tested_speed_values],
+                    "tested_volumetric_flow-rate_value": ts.volumetric_flow_rate,
                     "selected_parameter_value": 0,
-                    "selected_speed_value": 0,
+                    "selected_printing-speed_value": 0,
+                    "selected_volumetric_flow-rate_value": 0,
                     "units": ts.test_info.units,
                     "parameter_precision": ts.test_info.precision,
                     "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
-                    "selected_volumetric_flow_rate_value": 0,
                     "comments": 0,
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -165,7 +166,7 @@ else:
     elif test_info.name == 'printing speed':
         min_max_speed_printing = None
     else:
-        min_max_speed_printing = evaluate(input("Printing speed range values [min, max] or None: "))
+        min_max_speed_printing = evaluate(input("Printing-speed range [min, max] or None: "))
 
     ts = initialize_test()
 
@@ -173,11 +174,11 @@ else:
         clear()
     print("Tested Parameter values:")
     print([round(k,int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()[::-1]])
-    print("Corresponding Volumetric flow rate values (mm3/s):")
+    print("Corresponding Volumetric flow-rate values (mm3/s):")
     [print(x[::-1]) for x in ts.volumetric_flow_rate]
 
     if min_max_speed_printing is not None:
-        print("Printing speed values:")
+        print("Printing-speed values:")
         min_max_speed_printing = ts.min_max_speed_printing
         print([round(k, 1) for k in min_max_speed_printing])
 
@@ -196,13 +197,13 @@ else:
 
     current_test = {"test_name": ts.test_name,
                     "tested_parameter_values": [round(k, int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
-                    "tested_speed_values": [round(k, 1) for k in tested_speed_values],
+                    "tested_printing-speed_values": [round(k, 1) for k in tested_speed_values],
                     "selected_parameter_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
-                    "selected_speed_value": evaluate(input("Enter the printing speed value which corresponds to the best parameter value: ")) if not quiet else 0,
+                    "selected_printing-speed_value": evaluate(input("Enter the printing-speed value which corresponds to the best strucuture: ")) if not quiet else 0,
+                    "selected_volumetric_flow-rate_value": evaluate(input("Enter the volumetric flow-rate value which corresponds to the best strucuture: ")) if not quiet else 0,
                     "units": ts.test_info.units,
                     "parameter_precision": ts.test_info.precision,
                     "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
-                    "selected_volumetric_flow_rate_value": evaluate(input("Enter the volumetric flow rate value which corresponds to the best parameter value: ")) if not quiet else 0,
                     "comments": input("Comments: ") if not quiet else 0,
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -213,30 +214,30 @@ else:
         if dummy["test_name"] == "printing speed":
             import_json_dict["settings"]["speed_printing"] = dummy["selected_parameter_value"]
         elif dummy["test_name"] == "path height":
-            import_json_dict["settings"]["path_height"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+            import_json_dict["settings"]["track_height"] = dummy["selected_parameter_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "first layer height":
-            import_json_dict["settings"]["path_height_raft"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["path_width_raft"] = np.mean(ts.coef_w_raft) * machine.nozzle.size_id
-            import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
+            import_json_dict["settings"]["track_height_raft"] = dummy["selected_parameter_value"]
+            import_json_dict["settings"]["track_width_raft"] = np.mean(ts.coef_w_raft) * machine.nozzle.size_id
+            import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "first layer width":
-            import_json_dict["settings"]["path_height_raft"] = np.mean(ts.coef_h_raft) * machine.nozzle.size_id
-            import_json_dict["settings"]["path_width_raft"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
+            import_json_dict["settings"]["track_height_raft"] = np.mean(ts.coef_h_raft) * machine.nozzle.size_id
+            import_json_dict["settings"]["track_width_raft"] = dummy["selected_parameter_value"]
+            import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "path width":
-            import_json_dict["settings"]["path_width"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+            import_json_dict["settings"]["track_width"] = dummy["selected_parameter_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "extrusion temperature":
             import_json_dict["settings"]["temperature_extruder"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "extrusion multiplier":
             import_json_dict["settings"]["extrusion_multiplier"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "retraction distance":
             import_json_dict["settings"]["retraction_distance"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_speed_value"]
+            import_json_dict["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
 
-    import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["path_height"]/import_json_dict["settings"]["path_width"])),0)
+    import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["track_height"]/import_json_dict["settings"]["track_width"])),0)
 
     with open(cwd + separator("jsons") + material.manufacturer + "_" + material.name + "_" + "{:.0f}".format(machine.nozzle.size_id*1000) + "_um" + ".json", mode="w") as file:
         output = json.dumps(import_json_dict, indent=4, sort_keys=False)

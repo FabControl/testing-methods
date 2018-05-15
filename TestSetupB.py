@@ -22,19 +22,19 @@ class TestSetupB(object):
 
         self.raft = raft
 
-        self.coef_h_raft, _, self.coef_w_raft = minmax_path_width_height_raft(machine)
+        self.coef_h_raft, _, self.coef_w_raft = minmax_track_width_height_raft(machine)
 
-        # if machine.settings.path_height_raft != None:
-        #     self.coef_h_raft = machine.settings.path_height_raft/machine.nozzle.size_id
-        # if machine.settings.path_width_raft != None:
-        #     self.coef_w_raft = machine.settings.path_width_raft/machine.nozzle.size_id
+        # if machine.settings.track_height_raft != None:
+        #     self.coef_h_raft = machine.settings.track_height_raft/machine.nozzle.size_id
+        # if machine.settings.track_width_raft != None:
+        #     self.coef_w_raft = machine.settings.track_width_raft/machine.nozzle.size_id
 
         self.test_structure_size = get_test_structure_size(machine)
         self.speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], self.number_of_test_structures).tolist()
 
-        self.coef_h = [x * machine.settings.path_height / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
+        self.coef_h = [x * machine.settings.track_height / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
         self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
-        self.coef_w = [x * machine.settings.path_width / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
+        self.coef_w = [x * machine.settings.track_width / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
         self.extrusion_multiplier = [x * machine.settings.extrusion_multiplier for x in [1] * self.number_of_test_structures]
         self.temperature_extruder = [x * machine.settings.temperature_extruder for x in [1] * self.number_of_test_structures]
         self.retraction_speed = 60
@@ -63,9 +63,9 @@ class TestSetupB(object):
             self.argument_row = self.speed_printing
             self.argument_column = self.overlap
 
-        elif test_name == 'path height':
+        elif test_name == 'track height':
             # PATH HEIGHT test
-            self.coef_h, _ = minmax_path_height(machine, self.number_of_test_structures)
+            self.coef_h, _ = minmax_track_height(machine, self.number_of_test_structures)
 
             self.argument_row = self.speed_printing
             self.argument_column = self.coef_h

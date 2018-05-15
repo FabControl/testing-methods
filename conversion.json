@@ -169,7 +169,7 @@
       "_value": null,
       "modifier": null,
       "name": "path height",
-      "parameter": "path_height",
+      "parameter": "track_height",
       "params": {
         "py/id": 3
       },
@@ -208,7 +208,7 @@
       "_value": null,
       "modifier": null,
       "name": "first layer height",
-      "parameter": "path_height_raft",
+      "parameter": "track_height_raft",
       "params": {
         "py/id": 3
       },
@@ -231,7 +231,7 @@
         "modifier": "round(x/y*100)",
         "name": null,
         "parameter": "firstLayerHeightpercent",
-        "parent_parameter": "path_height",
+        "parent_parameter": "track_height",
         "reverse_modifier": "y*x/100",
         "root": {
           "py/id": 19
@@ -246,8 +246,8 @@
       "_manual": false,
       "_value": null,
       "modifier": null,
-      "name": "path width",
-      "parameter": "path_width",
+      "name": "track width",
+      "parameter": "track_width",
       "params": {
         "py/id": 3
       },
@@ -286,7 +286,7 @@
       "_value": null,
       "modifier": null,
       "name": "first layer path width",
-      "parameter": "path_width_raft",
+      "parameter": "track_width_raft",
       "params": {
         "py/id": 3
       },
@@ -309,7 +309,7 @@
         "modifier": "int(x/y*100)",
         "name": null,
         "parameter": "firstLayerWidthPercentage",
-        "parent_parameter": "path_width",
+        "parent_parameter": "track_width",
         "reverse_modifier": "round(y*x/100)",
         "root": {
           "py/id": 25
@@ -1066,11 +1066,11 @@
       "_value": null,
       "modifier": "x",
       "name": null,
-      "parameter": "path_width_infill",
+      "parameter": "track_width_infill",
       "params": {
         "py/id": 3
       },
-      "parent": "path_width",
+      "parent": "track_width",
       "prusa": {
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
@@ -1089,7 +1089,7 @@
         "modifier": "int(x/y*100)",
         "name": null,
         "parameter": "infillExtrusionWidthPercentage",
-        "parent_parameter": "path_width",
+        "parent_parameter": "track_width",
         "reverse_modifier": "round(y/x)*100",
         "root": {
           "py/id": 85
@@ -1339,11 +1339,11 @@
       "_value": null,
       "modifier": "x",
       "name": null,
-      "parameter": "path_width_perimeter",
+      "parameter": "track_width_perimeter",
       "params": {
         "py/id": 3
       },
-      "parent": "path_width",
+      "parent": "track_width",
       "prusa": {
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
@@ -1768,11 +1768,11 @@
       "_value": null,
       "modifier": "x",
       "name": null,
-      "parameter": "path_width_solid_infill",
+      "parameter": "track_width_solid_infill",
       "params": {
         "py/id": 3
       },
-      "parent": "path_width",
+      "parent": "track_width",
       "prusa": {
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
@@ -1885,11 +1885,11 @@
       "_value": null,
       "modifier": "x",
       "name": null,
-      "parameter": "path_width_support",
+      "parameter": "track_width_support",
       "params": {
         "py/id": 3
       },
-      "parent": "path_width",
+      "parent": "track_width",
       "prusa": {
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
@@ -1963,11 +1963,11 @@
       "_value": null,
       "modifier": "y*1.05",
       "name": null,
-      "parameter": "path_width_top_solid",
+      "parameter": "track_width_top_solid",
       "params": {
         "py/id": 3
       },
-      "parent": "path_width",
+      "parent": "track_width",
       "prusa": {
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
@@ -2312,9 +2312,9 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
-      "modifier": "max(self.params.get('path_height').value, self.params.get('path_height_raft').value)",
+      "modifier": "max(self.params.get('track_height').value, self.params.get('track_height_raft').value)",
       "name": null,
-      "parameter": "path_height_max",
+      "parameter": "track_height_max",
       "params": {
         "py/id": 3
       },
@@ -2351,9 +2351,9 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
-      "modifier": "min(self.params.get('path_height').value, self.params.get('path_height_raft').value)",
+      "modifier": "min(self.params.get('track_height').value, self.params.get('track_height_raft').value)",
       "name": null,
-      "parameter": "path_height_min",
+      "parameter": "track_height_min",
       "params": {
         "py/id": 3
       },

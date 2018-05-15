@@ -2,7 +2,7 @@ from mecode import G
 from Definitions import *
 from paths import gcode_folder
 
-path_list = []
+track_list = []
 
 class Gplus(G):
     # Build on the G class from mecode. Gplus class redefines some of the commands, creates new commands
@@ -13,13 +13,13 @@ class Gplus(G):
         self.nozzle_diameter = machine.nozzle.size_id
         self.nozzle_od = machine.nozzle.size_od
         self.extrusion_multiplier = machine.settings.extrusion_multiplier
-        self.path_height = machine.settings.path_height
-        self.path_width = machine.settings.path_width
+        self.track_height = machine.settings.track_height
+        self.track_width = machine.settings.track_width
 
-        self.coef_w = machine.settings.path_width / machine.nozzle.size_id
+        self.coef_w = machine.settings.track_width / machine.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
 
-        self.path_list = [] # TODO Is it used?
+        self.track_list = [] # TODO Is it used?
 
     def set_extruder_temperature(self, temperature: float):
         """Set the liquefier temperature in degC"""
@@ -75,12 +75,12 @@ class Gplus(G):
         if coef_w is not None:
             self.coef_w = coef_w
         elif coef_w is None:
-            self.coef_w = self.path_width / self.nozzle_diameter
+            self.coef_w = self.track_width / self.nozzle_diameter
 
         if coef_h is not None:
             self.coef_h = coef_h
         elif coef_h is None:
-            self.coef_h = self.path_height / self.nozzle_diameter
+            self.coef_h = self.track_height / self.nozzle_diameter
 
         if self.extrude is True and 'E' not in kwargs.keys():
             if self.is_relative is not True:
@@ -113,7 +113,7 @@ class Gplus(G):
                 kwargs['E'] = 0 + current_extruder_position
 
         self._update_current_position(x=x, y=y, z=z, **kwargs)
-        path_list.append((self.current_position["x"], self.current_position["y"], self.current_position["z"]))
+        track_list.append((self.current_position["x"], self.current_position["y"], self.current_position["z"]))
         args = self._format_args(x, y, z, **kwargs)
         cmd = 'G0 ' if rapid else 'G1 '
         self.write(cmd + args)

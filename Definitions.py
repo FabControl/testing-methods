@@ -32,10 +32,12 @@ class Material(object):
     heat_capacity          - specific heat capacity (J/kg/K)
     """
 
-    def __init__(self, name, manufacturer, id=None, size_od: float=None, temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None, mvr=None, mfi=None, temperature_mfr=None, load_mfr=None, capillary_length_mfr=None, capillary_diameter_mfr=None, time_mfr=None, density_rt=None, lcte=None, heat_capacity=None, price_eur_per_kg=None, *args, **kwargs):
-        self.name=name
-        self.manufacturer=manufacturer
-        self.id=id
+    def __init__(self, name, manufacturer, material_group=None, polymer_class=None, id=None, size_od: float=None, temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None, mvr=None, mfi=None, temperature_mfr=None, load_mfr=None, capillary_length_mfr=None, capillary_diameter_mfr=None, time_mfr=None, density_rt=None, lcte=None, heat_capacity=None, price_eur_per_kg=None, *args, **kwargs):
+        self.name = name
+        self.material_group = material_group
+        self.polymer_class = polymer_class
+        self.manufacturer = manufacturer
+        self.id = id
         self.size_od = size_od
         self.temperature_melting = temperature_melting
         self.temperature_destr = temperature_destr
@@ -65,7 +67,6 @@ class Nozzle(object):
     """
 
     def __init__(self, size_id: float, size_od: float, size_capillary_length: float, size_angle: float, type: str, size_extruder_id: float, *args, **kwargs):
-
         self.size_id = size_id  # respect the units: mm
         self.size_od = size_od  # respect the units: mm
         self.size_capillary_length = size_capillary_length  # respect the units: mm
@@ -120,8 +121,8 @@ class Firmware(object):
 class Settings(object):
     """
     definition of the user's settings:
-    path_height - height of the path (mm)
-    path_width - width of the path (mm)
+    track_height - height of the path (mm)
+    track_width - width of the path (mm)
     temperature_extruder_raft - temperature of the extruder when printing the first layer (mm)
     temperature_printbed_raft - temperature of the printbed when printing the first layer (mm)
     extrusion_multiplier_raft - when printing the first layer (1)
@@ -135,20 +136,20 @@ class Settings(object):
     retraction_distance - retraction distance (mm)
     """
 
-    def __init__(self, aim=None, material=None, nozzle=None, path_width=None, path_width_raft =None, path_height=None, path_height_raft=None, temperature_extruder_raft=None,
+    def __init__(self, aim=None, material=None, nozzle=None, track_width=None, track_width_raft =None, track_height=None, track_height_raft=None, temperature_extruder_raft=None,
                  speed_printing_raft=None, temperature_extruder=None, temperature_printbed=None, extrusion_multiplier=None,
                  speed_printing=None, retraction_distance=None, retraction_restart_distance=None, retraction_speed=None, coasting_distance=None,
                  ventilator_part_cooling=None, ventilator_entry=None, ventilator_exit=None, raft_density=None,
-                 optimize_temperature_printbed=None, optimize_speed_printing=None, optimize_path_height=None, get_path_width=None, get_path_height=None,
+                 optimize_temperature_printbed=None, optimize_speed_printing=None, optimize_track_height=None, get_track_width=None, get_track_height=None,
                  perimeter=None, overlap=None, matrix_size=None, layers=None, *args, **kwargs):
 
         self.aim = aim
 
         self.material = Material(None, None, None, 1.75) # TODO why 1.75
-        self.path_width = path_width
-        self.path_width_raft = path_width_raft
-        self.path_height = path_height
-        self.path_height_raft = path_height_raft
+        self.track_width = track_width
+        self.track_width_raft = track_width_raft
+        self.track_height = track_height
+        self.track_height_raft = track_height_raft
         self.speed_printing = speed_printing
         self.speed_printing_raft = speed_printing/2 if speed_printing_raft is None else speed_printing_raft
 
@@ -172,9 +173,9 @@ class Settings(object):
         self.raft_density = 100 if raft_density is None else raft_density  # (%)
         self.optimize_temperature_printbed = optimize_temperature_printbed  # True if ones wants to optimize temperature_printbed
         self.optimize_speed_printing = optimize_speed_printing  # True if ones wants to optimize speed_printing
-        self.optimize_path_height = optimize_path_height  # True if ones wants to optimize path_height
-        self.get_path_width = get_path_width  # True if ones wants to get path_width values
-        self.get_path_height = get_path_height  # True if ones wants to get path_height values
+        self.optimize_track_height = optimize_track_height  # True if ones wants to optimize track_height
+        self.get_track_width = get_track_width  # True if ones wants to get track_width values
+        self.get_track_height = get_track_height  # True if ones wants to get track_height values
         self.perimeter = perimeter
         self.overlap = overlap
         self.matrix_size = matrix_size
@@ -242,7 +243,7 @@ class TestInfo(object):
             self.max_default = default_value[1]
 
 
-def minmax_path_width(machine: Machine, number_of_test_structures: int):
+def minmax_track_width(machine: Machine, number_of_test_structures: int):
     if machine.nozzle.size_id <= 0.6:
         coef_w_min = 0.90
         coef_w_max = 1
@@ -262,7 +263,7 @@ def minmax_path_width(machine: Machine, number_of_test_structures: int):
     return coef_w_all, coef_w_mean
 
 
-def minmax_path_height(machine: Machine, number_of_test_structures: int):
+def minmax_track_height(machine: Machine, number_of_test_structures: int):
     if machine.nozzle.size_id == 0.1:
         coef_h_min = 0.10
         coef_h_max = 0.50
@@ -275,7 +276,7 @@ def minmax_path_height(machine: Machine, number_of_test_structures: int):
     return coef_h_all
 
 
-def minmax_path_width_height_raft(machine: Machine, number_of_test_structures=None):
+def minmax_track_width_height_raft(machine: Machine, number_of_test_structures=None):
     coef_w_max_raft = machine.nozzle.size_od/machine.nozzle.size_id
     coef_w_min_raft = 1.0
 
@@ -349,8 +350,8 @@ def get_test_structure_size(machine):
         test_structure_size = 75
         if machine.nozzle.size_id > 0.4:
             test_structure_size = 100
-            # if machine.nozzle.size_id > 0.6:
-            #     test_structure_size = 125
+            if machine.nozzle.size_id > 0.6:
+                test_structure_size = 125
             #     if machine.nozzle.size_id > 1.0:
             #         test_structure_size = 150
 

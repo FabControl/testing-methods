@@ -16,7 +16,7 @@ def check_printing_speed_shear_rate(machine, gamma_dot, quiet: bool):
     if not quiet:
         print('maximum shear rate in the nozzle is {:.3f} 1/s'.format(gamma_dot_out[0]))
 
-    gamma_dot_out[1] = machine.settings.speed_printing / machine.settings.path_height  # shear rate in the polymer melt during bonding (constant path height and printing speed)
+    gamma_dot_out[1] = machine.settings.speed_printing / machine.settings.track_height  # shear rate in the polymer melt during bonding (constant path height and printing speed)
     if not quiet:
         print('maximum shear rate during bonding is {:.3f} 1/s'.format(gamma_dot_out[1]))
 
@@ -25,12 +25,12 @@ def check_printing_speed_shear_rate(machine, gamma_dot, quiet: bool):
 
         if not quiet:
             print("With the current path height value of {:.2f} mm, "
-                  "the printing speed should be around {:.2f} mm/s!".format(machine.settings.path_height, machine.settings.path_height * gamma_dot_out[0]))
+                  "the printing speed should be around {:.2f} mm/s!".format(machine.settings.track_height, machine.settings.track_height * gamma_dot_out[0]))
 
-        machine.settings.speed_printing = round(machine.settings.path_height * gamma_dot_out[0], 3)
+        machine.settings.speed_printing = round(machine.settings.track_height * gamma_dot_out[0], 3)
         # q_v = flow_rate(machine)
         # output = ("maximum printing speed (mine): {:.2f} mm/s,"
-        #           "maximum printing speed (Crocket): {:.2f} mm/s!".format(machine.settings.path_height * gamma_dot_out[0], q_v * math.pi / (machine.settings.path_height) ** 2))
+        #           "maximum printing speed (Crocket): {:.2f} mm/s!".format(machine.settings.track_height * gamma_dot_out[0], q_v * math.pi / (machine.settings.track_height) ** 2))
         # print(output)
         if not quiet:
             print('--> printing_speed optimized! (shear rate)')
@@ -65,12 +65,12 @@ def check_printing_speed_pressure(machine, material, delta_p, param_power_law):
     return
 
 
-# def check_path_height(machine, gamma_dot): # should be selected by the user!
+# def check_track_height(machine, gamma_dot): # should be selected by the user!
 #     gamma_dot_nozzle = max(gamma_dot)  # max shear rate in the polymer melt going through the given nozzle (with the set path width, path height, printing speed)
 #     output = ('maximum shear rate in nozzle is %.3f 1/s' % (gamma_dot_nozzle))
 #     print(output)
 #
-#     gamma_dot_bonding = machine.settings.speed_printing / machine.settings.path_height  # shear rate in the polymer melt during bonding (constant path height and printing speed)
+#     gamma_dot_bonding = machine.settings.speed_printing / machine.settings.track_height  # shear rate in the polymer melt during bonding (constant path height and printing speed)
 #     output = ('maximum shear rate during bonding is %.3f 1/s' % (gamma_dot_bonding))
 #     print(output)
 #
@@ -80,18 +80,18 @@ def check_printing_speed_pressure(machine, material, delta_p, param_power_law):
 #     if gamma_dot_bonding > gamma_dot_nozzle:
 #         output = ("for printing speed value of %.2f mm/s the path height should be below %.2f mm!" % (
 #             machine.settings.speed_printing,
-#             round(gamma_dot_nozzle * machine.settings.path_height, 2)))
+#             round(gamma_dot_nozzle * machine.settings.track_height, 2)))
 #         print(output)
-#         machine.settings.speed_printing = round(machine.settings.path_height * gamma_dot_nozzle, 3)
+#         machine.settings.speed_printing = round(machine.settings.track_height * gamma_dot_nozzle, 3)
 #     else:
 #         pass
 #
 #     output = ("maximum printing speed (mine): %.2f mm/s, maximum printing speed (Crocket): %.2f mm/s!" % (
-#         round(machine.settings.path_height * gamma_dot_nozzle, 2),
-#         round(q_v * math.pi / (machine.settings.path_height) ** 2, 2)))
+#         round(machine.settings.track_height * gamma_dot_nozzle, 2),
+#         round(q_v * math.pi / (machine.settings.track_height) ** 2, 2)))
 #     print(output)
 #
-#     print('--> path_height optimized! (height)')
+#     print('--> track_height optimized! (height)')
 #     return
 
 
@@ -122,6 +122,6 @@ def feeder_speed(machine):
     :return: feeder_speed: linear filament speed in mm/s
     """
     feeder_speed = machine.settings.extrusion_multiplier * (4 / math.pi) * (1 / machine.nozzle.size_id)**2 * \
-                   ((machine.settings.path_width - machine.settings.path_height) * machine.settings.path_height + math.pi * (machine.settings.path_height/2)**2) * machine.settings.speed_printing
+                   ((machine.settings.track_width - machine.settings.track_height) * machine.settings.track_height + math.pi * (machine.settings.track_height/2)**2) * machine.settings.speed_printing
 
     return feeder_speed

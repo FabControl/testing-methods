@@ -3,7 +3,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter
-from Definitions import  minmax_temperature, minmax_path_width_height_raft
+from Definitions import  minmax_temperature, minmax_track_width_height_raft
 
 
 def rheology(material, machine, delta_p_out, number_of_test_structures):
@@ -112,18 +112,18 @@ def pressure_drop(machine, param_power_law):
 def flow_rate(machine, speed_override = None):
     if speed_override is not None:
         machine.settings.speed_printing = speed_override
-    if machine.settings.path_height < machine.settings.path_width / (2 - math.pi / 2):
-        q_v = machine.settings.speed_printing * (machine.settings.path_height * (machine.settings.path_width - machine.settings.path_height) + math.pi * (machine.settings.path_height / 2) ** 2)
+    if machine.settings.track_height < machine.settings.track_width / (2 - math.pi / 2):
+        q_v = machine.settings.speed_printing * (machine.settings.track_height * (machine.settings.track_width - machine.settings.track_height) + math.pi * (machine.settings.track_height / 2) ** 2)
     else:
-        q_v = machine.settings.speed_printing * machine.settings.path_height * machine.settings.path_width
+        q_v = machine.settings.speed_printing * machine.settings.track_height * machine.settings.track_width
 
     return q_v
 
 
 def flow_rate_raft(machine):
-    coef_h_raft, coef_w_raft = minmax_path_width_height_raft(machine)
+    coef_h_raft, coef_w_raft = minmax_track_width_height_raft(machine)
 
-    if machine.settings.path_height < machine.settings.path_width / (2 - math.pi / 2):
+    if machine.settings.track_height < machine.settings.track_width / (2 - math.pi / 2):
         q_v_raft = machine.settings.extrusion_multiplier_raft * machine.settings.speed_printing_raft * (machine.nozzle.size_id * coef_h_raft * (machine.nozzle.size_id * coef_w_raft - machine.nozzle.size_id * coef_h_raft) + math.pi * (machine.nozzle.size_id * coef_h_raft / 2) ** 2)
     else:
         q_v_raft = machine.settings.extrusion_multiplier_raft * machine.settings.speed_printing_raft * machine.nozzle.size_id * coef_h_raft * machine.nozzle.size_id * coef_w_raft

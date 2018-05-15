@@ -1,4 +1,4 @@
-from Definitions import Material, Settings, Machine, TestInfo, minmax_path_width_height_raft
+from Definitions import Material, Settings, Machine, TestInfo, minmax_track_width_height_raft
 import json
 from session_loader import session_id
 
@@ -21,6 +21,8 @@ except:
     "material": {
         "name": "PC Plus",
         "manufacturer": "Polymaker",
+        "material_group": "unfilled polymer",
+        "polymer_class": "polycarbonate",
         "id": "123456",
         "size_od": 1.75,
         "temperature_melting": 230,
@@ -79,12 +81,13 @@ except:
         "raft_density": 100,
         "temperature_printbed": 115,
         "temperature_extruder_raft": 280,
-        "path_height_raft": 0.3,
-        "path_width_raft": 0.6,
+        "track_height_raft": 0.3,
+        "track_width_raft": 0.6,
         "speed_printing_raft": 10,
+        "extrusion_multiplier_raft": 1,
         "temperature_extruder": 280,
-        "path_height": 0.3,
-        "path_width": 0.6,
+        "track_height": 0.3,
+        "track_width": 0.6,
         "speed_printing": 20,
         "extrusion_multiplier": 1,
         "retraction_distance": 4,
@@ -103,7 +106,7 @@ except:
         "uid": 20180508,
         "previous_tests": [],
         "test_type": 'A',
-        "test_name": 1,
+        "test_name": 2,
         "min_max": None,
         "min_max_speed": [10, 30],
         "slicer": "Prusa Slic3r",
@@ -112,25 +115,25 @@ except:
     }
 # TODO Add to json for report generation
 # TODO Create a similar dict for B tests
-test_dict = {'1': TestInfo('first layer height', 'first layer height', 'mm', '{:.3f}',
+test_dict = {'1': TestInfo('first-layer track height', 'first-layer track height', 'mm', '{:.3f}',
                            number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=False),
-             '2': TestInfo('first layer width', 'first layer width', 'mm', '{:.3f}',
-                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=False),
-             '3': TestInfo('extrusion temperature', 'extrusion temperature', 'degC', '{:.0f}',
+             '2': TestInfo('first-layer track width', 'first-layer track width', 'mm', '{:.3f}',
+                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=1, raft=False),
+             '3': TestInfo('extrusion temperature', 'extrusion-temperature', 'degC', '{:.0f}',
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
-             '4': TestInfo('path height', 'path height', 'mm', '{:.3f}',
+             '4': TestInfo('track height', 'track-height', 'mm', '{:.3f}',
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
-             '5': TestInfo('path width', 'path width', 'mm', '{:.3f}',
+             '5': TestInfo('track width', 'track-width', 'mm', '{:.3f}',
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
-             '6': TestInfo('extrusion multiplier', 'extrusion multiplier', '-', '{:.3f}',
+             '6': TestInfo('extrusion multiplier', 'extrusion-multiplier', '-', '{:.3f}',
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0.80, 1.40]),
-             '7': TestInfo('printing speed', 'printing speed', 'mm/s', '{:.1f}',
+             '7': TestInfo('printing speed', 'printing-speed', 'mm/s', '{:.1f}',
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0.80, 1.75]),
-             '8': TestInfo('retraction distance', 'retraction distance', 'mm', '{:.3f}',
+             '8': TestInfo('retraction distance', 'retraction-distance', 'mm', '{:.3f}',
                            number_of_layers=8, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0., 4.]),
-             '9': TestInfo('retraction restart distance', 'retraction restart distance', 'mm', '{:.3f}',
+             '9': TestInfo('retraction-restart distance', 'retraction-restart-distance', 'mm', '{:.3f}',
                            number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0., 0.4]),
-             '10': TestInfo('bridging', 'bridging extrusion multiplier', '-', '{:.3f}',
+             '10': TestInfo('bridging', 'bridging-extrusion-multiplier', '-', '{:.3f}',
                            number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[1.0, 2.0])}
 
 test_name_list, test_precision_list, test_units_list = [], [], []
@@ -145,4 +148,4 @@ for test_number in test_number_list:
 material = Material(**import_json_dict["material"])
 machine = Machine(**import_json_dict["machine"])
 machine.settings = Settings(nozzle=machine.nozzle, material=material, **import_json_dict["settings"])
-#coef_h_raft, coef_w_raft, coef_h_raft_all = minmax_path_width_height_raft(machine) TODO was it needed for B tests?
+#coef_h_raft, coef_w_raft, coef_h_raft_all = minmax_track_width_height_raft(machine) TODO was it needed for B tests?

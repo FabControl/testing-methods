@@ -79,7 +79,7 @@ main_info = "Critical overhang angle: " + str(import_json_dict["settings"]["crit
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Extruder temperature (raft): " + str(import_json_dict["settings"]["temperature_extruder_raft"]) + " degC"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Path width (raft): " + str(import_json_dict["settings"]["path_width_raft"]) + " mm"
+main_info = "Path width (raft): " + str(import_json_dict["settings"]["track_width_raft"]) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Printbed temperature: " + str(import_json_dict["settings"]["temperature_printbed"]) + " degC"
 elements.append(Paragraph(main_info, style=style_text))
@@ -96,8 +96,8 @@ data = [" ", "Test name", "Units"]
 for dummy in range(import_json_dict["session"]["number_of_test_structures"]):
     data.append("Tested values")
 data.append("Selected parameter value")
-data.append("Selected printing speed value (mm/s)")
-data.append("Selected volumetric flow rate value (mm3/s)")
+data.append("Selected printing-speed value (mm/s)")
+data.append("Selected volumetric flow-rate value (mm3/s)")
 data = [data]
 
 i = 1
@@ -111,7 +111,7 @@ for single_test in performed_tests:
     new_line.append("{:.1f}".format(single_test["selected_speed_value"]))
 
     try:
-        new_line.append("{:.3f}".format(single_test["selected_volumetric_flow_rate_value"]))
+        new_line.append("{:.3f}".format(single_test["selected_volumetric_flow-rate_value"]))
     except KeyError:
         pass
     data.append(new_line)

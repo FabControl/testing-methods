@@ -100,7 +100,7 @@ def make_perimeter(polygon: Polygon, outlines: int = 1):
     perimeters = []
     for outline in range(outlines):
         perimeters.append(LinearRing(polygon.exterior))
-        polygon = polygon.buffer(-machine.settings.path_width)
+        polygon = polygon.buffer(-machine.settings.track_width)
 
     return polygon, perimeters
 

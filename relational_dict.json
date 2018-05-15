@@ -48,7 +48,7 @@
         },
         "slic3r": ""
     },
-    "path_height": {
+    "track_height": {
         "kisslicer": "",
         "prusa": {
             "modifier": "",
@@ -60,7 +60,7 @@
         },
         "slic3r": ""
     },
-    "path_height_raft": {
+    "track_height_raft": {
         "kisslicer": "",
         "prusa": {
             "modifier": "",
@@ -69,12 +69,12 @@
         "simplify3d": {
             "modifier": "round(x/y*100)",
             "parameter": "firstLayerHeightPercentage",
-            "parent_parameter": "path_height",
+            "parent_parameter": "track_height",
             "units": "percentage"
         },
         "slic3r": ""
     },
-    "path_width": {
+    "track_width": {
         "kisslicer": "",
         "prusa": {
             "modifier": "",
@@ -86,7 +86,7 @@
         },
         "slic3r": ""
     },
-    "path_width_raft": {
+    "track_width_raft": {
         "kisslicer": "",
         "prusa": {
             "modifier": "",
@@ -95,7 +95,7 @@
         "simplify3d": {
             "modifier": "round(x/y*100)",
             "parameter": "firstLayerWidthPercentage",
-            "parent_parameter": "path_width",
+            "parent_parameter": "track_width",
             "units": "percentage"
         },
         "slic3r": ""
