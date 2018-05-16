@@ -115,7 +115,7 @@ elif slicer == "simplify3d":
 
     tree = ET.parse('simplify_config.fff')
     root = tree.getroot()
-    root.attrib["name"] = "{0} {1} {2} for {3} mm nozzle".format(persistence["material"]["manufacturer"],
+    root.attrib["name"] = "{0} {1} {2} for {3} um nozzle".format(persistence["material"]["manufacturer"],
                                                                  persistence["material"]["name"],
                                                                  str(persistence["material"]["size_od"]).format("{:.2f}"),
                                                                  str(persistence["machine"]["nozzle"]["size_id"]*1000))
