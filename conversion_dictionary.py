@@ -299,6 +299,7 @@ class Params(object):
         Assigns a value to all parameters found in self.parameters.
         Independent (parent) parameters are assigned first in order to escape conflicts.
         :param input_dictionary: a dictionary with parameter/value as key/value
+        :param auto:
         :return:
         """
 
@@ -306,7 +307,7 @@ class Params(object):
             """
             Helper method for cycling through keys from an input dict, and mapping them to corresponding params
             :param parameters:
-            :param look_in_slicers:
+            :param look_in_slicers: should the parameters be looked for in slicer parameter names
             :return:
             """
             if not look_in_slicers:
@@ -389,7 +390,7 @@ class Param(object):
                 x = self._value
                 if hasattr(self, "parent") and self.parent is not None:
                     y = self.params.get(self.parent).value
-                print("Evaluating the following modifier: {}".format(self.modifier))
+                print("Evaluating the following modifier: {} for {}".format(self.modifier, self.parameter))
                 return numeral_eval(eval(self.modifier))
             elif hasattr(self, "_value") and self._value is not None:
                 return self._value
@@ -404,7 +405,8 @@ class Param(object):
     def value(self, new_value):
         self._value = new_value
         if not self._manual:
-            print("{} now uses a manual value selection mode, and won't use its modifier.".format(self.parameter))
+            if self.modifier is not None:
+                print("{} now uses a manual value selection mode, and won't use its modifier.".format(self.parameter))
         self._manual = True
 
     def _add_slicer(self, slicer: str, name: str = None, parameter: str = None, parent_parameter: str = None,

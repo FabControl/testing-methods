@@ -81,7 +81,7 @@ def output_name(extension: str):
                                           "{:.2f}".format(persistence["material"]["size_od"]).replace(".", "-"),
                                           "{:.0f} um".format(persistence["machine"]["nozzle"]["size_id"] * 1000).replace(".", "-"),
                                           extension)
-    return output
+    return output.replace(' ', '_')
 
 
 params = Params("conversion.json")
@@ -130,7 +130,14 @@ elif slicer == "simplify3d":
                 temp_controllers = root.findall("temperatureController")
                 for controller in temp_controllers:
                     if controller.attrib["name"] == param.simplify3d.parameter:
-                        element = controller.find("setpoint")
+                        setpoints = controller.findall("setpoint")
+                        if len(setpoints) > 1:
+                            if param.parameter == "temperature_extruder":
+                                element = setpoints[-1]
+                            else:
+                                element = setpoints[0]
+                        else:
+                            element = controller.find("setpoint")
                         element.attrib["temperature"] = str(param.simplify3d.value)
                 continue
             if param.parameter == "ventilator_part_cooling":

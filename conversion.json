@@ -228,9 +228,9 @@
       "reverse_modifier": null,
       "simplify3d": {
         "py/object": "conversion_dictionary.Slicer",
-        "modifier": "round(x/y*100)",
+        "modifier": "int(x/y*100)",
         "name": null,
-        "parameter": "firstLayerHeightpercent",
+        "parameter": "firstLayerHeightPercentage",
         "parent_parameter": "track_height",
         "reverse_modifier": "y*x/100",
         "root": {
@@ -620,7 +620,7 @@
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
         "name": null,
-        "parameter": null,
+        "parameter": "Primary Extruder Temperature",
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
