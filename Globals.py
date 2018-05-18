@@ -153,3 +153,18 @@ material = Material(**persistence["material"])
 machine = Machine(**persistence["machine"])
 machine.settings = Settings(nozzle=machine.nozzle, material=material, **persistence["settings"])
 #coef_h_raft, coef_w_raft, coef_h_raft_all = minmax_track_width_height_raft(machine) TODO was it needed for B tests?
+
+
+def filename(extension: str) -> str:
+    """
+    Takes a filename extension and returns a full file-name based on the following convention:
+    'YYYYMMDDxxx_UserID_TestNumber' where x is a number character from [0-9a-z] and TestNumber is a double-digit
+    zero-padded number.
+    :param extension:
+    :return:
+    """
+    if not extension.startswith("."):
+        extension = "." + extension
+    output = "{}_{}_{}.{}".format(persistence["session"]["uid"], persistence["session"]["user_id"],
+                                  str(persistence["session"]["test_name"]), extension)
+    return output
