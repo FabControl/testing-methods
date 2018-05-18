@@ -124,7 +124,6 @@ def separator(input=None):
             return "/{}/".format(input)
 
 
-
 builtins_round = round
 
 

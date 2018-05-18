@@ -104,6 +104,7 @@ except:
     },
     "session": {
         "uid": 20180508,
+        "file_name": "a name",
         "previous_tests": [],
         "test_type": 'A',
         "test_name": 1,
