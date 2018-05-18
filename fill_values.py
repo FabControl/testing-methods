@@ -29,7 +29,6 @@ for dummy in persistence["session"]["previous_tests"]:
         persistence["settings"]["speed_printing"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "first layer height":
         persistence["settings"]["track_height_raft"] = dummy["selected_parameter_value"]
-        persistence["settings"]["track_width_raft"] = np.mean(ts.coef_w_raft) * persistence["machine"]["nozzle"]["size_id"] #TODO
         persistence["settings"]["speed_printing_raft"] = dummy["selected_speed_value"]
     elif dummy["test_name"] == "path width":
         persistence["settings"]["track_width"] = dummy["selected_parameter_value"]

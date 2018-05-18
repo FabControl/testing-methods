@@ -17,12 +17,12 @@ def check_compatibility(machine, material):
         quit()
 
 
-    if max(machine.settings.temperature_extruder, machine.settings.temperature_extruder_raft) > material.temperature_destr:
-        # Compare the preset extrusion temperature and the destruction temperature:
-        output = ("The set extrusion temperature of {:0.0f} degC is higher than the destruction temperature of feedstock material {:0.0f} degC"
-            .format(max(machine.settings.temperature_extruder, machine.settings.temperature_extruder_raft),material.temperature_destr))
-        print("Compatibility issue: " + output)
-        quit()
+    # if max(machine.settings.temperature_extruder, machine.settings.temperature_extruder_raft) > material.temperature_destr:
+    #     # Compare the preset extrusion temperature and the destruction temperature:
+    #     output = ("The set extrusion temperature of {:0.0f} degC is higher than the destruction temperature of feedstock material {:0.0f} degC"
+    #         .format(max(machine.settings.temperature_extruder, machine.settings.temperature_extruder_raft),material.temperature_destr))
+    #     print("Compatibility issue: " + output)
+    #     quit()
 
     if machine.printbed.printbed_heatable:
         if machine.settings.temperature_printbed > machine.printbed.temperature_printbed_max:

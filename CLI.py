@@ -19,7 +19,7 @@ from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retr
 #from DefinitionsTestsB import dimensional_test TODO not working at all
 from datetime import datetime
 from docopt import docopt
-from Globals import machine, material, import_json_dict
+from Globals import machine, material, persistence
 from Globals import test_number_list, test_name_list, test_dict
 from paths import cwd, gcode_folder
 import re, subprocess
@@ -31,32 +31,34 @@ import time
 quiet = True
 verbose = False
 
-def initialize_test():
-    path = str(cwd + gcode_folder + separator() + test_info.parameter + ' test' + '.gcode')
 
-    if import_json_dict["session"]["test_type"] == "A":
+def initialize_test():
+    path = str(cwd + gcode_folder + separator() + test_info.name + ' test' + '.gcode')
+
+    if persistence["session"]["test_type"] == "A":
         ts = TestSetupA(machine, material, test_info, path,
                         min_max_argument=min_max_argument,
                         min_max_speed_printing=min_max_speed_printing)
 
         if test_info.name == 'retraction distance':
             retraction_distance(ts)
-        elif test_info.name == 'retraction restart distance':
+        elif test_info.name == 'retraction-restart distance':
             retraction_restart_distance_vs_coasting_distance(ts)
         elif test_info.name == 'bridging':
             bridging_test(ts)
         else:
             flat_test_single_parameter_vs_speed_printing(ts)
 
-    elif import_json_dict["session"]["test_type"] == "B":  # 'perimeter', 'overlap', 'path height', 'temperature'
+    elif persistence["session"]["test_type"] == "B":  # 'perimeter', 'overlap', 'path height', 'temperature'
         ts = TestSetupB(machine, material, test_info, path,
                         min_max_argument=min_max_argument,
                         min_max_speed_printing=min_max_speed_printing,
-                        raft=True if import_json_dict["settings"]["raft_density"] > 0 else False)
+                        raft=True if persistence["settings"]["raft_density"] > 0 else False)
 
         dimensional_test(ts)
 
     return ts
+
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='MP Feedstock Testing Suite')
@@ -68,7 +70,7 @@ if __name__ == '__main__':
     if arguments["generate-configuration"]:
         slicer_arg = str(arguments["<slicer>"]).lower()
         if slicer_arg == 'prusa' or slicer_arg == "simplify3d":
-            import_json_dict["session"]["slicer"] = slicer_arg
+            persistence["session"]["slicer"] = slicer_arg
             import generate_configuration
         else:
             raise ValueError("{} not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.".format(slicer_arg))
@@ -79,7 +81,7 @@ if arguments["generate-gcode-iso"]:
     generate_gcode(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<file>"], config)
     quit()
 
-session = import_json_dict["session"]
+session = persistence["session"]
 start = time.time()
 
 # Check compatibility
@@ -108,17 +110,12 @@ check_compatibility(machine, material)
 #     check_printing_speed_shear_rate(machine, gamma_dot_out, quiet)
 #     check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
 
-if not verbose:
-    clear()
-
 if quiet:
-    test_info = test_dict[str(import_json_dict["session"]["test_name"])]
-    print(test_info.name)
+    test_info = test_dict[str(persistence["session"]["test_name"])]
     min_max_argument = session["min_max"] if session["min_max"] != "" else None
-    session["number_of_test_structures"] = test_info.number_of_test_structures
 
     if test_info.name == 'retraction distance':
-        min_max_speed_printing = [import_json_dict["settings"]["speed_printing"]] * 4
+        min_max_speed_printing = [persistence["settings"]["speed_printing"]] * 4
     elif test_info.name == 'printing speed':
         min_max_speed_printing = None
     else:
@@ -127,22 +124,23 @@ if quiet:
     ts = initialize_test()
 
     # Add a step for selecting/approving of the result
-    previous_tests = import_json_dict["session"]["previous_tests"]
+    previous_tests = persistence["session"]["previous_tests"]
 
     if ts.test_name == "printing speed":
         tested_speed_values = ts.get_values()
     elif ts.test_name == "retraction distance":
-        tested_speed_values = []
+        tested_speed_values = np.mean(ts.speed_printing)
     else:
-        tested_speed_values = import_json_dict["settings"]["speed_printing"] if min_max_speed_printing is None else ts.min_max_speed_printing
+        tested_speed_values = ts.min_max_speed_printing
 
-    if ts.test_name == "retraction distance" or min_max_speed_printing is None:
-        tested_speed_values = []
+    if ts.test_name == "first-layer track height":
+        persistence["settings"]["track_width_raft"] = np.mean(ts.track_width)
 
     current_test = {"test_name": ts.test_name,
+                    "file_name": "a name",  # TODO
                     "tested_parameter_values": [round(k, int(re.search("[0-9]", ts.test_info.precision).group())) for k in ts.get_values()],
                     "tested_printing-speed_values": [round(k, 1) for k in tested_speed_values],
-                    "tested_volumetric_flow-rate_value": ts.volumetric_flow_rate,
+                    "tested_volumetric_flow-rate_values": ts.volumetric_flow_rate,
                     "selected_parameter_value": 0,
                     "selected_printing-speed_value": 0,
                     "selected_volumetric_flow-rate_value": 0,
@@ -153,16 +151,16 @@ if quiet:
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
     previous_tests.append(current_test)
-    import_json_dict["session"]["previous_tests"] = previous_tests
+    persistence["session"]["previous_tests"] = previous_tests
 
-else:
+else: # TODO saskanot ar quiet
     test_info = test_dict[str(int(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number_list, test_name_list)) + ": ")))]
     min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: "))
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
     session["number_of_test_structures"] = test_info.number_of_test_structures
 
     if test_info.name == 'retraction distance':
-        min_max_speed_printing = [import_json_dict["settings"]["speed_printing"]] * 4
+        min_max_speed_printing = [persistence["settings"]["speed_printing"]] * 4
     elif test_info.name == 'printing speed':
         min_max_speed_printing = None
     else:
@@ -183,14 +181,14 @@ else:
         print([round(k, 1) for k in min_max_speed_printing])
 
     # Add a step for selecting/approving of the result
-    previous_tests = import_json_dict["session"]["previous_tests"]
+    previous_tests = persistence["session"]["previous_tests"]
 
     if ts.test_name == "printing speed":
         tested_speed_values = ts.get_values()
     elif ts.test_name == "retraction distance":
         tested_speed_values = []
     else:
-        tested_speed_values = import_json_dict["settings"]["speed_printing"] if min_max_speed_printing is None else ts.min_max_speed_printing
+        tested_speed_values = persistence["settings"]["speed_printing"] if min_max_speed_printing is None else ts.min_max_speed_printing
 
     if ts.test_name == "retraction distance" or min_max_speed_printing is None:
         tested_speed_values = []
@@ -208,48 +206,48 @@ else:
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
     previous_tests.append(current_test)
-    import_json_dict["session"]["previous_tests"] = previous_tests
+    persistence["session"]["previous_tests"] = previous_tests
 
-    for dummy in import_json_dict["session"]["previous_tests"]:
+    for dummy in persistence["session"]["previous_tests"]:
         if dummy["test_name"] == "printing speed":
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_parameter_value"]
         elif dummy["test_name"] == "path height":
-            import_json_dict["settings"]["track_height"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+            persistence["settings"]["track_height"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "first layer height":
-            import_json_dict["settings"]["track_height_raft"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["track_width_raft"] = np.mean(ts.coef_w_raft) * machine.nozzle.size_id
-            import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
+            persistence["settings"]["track_height_raft"] = dummy["selected_parameter_value"]
+            persistence["settings"]["track_width_raft"] = np.mean(ts.coef_w_raft) * machine.nozzle.size_id
+            persistence["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "first layer width":
-            import_json_dict["settings"]["track_height_raft"] = np.mean(ts.coef_h_raft) * machine.nozzle.size_id
-            import_json_dict["settings"]["track_width_raft"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
+            persistence["settings"]["track_height_raft"] = np.mean(ts.coef_h_raft) * machine.nozzle.size_id
+            persistence["settings"]["track_width_raft"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "path width":
-            import_json_dict["settings"]["track_width"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+            persistence["settings"]["track_width"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "extrusion temperature":
-            import_json_dict["settings"]["temperature_extruder"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+            persistence["settings"]["temperature_extruder"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "extrusion multiplier":
-            import_json_dict["settings"]["extrusion_multiplier"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+            persistence["settings"]["extrusion_multiplier"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
         elif dummy["test_name"] == "retraction distance":
-            import_json_dict["settings"]["retraction_distance"] = dummy["selected_parameter_value"]
-            import_json_dict["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+            persistence["settings"]["retraction_distance"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
 
-    import_json_dict["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*import_json_dict["settings"]["track_height"]/import_json_dict["settings"]["track_width"])),0)
+    persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2 * persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
 
     with open(cwd + separator("jsons") + material.manufacturer + "_" + material.name + "_" + "{:.0f}".format(machine.nozzle.size_id*1000) + "_um" + ".json", mode="w") as file:
-        output = json.dumps(import_json_dict, indent=4, sort_keys=False)
+        output = json.dumps(persistence, indent=4, sort_keys=False)
         file.write(output)
 
 if session_id is not None:
-    with open(cwd + separator() + "persistence_" + str(import_json_dict["session"]["uid"]) + ".json", mode="w") as file:
-        output = json.dumps(import_json_dict, indent=4, sort_keys=False)
+    with open(cwd + separator() + "persistence_" + str(persistence["session"]["uid"]) + ".json", mode="w") as file:
+        output = json.dumps(persistence, indent=4, sort_keys=False)
         file.write(output)
 else:
     with open(cwd + separator() + "persistence.json", mode="w") as file:
-        output = json.dumps(import_json_dict, indent=4, sort_keys=False)
+        output = json.dumps(persistence, indent=4, sort_keys=False)
         file.write(output)
 
 end = time.time()

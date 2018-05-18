@@ -62,7 +62,6 @@ def wipe(ts: TestSetupA or TestSetupB, full = True):
 
 # RAFT PERIMETER
 def raft_perimeter(ts: TestSetupA):
-    ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
     ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft)
     ts.g.write("; --- print the outer perimeter ---")
     ts.g.feed(machine.settings.speed_printing_raft / 3)  # print the outer perimeter of the raft
@@ -88,12 +87,10 @@ def raft_perimeter(ts: TestSetupA):
 
 # PRINTING RAFT
 def print_raft(ts: TestSetupA):
-    ts.g.feed(ts.speed_printing_raft) # print the raft
     ts.g.write("; --- start to print the raft ---")
     ts.g.set_extruder_temperature(ts.temperature_extruder_raft)
     raft_perimeter(ts)
-    output = ("; --- print the infill with the fill density of {} % ---".format(machine.settings.raft_density))
-    ts.g.write(output)
+    ts.g.write("; --- print the infill with the fill density of {} % ---".format(machine.settings.raft_density))
     ts.g.feed(ts.speed_printing_raft)  # print the filling of the raft
     raft_density = machine.settings.raft_density/100
     step = ts.coef_w_raft * machine.nozzle.size_id/raft_density  # step size
@@ -147,8 +144,7 @@ def print_raft_new(ts: TestSetupA):
     ts.g.write("; --- start to clean the nozzle ---")
     ts.g.set_extruder_temperature(ts.temperature_extruder_raft)
     ts.g.dwell(5)
-    output = "G1 F1000 E5; extrude 5 mm of material"
-    ts.g.write(output)
+    ts.g.write("G1 F1000 E5; extrude 5 mm of material")
     ts.g.dwell(5)
     ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
     sf.infill(sf.raft_structure(ts.test_structure_size/2, structure="square"), outlines=2, g=ts.g, coef_w_raft=ts.coef_w_raft, coef_h_raft=ts.coef_h_raft)

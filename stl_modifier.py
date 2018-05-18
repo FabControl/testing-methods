@@ -21,10 +21,10 @@ orientation = argv[0]
 
 scene = bpy.context.scene
 
-mesh = bpy.data.meshes.new("mesh") # make a new empty mesh
-obj = bpy.data.objects.new("ISO527A", mesh) # link the mesh to an object # TODO rename!!!
+mesh = bpy.data.meshes.new("mesh")  # make a new empty mesh
+obj = bpy.data.objects.new("_", mesh)  # link the mesh to an object # TODO rename!!!
 scene.objects.link(obj) # link the object to the scene
-imported_object =  bpy.ops.import_mesh.stl(filepath=cwd + object_path, global_scale=0.1) # get the stl file
+imported_object = bpy.ops.import_mesh.stl(filepath=cwd + object_path, global_scale=0.1)  # get the stl file
 obj.select = True  # select the empty object
 
 bpy.ops.object.modifier_add(type='ARRAY')
@@ -41,8 +41,8 @@ else:
 bpy.context.object.modifiers["Array"].count = count
 
 # Set rotation
-bpy.ops.transform.rotate(value= math.radians(placement[orientation]), axis=(0, 1, 0)) # Rotate Y
-bpy.ops.transform.rotate(value= math.radians(rotation_Z), axis=(0, 0, 1)) # Rotate Z
+bpy.ops.transform.rotate(value= math.radians(placement[orientation]), axis=(0, 1, 0))  # Rotate Y
+bpy.ops.transform.rotate(value= math.radians(rotation_Z), axis=(0, 0, 1))  # Rotate Z
 
 # Apply modifier and ffset the geometry to center
 bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Array")

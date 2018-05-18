@@ -1,6 +1,6 @@
 import re
 from collections import OrderedDict
-from Globals import import_json_dict as persistence
+from Globals import persistence as persistence
 from CLI_helpers import exclusive_write
 import json
 import datetime

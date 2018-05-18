@@ -16,8 +16,7 @@ class TestSetupA(object):
         :param min_max_speed_printing:
         :param raft:
         """
-        self.test_info = test_info
-        self.ventilator_part_cooling =  machine.ventilators.part_cooling
+        self.ventilator_part_cooling = machine.ventilators.part_cooling
         if self.ventilator_part_cooling:
             self.set_ventilator_part_cooling = machine.settings.ventilator_part_cooling
         self.ventilator_entry = machine.ventilators.entry
@@ -27,12 +26,14 @@ class TestSetupA(object):
         if self.ventilator_exit:
             self.set_ventilator_exit = machine.settings.ventilator_exit
 
+        self.test_info = test_info
         self.number_of_test_structures = test_info.number_of_test_structures
         self.number_of_substructures = test_info.number_of_substructures
         self.number_of_layers = test_info.number_of_layers
         self.test_name = test_info.name
+        self.raft = test_info.raft
 
-        self.coef_h_raft, self.coef_w_raft, self.coef_h_raft_all, self.coef_w_raft_all = minmax_track_width_height_raft(machine, self.number_of_test_structures) # TODO
+        self.coef_h_raft, self.coef_w_raft, self.coef_h_raft_all, self.coef_w_raft_all = minmax_track_width_height_raft(machine, self.number_of_test_structures)
 
         if machine.settings.track_height_raft is not None:
             self.coef_h_raft = machine.settings.track_height_raft/machine.nozzle.size_id
@@ -47,15 +48,13 @@ class TestSetupA(object):
         self.coef_h = [x * machine.settings.track_height / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
         self.coef_w = [x * machine.settings.track_width / machine.settings.nozzle.size_id for x in [1] * self.number_of_test_structures]
 
-        self.raft = test_info.raft
-
         if self.raft is False:
             self.abs_z = [x * self.coef_h_raft * machine.nozzle.size_id for x in [1] * self.number_of_test_structures]
         else:
             self.abs_z = [(x + self.coef_h_raft) * machine.nozzle.size_id for x in self.coef_h]
 
         self.extrusion_multiplier = [x * machine.settings.extrusion_multiplier for x in [1] * self.number_of_test_structures]
-        self.extrusion_multiplier_raft = machine.settings.extrusion_multiplier
+        self.extrusion_multiplier_raft = machine.settings.extrusion_multiplier_raft
 
         if machine.printbed.printbed_heatable:
             self.temperature_printbed = machine.settings.temperature_printbed
@@ -114,6 +113,7 @@ class TestSetupA(object):
             self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
             self.temperature_extruder = self.temperature_extruder_raft
 
+            self.abs_z = [x * machine.nozzle.size_id for x in self.coef_h]
             self.argument = self.coef_w
             self.values = [x * machine.nozzle.size_id for x in self.argument]
 
@@ -203,7 +203,6 @@ class TestSetupA(object):
                 self.extrusion_multiplier_bridging = np.linspace(test_info.min_default, test_info.max_default, self.number_of_test_structures).tolist()
             else:
                 self.extrusion_multiplier_bridging = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
-
             self.argument = self.extrusion_multiplier_bridging
             self.values = self.argument
 
@@ -245,7 +244,7 @@ class TestSetupA(object):
 
 
 def addtitle(test_info: TestInfo, material: Material, machine: Machine):
-    title = str("; --- 2D test for " + test_info.parameter + " of {0} from {1} (ID: {2}) using {3} {4} (SN: {5}) and {6} mm {7} nozzle---".format(material.name, material.manufacturer, material.id, machine.manufacturer, machine.model, machine.sn, machine.nozzle.size_id, machine.nozzle.type))
+    title = str("; --- 2D test for " + test_info.name + " of {0} from {1} (ID: {2}) using {3} {4} (SN: {5}) and {6} mm {7} nozzle---".format(material.name, material.manufacturer, material.id, machine.manufacturer, machine.model, machine.sn, machine.nozzle.size_id, machine.nozzle.type))
     return title
 
 
