@@ -1,16 +1,17 @@
 """
 Usage:
 
-blender -b -P stl_modifier.py <horizontal|vertical> <count> <rotation_Z> <object_path> <cwd>
+blender -b -P stl_modifier.py <horizontal|vertical> <count> <rotation_Z> <object_path> <cwd> <maxdim>
 """
 import bpy
 import math
 import sys
-
+import json
 
 argv = sys.argv
 argv = argv[argv.index("--") + 1:]
 
+max_dim_y = argv[5]
 object_path = argv[3]
 cwd = argv[4]
 placement = {"vertical": 90, "horizontal": 0}
@@ -21,22 +22,23 @@ orientation = argv[0]
 
 scene = bpy.context.scene
 
-mesh = bpy.data.meshes.new("mesh")  # make a new empty mesh
-obj = bpy.data.objects.new("_", mesh)  # link the mesh to an object # TODO rename!!!
-scene.objects.link(obj) # link the object to the scene
 imported_object = bpy.ops.import_mesh.stl(filepath=cwd + object_path, global_scale=0.1)  # get the stl file
-obj.select = True  # select the empty object
 
+dimension_Y = bpy.context.object.dimensions[1]
+while (count + 1) * dimension_Y > max_dim_y * 0.1:
+    count = count - 1
+
+# Array operations
 bpy.ops.object.modifier_add(type='ARRAY')
-bpy.context.object.modifiers["Array"].use_relative_offset = True
-bpy.context.object.modifiers["Array"].use_constant_offset = False
+bpy.context.object.modifiers["Array"].use_relative_offset = False
+bpy.context.object.modifiers["Array"].use_constant_offset = True
 bpy.context.object.modifiers["Array"].relative_offset_displace[0] = 0
 
 if orientation == "vertical":
-    bpy.context.object.modifiers["Array"].constant_offset_displace[2] = 0.8
+    bpy.context.object.modifiers["Array"].constant_offset_displace[2] = 0.5
     bpy.context.object.modifiers["Array"].relative_offset_displace[2] = 1.5
 else:
-    bpy.context.object.modifiers["Array"].constant_offset_displace[1] = 2.5
+    bpy.context.object.modifiers["Array"].constant_offset_displace[1] = dimension_Y + 0.5
     bpy.context.object.modifiers["Array"].relative_offset_displace[1] = 1.2
 bpy.context.object.modifiers["Array"].count = count
 
