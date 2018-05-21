@@ -31,6 +31,7 @@ class TestSetupA(object):
         self.number_of_substructures = test_info.number_of_substructures
         self.number_of_layers = test_info.number_of_layers
         self.test_name = test_info.name
+        self.parameter = test_info.parameter
         self.raft = test_info.raft
 
         self.coef_h_raft, self.coef_w_raft, self.coef_h_raft_all, self.coef_w_raft_all = minmax_track_width_height_raft(machine, self.number_of_test_structures)
@@ -219,10 +220,10 @@ class TestSetupA(object):
         volumetric_flow_rate_row = []
 
         for speed in self.min_max_speed_printing:
-            for dummy in range(self.number_of_test_structures if self.test_name != "printing speed" else 1):
+            for dummy in range(self.number_of_test_structures):
                 value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
                 volumetric_flow_rate_row.append(value)
-                if dummy == self.number_of_test_structures-1 or self.test_name == "printing speed":
+                if dummy == self.number_of_test_structures-1:
                     volumetric_flow_rate.append(volumetric_flow_rate_row)
                     volumetric_flow_rate_row = []
         self.volumetric_flow_rate = volumetric_flow_rate

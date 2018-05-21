@@ -4,36 +4,32 @@ Command Line Interface
 Usage:
     CLI.py [-v] [-q]
     CLI.py <session-id> [-v] [-q]
-    CLI.py new-test
-    CLI.py generate-report
-    CLI.py generate-configuration <slicer>
-    CLI.py generate-gcode-iso <orientation> <count> <rotation> <config> <file>
     CLI.py --help
 """
 #python CLI.py generate-gcode-iso horizontal 4 90 "Carbodeon_Nanodiamond PLA A_1-75_0-8.ini" ISO527-1A.stl
 
+import re
+import time
+from datetime import datetime
+
+from docopt import docopt
+
+from CLI_helpers import evaluate, clear, extruded_filament
 from CheckCompatibility import check_compatibility
-from CLI_helpers import evaluate, clear, extruded_filament, generate_gcode, separator, exclusive_write
 from Definitions import *
 from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retraction_restart_distance_vs_coasting_distance, retraction_distance, bridging_test
-#from DefinitionsTestsB import dimensional_test TODO not working at all
-from datetime import datetime
-from docopt import docopt
-from Globals import machine, material, persistence
-from Globals import test_number_list, test_name_list, test_dict
-from paths import cwd, gcode_folder
-import re, subprocess
+# from DefinitionsTestsB import dimensional_test TODO not working at all
+from Globals import machine, material, persistence, test_number_list, test_name_list, test_dict, filename, session_idn
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
-import session_loader
-import time
+from paths import cwd
+from session_loader import session_uid
 
 quiet = True
 verbose = False
 
-
 def initialize_test():
-    path = str(cwd + gcode_folder + separator() + test_info.name + ' test' + '.gcode')
+    path = filename(cwd, session_id, "gcode")
 
     if persistence["session"]["test_type"] == "A":
         ts = TestSetupA(machine, material, test_info, path,
@@ -65,21 +61,21 @@ if __name__ == '__main__':
 
     verbose = arguments["-v"]
     quiet = arguments["-q"]
-    session_id = arguments["<session-id>"]
+    session_id = arguments["<session-id>"] if arguments["<session-id>"] is not None else session_idn
 
-    if arguments["generate-configuration"]:
-        slicer_arg = str(arguments["<slicer>"]).lower()
-        if slicer_arg == 'prusa' or slicer_arg == "simplify3d":
-            persistence["session"]["slicer"] = slicer_arg
-            import generate_configuration
-        else:
-            raise ValueError("{} not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.".format(slicer_arg))
-        quit()
-
-if arguments["generate-gcode-iso"]:
-    config = arguments["<config>"]
-    generate_gcode(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<file>"], config)
-    quit()
+#     if arguments["generate-configuration"]:
+#         slicer_arg = str(arguments["<slicer>"]).lower()
+#         if slicer_arg == 'prusa' or slicer_arg == "simplify3d":
+#             persistence["session"]["slicer"] = slicer_arg
+#             import generate_configuration
+#         else:
+#             raise ValueError("{} not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.".format(slicer_arg))
+#         quit()
+#
+# if arguments["generate-gcode-iso"]:
+#     config = arguments["<config>"]
+#     generate_gcode(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<file>"], config)
+#     quit()
 
 session = persistence["session"]
 start = time.time()
@@ -129,7 +125,7 @@ if quiet:
     if ts.test_name == "printing speed":
         tested_speed_values = ts.get_values()
     elif ts.test_name == "retraction distance":
-        tested_speed_values = np.mean(ts.speed_printing)
+        tested_speed_values = [np.mean(ts.speed_printing)]
     else:
         tested_speed_values = ts.min_max_speed_printing
 
@@ -137,7 +133,6 @@ if quiet:
         persistence["settings"]["track_width_raft"] = np.mean(ts.track_width)
 
     current_test = {"test_name": ts.test_name,
-                    "file_name": "a name",  # TODO
                     "tested_parameter_values": [round(k, int(re.search("[0-9]", ts.test_info.precision).group())) for k in ts.get_values()],
                     "tested_printing-speed_values": [round(k, 1) for k in tested_speed_values],
                     "tested_volumetric_flow-rate_values": ts.volumetric_flow_rate,
@@ -146,15 +141,15 @@ if quiet:
                     "selected_volumetric_flow-rate_value": 0,
                     "units": ts.test_info.units,
                     "parameter_precision": ts.test_info.precision,
-                    "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
+                    "extruded_filament": extruded_filament(filename(cwd, session_id, "gcode")),
                     "comments": 0,
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
     previous_tests.append(current_test)
     persistence["session"]["previous_tests"] = previous_tests
 
-else: # TODO saskanot ar quiet
-    test_info = test_dict[str(int(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number_list, test_name_list)) + ": ")))]
+else:
+    test_info = test_dict[str(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number_list, test_name_list)) + ": "))]
     min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: "))
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
     session["number_of_test_structures"] = test_info.number_of_test_structures
@@ -176,7 +171,7 @@ else: # TODO saskanot ar quiet
     [print(x[::-1]) for x in ts.volumetric_flow_rate]
 
     if min_max_speed_printing is not None:
-        print("Printing-speed values:")
+        print("Printing-speed values (mm/s):")
         min_max_speed_printing = ts.min_max_speed_printing
         print([round(k, 1) for k in min_max_speed_printing])
 
@@ -186,7 +181,7 @@ else: # TODO saskanot ar quiet
     if ts.test_name == "printing speed":
         tested_speed_values = ts.get_values()
     elif ts.test_name == "retraction distance":
-        tested_speed_values = []
+        tested_speed_values = [np.mean(ts.speed_printing)]
     else:
         tested_speed_values = persistence["settings"]["speed_printing"] if min_max_speed_printing is None else ts.min_max_speed_printing
 
@@ -196,13 +191,14 @@ else: # TODO saskanot ar quiet
     current_test = {"test_name": ts.test_name,
                     "tested_parameter_values": [round(k, int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
                     "tested_printing-speed_values": [round(k, 1) for k in tested_speed_values],
-                    "selected_parameter_value": evaluate(input("Enter the best parameter value: ")) if not quiet else 0,
-                    "selected_printing-speed_value": evaluate(input("Enter the printing-speed value which corresponds to the best strucuture: ")) if not quiet else 0,
-                    "selected_volumetric_flow-rate_value": evaluate(input("Enter the volumetric flow-rate value which corresponds to the best strucuture: ")) if not quiet else 0,
+                    "tested_volumetric_flow-rate_values": ts.volumetric_flow_rate,
+                    "selected_parameter_value": evaluate(input("Enter the best parameter value: ")),
+                    "selected_printing-speed_value": evaluate(input("Enter the printing-speed value (mm/s) which corresponds to the best strucuture: ")),
+                    "selected_volumetric_flow-rate_value": evaluate(input("Enter the volumetric flow-rate value (mm3/s) which corresponds to the best strucuture: ")),
                     "units": ts.test_info.units,
                     "parameter_precision": ts.test_info.precision,
-                    "extruded_filament": extruded_filament(cwd + gcode_folder + separator() + ts.test_name + " test.gcode"),
-                    "comments": input("Comments: ") if not quiet else 0,
+                    "extruded_filament": extruded_filament(filename(cwd, session_id, "gcode")),
+                    "comments": input("Comments: "),
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
     previous_tests.append(current_test)
@@ -237,18 +233,9 @@ else: # TODO saskanot ar quiet
 
     persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2 * persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
 
-    with open(cwd + separator("jsons") + material.manufacturer + "_" + material.name + "_" + "{:.0f}".format(machine.nozzle.size_id*1000) + "_um" + ".json", mode="w") as file:
-        output = json.dumps(persistence, indent=4, sort_keys=False)
-        file.write(output)
-
-if session_id is not None:
-    with open(cwd + separator() + "persistence_" + str(persistence["session"]["uid"]) + ".json", mode="w") as file:
-        output = json.dumps(persistence, indent=4, sort_keys=False)
-        file.write(output)
-else:
-    with open(cwd + separator() + "persistence.json", mode="w") as file:
-        output = json.dumps(persistence, indent=4, sort_keys=False)
-        file.write(output)
+with open(filename(cwd, session_id, "json"), mode="w") as file:
+    output = json.dumps(persistence, indent=4, sort_keys=False)
+    file.write(output)
 
 end = time.time()
 time_elapsed = end - start

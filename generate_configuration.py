@@ -1,10 +1,31 @@
+#!/usr/local/bin/python
+"""
+Mass Portal Feedstock Testing Suite
+Configuration file Generator
+
+Usage:
+    generate_configuration.py <session_id>
+"""
+
+import datetime
+import json
 import re
 from collections import OrderedDict
-from Globals import persistence as persistence
+
+from docopt import docopt
+
 from CLI_helpers import exclusive_write
-import json
-import datetime
+from Globals import filename
 from conversion_dictionary import Slicer, Param, Params
+from paths import *
+
+arguments = docopt(__doc__)
+session_id = str(arguments["<session_id>"])
+
+json_path = filename(cwd, session_id, "json")
+
+with open(json_path, mode="r") as file:
+    persistence = json.load(file)
 
 slicer = str(persistence["session"]["slicer"]).lower()
 
@@ -152,4 +173,3 @@ elif slicer == "simplify3d":
 
     tree.write(output_name("fff"), xml_declaration=True, encoding="utf-8")
     print("{} succesfully written".format(output_name("fff")))
-

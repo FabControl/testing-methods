@@ -1,19 +1,21 @@
-from Definitions import Material, Settings, Machine, TestInfo, minmax_track_width_height_raft
+from Definitions import Material, Settings, Machine, TestInfo
 import json
-from session_loader import session_id
+from session_loader import session_uid
+from paths import cwd, json_folder
+from CLI_helpers import separator
 
 try:
     try:
-        print("Attempting to load the persistence file with ID {}".format(session_id))
-        with open("persistence_" + session_id + ".json", mode="r") as file:
+        print("Attempting to load the persistence file with ID {}".format(session_uid))
+        with open(str(cwd + json_folder + separator() + session_uid + ".json"), mode="r") as file:
             persistence = json.load(file)
-        print("Loaded a testing session ID {} from outer scope".format(persistence["session"]["uid"]))
+        print("Loaded a testing session ID {} from the existing JSON file".format(persistence["session"]["uid"]))
         file.close()
     except:
-        print("Attempting to load the persistence file without an ID".format(session_id))
-        with open("persistence.json", mode="r") as file:
+        print("Attempting to load the persistence file without an ID".format(session_uid))
+        with open(str(cwd + json_folder + separator() + session_uid + ".json"), mode="r") as file:
             persistence = json.load(file)
-        print("Loaded a testing session ID {} from outer scope".format(persistence["session"]["uid"]))
+        print("Loaded a testing session ID {} from the existing JSON file".format(persistence["session"]["uid"]))
         file.close()
 except:
     print("falling back to hardcoded JSON")
@@ -79,7 +81,7 @@ except:
         "ventilator_entry": 0,
         "ventilator_exit": 0,
         "raft_density": 100,
-        "temperature_printbed": 115,
+        "temperature_printbed": 40,
         "temperature_extruder_raft": 280,
         "track_height_raft": 0.3,
         "track_width_raft": 0.6,
@@ -103,41 +105,44 @@ except:
         "critical_overhang_angle": 36.0
     },
     "session": {
-        "uid": 20180508,
+        "uid": 20180521,
+        "user_id": "GB",
         "file_name": "a name",
         "previous_tests": [],
-        "test_type": 'A',
-        "test_name": 1,
+        "test_type": "A",
+        "test_name": "01",
         "min_max": None,
         "min_max_speed": [10, 30],
         "slicer": "Prusa Slic3r",
         "number_of_test_structures": 7
         }
     }
-# TODO Add to json for report generation
+
 # TODO Create a similar dict for B tests
-test_dict = {'1': TestInfo('first-layer track height', 'first-layer-track-height', 'mm', '{:.3f}',
+test_dict = {"01": TestInfo("first-layer track height", "first-layer-track-height", "mm", "{:.3f}",
                            number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=False),
-             '2': TestInfo('first-layer track width', 'first-layer-track-width', 'mm', '{:.3f}',
+             "02": TestInfo("first-layer track width", "first-layer-track-width", "mm", "{:.3f}",
                            number_of_layers=1, number_of_test_structures=7, number_of_substructures=1, raft=False),
-             '3': TestInfo('extrusion temperature', 'extrusion-temperature', 'degC', '{:.0f}',
+             "03": TestInfo("extrusion temperature", "extrusion-temperature", "degC", "{:.0f}",
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
-             '4': TestInfo('track height', 'track-height', 'mm', '{:.3f}',
+             "04": TestInfo("track height", "track-height", "mm", "{:.3f}",
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
-             '5': TestInfo('track width', 'track-width', 'mm', '{:.3f}',
+             "05": TestInfo("track width", "track-width", "mm", "{:.3f}",
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
-             '6': TestInfo('extrusion multiplier', 'extrusion-multiplier', '-', '{:.3f}',
+             "06": TestInfo("extrusion multiplier", "extrusion-multiplier", "-", "{:.3f}",
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0.80, 1.40]),
-             '7': TestInfo('printing speed', 'printing-speed', 'mm/s', '{:.1f}',
+             "07": TestInfo("printing speed", "printing-speed", "mm/s", "{:.1f}",
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0.80, 1.75]),
-             '8': TestInfo('retraction distance', 'retraction-distance', 'mm', '{:.3f}',
-                           number_of_layers=8, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0., 4.]),
-             '9': TestInfo('retraction-restart distance', 'retraction-restart-distance', 'mm', '{:.3f}',
-                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0., 0.4]),
-             '10': TestInfo('bridging', 'bridging-extrusion-multiplier', '-', '{:.3f}',
+             "08": TestInfo("retraction distance", "retraction-distance", "mm", "{:.3f}",
+                           number_of_layers=8, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0.0, 4.0]),
+             "09": TestInfo("retraction-restart distance", "retraction-restart-distance", "mm", "{:.3f}",
+                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0.0, 0.4]),
+             "10": TestInfo("bridging extrusion-multiplier", "bridging-extrusion-multiplier", "-", "{:.3f}",
                            number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[1.0, 2.0])}
 
 test_info = test_dict[str(persistence["session"]["test_name"])]
+session_idn = str(persistence["session"]["uid"])
+
 persistence["session"]["number_of_test_structures"] = test_info.number_of_test_structures
 
 test_name_list, test_precision_list, test_units_list = [], [], []
@@ -145,26 +150,38 @@ test_number_list = test_dict.keys()
 
 for test_number in test_number_list:
     test = test_dict[test_number]
-    test_name_list.append(test.parameter)
+    test_name_list.append(test.name)
     test_precision_list.append(test.precision)
     test_units_list.append(test.units)
 
 material = Material(**persistence["material"])
 machine = Machine(**persistence["machine"])
 machine.settings = Settings(nozzle=machine.nozzle, material=material, **persistence["settings"])
-#coef_h_raft, coef_w_raft, coef_h_raft_all = minmax_track_width_height_raft(machine) TODO was it needed for B tests?
 
-
-def filename(extension: str) -> str:
+def filename(cwd: str, session_id: str, extension: str) -> str:
     """
     Takes a filename extension and returns a full file-name based on the following convention:
-    'YYYYMMDDxxx_UserID_TestNumber' where x is a number character from [0-9a-z] and TestNumber is a double-digit
+    'cwd\\folder\\YYYYMMDDxxx_TestNumber.extension' where x is a number character from [0-9a-z] and TestNumber is a double-digit
     zero-padded number.
     :param extension:
     :return:
     """
+    from paths import gcode_folder, json_folder, pdf_folder, stl_folder
+
     if not extension.startswith("."):
         extension = "." + extension
-    output = "{}_{}_{}.{}".format(persistence["session"]["uid"], persistence["session"]["user_id"],
-                                  str(persistence["session"]["test_name"]), extension)
+
+    if extension == ".gcode":
+        folder = gcode_folder
+    if extension == ".json":
+        folder = json_folder
+    if extension == ".pdf":
+        folder = pdf_folder
+    if extension == ".stl":
+        folder = stl_folder
+
+    if extension == ".gcode":
+        output = str(cwd + folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
+    else:
+        output = str(cwd + folder + separator() + session_id + extension)
     return output

@@ -4,64 +4,65 @@ Mass Portal Feedstock Testing Suite
 Test Report Generator
 
 Usage:
-    generate_report.py [json_path]
+    generate_report.py <session_id>
 """
 
-from CLI_helpers import *
+import json
+import os
 from datetime import datetime
+
 from docopt import docopt
-import json, os
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, inch, landscape
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib.styles import ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
+
+from CLI_helpers import *
+from Globals import filename
+from paths import *
 
 arguments = docopt(__doc__)
-if arguments["json_path"]:
-    json_path = arguments["json_path"]
-else:
-    json_path = "persistence.json"
+session_id = str(arguments["<session_id>"])
+
+json_path = filename(cwd, session_id, "json")
 
 with open(json_path, mode="r") as file:
     import_json_dict = json.load(file)
 
-file_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' ' + str(import_json_dict["material"]["size_od"]*1000) + ' um'
-report_name = 'Test report for ' + import_json_dict["material"]["manufacturer"]+' '+import_json_dict["material"]["name"] + ' Ø' + str(import_json_dict["material"]["size_od"]) + ' mm'
+report_name = "Test report for " + import_json_dict["material"]["manufacturer"] +" "+import_json_dict["material"]["name"] + " Ø" + str(import_json_dict["material"]["size_od"]) + " mm"
 
-doc = SimpleDocTemplate(file_name + '.pdf',
+doc = SimpleDocTemplate(filename(cwd, session_id, "pdf"),
                         pagesize=landscape(A4),
                         rightMargin=30,
                         leftMargin=25,
                         topMargin=30,
                         bottomMargin=18)
 
-style_heading = ParagraphStyle(
-        name='Bold',
-        fontName='Times',
-        fontSize=24)
+style_heading = ParagraphStyle(name="Bold",
+                               fontName="Times",
+                               fontSize=24)
 
-style_text = ParagraphStyle(
-        name='Normal',
-        fontName='Times',
-        fontSize=11)
+style_text = ParagraphStyle(name="Normal",
+                            fontName="Times",
+                            fontSize=11)
 
 elements = []
 
 cwd = os.getcwd()
 
-logo = cwd + '/MP-Logo-horiz-black.png'
+logo = cwd + "/MP-Logo-horiz-black.png"
 im = Image(logo, 2.14*inch, 0.35*inch)
-im.hAlign = 'LEFT'
+im.hAlign = "LEFT"
 elements.append(im)
 
 elements.append(Paragraph(report_name, style=style_heading))
 elements.append(Spacer(1, 0.5*inch))
 
-datetime_info = "Report generated on: " + datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-main_info = "Aim for: " + import_json_dict["settings"]["aim"]
-elements.append(Paragraph(main_info, style=style_text))
+datetime_info = "Report generated on: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 elements.append(Paragraph(datetime_info, style=style_text))
-main_info = "Material: " + import_json_dict["material"]["name"]
+main_info = "Target: " + import_json_dict["settings"]["aim"]
+elements.append(Paragraph(main_info, style=style_text))
+main_info = "Material: " + import_json_dict["material"]["name"] + ", ID:" + import_json_dict["material"]["id"] if import_json_dict["material"]["id"] is not None else "Material: " + import_json_dict["material"]["name"]
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Manufacturer: " + import_json_dict["material"]["manufacturer"]
 elements.append(Paragraph(main_info, style=style_text))
@@ -108,7 +109,7 @@ for single_test in performed_tests:
         new_line.append(single_test["parameter_precision"].format(dummy))
 
     new_line.append(single_test["parameter_precision"].format(single_test["selected_parameter_value"]))
-    new_line.append("{:.1f}".format(single_test["selected_speed_value"]))
+    new_line.append("{:.1f}".format(single_test["selected_printing-speed_value"]))
 
     try:
         new_line.append("{:.3f}".format(single_test["selected_volumetric_flow-rate_value"]))
@@ -117,12 +118,12 @@ for single_test in performed_tests:
     data.append(new_line)
     i += 1
 
-style = TableStyle([('ALIGN',(0,0),(-1,-1),'CENTER'),
-                    ('TEXTCOLOR',(0,0),(-1,-1),colors.black),
-                    ('VALIGN',(0, 0),(-1,-1),'MIDDLE'),
-                    ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
-                    ('BOX', (0,0), (-1,-1), 0.25, colors.black),
-                    ('SPAN',(3,0),(-4,0))
+style = TableStyle([("ALIGN",(0,0),(-1,-1),"CENTER"),
+                    ("TEXTCOLOR",(0,0),(-1,-1),colors.black),
+                    ("VALIGN",(0, 0),(-1,-1),"MIDDLE"),
+                    ("INNERGRID", (0,0), (-1,-1), 0.25, colors.black),
+                    ("BOX", (0,0), (-1,-1), 0.25, colors.black),
+                    ("SPAN",(3,0),(-4,0))
                     ])
 
 colwidths = [20, 110, 50]
@@ -139,5 +140,3 @@ t.setStyle(style)
 # Send the data and build the file
 elements.append(t)
 doc.build(elements)
-# TODO to foresee: fields for comments Reinis
-exclusive_write(json_path, json.dumps(import_json_dict, indent=4, sort_keys=False))

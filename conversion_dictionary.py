@@ -5,29 +5,19 @@ Usage:
     conversion_dictionary.py add-slicer <slicer>
     conversion_dictionary.py parameter (add <parameter> | modify <parameter> [<slicer>])
 """
-import json
 import gc
-from CLI_helpers import clear, round
+import json
+
 import jsonpickle
 from docopt import docopt
 
+from CLI_helpers import clear, round
+
 gc.enable()  # Enable garbage collection
-with open("relational_dict.json") as file:
-    relational_dict = json.load(file)
-    file.close()
-
-with open("persistence.json") as file:
-    persistence = json.load(file)
-    file.close()
-
-# Needed to unify all relevant values in a single list for convenience
-flat_values = dict(persistence["settings"], **persistence["machine"]["nozzle"])
-flat_values["material_name"] = persistence["material"]["name"]
 
 """
 Utility Methods
 """
-
 
 def numeral_eval(value):
     """
@@ -52,7 +42,7 @@ def numeral_input(text: str):
 def generate_reverse_modifier(input_obj):
     if input_obj.modifier is not None:
         print("Working parameter: %s" % input_obj.root.parameter)
-        input_obj.reverse_modifier = numeral_input("reverse modifier for '%s': " % input_obj.modifier)
+        input_obj.reverse_modifier = numeral_input("reverse modifier for '{}': ".format(input_obj.modifier))
 
 
 def generate_dict_entry():
@@ -60,10 +50,10 @@ def generate_dict_entry():
     Generate a dict entry for each value in settings
     """
     new_dictionary = []
-    for key, value in persistence["settings"]:
-        persistence[key] = {"prusa": input("%s in %s: " % (key, "prusa")),
+    for key, value in persistence["settings"]: #TODO remove all references to persistence in this file
+        persistence[key] = {"prusa": input("{} in {}: ".format(key, "prusa")),
                             "slic3r": "",
-                            "simplify3d": input("%s in %s: " % (key, "simplify3d")),
+                            "simplify3d": input("{} in {}: ".format(key, "simplify3d")),
                             "kissslicer": ""}
         with open("relational_dict.json", mode="w") as file:
             output = json.dumps(new_dictionary, indent=4, sort_keys=True)
@@ -86,7 +76,7 @@ def assign_modifiers():
                 input_json[param][slicer] = {
                     "parameter": input_json[param][slicer],
                     "modifier": input(
-                        "%s modifier for %s to derive from %s: " % (param, parameter, persistence["settings"][param]))}
+                        "{} modifier for {} to derive from {}: ".format(param, parameter, persistence["settings"][param]))}
                 if input_json[param][slicer]["modifier"] != "":
                     if "y" in input_json[param][slicer]["modifier"]:
                         input_json[param][slicer]["parent_parameter"] = input("Key of the parent parameter: ")
@@ -465,4 +455,3 @@ if __name__ == "__main__":
     elif arguments["parameter"]:
         if arguments["[add]"]:
             params.add_parameter(arguments["<parameter>"])
-
