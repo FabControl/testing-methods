@@ -176,7 +176,7 @@ class TestSetupA(object):
             else:
                 self.speed_printing = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
             self.argument = self.speed_printing
-            self.min_max_speed_printing = self.speed_printing
+            #self.min_max_speed_printing = self.speed_printing
             self.values = self.argument
 
         elif self.test_name == 'retraction distance':
@@ -219,13 +219,22 @@ class TestSetupA(object):
         volumetric_flow_rate = []
         volumetric_flow_rate_row = []
 
-        for speed in self.min_max_speed_printing:
+        if self.number_of_substructures != 1:
+            for speed in self.min_max_speed_printing:
+                for dummy in range(self.number_of_test_structures):
+                    value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
+                    volumetric_flow_rate_row.append(value)
+                    if dummy == self.number_of_test_structures-1:
+                        volumetric_flow_rate.append(volumetric_flow_rate_row)
+                        volumetric_flow_rate_row = []
+        else:
             for dummy in range(self.number_of_test_structures):
-                value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
+                value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], self.speed_printing[dummy], self.extrusion_multiplier[dummy]), 3)
                 volumetric_flow_rate_row.append(value)
                 if dummy == self.number_of_test_structures-1:
                     volumetric_flow_rate.append(volumetric_flow_rate_row)
                     volumetric_flow_rate_row = []
+
         self.volumetric_flow_rate = volumetric_flow_rate
 
         self.title = addtitle(test_info, material, machine)

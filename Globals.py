@@ -110,7 +110,7 @@ except:
         "file_name": "a name",
         "previous_tests": [],
         "test_type": "A",
-        "test_name": "01",
+        "test_name": "07",
         "min_max": None,
         "min_max_speed": [10, 30],
         "slicer": "Prusa Slic3r",

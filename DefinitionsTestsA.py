@@ -14,7 +14,7 @@ def wipe(ts: TestSetupA or TestSetupB, full = True):
                   z=+2 * ts.coef_h_raft * machine.nozzle.size_id,
                   extrude=False, extrusion_multiplier=0)
 
-    if hasattr(ts, 'temperature_printbed'):
+    if hasattr(ts, "temperature_printbed"):
         ts.g.set_printbed_temperature(ts.temperature_printbed)
 
     ts.g.write("; --- start to clean the nozzle ---")
@@ -134,7 +134,7 @@ def print_raft_new(ts: TestSetupA):
     ts.g.home()
     ts.g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
 
-    if hasattr(ts, 'temperature_printbed'):
+    if hasattr(ts, "temperature_printbed"):
         ts.g.set_printbed_temperature(ts.temperature_printbed)
 
     ts.g.abs_move(x=0,
@@ -177,7 +177,7 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
                         z=+ts.abs_z[current_test_structure],
                         lift=1)
 
-        if ts.test_name == 'extrusion temperature':
+        if ts.test_name == "extrusion temperature":
             ts.g.travel(x=0,
                         y=+ts.test_structure_size/5,
                         z=+ts.abs_z[current_test_structure], retraction_speed=ts.retraction_speed, retraction_distance=ts.retraction_distance[current_test_structure])
@@ -194,12 +194,12 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
         step_x = ts.step_x[current_test_structure]
 
         for current_substructure in range(ts.number_of_substructures):
-            if ts.min_max_speed_printing is not None:
-                current_printing_speed = ts.min_max_speed_printing[(current_substructure)] #if ts.number_of_substructures > 1 else current_test_structure
+            if hasattr(ts, "min_max_speed_printing"):
+                current_printing_speed = ts.min_max_speed_printing[(current_substructure)]
             else:
                 current_printing_speed = ts.speed_printing[current_test_structure]
 
-            ts.g.write('; --- testing the following printing speed value: {:.3f} mm/s'.format(current_printing_speed))
+            ts.g.write("; --- testing the following printing speed value: {:.3f} mm/s".format(current_printing_speed))
             ts.g.feed(current_printing_speed)
 
             for current_layer in range(ts.number_of_layers): # layers
@@ -349,7 +349,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
             else:
                 current_printing_speed = ts.speed_printing[current_test_structure]
 
-            ts.g.write('; --- testing the following printing speed value: {:.1f} mm/s'.format(current_printing_speed))
+            ts.g.write("; --- testing the following printing speed value: {:.1f} mm/s".format(current_printing_speed))
             ts.g.feed(current_printing_speed)
             coasting_distance = np.linspace(0, ts.coasting_distance, ts.number_of_lines)
 
@@ -454,7 +454,7 @@ def bridging_test(ts: TestSetupA):
 
     # Printing bridges
     for current_speed_value in ts.min_max_speed_printing:
-        ts.g.write('; --- testing the following bridging speed value: {:.1f} mm/s'.format(current_speed_value))
+        ts.g.write("; --- testing the following bridging speed value: {:.1f} mm/s".format(current_speed_value))
         ts.g.feed(current_speed_value)
         for index, current_extrusion_multiplier_value in enumerate(ts.extrusion_multiplier_bridging):
             ts.g.write(ts.comment2[index])
