@@ -11,9 +11,7 @@ Usage:
 import re
 import time
 from datetime import datetime
-
 from docopt import docopt
-
 from CLI_helpers import evaluate, clear, extruded_filament
 from CheckCompatibility import check_compatibility
 from Definitions import *
@@ -149,7 +147,9 @@ if quiet:
     persistence["session"]["previous_tests"] = previous_tests
 
 else:
-    test_info = test_dict[str(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number_list, test_name_list)) + ": "))]
+    test_number = str(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(test_number_list, test_name_list)) + ": "))
+    persistence["session"]["test_name"] = test_number.strip()
+    test_info = test_dict[test_number]
     min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: "))
     min_max_argument = min_max_argument_input if min_max_argument_input != "" else None
     session["number_of_test_structures"] = test_info.number_of_test_structures

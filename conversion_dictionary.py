@@ -5,19 +5,18 @@ Usage:
     conversion_dictionary.py add-slicer <slicer>
     conversion_dictionary.py parameter (add <parameter> | modify <parameter> [<slicer>])
 """
-import gc
 import json
-
+import gc
+from CLI_helpers import clear, round
 import jsonpickle
 from docopt import docopt
-
-from CLI_helpers import clear, round
 
 gc.enable()  # Enable garbage collection
 
 """
 Utility Methods
 """
+
 
 def numeral_eval(value):
     """
@@ -45,13 +44,13 @@ def generate_reverse_modifier(input_obj):
         input_obj.reverse_modifier = numeral_input("reverse modifier for '{}': ".format(input_obj.modifier))
 
 
-def generate_dict_entry():
+def generate_dict_entry(persistence):
     """
     Generate a dict entry for each value in settings
     """
     new_dictionary = []
-    for key, value in persistence["settings"]: #TODO remove all references to persistence in this file
-        persistence[key] = {"prusa": input("{} in {}: ".format(key, "prusa")),
+    for key, value in persistence["settings"]:
+        persistence[key] = {"prusa": input("%s in %s: " % (key, "prusa")),
                             "slic3r": "",
                             "simplify3d": input("{} in {}: ".format(key, "simplify3d")),
                             "kissslicer": ""}
@@ -61,7 +60,7 @@ def generate_dict_entry():
             file.close()
 
 
-def assign_modifiers():
+def assign_modifiers(persistence):
     """
     Assign modifiers and parent parameters
     """
