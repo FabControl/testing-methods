@@ -183,7 +183,10 @@ def filename(cwd: str, session_id: str, extension: str) -> str:
     if extension == ".png":
         folder = png_folder
 
-    if extension == ".gcode" or ".png":
+    if extension == ".gcode":
+        output = str(cwd + folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
+
+    if extension == ".png":
         output = str(cwd + folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
     else:
         output = str(cwd + folder + separator() + session_id + extension)
