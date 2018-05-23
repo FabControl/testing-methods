@@ -159,11 +159,14 @@ material = Material(**persistence["material"])
 machine = Machine(**persistence["machine"])
 machine.settings = Settings(nozzle=machine.nozzle, material=material, **persistence["settings"])
 
+
 def filename(cwd: str, session_id: str, extension: str) -> str:
     """
     Takes a filename extension and returns a full file-name based on the following convention:
     'cwd\\folder\\YYYYMMDDxxx_TestNumber.extension' where x is a number character from [0-9a-z] and TestNumber is a double-digit
     zero-padded number.
+    :param cwd:
+    :param session_id:
     :param extension:
     :return:
     """
@@ -186,7 +189,7 @@ def filename(cwd: str, session_id: str, extension: str) -> str:
     if extension == ".gcode":
         output = str(cwd + folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
 
-    if extension == ".png":
+    elif extension == ".png":
         output = str(cwd + folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
     else:
         output = str(cwd + folder + separator() + session_id + extension)
