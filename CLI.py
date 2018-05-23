@@ -6,7 +6,6 @@ Usage:
     CLI.py <session-id> [-v] [-q]
     CLI.py --help
 """
-#python CLI.py generate-gcode-iso horizontal 4 90 "Carbodeon_Nanodiamond PLA A_1-75_0-8.ini" ISO527-1A.stl
 
 import re
 import time
@@ -38,7 +37,7 @@ def initialize_test():
             retraction_distance(ts)
         elif test_info.name == 'retraction-restart distance':
             retraction_restart_distance_vs_coasting_distance(ts)
-        elif test_info.name == 'bridging':
+        elif test_info.name == 'bridging extrusion-multiplier':
             bridging_test(ts)
         else:
             flat_test_single_parameter_vs_speed_printing(ts)

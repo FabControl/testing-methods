@@ -176,7 +176,6 @@ class TestSetupA(object):
             else:
                 self.speed_printing = np.linspace(min_max_argument[0], min_max_argument[1], self.number_of_test_structures).tolist()
             self.argument = self.speed_printing
-            #self.min_max_speed_printing = self.speed_printing
             self.values = self.argument
 
         elif self.test_name == 'retraction distance':
@@ -198,7 +197,7 @@ class TestSetupA(object):
             self.argument = self.retraction_restart_distance
             self.values = self.argument
 
-        elif self.test_name == 'bridging':
+        elif self.test_name == 'bridging extrusion-multiplier':
             # BRIDGING test parameters
             if min_max_argument is None:
                 self.extrusion_multiplier_bridging = np.linspace(test_info.min_default, test_info.max_default, self.number_of_test_structures).tolist()
