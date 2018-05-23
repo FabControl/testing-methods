@@ -20,16 +20,15 @@ from Globals import machine, material, persistence, test_number_list, test_name_
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
 from paths import cwd
+from generate_label import generate_label
 from session_loader import session_uid
 
 quiet = True
 verbose = False
 
 def initialize_test():
-    path = filename(cwd, session_id, "gcode")
-
     if persistence["session"]["test_type"] == "A":
-        ts = TestSetupA(machine, material, test_info, path,
+        ts = TestSetupA(machine, material, test_info, path=filename(cwd, session_id, "gcode"),
                         min_max_argument=min_max_argument,
                         min_max_speed_printing=min_max_speed_printing)
 
@@ -43,7 +42,7 @@ def initialize_test():
             flat_test_single_parameter_vs_speed_printing(ts)
 
     elif persistence["session"]["test_type"] == "B":  # 'perimeter', 'overlap', 'path height', 'temperature'
-        ts = TestSetupB(machine, material, test_info, path,
+        ts = TestSetupB(machine, material, test_info, path=filename(cwd, session_id, "gcode"),
                         min_max_argument=min_max_argument,
                         min_max_speed_printing=min_max_speed_printing,
                         raft=True if persistence["settings"]["raft_density"] > 0 else False)
@@ -235,6 +234,8 @@ else:
 with open(filename(cwd, session_id, "json"), mode="w") as file:
     output = json.dumps(persistence, indent=4, sort_keys=False)
     file.write(output)
+
+generate_label(persistence)
 
 end = time.time()
 time_elapsed = end - start

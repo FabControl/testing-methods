@@ -114,7 +114,8 @@ except:
         "min_max": None,
         "min_max_speed": [10, 30],
         "slicer": "Prusa Slic3r",
-        "number_of_test_structures": 7
+        "number_of_test_structures": 7,
+        "target": "aesthetics"
         }
     }
 
@@ -166,7 +167,7 @@ def filename(cwd: str, session_id: str, extension: str) -> str:
     :param extension:
     :return:
     """
-    from paths import gcode_folder, json_folder, pdf_folder, stl_folder
+    from paths import gcode_folder, json_folder, pdf_folder, stl_folder, png_folder
 
     if not extension.startswith("."):
         extension = "." + extension
@@ -179,8 +180,10 @@ def filename(cwd: str, session_id: str, extension: str) -> str:
         folder = pdf_folder
     if extension == ".stl":
         folder = stl_folder
+    if extension == ".png":
+        folder = png_folder
 
-    if extension == ".gcode":
+    if extension == ".gcode" or ".png":
         output = str(cwd + folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
     else:
         output = str(cwd + folder + separator() + session_id + extension)
