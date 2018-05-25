@@ -168,7 +168,7 @@
       "_manual": false,
       "_value": null,
       "modifier": null,
-      "name": "path height",
+      "name": "track height",
       "parameter": "track_height",
       "params": {
         "py/id": 3
@@ -199,7 +199,7 @@
         },
         "units": "mm"
       },
-      "test": "path height test",
+      "test": "track height test",
       "units": "mm"
     },
     {
@@ -277,7 +277,7 @@
         },
         "units": "mm"
       },
-      "test": "path width test",
+      "test": "track width test",
       "units": "mm"
     },
     {
@@ -285,7 +285,7 @@
       "_manual": false,
       "_value": null,
       "modifier": null,
-      "name": "first layer path width",
+      "name": "first layer track width",
       "parameter": "track_width_raft",
       "params": {
         "py/id": 3

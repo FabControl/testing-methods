@@ -6,15 +6,16 @@ Label Generator
 
 from Globals import filename
 from paths import *
+from CLI_helpers import separator
 
 from PIL import Image, ImageFont, ImageDraw
 
 def generate_label(import_json_dict):
     font_size = 25
     font_size_small = 20
-    font = ImageFont.truetype("/usr/share/fonts/dejavu/DejaVuSans.ttf", font_size)
-    font_bold = ImageFont.truetype("/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf", font_size)
-    font_small = ImageFont.truetype("/usr/share/fonts/dejavu/DejaVuSans.ttf", font_size_small)
+    font = ImageFont.truetype(font_path, font_size)
+    font_bold = ImageFont.truetype(font_bold_path, font_size)
+    font_small = ImageFont.truetype(font_path, font_size_small)
     img = Image.new("RGBA", (696,550), (255,255,255))
     draw = ImageDraw.Draw(img)
 
@@ -56,3 +57,4 @@ def generate_label(import_json_dict):
 
     ImageDraw.Draw(img)
     img.save(filename(cwd, str(import_json_dict["session"]["uid"]), ".png"))
+

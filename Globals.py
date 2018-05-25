@@ -147,7 +147,7 @@ session_idn = str(persistence["session"]["uid"])
 persistence["session"]["number_of_test_structures"] = test_info.number_of_test_structures
 
 test_name_list, test_precision_list, test_units_list = [], [], []
-test_number_list = test_dict.keys()
+test_number_list = sorted(test_dict.keys())
 
 for test_number in test_number_list:
     test = test_dict[test_number]
