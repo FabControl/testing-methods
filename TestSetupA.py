@@ -88,7 +88,7 @@ class TestSetupA(object):
             if self.number_of_lines % 4 == 3:
                 self.number_of_lines = self.number_of_lines + 1
 
-        if self.test_name == 'first-layer track height':
+        if self.test_name == "first-layer track height":
             # FIRST LAYER HEIGHT test parameters
             if min_max_argument is None:
                 self.coef_h = self.coef_h_raft_all
@@ -105,7 +105,7 @@ class TestSetupA(object):
             self.track_width = [x * machine.nozzle.size_id for x in [self.coef_w_raft] * self.number_of_test_structures]
             self.step_x = self.track_width
 
-        elif self.test_name == 'first-layer track width':
+        elif self.test_name == "first-layer track width":
             # FIRST LAYER WIDTH test parameters
             if min_max_argument is None:
                 self.coef_w = self.coef_w_raft_all
@@ -124,7 +124,7 @@ class TestSetupA(object):
             self.track_height = [x * machine.nozzle.size_id for x in [self.coef_h_raft] * self.number_of_test_structures]
             self.step_x = [x * machine.nozzle.size_id for x in self.coef_w]
 
-        elif self.test_name == 'extrusion temperature':
+        elif self.test_name == "extrusion temperature":
             # EXTRUSION TEMPERATURE test parameters
             if min_max_argument is None:
                 self.temperature_extruder = minmax_temperature(material, machine, self.number_of_test_structures)
@@ -133,7 +133,7 @@ class TestSetupA(object):
             self.argument = self.temperature_extruder
             self.values = self.argument
 
-        elif self.test_name == 'track height':
+        elif self.test_name == "track height":
             # PATH HEIGHT test parameters
             if min_max_argument is None:
                 self.coef_h = minmax_track_height(machine, self.number_of_test_structures)
@@ -144,7 +144,7 @@ class TestSetupA(object):
             self.values = [x * machine.nozzle.size_id for x in self.argument]
             self.track_height = self.values
 
-        elif self.test_name == 'track width':
+        elif self.test_name == "track width":
             # PATH WIDTH test parameters
             if min_max_argument is None:
                 self.coef_w, _ = minmax_track_width(machine, self.number_of_test_structures)
@@ -158,7 +158,7 @@ class TestSetupA(object):
 
             self.track_width = self.values
 
-        elif self.test_name == 'extrusion multiplier':
+        elif self.test_name == "extrusion multiplier":
             # EXTRUSION MULTIPLIER test parameters
             if min_max_argument is None:
                 self.extrusion_multiplier = np.linspace(test_info.min_default, test_info.max_default, self.number_of_test_structures).tolist()
@@ -167,7 +167,7 @@ class TestSetupA(object):
             self.argument = self.extrusion_multiplier
             self.values = self.argument
 
-        elif self.test_name == 'printing speed':
+        elif self.test_name == "printing speed":
             # PRINTING SPEED test parameters
             if min_max_argument is None:
                 self.speed_printing = np.linspace(test_info.min_default * self.speed_printing[0],
@@ -178,7 +178,7 @@ class TestSetupA(object):
             self.argument = self.speed_printing
             self.values = self.argument
 
-        elif self.test_name == 'retraction distance':
+        elif self.test_name == "retraction distance":
             # RETRACTION DISTANCE test parameters
             if min_max_argument is None:
                 self.retraction_distance = np.linspace(test_info.min_default, test_info.max_default, self.number_of_test_structures).tolist()
@@ -187,7 +187,7 @@ class TestSetupA(object):
             self.argument = self.retraction_distance
             self.values = self.argument
 
-        elif self.test_name == 'retraction-restart distance':
+        elif self.test_name == "retraction-restart distance":
             # RETRACTION RESTART DISTANCE amd COASTING DISTANCE test parameters
             if min_max_argument is None:
                 self.retraction_restart_distance = np.linspace(test_info.min_default, test_info.max_default, self.number_of_test_structures).tolist()
@@ -197,7 +197,7 @@ class TestSetupA(object):
             self.argument = self.retraction_restart_distance
             self.values = self.argument
 
-        elif self.test_name == 'bridging extrusion-multiplier':
+        elif self.test_name == "bridging extrusion-multiplier":
             # BRIDGING test parameters
             if min_max_argument is None:
                 self.extrusion_multiplier_bridging = np.linspace(test_info.min_default, test_info.max_default, self.number_of_test_structures).tolist()
@@ -207,7 +207,6 @@ class TestSetupA(object):
             self.values = self.argument
 
         else:
-            print('Unknown test')
             raise ValueError("{} is not a valid test.".format(test_info.name))
 
         if min_max_speed_printing is not None:
@@ -258,7 +257,7 @@ def addtitle(test_info: TestInfo, material: Material, machine: Machine):
 
 
 def addcomment1(test_info: TestInfo, values: list):
-    comment1 = str('; --- testing the following ' + test_info.parameter + ' values: ' + ', '.join((test_info.precision + ' {}').format(*k) for k in zip(values, len(values)*[test_info.units])) + ' ---')
+    comment1 = str("; --- testing the following " + test_info.parameter + " values: " + ", ".join((test_info.precision + " {}").format(*k) for k in zip(values, len(values)*[test_info.units])) + " ---")
     return comment1
 
 

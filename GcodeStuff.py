@@ -61,7 +61,7 @@ class Gplus(G):
 
     def dwell(self, time: int):
         """ Pause code executions for the given amount of time """
-        self.write('G4 P{}'.format(time * 1000) + " T0; set the waiting time in ms")
+        self.write("G4 P{}".format(time * 1000) + " T0; set the waiting time in ms")
 
     def move(self, x=None, y=None, z=None, rapid=False, extrude=None, extrusion_multiplier=None, coef_w=None,
              coef_h=None, **kwargs):
@@ -82,13 +82,13 @@ class Gplus(G):
         elif coef_h is None:
             self.coef_h = self.track_height / self.nozzle_diameter
 
-        if self.extrude is True and 'E' not in kwargs.keys():
+        if self.extrude is True and "E" not in kwargs.keys():
             if self.is_relative is not True:
-                x_move = self.current_position['x'] if x is None else x
-                y_move = self.current_position['y'] if y is None else y
-                x_distance = abs(x_move - self.current_position['x'])
-                y_distance = abs(y_move - self.current_position['y'])
-                current_extruder_position = self.current_position['E']
+                x_move = self.current_position["x"] if x is None else x
+                y_move = self.current_position["y"] if y is None else y
+                x_distance = abs(x_move - self.current_position["x"])
+                y_distance = abs(y_move - self.current_position["y"])
+                current_extruder_position = self.current_position["E"]
             else:
                 x_distance = 0 if x is None else x
                 y_distance = 0 if y is None else y
@@ -101,21 +101,21 @@ class Gplus(G):
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * ((self.coef_w - self.coef_h) * self.coef_h + (math.pi / 4) * (
                     self.coef_h) ** 2) * line_length * self.extrusion_multiplier
             else:
-                print('path height of {:.3f} mm is too thin'.format(self.coef_h * self.nozzle_diameter)) # TODO Reinis!!!
+                print("path height of {:.3f} mm is too thin".format(self.coef_h * self.nozzle_diameter)) # TODO Reinis!!!
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * (self.coef_w * self.coef_h) * line_length * self.extrusion_multiplier
 
-            kwargs['E'] = filament_length + current_extruder_position
+            kwargs["E"] = filament_length + current_extruder_position
         elif self.extrude is False:
             if self.is_relative is not True:
-                kwargs['E'] = 0
+                kwargs["E"] = 0
             else:
                 current_extruder_position = 0
-                kwargs['E'] = 0 + current_extruder_position
+                kwargs["E"] = 0 + current_extruder_position
 
         self._update_current_position(x=x, y=y, z=z, **kwargs)
         track_list.append((self.current_position["x"], self.current_position["y"], self.current_position["z"]))
         args = self._format_args(x, y, z, **kwargs)
-        cmd = 'G0 ' if rapid else 'G1 '
+        cmd = "G0 " if rapid else "G1 "
         self.write(cmd + args)
 
     def abs_move(self, x=None, y=None, z=None, rapid=False, extrude=None, extrusion_multiplier=None, **kwargs):
@@ -186,5 +186,5 @@ class Gplus(G):
         The speed to move the tool head in mm/s.
 
         """
-        self.write('G1 F{}'.format(rate * 60))
+        self.write("G1 F{}".format(rate * 60))
         self.speed = rate * 60

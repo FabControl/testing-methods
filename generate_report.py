@@ -47,15 +47,12 @@ style_text = ParagraphStyle(name="Normal",
                             fontSize=11)
 
 elements = []
-
 cwd = os.getcwd()
 
-logo = cwd + "/MP-Logo-horiz-black.png"
-im = Image(logo, 2.14*inch, 0.35*inch)
-im.hAlign = "LEFT"
-elements.append(im)
-
 elements.append(Paragraph(report_name, style=style_heading))
+im = Image(logo_path, 4.28*inch, 0.7*inch)
+im.hAlign = "RIGHT"
+elements.append(im)
 elements.append(Spacer(1, 0.5*inch))
 
 datetime_info = "Report generated on: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S")

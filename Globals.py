@@ -86,7 +86,6 @@ except:
         "track_height_raft": 0.3,
         "track_width_raft": 0.6,
         "speed_printing_raft": 10,
-        "extrusion_multiplier_raft": 1.0,
         "temperature_extruder": 280,
         "track_height": 0.3,
         "track_width": 0.6,
@@ -107,10 +106,9 @@ except:
     "session": {
         "uid": 20180521,
         "user_id": "GB",
-        "file_name": "a name",
         "previous_tests": [],
         "test_type": "A",
-        "test_name": "07",
+        "test_name": "01",
         "min_max": None,
         "min_max_speed": [10, 30],
         "slicer": "Prusa Slic3r",
@@ -147,7 +145,7 @@ session_idn = str(persistence["session"]["uid"])
 persistence["session"]["number_of_test_structures"] = test_info.number_of_test_structures
 
 test_name_list, test_precision_list, test_units_list = [], [], []
-test_number_list = test_dict.keys()
+test_number_list = sorted(test_dict.keys())
 
 for test_number in test_number_list:
     test = test_dict[test_number]
@@ -177,18 +175,17 @@ def filename(cwd: str, session_id: str, extension: str) -> str:
 
     if extension == ".gcode":
         folder = gcode_folder
-    if extension == ".json":
+    elif extension == ".json":
         folder = json_folder
-    if extension == ".pdf":
+    elif extension == ".pdf":
         folder = pdf_folder
-    if extension == ".stl":
+    elif extension == ".stl":
         folder = stl_folder
-    if extension == ".png":
+    elif extension == ".png":
         folder = png_folder
 
     if extension == ".gcode":
         output = str(cwd + folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
-
     elif extension == ".png":
         output = str(cwd + folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
     else:
