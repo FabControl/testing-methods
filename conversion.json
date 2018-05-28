@@ -9,7 +9,7 @@
       "parameter": "coasting_distance",
       "params": {
         "py/object": "conversion_dictionary.Params",
-        "_parameters": {
+        "parameters": {
           "py/id": 1
         },
         "supported_slicers": [
@@ -2502,6 +2502,45 @@
       },
       "test": null,
       "units": "mm/s"
+    },
+    {
+      "py/object": "conversion_dictionary.Param",
+      "_manual": true,
+      "_value": null,
+      "modifier": null,
+      "name": null,
+      "parameter": "solid_infill_pattern",
+      "params": {
+        "py/id": 3
+      },
+      "parent": null,
+      "prusa": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": "str(x).lower()",
+        "name": "External fill pattern",
+        "parameter": "external_fill_pattern",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 196
+        },
+        "units": null
+      },
+      "reverse_modifier": null,
+      "simplify3d": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": "str(x).capitalize()",
+        "name": "External infill pattern",
+        "parameter": "externalInfillPattern",
+        "parent_parameter": null,
+        "reverse_modifier": "str(x).lower()",
+        "root": {
+          "py/id": 196
+        },
+        "units": null
+      },
+      "test": null,
+      "units": null
     }
   ],
   {

@@ -32,6 +32,8 @@ slicer = str(persistence["session"]["slicer"]).lower()
 persistence_flat = dict(persistence["settings"], **persistence["machine"]["nozzle"])
 persistence_flat["material_name"] = persistence["material"]["name"]
 persistence_flat["density_rt"] = persistence["material"]["density_rt"]
+with open("target_overrides.json") as overrides:
+    target_overrides = json.load(overrides)
 
 
 def numeral_eval(value):
@@ -112,6 +114,7 @@ for key, value in defaults.items():
     del key, value
 params.populate(defaults, auto=True)
 params.populate(persistence_flat, auto=True)
+params.populate(target_overrides[persistence["settings"]["aim"]])
 
 
 if "prusa" in slicer.lower():

@@ -1,0 +1,23 @@
+{
+  "aesthetics": {
+    "ventilator_part_cooling": 100,
+    "perimeter": 3,
+    "top_solid_layers": 3,
+    "bottom_solid_layers": 3,
+    "solid_infill_pattern": "rectiliniear",
+    "infill_pattern": "rectiliniear"
+  },
+  "fast_printing": {
+    "ventilator_part_cooling": 100,
+    "top_solid_layers": 3,
+    "bottom_solid_layers": 3
+  },
+  "mechanical_strength": {
+    "perimeter": 4,
+    "bottom_solid_layers": 8,
+    "top_solid_layers": 8,
+    "infill_pattern": "concentric",
+    "solid_infill_pattern": "concentric",
+    "ventilator_part_cooling": 50
+  }
+}
