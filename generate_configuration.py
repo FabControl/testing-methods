@@ -132,14 +132,14 @@ if "prusa" in slicer.lower():
         if param is not None:
             configuration[item]["value"] = param.prusa.value
 
-    exclusive_write(output_name("ini"), assemble_ini(configuration))
+    exclusive_write(output_name("ini"), assemble_ini(configuration)) # TODO replace with filename, same for FFF files
 
 elif slicer == "simplify3d":
     import xml.etree.ElementTree as ET
 
     tree = ET.parse('simplify_config.fff')
     root = tree.getroot()
-    root.attrib["name"] = "{0} {1} {2} for {3} um nozzle".format(persistence["material"]["manufacturer"],
+    root.attrib["name"] = "{0}_{1}_{2}_for_{3}_um_nozzle".format(persistence["material"]["manufacturer"],
                                                                  persistence["material"]["name"],
                                                                  str(persistence["material"]["size_od"]).format("{:.2f}"),
                                                                  str(persistence["machine"]["nozzle"]["size_id"]*1000))

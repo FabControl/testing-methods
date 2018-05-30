@@ -78,4 +78,3 @@ def generate_label(import_json_dict):
     label = img.rotate(angle=90, expand=True)
     label.save(filename(cwd, str(import_json_dict["session"]["uid"]), ".png"))
     add_logo(filename(cwd, str(import_json_dict["session"]["uid"]), ".png"), logo_path, filename(cwd, str(import_json_dict["session"]["uid"]), ".png"))
-

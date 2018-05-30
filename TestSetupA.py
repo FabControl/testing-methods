@@ -119,6 +119,7 @@ class TestSetupA(object):
             self.values = [x * machine.nozzle.size_id for x in self.argument]
 
             self.min_max_speed_printing = self.speed_printing_raft
+            self.speed_printing = [self.speed_printing_raft] * self.number_of_test_structures
 
             self.track_width = self.values
             self.track_height = [x * machine.nozzle.size_id for x in [self.coef_h_raft] * self.number_of_test_structures]
@@ -213,6 +214,8 @@ class TestSetupA(object):
             self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], self.number_of_substructures).tolist()
         if self.test_name == "retraction distance":
             self.min_max_speed_printing = [self.speed_printing[0]]
+        if self.test_name == "bridging extrusion-multiplier":
+            self.min_max_speed_printing = np.linspace(1.00*self.speed_printing[0], 2.00*self.speed_printing[0], self.number_of_substructures).tolist()
 
         volumetric_flow_rate = []
         volumetric_flow_rate_row = []

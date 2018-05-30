@@ -21,16 +21,16 @@ except:
     print("falling back to hardcoded JSON")
     persistence = {
     "material": {
-        "name": "PC Plus",
-        "manufacturer": "Polymaker",
-        "material_group": "unfilled polymer",
-        "polymer_class": "polycarbonate",
+        "name": "Nanodiamond B",
+        "manufacturer": "?",
+        "material_group": "filled polymer",
+        "polymer_class": "PLA",
         "id": "123456",
         "size_od": 1.75,
-        "temperature_melting": 230,
+        "temperature_melting": 178,
         "temperature_destr": 320,
-        "temperature_vicat": 130, # optional
-        "temperature_glass": 112, # optional
+        "temperature_vicat": 60, # optional
+        "temperature_glass": 60, # optional
         "mvr": 32, # optional
         "load_mfr": 1, # optional
         "temperature_mfr": 220, # optional
@@ -49,8 +49,8 @@ except:
         "temperature_extruder_max": 320,
         "temperature_extruder_min": 190,
         "nozzle": {
-            "size_id": 0.6,
-            "size_od": 0.84,
+            "size_id": 0.4,
+            "size_od": 0.64,
             "size_capillary_length": 5, # optional
             "size_angle": 60, # optional
             "size_extruder_id": 1.95,
@@ -75,25 +75,24 @@ except:
         }
     },
     "settings": {
-        "aim": "aesthetics",
         "optimize_speed_printing": True, # optional
-        "ventilator_part_cooling": 0,
+        "ventilator_part_cooling": 100,
         "ventilator_entry": 0,
         "ventilator_exit": 0,
         "raft_density": 100,
-        "temperature_printbed": 40,
-        "temperature_extruder_raft": 280,
-        "track_height_raft": 0.3,
-        "track_width_raft": 0.6,
-        "speed_printing_raft": 10,
-        "temperature_extruder": 280,
-        "track_height": 0.3,
-        "track_width": 0.6,
-        "speed_printing": 20,
-        "extrusion_multiplier": 1,
-        "retraction_distance": 4,
+        "temperature_printbed": 100,
+        "temperature_extruder_raft": 235,
+        "track_height_raft": 0.25,
+        "track_width_raft": 0.4,
+        "speed_printing_raft": 20,
+        "temperature_extruder": 235,
+        "track_height": 0.2,
+        "track_width": 0.4,
+        "speed_printing": 40,
+        "extrusion_multiplier": 1.0,
+        "retraction_distance": 0,
         "retraction_restart_distance": 0.0,
-        "retraction_speed": 120,
+        "retraction_speed": 80,
         "coasting_distance": 0.0,
         "overlap": 0,
         "perimeter": 1,
@@ -104,7 +103,7 @@ except:
         "critical_overhang_angle": 36.0
     },
     "session": {
-        "uid": 20180521,
+        "uid": 20180529,
         "user_id": "GB",
         "previous_tests": [],
         "test_type": "A",
