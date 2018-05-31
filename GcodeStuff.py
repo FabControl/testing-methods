@@ -1,6 +1,7 @@
 from mecode import G
 from Definitions import *
 from paths import gcode_folder
+from CLI_helpers import exception_handler
 
 track_list = []
 
@@ -101,7 +102,7 @@ class Gplus(G):
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * ((self.coef_w - self.coef_h) * self.coef_h + (math.pi / 4) * (
                     self.coef_h) ** 2) * line_length * self.extrusion_multiplier
             else:
-                print("path height of {:.3f} mm is too thin".format(self.coef_h * self.nozzle_diameter)) # TODO Reinis!!!
+                exception_handler("path height of {:.3f} mm is too thin".format(self.coef_h * self.nozzle_diameter)) # TODO Reinis!!!
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * (self.coef_w * self.coef_h) * line_length * self.extrusion_multiplier
 
             kwargs["E"] = filament_length + current_extruder_position

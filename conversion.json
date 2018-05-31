@@ -1203,11 +1203,11 @@
       "reverse_modifier": null,
       "simplify3d": {
         "py/object": "conversion_dictionary.Slicer",
-        "modifier": "int(x*60)",
+        "modifier": null,
         "name": null,
-        "parameter": "defaultSpeed",
+        "parameter": null,
         "parent_parameter": null,
-        "reverse_modifier": "int(x/60)",
+        "reverse_modifier": null,
         "root": {
           "py/id": 94
         },

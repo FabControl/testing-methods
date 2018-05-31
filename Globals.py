@@ -2,7 +2,7 @@ from Definitions import Material, Settings, Machine, TestInfo
 import json
 from session_loader import session_uid
 from paths import cwd, json_folder
-from CLI_helpers import separator
+from CLI_helpers import separator, exception_handler
 
 try:
     try:
@@ -12,13 +12,14 @@ try:
         print("Loaded a testing session ID {} from the existing JSON file".format(persistence["session"]["uid"]))
         file.close()
     except:
+        exception_handler("Session not found")
         print("Attempting to load the persistence file without an ID".format(session_uid))
-        with open(str(cwd + json_folder + separator() + session_uid + ".json"), mode="r") as file:
+        with open(str("persistence.json"), mode="r") as file:
             persistence = json.load(file)
         print("Loaded a testing session ID {} from the existing JSON file".format(persistence["session"]["uid"]))
         file.close()
 except:
-    print("falling back to hardcoded JSON")
+    exception_handler("falling back to hardcoded JSON")
     persistence = {
     "material": {
         "name": "Nanodiamond B",

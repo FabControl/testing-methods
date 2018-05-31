@@ -3,6 +3,9 @@ from os import system, name, listdir, devnull
 from paths import blender_path, slic3r_path, cwd, stl_folder, gcode_folder
 import re
 import subprocess
+import warnings
+import traceback
+import sys
 
 
 def evaluate(input):
@@ -88,7 +91,7 @@ def exclusive_write(path: str, output, limit=True):
         print("{} successfully saved.".format(path))
 
 
-def generate_gcode(orientation: str, count: int, rotation: float or int, file: str, config: str):
+def generate_gcode(orientation: str, count: int, rotation: float or int, file: str, config: str, max_dim_y: int):
     """
     Creates a subprocesses of Blender and Slic3r in order to generate an ISO527 test specimen geometry and slice it with an appropriate
     Slic3r configuration file.
@@ -97,12 +100,14 @@ def generate_gcode(orientation: str, count: int, rotation: float or int, file: s
     :param rotation:
     :param file:
     :param config:
+    :param max_dim_y:
     :return:
     """
-    geometry = cwd + stl_folder + separator() + file
     output = cwd + gcode_folder + separator() + file.replace(".stl", ".gcode")
+    geometry = cwd + stl_folder + separator() + file
     subprocess.run([blender_path, "-b", "-P", str(cwd + "stl_modifier.py"), "--", orientation, str(count),
-         str(rotation), cwd + stl_folder + separator() + file, cwd + separator() + stl_folder], stderr=open(devnull, 'wb'))
+                    str(rotation), cwd + stl_folder + separator() + file, stl_folder, max_dim_y],
+                   stderr=open(devnull, 'wb'))
     subprocess.run([slic3r_path, "--load", config, "-o", output, "--dont-arrange", geometry])
 
 
@@ -135,3 +140,45 @@ def round(input: float, depth: int = 3):
     :return:
     """
     return float(str(builtins_round(input, depth)))
+
+
+# class _MPError(Exception):
+#     def __init__(self, message):
+#         super(_MPError, self).__init__(str("MPError: " + message))
+#
+#
+# class MPException(object):
+#     @staticmethod
+#     def warning(message: str):
+#         """
+#         a custom warning for more convenient front-end debugging
+#         :param message:
+#         :return:
+#         """
+#         traceback.print_exc()
+#         warnings.warn(message="MPWarning: " + message)
+#
+#     def __init__(self, message: str, fatal=True):
+#         if fatal:
+#             try:
+#                 raise _MPError(message)
+#             except:
+#                 traceback.print_exc()
+#                 sys.exit(15)
+#         else:
+#             self.warning(message)
+#
+#
+
+
+def exception_handler(message, fatal: bool = False):
+
+    traceback.print_exc()
+    print("MPException: " + message)
+    if fatal:
+        sys.exit(15)
+
+
+if __name__ == "__main__":
+    exception_handler("Session not loaded", True)
+
