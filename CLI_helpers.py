@@ -142,35 +142,6 @@ def round(input: float, depth: int = 3):
     return float(str(builtins_round(input, depth)))
 
 
-# class _MPError(Exception):
-#     def __init__(self, message):
-#         super(_MPError, self).__init__(str("MPError: " + message))
-#
-#
-# class MPException(object):
-#     @staticmethod
-#     def warning(message: str):
-#         """
-#         a custom warning for more convenient front-end debugging
-#         :param message:
-#         :return:
-#         """
-#         traceback.print_exc()
-#         warnings.warn(message="MPWarning: " + message)
-#
-#     def __init__(self, message: str, fatal=True):
-#         if fatal:
-#             try:
-#                 raise _MPError(message)
-#             except:
-#                 traceback.print_exc()
-#                 sys.exit(15)
-#         else:
-#             self.warning(message)
-#
-#
-
-
 def exception_handler(message, fatal: bool = False):
 
     traceback.print_exc()
@@ -181,4 +152,3 @@ def exception_handler(message, fatal: bool = False):
 
 if __name__ == "__main__":
     exception_handler("Session not loaded", True)
-

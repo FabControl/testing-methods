@@ -92,11 +92,12 @@ def assemble_ini(dictionary: OrderedDict):
     return outstring
 
 
-def output_name(extension: str):
+def output_name(extension: str, folder: str = None):
     """
     Creates a filename based on material manufacturer, name, outer diameter and nozzle diameter.
     Accepts a file extension as an input parameter.
     :param extension:
+    :param folder:
     :return:
     """
     output = "{0}_{1}_{2}_{3}.{4}".format(persistence["material"]["manufacturer"],
@@ -104,7 +105,10 @@ def output_name(extension: str):
                                           "{:.2f}".format(persistence["material"]["size_od"]).replace(".", "-"),
                                           "{:.0f} um".format(persistence["machine"]["nozzle"]["size_id"] * 1000).replace(".", "-"),
                                           extension)
-    return output.replace(' ', '_')
+    if folder is None:
+        return output.replace(' ', '_')
+    else:
+        return folder + output.replace(' ', '_')
 
 
 params = Params("conversion.json")
@@ -132,7 +136,7 @@ if "prusa" in slicer.lower():
         if param is not None:
             configuration[item]["value"] = param.prusa.value
 
-    exclusive_write(output_name("ini"), assemble_ini(configuration)) # TODO replace with filename, same for FFF files
+    exclusive_write(output_name("ini", folder=config_folder), assemble_ini(configuration)) # TODO replace with filename, same for FFF files
 
 elif slicer == "simplify3d":
     import xml.etree.ElementTree as ET
@@ -175,4 +179,4 @@ elif slicer == "simplify3d":
                     element.attrib = str(numeral_eval(param.simplify3d.value))
 
     tree.write(output_name("fff"), xml_declaration=True, encoding="utf-8")
-    print("{} succesfully written".format(output_name("fff")))
+    print("{} succesfully written".format(output_name("fff", folder=config_folder)))
