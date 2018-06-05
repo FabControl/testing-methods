@@ -211,11 +211,14 @@ class TestSetupA(object):
             raise ValueError("{} is not a valid test.".format(test_info.name))
 
         if min_max_speed_printing is not None:
-            self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1], self.number_of_substructures).tolist()
+            self.min_max_speed_printing = np.linspace(min_max_speed_printing[0], min_max_speed_printing[1],
+                                                      self.number_of_substructures).tolist()
+        else:
+            if self.test_name == "bridging extrusion-multiplier":
+                self.min_max_speed_printing = np.linspace(0.50 * self.speed_printing[0], 1.50 * self.speed_printing[0],
+                                                          self.number_of_substructures).tolist()
         if self.test_name == "retraction distance":
             self.min_max_speed_printing = [self.speed_printing[0]]
-        if self.test_name == "bridging extrusion-multiplier":
-            self.min_max_speed_printing = np.linspace(1.00*self.speed_printing[0], 2.00*self.speed_printing[0], self.number_of_substructures).tolist()
 
         volumetric_flow_rate = []
         volumetric_flow_rate_row = []

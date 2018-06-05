@@ -14,7 +14,7 @@ from collections import OrderedDict
 
 from docopt import docopt
 
-from CLI_helpers import exclusive_write
+from CLI_helpers import exclusive_write, separator
 from Globals import filename
 from conversion_dictionary import Slicer, Param, Params
 from paths import *
@@ -108,7 +108,7 @@ def output_name(extension: str, folder: str = None):
     if folder is None:
         return output.replace(' ', '_')
     else:
-        return folder + output.replace(' ', '_')
+        return folder + separator() + output.replace(' ', '_')
 
 
 params = Params("conversion.json")
@@ -118,7 +118,7 @@ for key, value in defaults.items():
     del key, value
 params.populate(defaults, auto=True)
 params.populate(persistence_flat, auto=True)
-params.populate(target_overrides[persistence["settings"]["aim"]])
+params.populate(target_overrides[persistence["session"]["target"]])
 
 
 if "prusa" in slicer.lower():
@@ -135,8 +135,8 @@ if "prusa" in slicer.lower():
         param = params.get(item, mode="prusa")
         if param is not None:
             configuration[item]["value"] = param.prusa.value
-
-    exclusive_write(output_name("ini", folder=config_folder), assemble_ini(configuration)) # TODO replace with filename, same for FFF files
+    with open((output_name("ini", folder=config_folder)), mode='w') as file:
+        file.write(assemble_ini(configuration))
 
 elif slicer == "simplify3d":
     import xml.etree.ElementTree as ET
