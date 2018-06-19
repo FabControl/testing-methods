@@ -189,7 +189,7 @@ else:
         tested_speed_values = []
 
     current_test = {"test_name": ts.test_name,
-                    "tested_parameter_values": [round(k, int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
+                    "tested_parameter_values": [round(k, int(re.search("[0-9]", ts.test_info.precision).group())) for k in ts.get_values()],
                     "tested_printing-speed_values": [round(k, 1) for k in tested_speed_values],
                     "tested_volumetric_flow-rate_values": ts.volumetric_flow_rate,
                     "selected_parameter_value": evaluate(input("Enter the best parameter value: ")),
@@ -206,32 +206,33 @@ else:
     previous_tests.append(current_test)
     persistence["session"]["previous_tests"] = previous_tests
 
-for dummy in persistence["session"]["previous_tests"]:
-    if dummy["test_name"] == "printing speed":
-        persistence["settings"]["speed_printing"] = dummy["selected_parameter_value"]
-    elif dummy["test_name"] == "track height":
-        persistence["settings"]["track_height"] = dummy["selected_parameter_value"]
-        persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
-    elif dummy["test_name"] == "first-layer track height":
-        persistence["settings"]["track_height_raft"] = dummy["selected_parameter_value"]
-        persistence["settings"]["track_width_raft"] = np.mean(ts.coef_w_raft) * machine.nozzle.size_id
-        persistence["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
-    elif dummy["test_name"] == "first-layer track width":
-        persistence["settings"]["track_height_raft"] = np.mean(ts.coef_h_raft) * machine.nozzle.size_id
-        persistence["settings"]["track_width_raft"] = dummy["selected_parameter_value"]
-        persistence["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
-    elif dummy["test_name"] == "track width":
-        persistence["settings"]["track_width"] = dummy["selected_parameter_value"]
-        persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
-    elif dummy["test_name"] == "extrusion temperature":
-        persistence["settings"]["temperature_extruder"] = dummy["selected_parameter_value"]
-        persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
-    elif dummy["test_name"] == "extrusion multiplier":
-        persistence["settings"]["extrusion_multiplier"] = dummy["selected_parameter_value"]
-        persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
-    elif dummy["test_name"] == "retraction distance":
-        persistence["settings"]["retraction_distance"] = dummy["selected_parameter_value"]
-        persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+if not quiet:
+    for dummy in persistence["session"]["previous_tests"]:
+        if dummy["test_name"] == "printing speed":
+            persistence["settings"]["speed_printing"] = dummy["selected_parameter_value"]
+        elif dummy["test_name"] == "track height":
+            persistence["settings"]["track_height"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+        elif dummy["test_name"] == "first-layer track height":
+            persistence["settings"]["track_height_raft"] = dummy["selected_parameter_value"]
+            persistence["settings"]["track_width_raft"] = np.mean(ts.coef_w_raft) * machine.nozzle.size_id
+            persistence["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
+        elif dummy["test_name"] == "first-layer track width":
+            persistence["settings"]["track_height_raft"] = np.mean(ts.coef_h_raft) * machine.nozzle.size_id
+            persistence["settings"]["track_width_raft"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
+        elif dummy["test_name"] == "track width":
+            persistence["settings"]["track_width"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+        elif dummy["test_name"] == "extrusion temperature":
+            persistence["settings"]["temperature_extruder"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+        elif dummy["test_name"] == "extrusion multiplier":
+            persistence["settings"]["extrusion_multiplier"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+        elif dummy["test_name"] == "retraction distance":
+            persistence["settings"]["retraction_distance"] = dummy["selected_parameter_value"]
+            persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
 
 persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2 * persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
 

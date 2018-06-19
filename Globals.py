@@ -173,6 +173,8 @@ def filename(cwd: str, session_id: str, extension: str) -> str:
     if not extension.startswith("."):
         extension = "." + extension
 
+    folder = None
+
     if extension == ".gcode":
         folder = gcode_folder
     elif extension == ".json":
