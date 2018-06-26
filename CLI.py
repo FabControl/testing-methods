@@ -26,6 +26,7 @@ from session_loader import session_uid
 quiet = True
 verbose = False
 
+
 def initialize_test():
     if persistence["session"]["test_type"] == "A":
         ts = TestSetupA(machine, material, test_info, path=filename(cwd, session_id, "gcode"),

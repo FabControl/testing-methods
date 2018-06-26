@@ -135,7 +135,7 @@ if "prusa" in slicer.lower():
         param = params.get(item, mode="prusa")
         if param is not None:
             configuration[item]["value"] = param.prusa.value
-    with open((output_name("ini", folder=config_folder)), mode='w') as file:
+    with open(cwd + (output_name("ini", folder=config_folder)), mode='w') as file:
         file.write(assemble_ini(configuration))
 
 elif slicer == "simplify3d":
@@ -178,5 +178,5 @@ elif slicer == "simplify3d":
                 elif param.parameter == "":
                     element.attrib = str(numeral_eval(param.simplify3d.value))
 
-    tree.write(output_name("fff"), xml_declaration=True, encoding="utf-8")
+    tree.write(str(cwd + output_name("fff", config_folder)), xml_declaration=True, encoding="utf-8")
     print("{} succesfully written".format(output_name("fff", folder=config_folder)))

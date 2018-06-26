@@ -55,6 +55,7 @@ class Material(object):
         self.heat_capacity = heat_capacity  # respect the units: J / K / g
         self.price_eur_per_kg = price_eur_per_kg
 
+
 class Nozzle(object):
     """
     definition of the nozzle properties:

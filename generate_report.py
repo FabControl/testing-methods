@@ -29,7 +29,7 @@ json_path = filename(cwd, session_id, "json")
 with open(json_path, mode="r") as file:
     import_json_dict = json.load(file)
 
-report_name = "Test report for " + import_json_dict["material"]["manufacturer"] +" "+import_json_dict["material"]["name"] + " Ø" + str(import_json_dict["material"]["size_od"]) + " mm"
+report_name = "Test report for " + import_json_dict["material"]["manufacturer"] + " " + import_json_dict["material"]["name"] + " Ø" + str(import_json_dict["material"]["size_od"]) + " mm"
 
 doc = SimpleDocTemplate(filename(cwd, session_id, "pdf"),
                         pagesize=landscape(A4),
@@ -57,7 +57,7 @@ elements.append(Spacer(1, 0.5*inch))
 
 datetime_info = "Report generated on: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 elements.append(Paragraph(datetime_info, style=style_text))
-main_info = "Target: " + import_json_dict["settings"]["aim"]
+main_info = "Target: " + import_json_dict["session"]["target"]
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Material: " + import_json_dict["material"]["name"] + ", ID:" + import_json_dict["material"]["id"] if import_json_dict["material"]["id"] is not None else "Material: " + import_json_dict["material"]["name"]
 elements.append(Paragraph(main_info, style=style_text))
@@ -115,12 +115,12 @@ for single_test in performed_tests:
     data.append(new_line)
     i += 1
 
-style = TableStyle([("ALIGN",(0,0),(-1,-1),"CENTER"),
-                    ("TEXTCOLOR",(0,0),(-1,-1),colors.black),
-                    ("VALIGN",(0, 0),(-1,-1),"MIDDLE"),
-                    ("INNERGRID", (0,0), (-1,-1), 0.25, colors.black),
-                    ("BOX", (0,0), (-1,-1), 0.25, colors.black),
-                    ("SPAN",(3,0),(-4,0))
+style = TableStyle([("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                    ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
+                    ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                    ("INNERGRID", (0, 0), (-1, -1), 0.25, colors.black),
+                    ("BOX", (0, 0), (-1, -1), 0.25, colors.black),
+                    ("SPAN", (3, 0), (-4, 0))
                     ])
 
 colwidths = [20, 110, 50]

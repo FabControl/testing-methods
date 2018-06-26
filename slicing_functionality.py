@@ -6,6 +6,7 @@ import math
 
 # rotation = 90
 
+
 def make_islands(points: list):
     """
     Takes a list of points and returns a list of lists - a list for each island.
@@ -237,6 +238,7 @@ def points_to_toolpaths(points, coef_w, coef_h, g, mode: str = "relative", rotat
 def infill(polygon: Polygon, coef_w_raft, coef_h_raft, g, outlines: int = 1, debug: bool = False):
 
     g.write("; Printing raft")
+
     def extrusion_switch(points: list):
         """
         An assistant function for making sure that extrusion is off when switching between islands and perimeters.
@@ -263,11 +265,11 @@ def infill(polygon: Polygon, coef_w_raft, coef_h_raft, g, outlines: int = 1, deb
         # Pass islands to GCODE here
         points_final.extend(extrusion_switch(island))
 
-    points_to_toolpaths(absolute_to_relative(points_final), coef_w_raft, coef_h_raft, g=g, rotation= True)
+    points_to_toolpaths(absolute_to_relative(points_final), coef_w_raft, coef_h_raft, g=g, rotation=True)
     g.write("; Raft Finished")
 
 
-def raft_structure(circumradius:int or float, structure: str = "circle"):
+def raft_structure(circumradius: int or float, structure: str = "circle"):
     """
     Takes circumradius (int or float), and exports a shapely circle or a square as a polygon
     :param circumradius: Circumradius of the raft structure

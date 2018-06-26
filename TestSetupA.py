@@ -10,11 +10,9 @@ class TestSetupA(object):
         """
         :param machine:
         :param material:
-        :param test_name:
         :param path:
         :param min_max_argument:
         :param min_max_speed_printing:
-        :param raft:
         """
         self.ventilator_part_cooling = machine.ventilators.part_cooling
         if self.ventilator_part_cooling:

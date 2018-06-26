@@ -10,6 +10,7 @@ from CLI_helpers import separator
 
 from PIL import Image, ImageFont, ImageDraw
 
+
 def add_logo(mfname, lfname, outfname):
     mimage = Image.open(mfname)
     limage = Image.open(lfname)
@@ -34,29 +35,29 @@ def generate_label(import_json_dict):
     font = ImageFont.truetype(font_path, font_size)
     font_bold = ImageFont.truetype(font_bold_path, font_size)
     font_small = ImageFont.truetype(font_path, font_size_small)
-    img = Image.new("RGBA", (696,550), (255,255,255))
+    img = Image.new("RGBA", (696, 550), (255, 255, 255))
     draw = ImageDraw.Draw(img)
 
-    draw.text((0,0), "Session ID: {}, User ID: {}".format(import_json_dict["session"]["uid"],
-                                                          import_json_dict["session"]["user_id"]), (0,0,0), font=font_bold)
+    draw.text((0, 0), "Session ID: {}, User ID: {}".format(import_json_dict["session"]["uid"],
+                                                          import_json_dict["session"]["user_id"]), (0, 0, 0), font=font_bold)
 
-    draw.text((0,font_size), "Feedstock material: {} {} {} {}".format(import_json_dict["material"]["manufacturer"],
+    draw.text((0, font_size), "Feedstock material: {} {} {} {}".format(import_json_dict["material"]["manufacturer"],
                                                                      import_json_dict["material"]["id"],
                                                                      import_json_dict["material"]["name"],
-                                                                     import_json_dict["material"]["size_od"]), (0,0,0), font=font)
+                                                                     import_json_dict["material"]["size_od"]), (0, 0, 0), font=font)
 
-    draw.text((0,2*font_size), "3D printer: {} {} {}".format(import_json_dict["machine"]["manufacturer"],
+    draw.text((0, 2*font_size), "3D printer: {} {} {}".format(import_json_dict["machine"]["manufacturer"],
                                                              import_json_dict["machine"]["model"],
-                                                             import_json_dict["machine"]["sn"]), (0,0,0), font=font)
+                                                             import_json_dict["machine"]["sn"]), (0, 0, 0), font=font)
 
-    draw.text((0,3*font_size), "Nozzle: {} mm {} nozzle".format(import_json_dict["machine"]["nozzle"]["size_id"],
-                                                                import_json_dict["machine"]["nozzle"]["type"]), (0,0,0), font=font)
+    draw.text((0, 3*font_size), "Nozzle: {} mm {} nozzle".format(import_json_dict["machine"]["nozzle"]["size_id"],
+                                                                import_json_dict["machine"]["nozzle"]["type"]), (0, 0, 0), font=font)
 
-    draw.text((0,4*font_size), "Tested parameter (units): {} ({})".format(import_json_dict["session"]["previous_tests"][-1]["test_name"],
+    draw.text((0, 4*font_size), "Tested parameter (units): {} ({})".format(import_json_dict["session"]["previous_tests"][-1]["test_name"],
                                                                           import_json_dict["session"]["previous_tests"][-1]["units"],
                                                                           import_json_dict["machine"]["nozzle"]["type"]), (0,0,0), font=font)
 
-    draw.text((0,5*font_size), "Target: {}".format(import_json_dict["session"]["target"]), (0,0,0), font=font)
+    draw.text((0, 5*font_size), "Target: {}".format(import_json_dict["session"]["target"]), (0, 0, 0), font=font)
 
     vertical_offset = 0
     horizontal_offset = 225

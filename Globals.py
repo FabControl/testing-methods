@@ -21,46 +21,47 @@ try:
 except:
     exception_handler("falling back to hardcoded JSON")
     persistence = {
-    "material": {
-        "name": "Nanodiamond B",
-        "manufacturer": "?",
-        "material_group": "filled polymer",
-        "polymer_class": "PLA",
-        "id": "123456",
-        "size_od": 1.75,
-        "temperature_melting": 178,
-        "temperature_destr": 320,
-        "temperature_vicat": 60, # optional
-        "temperature_glass": 60, # optional
-        "mvr": 32, # optional
-        "load_mfr": 1, # optional
-        "temperature_mfr": 220, # optional
-        "capillary_diameter_mfr": 4, # optional
-        "capillary_length_mfr": 8, # optional
-        "time_mfr": 10, # optional
-        "density_rt": 1.2 # optional
-    },
-    "machine": {
-        "manufacturer": "Mass Portal",
-        "model": "Pharaoh D20",
-        "sn": 0,
-        "buildarea_maxdim1": 145,
-        "buildarea_maxdim2": 145,
-        "max_dimension_z": 200,
-        "temperature_extruder_max": 320,
-        "temperature_extruder_min": 190,
-        "nozzle": {
-            "size_id": 0.4,
-            "size_od": 0.64,
-            "size_capillary_length": 5, # optional
-            "size_angle": 60, # optional
-            "size_extruder_id": 1.95,
-            "type": "brass"
+        "material": {
+            "name": "Pro1",
+            "manufacturer": "Innofill",
+            "material_group": "unfilled polymer",
+            "polymer_class": "PLA",
+            "id": "12345",
+            "size_od": 1.75,
+            "temperature_melting": 190,
+            "temperature_destr": 320,
+            "temperature_vicat": 70,  # optional
+            "temperature_glass": 50,  # optional
+            "mvr": 32,  # optional
+            "load_mfr": 1,  # optional
+            "temperature_mfr": 220,  # optional
+            "capillary_diameter_mfr": 4,  # optional
+            "capillary_length_mfr": 8,  # optional
+            "time_mfr": 10,  # optional
+            "density_rt": 1.2,  # optional
+            "dried": True
         },
-        "ventilators": {
-             "ventilator_part_cooling": True,
-             "ventilator_entry": True,
-             "ventilator_exit": True
+        "machine": {
+            "manufacturer": "Mass Portal",
+            "model": "Pharaoh D20",
+            "sn": 0,
+            "buildarea_maxdim1": 145,
+            "buildarea_maxdim2": 145,
+            "max_dimension_z": 200,
+            "temperature_extruder_max": 320,
+            "temperature_extruder_min": 190,
+            "nozzle": {
+                "size_id": 0.4,
+                "size_od": 0.64,
+                "size_capillary_length": 5,  # optional
+                "size_angle": 60,  # optional
+                "size_extruder_id": 1.95,
+                "type": "brass"
+            },
+            "ventilators": {
+                "ventilator_part_cooling": True,
+                "ventilator_entry": False,
+                "ventilator_exit": False
             },
         "software": {
              "version": "2.1"
