@@ -404,18 +404,17 @@ def bridging_test(ts: TestSetupA):
     if ts.raft:
         print_raft(ts)  # print the raft to support the test structure
 
-    ts.g.write("; --- start to print the test structure ---")
+    ts.g.write("; --- start to print the support structure ---")
     ts.g.feed(machine.settings.speed_printing)
 
     angle = 45
     perimeter = 4
-    height = 3
-    number_of_layers = int(height/np.mean(ts.track_height))
+
     step_x = ts.test_structure_size/((ts.number_of_test_structures + 1)/2)/2
     step_y = ts.test_structure_size/ts.number_of_substructures - perimeter*np.mean(ts.track_width)/np.cos(np.deg2rad(angle))
 
     # Building support structures
-    for current_layer in range(number_of_layers):
+    for current_layer in range(ts.number_of_layers):
         ts.g.abs_travel(x=+ts.test_structure_size/2,
                         y=-ts.test_structure_size/2,
                         z=+np.mean(ts.abs_z)+current_layer*np.mean(ts.track_height), lift=1)
@@ -450,11 +449,11 @@ def bridging_test(ts: TestSetupA):
                 retraction_speed=ts.retraction_speed,
                 retraction_distance=np.mean(ts.retraction_distance))
 
-    ts.g.write("starting")
+    ts.g.write("; --- starting to print bridges ---")
 
     # Printing bridges
     for current_speed_value in ts.min_max_speed_printing:
-        ts.g.write("; --- testing the following bridging speed value: {:.1f} mm/s".format(current_speed_value))
+        ts.g.write("; --- testing the following bridging speed value: {:.1f} mm/s ---".format(current_speed_value))
         ts.g.feed(current_speed_value)
         for index, current_extrusion_multiplier_value in enumerate(ts.extrusion_multiplier_bridging):
             ts.g.write(ts.comment2[index])

@@ -190,7 +190,7 @@ else:
         tested_speed_values = []
 
     current_test = {"test_name": ts.test_name,
-                    "tested_parameter_values": [round(k, int(re.search("[0-9]", ts.test_info.precision).group())) for k in ts.get_values()],
+                    "tested_parameter_values": [round(k, int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
                     "tested_printing-speed_values": [round(k, 1) for k in tested_speed_values],
                     "tested_volumetric_flow-rate_values": ts.volumetric_flow_rate,
                     "selected_parameter_value": evaluate(input("Enter the best parameter value: ")),
@@ -207,7 +207,6 @@ else:
     previous_tests.append(current_test)
     persistence["session"]["previous_tests"] = previous_tests
 
-if not quiet:
     for dummy in persistence["session"]["previous_tests"]:
         if dummy["test_name"] == "printing speed":
             persistence["settings"]["speed_printing"] = dummy["selected_parameter_value"]

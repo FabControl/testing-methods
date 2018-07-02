@@ -41,14 +41,14 @@ def generate_label(import_json_dict):
     draw.text((0, 0), "Session ID: {}, User ID: {}".format(import_json_dict["session"]["uid"],
                                                           import_json_dict["session"]["user_id"]), (0, 0, 0), font=font_bold)
 
-    draw.text((0, font_size), "Feedstock material: {} {} {} {}".format(import_json_dict["material"]["manufacturer"],
-                                                                     import_json_dict["material"]["id"],
-                                                                     import_json_dict["material"]["name"],
-                                                                     import_json_dict["material"]["size_od"]), (0, 0, 0), font=font)
+    draw.text((0,1*font_size), "Feedstock material: {} {} {} {} mm".format(import_json_dict["material"]["manufacturer"],
+                                                                           import_json_dict["material"]["id"],
+                                                                           import_json_dict["material"]["name"],
+                                                                           import_json_dict["material"]["size_od"]), (0, 0, 0), font=font)
 
-    draw.text((0, 2*font_size), "3D printer: {} {} {}".format(import_json_dict["machine"]["manufacturer"],
-                                                             import_json_dict["machine"]["model"],
-                                                             import_json_dict["machine"]["sn"]), (0, 0, 0), font=font)
+    draw.text((0,2*font_size), "3D printer: {} {}, SN: {}".format(import_json_dict["machine"]["manufacturer"],
+                                                           import_json_dict["machine"]["model"],
+                                                           import_json_dict["machine"]["sn"]), (0, 0, 0), font=font)
 
     draw.text((0, 3*font_size), "Nozzle: {} mm {} nozzle".format(import_json_dict["machine"]["nozzle"]["size_id"],
                                                                 import_json_dict["machine"]["nozzle"]["type"]), (0, 0, 0), font=font)

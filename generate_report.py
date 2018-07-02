@@ -39,11 +39,11 @@ doc = SimpleDocTemplate(filename(cwd, session_id, "pdf"),
                         bottomMargin=18)
 
 style_heading = ParagraphStyle(name="Bold",
-                               fontName="Times",
+                               fontName="Helvetica",
                                fontSize=24)
 
 style_text = ParagraphStyle(name="Normal",
-                            fontName="Times",
+                            fontName="Helvetica",
                             fontSize=11)
 
 elements = []
@@ -77,7 +77,7 @@ main_info = "Critical overhang angle: " + str(import_json_dict["settings"]["crit
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Extruder temperature (raft): " + str(import_json_dict["settings"]["temperature_extruder_raft"]) + " degC"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Track width (raft): " + str(import_json_dict["settings"]["track_width_raft"]) + " mm"
+main_info = "Track width (first layer): " + str(import_json_dict["settings"]["track_width_raft"]) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Printbed temperature: " + str(import_json_dict["settings"]["temperature_printbed"]) + " degC"
 elements.append(Paragraph(main_info, style=style_text))
