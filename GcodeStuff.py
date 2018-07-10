@@ -97,7 +97,6 @@ class Gplus(G):
 
             line_length = math.sqrt(x_distance ** 2 + y_distance ** 2)
 
-            # max E cherez motor?
             if self.coef_h < self.coef_w / (2 - math.pi / 2):
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * ((self.coef_w - self.coef_h) * self.coef_h + (math.pi / 4) * (
                     self.coef_h) ** 2) * line_length * self.extrusion_multiplier

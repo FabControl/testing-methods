@@ -8,6 +8,25 @@ import os
 header = r'header'
 footer = r'footer'
 
+class DryingProcess(object):
+    """
+    definition of the drying process:
+    dried                 - True / False
+    drying_temperature    - drying temperature(degC)
+    drying_time           - drying time (min)
+    drying_airflow        - airflow during drying (%)
+    feeding_temperature   - feeding temperature(degC)
+    feeding_airflow       - airflow during feeding(%)
+    """
+    def __init__(self, dried: bool, drying_temperature: int, drying_time: int, drying_airflow: int, feeding_temperature: int, feeding_airflow: int, *args, **kwargs):
+        self.dried = dried
+        if self.dried:
+            self.drying_temperature = drying_temperature
+            self.drying_time = drying_time
+            self.drying_airflow = drying_airflow
+            self.feeding_temperature = feeding_temperature
+            self.feeding_airflow = feeding_airflow
+
 
 class Material(object):
     """
@@ -32,7 +51,10 @@ class Material(object):
     heat_capacity          - specific heat capacity (J/kg/K)
     """
 
-    def __init__(self, name, manufacturer, material_group=None, polymer_class=None, id=None, size_od: float=None, temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None, mvr=None, mfi=None, temperature_mfr=None, load_mfr=None, capillary_length_mfr=None, capillary_diameter_mfr=None, time_mfr=None, density_rt=None, lcte=None, heat_capacity=None, price_eur_per_kg=None, *args, **kwargs):
+    def __init__(self, name, manufacturer, material_group=None, polymer_class=None, id=None, size_od: float=None,
+                 temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None,
+                 mvr=None, mfi=None, temperature_mfr=None, load_mfr=None, capillary_length_mfr=None, capillary_diameter_mfr=None,
+                 time_mfr=None, density_rt=None, lcte=None, heat_capacity=None, price_eur_per_kg=None, *args, **kwargs):
         self.name = name
         self.material_group = material_group
         self.polymer_class = polymer_class
@@ -54,6 +76,7 @@ class Material(object):
         self.load_mfr = load_mfr  # respect the units: kg
         self.heat_capacity = heat_capacity  # respect the units: J / K / g
         self.price_eur_per_kg = price_eur_per_kg
+        self.drying = None
 
 
 class Nozzle(object):
@@ -146,7 +169,7 @@ class Settings(object):
 
         self.aim = aim
 
-        self.material = Material(None, None, None, 1.75) # TODO why 1.75
+        self.material = Material(None, None, None, None, None) # TODO why 1.75
         self.track_width = track_width
         self.track_width_raft = track_width_raft
         self.track_height = track_height
@@ -177,12 +200,7 @@ class Settings(object):
         self.optimize_track_height = optimize_track_height  # True if ones wants to optimize track_height
         self.get_track_width = get_track_width  # True if ones wants to get track_width values
         self.get_track_height = get_track_height  # True if ones wants to get track_height values
-        self.perimeter = perimeter
-        self.overlap = overlap
-        self.matrix_size = matrix_size
-        self.layers = layers
-
-        self.material_name = None if material is None else material.name
+        #self.material_name = None if material is None else material.name
         self.nozzle = nozzle
 
 
@@ -222,10 +240,10 @@ class Machine(object):
 
         self.nozzle = Nozzle(**kwargs["nozzle"])
         self.ventilators = Ventilators(**kwargs["ventilators"])
-        self.settings = None
         self.software = Software(**kwargs["software"])
         self.firmware = Firmware(**kwargs["firmware"])
         self.printbed = Printbed(**kwargs["printbed"])
+        #self.settings = None
 
 
 class TestInfo(object):
@@ -347,14 +365,14 @@ def minmax_temperature(material: Material, machine: Machine, number_of_test_stru
 
 def get_test_structure_size(machine):
     test_structure_size = 55
-    if machine.nozzle.size_id > 0.3:
+    if machine.nozzle.size_id > 0.29:
         test_structure_size = 75
-        if machine.nozzle.size_id > 0.4:
+        if machine.nozzle.size_id > 0.39:
             test_structure_size = 100
-            if machine.nozzle.size_id > 0.6:
+            if machine.nozzle.size_id > 0.59:
                 test_structure_size = 125
-            #     if machine.nozzle.size_id > 1.0:
-            #         test_structure_size = 150
+                if machine.nozzle.size_id > 0.9:
+                    test_structure_size = 150
 
     return test_structure_size
 

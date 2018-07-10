@@ -1,4 +1,4 @@
-from Definitions import Material, Settings, Machine, TestInfo
+from Definitions import Material, Settings, Machine, TestInfo, DryingProcess
 import json
 from session_loader import session_uid
 from paths import cwd, json_folder
@@ -21,47 +21,46 @@ try:
 except:
     exception_handler("falling back to hardcoded JSON")
     persistence = {
-        "material": {
-            "name": "Pro1",
-            "manufacturer": "Innofill",
-            "material_group": "unfilled polymer",
-            "polymer_class": "PLA",
-            "id": "12345",
-            "size_od": 1.75,
-            "temperature_melting": 190,
-            "temperature_destr": 320,
-            "temperature_vicat": 70,  # optional
-            "temperature_glass": 50,  # optional
-            "mvr": 32,  # optional
-            "load_mfr": 1,  # optional
-            "temperature_mfr": 220,  # optional
-            "capillary_diameter_mfr": 4,  # optional
-            "capillary_length_mfr": 8,  # optional
-            "time_mfr": 10,  # optional
-            "density_rt": 1.2,  # optional
-            "dried": True
+    "material": {
+        "name": "Nanodiamond B",
+        "manufacturer": "?",
+        "material_group": "filled polymer",
+        "polymer_class": "PLA",
+        "id": "123456",
+        "size_od": 1.75,
+        "temperature_melting": 178,
+        "temperature_destr": 320,
+        "density_rt": 1.2, # optional
+        "drying": {
+            "dried": True,
+            "drying_temperature": 80,
+            "drying_time": 240,
+            "drying_airflow": 40,
+            "feeding_temperature": 40,
+            "feeding_airflow": 10
         },
-        "machine": {
-            "manufacturer": "Mass Portal",
-            "model": "Pharaoh D20",
-            "sn": 0,
-            "buildarea_maxdim1": 145,
-            "buildarea_maxdim2": 145,
-            "max_dimension_z": 200,
-            "temperature_extruder_max": 320,
-            "temperature_extruder_min": 190,
-            "nozzle": {
-                "size_id": 0.4,
-                "size_od": 0.64,
-                "size_capillary_length": 5,  # optional
-                "size_angle": 60,  # optional
-                "size_extruder_id": 1.95,
-                "type": "brass"
-            },
-            "ventilators": {
-                "ventilator_part_cooling": True,
-                "ventilator_entry": False,
-                "ventilator_exit": False
+    },
+    "machine": {
+        "manufacturer": "Mass Portal",
+        "model": "Pharaoh D20",
+        "sn": 0,
+        "buildarea_maxdim1": 145,
+        "buildarea_maxdim2": 145,
+        "max_dimension_z": 200,
+        "temperature_extruder_max": 320,
+        "temperature_extruder_min": 190,
+        "nozzle": {
+            "size_id": 0.4,
+            "size_od": 0.64,
+            "size_capillary_length": 5, # optional
+            "size_angle": 60, # optional
+            "size_extruder_id": 1.95,
+            "type": "brass"
+        },
+        "ventilators": {
+             "ventilator_part_cooling": True,
+             "ventilator_entry": True,
+             "ventilator_exit": True
             },
         "software": {
              "version": "2.1"
@@ -96,12 +95,6 @@ except:
         "retraction_restart_distance": 0.0,
         "retraction_speed": 80,
         "coasting_distance": 0.0,
-        "overlap": 0,
-        "perimeter": 1,
-        "matrix_size": 3,
-        "layer_count": 15,
-        "safe_distance": 50,
-        "edges": 30,
         "critical_overhang_angle": 36.0
     },
     "session": {
@@ -118,7 +111,6 @@ except:
         }
     }
 
-# TODO Create a similar dict for B tests
 test_dict = {"01": TestInfo("first-layer track height", "first-layer-track-height", "mm", "{:.3f}",
                            number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=False),
              "02": TestInfo("first-layer track width", "first-layer-track-width", "mm", "{:.3f}",
@@ -155,6 +147,7 @@ for test_number in test_number_list:
     test_units_list.append(test.units)
 
 material = Material(**persistence["material"])
+material.drying = DryingProcess(**persistence["material"]["drying"])
 machine = Machine(**persistence["machine"])
 machine.settings = Settings(nozzle=machine.nozzle, material=material, **persistence["settings"])
 
