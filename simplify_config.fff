@@ -70,7 +70,7 @@
   <internalInfillAngles>0</internalInfillAngles>
   <overlapInternalInfillAngles>0</overlapInternalInfillAngles>
   <externalInfillAngles>45,-45</externalInfillAngles>
-  <generateSupport>1</generateSupport>
+  <generateSupport>0</generateSupport>
   <supportExtruder>0</supportExtruder>
   <supportInfillPercentage>20</supportInfillPercentage>
   <supportExtraInflation>0</supportExtraInflation>
