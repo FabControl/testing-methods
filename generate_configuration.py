@@ -14,7 +14,7 @@ from collections import OrderedDict
 
 from docopt import docopt
 
-from CLI_helpers import exclusive_write, separator
+from CLI_helpers import separator
 from Globals import filename
 from conversion_dictionary import Slicer, Param, Params
 from paths import *

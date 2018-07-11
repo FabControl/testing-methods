@@ -204,16 +204,16 @@ class Params(object):
                 temp_slicer.units = None
                 param.__setattr__(slicer, temp_slicer)
                 continue
-            temp_slicer.name = numeral_input("Human readable name of the parameter in {}: ".format(slicer))
+            temp_slicer.name = None
             temp_slicer.modifier = numeral_input("Modifier: ")
             if temp_slicer.modifier is not None:
                 temp_slicer.reverse_modifier = numeral_input("Reverse modifier: ")
                 if "y" in temp_slicer.modifier:
                     temp_slicer.parent_parameter = numeral_input("Parent parameter: ")
-            temp_slicer.units = numeral_eval("Units: ")
+            temp_slicer.units = numeral_input("Units: ")
 
             param.__setattr__(slicer, temp_slicer)
-        self.parameters.append(Param(parameter, self))
+        self.parameters.append(param)
 
     def add_slicer(self, slicer: str):
         """

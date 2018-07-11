@@ -106,7 +106,7 @@
         "root": {
           "py/id": 10
         },
-        "units": "percentage"
+        "units": "percent"
       },
       "reverse_modifier": null,
       "simplify3d": {
@@ -119,10 +119,10 @@
         "root": {
           "py/id": 10
         },
-        "units": "percentage"
+        "units": "percent"
       },
       "test": null,
-      "units": "percentage"
+      "units": "percent"
     },
     {
       "py/object": "conversion_dictionary.Param",
@@ -145,7 +145,7 @@
         "root": {
           "py/id": 13
         },
-        "units": "percentage"
+        "units": "percent"
       },
       "reverse_modifier": null,
       "simplify3d": {
@@ -158,10 +158,10 @@
         "root": {
           "py/id": 13
         },
-        "units": "percentage"
+        "units": "percent"
       },
       "test": null,
-      "units": "percentage"
+      "units": "percent"
     },
     {
       "py/object": "conversion_dictionary.Param",
@@ -236,7 +236,7 @@
         "root": {
           "py/id": 19
         },
-        "units": "percentage"
+        "units": "percent"
       },
       "test": "first layer height test",
       "units": "mm"
@@ -314,7 +314,7 @@
         "root": {
           "py/id": 25
         },
-        "units": "percentage"
+        "units": "percent"
       },
       "test": null,
       "units": "mm"
@@ -2541,123 +2541,6 @@
       },
       "test": null,
       "units": null
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "modifier": null,
-      "name": null,
-      "parameter": "part_cooling_bridge",
-      "params": {
-        "py/id": 3
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bridge_fan_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 199
-        },
-        "units": "percentage"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bridgingFanSpeed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 199
-        },
-        "units": "percentage"
-      },
-      "test": null,
-      "units": "percentage"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "modifier": null,
-      "name": null,
-      "parameter": "extrusion_multiplier_bridge",
-      "params": {
-        "py/id": 3
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bridge_flow_ratio",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 202
-        },
-        "units": null
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bridgingExtrusionMultiplier",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 202
-        },
-        "units": null
-      },
-      "test": null,
-      "units": null
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "modifier": null,
-      "name": null,
-      "parameter": "speed_printing_bridge",
-      "params": {
-        "py/id": 3
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bridge_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 205
-        },
-        "units": "mm/s"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "round(x/y)",
-        "name": null,
-        "parameter": "bridgingSpeedMultiplier",
-        "parent_parameter": "speed_printing",
-        "reverse_modifier": "x*y",
-        "root": {
-          "py/id": 205
-        },
-        "units": null
-      },
-      "test": "",
-      "units": "mm/s"
     }
   ],
   {
