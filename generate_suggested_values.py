@@ -27,4 +27,7 @@ suggested_values = {"temperature": border_values(minmax_temperature(material, ma
                     "test_name": test_info.name}
 
 for key, value in suggested_values.items():
-    print("{}: ".format(key) + str([test_info.precision.format(x) for x in value]))
+    if type(value) == list:
+        print("{}: ".format(key) + str([x for x in value]))
+    else:
+        print("{}: {}".format(key, value))
