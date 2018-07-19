@@ -8,7 +8,7 @@ from TestSetupB import TestSetupB
 # WIPE
 def wipe(ts: TestSetupA or TestSetupB, full = True):
     ts.g.home()
-    ts.g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
+    ts.g.feed(machine.settings.speed_travel)  # respect the units: mm/min
     ts.g.abs_move(x=-6 * ts.test_structure_size/10,
                   y=-6 * ts.test_structure_size/10,
                   z=+2 * ts.coef_h_raft * machine.nozzle.size_id,

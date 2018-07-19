@@ -76,7 +76,7 @@ except:
         }
     },
     "settings": {
-        "optimize_speed_printing": True, # optional
+        "speed_travel": 150,
         "ventilator_part_cooling": 100,
         "ventilator_entry": 0,
         "ventilator_exit": 0,

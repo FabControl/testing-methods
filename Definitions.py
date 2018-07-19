@@ -160,7 +160,7 @@ class Settings(object):
     retraction_distance - retraction distance (mm)
     """
 
-    def __init__(self, aim=None, material=None, nozzle=None, track_width=None, track_width_raft =None, track_height=None, track_height_raft=None, temperature_extruder_raft=None,
+    def __init__(self, aim=None, material=None, nozzle=None, speed_travel = None, track_width=None, track_width_raft =None, track_height=None, track_height_raft=None, temperature_extruder_raft=None,
                  speed_printing_raft=None, temperature_extruder=None, temperature_printbed=None, extrusion_multiplier=None,
                  speed_printing=None, retraction_distance=None, retraction_restart_distance=None, retraction_speed=None, coasting_distance=None,
                  ventilator_part_cooling=None, ventilator_entry=None, ventilator_exit=None, raft_density=None,
@@ -168,6 +168,8 @@ class Settings(object):
                  perimeter=None, overlap=None, matrix_size=None, layers=None, *args, **kwargs):
 
         self.aim = aim
+
+        self.speed_travel = speed_travel
 
         self.material = Material(None, None, None, None, None) # TODO why 1.75
         self.track_width = track_width
@@ -336,10 +338,8 @@ def minmax_track_width_height_raft(machine: Machine, number_of_test_structures=N
 
 def minmax_temperature(material: Material, machine: Machine, number_of_test_structures: int):
     temperature_all = None
-    if machine.settings.temperature_extruder_raft is not None:
-        temperature_extruder_min = 0.975 * (machine.settings.temperature_extruder + 273.15) - 273.15
-    else:
-        temperature_extruder_min = machine.settings.temperature_extruder_raft
+
+    temperature_extruder_min = machine.settings.temperature_extruder_raft
 
     temperature_extruder_max = 1.060 * (machine.settings.temperature_extruder + 273.15) - 273.15
 
