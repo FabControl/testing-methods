@@ -76,8 +76,8 @@ except:
         }
     },
     "settings": {
-        "speed_travel": 150,
-        "ventilator_part_cooling": 100,
+        "optimize_speed_printing": True, # optional
+        "ventilator_part_cooling": 0,
         "ventilator_entry": 0,
         "ventilator_exit": 0,
         "raft_density": 100,
@@ -95,7 +95,10 @@ except:
         "retraction_restart_distance": 0.0,
         "retraction_speed": 80,
         "coasting_distance": 0.0,
-        "critical_overhang_angle": 36.0
+        "critical_overhang_angle": 36.0,
+        "bridging_part_cooling": 100,
+        "bridging_extrusion_multiplier": 1,
+        "bridging_speed_printing": 40
     },
     "session": {
         "uid": 20180529,
@@ -126,11 +129,11 @@ test_dict = {"01": TestInfo("first-layer track height", "first-layer-track-heigh
              "07": TestInfo("printing speed", "printing-speed", "mm/s", "{:.1f}",
                            number_of_layers=2, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0.80, 1.75]),
              "08": TestInfo("retraction distance", "retraction-distance", "mm", "{:.3f}",
-                           number_of_layers=8, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0.0, 4.0]),
+                           number_of_layers=3, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0.0, 4.0]),
              "09": TestInfo("retraction-restart distance", "retraction-restart-distance", "mm", "{:.3f}",
                            number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0.0, 0.4]),
              "10": TestInfo("bridging extrusion-multiplier", "bridging-extrusion-multiplier", "-", "{:.3f}",
-                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[1.0, 2.0])}
+                           number_of_layers=8, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[1.0, 2.0])}
 
 test_info = test_dict[str(persistence["session"]["test_name"])]
 session_idn = str(persistence["session"]["uid"])

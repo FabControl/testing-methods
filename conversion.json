@@ -674,13 +674,13 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
-      "modifier": null,
+      "modifier": "y",
       "name": "first layer printbed temperature",
       "parameter": "temperature_printbed_raft",
       "params": {
         "py/id": 3
       },
-      "parent": null,
+      "parent": "temperature_printbed",
       "prusa": {
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
@@ -2548,7 +2548,7 @@
       "_value": null,
       "modifier": null,
       "name": null,
-      "parameter": "part_cooling_bridge",
+      "parameter": "bridging_part_cooling",
       "params": {
         "py/id": 3
       },
@@ -2587,7 +2587,7 @@
       "_value": null,
       "modifier": null,
       "name": null,
-      "parameter": "extrusion_multiplier_bridge",
+      "parameter": "bridging_extrusion_multiplier",
       "params": {
         "py/id": 3
       },

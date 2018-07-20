@@ -452,6 +452,7 @@ def bridging_test(ts: TestSetupA):
     ts.g.write("; --- starting to print bridges ---")
 
     # Printing bridges
+    # if ts.part
     for current_speed_value in ts.min_max_speed_printing:
         ts.g.write("; --- testing the following bridging speed value: {:.1f} mm/s ---".format(current_speed_value))
         ts.g.feed(current_speed_value)

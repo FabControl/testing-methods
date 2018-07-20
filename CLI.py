@@ -233,6 +233,9 @@ else:
         elif dummy["test_name"] == "retraction distance":
             persistence["settings"]["retraction_distance"] = dummy["selected_parameter_value"]
             persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+        elif dummy["test_name"] == "bridging extrusion-multiplier":
+            persistence["settings"]["bridging_extrusion_multiplier"] = dummy["selected_parameter_value"]
+            persistence["settings"]["bridging_speed_printing"] = dummy["selected_printing-speed_value"]
 
 persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2 * persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
 

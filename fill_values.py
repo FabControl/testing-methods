@@ -10,13 +10,12 @@ import json
 import numpy as np
 from CLI_helpers import separator
 import paths
-from pprint import pprint
 from docopt import docopt
 
 
 args = docopt(__doc__)
 session_id = args["<session-id>"]
-path = paths.json_folder + separator() + session_id + ".json"
+path = paths.cwd + paths.json_folder + separator() + session_id + ".json"
 
 # Load persistence
 with open(path, mode='r') as file:
@@ -46,12 +45,11 @@ for dummy in persistence["session"]["previous_tests"]:
     elif dummy["test_name"] == "retraction distance":
         persistence["settings"]["retraction_distance"] = dummy["selected_parameter_value"]
         persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
+    elif dummy["test_name"] == "bridging extrusion-multiplier":
+        persistence["settings"]["bridging_extrusion_multiplier"] = dummy["selected_parameter_value"]
+        persistence["settings"]["bridging_speed_printing"] = dummy["selected_printing-speed_value"]
 
 persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*persistence["settings"]["track_height"]/persistence["settings"]["track_width"])),0)
-
-# with open(paths.cwd + separator("jsons") + persistence["material"]["manufacturer"] + " " + persistence["material"]["name"] + " " + str(persistence["machine"]["nozzle"]["size_id"]) + " mm" + ".json", mode="w") as file:
-#     output = json.dumps(persistence, indent=4, sort_keys=False)
-#     file.write(output)
 
 with open(path, mode="w") as file:
     output = json.dumps(persistence, indent=4, sort_keys=False)
