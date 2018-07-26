@@ -8,7 +8,6 @@ Usage:
 """
 
 import json
-import os
 from datetime import datetime
 
 from docopt import docopt
@@ -29,7 +28,7 @@ json_path = filename(cwd, session_id, "json")
 with open(json_path, mode="r") as file:
     import_json_dict = json.load(file)
 
-report_name = "Test report for " + import_json_dict["material"]["manufacturer"] + " " + import_json_dict["material"]["name"] + " Ø" + str(import_json_dict["material"]["size_od"]) + " mm"
+report_head = "Test report for " + str(import_json_dict["material"]["manufacturer"]) + " " + str(import_json_dict["material"]["name"]) + " Ø" + str(import_json_dict["material"]["size_od"]) + " mm"
 
 doc = SimpleDocTemplate(filename(cwd, session_id, "pdf"),
                         pagesize=landscape(A4),
@@ -44,43 +43,46 @@ style_heading = ParagraphStyle(name="Bold",
 
 style_text = ParagraphStyle(name="Normal",
                             fontName="Helvetica",
-                            fontSize=11)
+                            fontSize=10)
 
 elements = []
 cwd = os.getcwd()
 
-elements.append(Paragraph(report_name, style=style_heading))
 im = Image(logo_path, 4.28*inch, 0.7*inch)
 im.hAlign = "RIGHT"
 elements.append(im)
+elements.append(Paragraph(report_head, style=style_heading))
 elements.append(Spacer(1, 0.5*inch))
 
 datetime_info = "Report generated on: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 elements.append(Paragraph(datetime_info, style=style_text))
 main_info = "Target: " + import_json_dict["session"]["target"]
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Material: " + import_json_dict["material"]["name"] + ", ID:" + import_json_dict["material"]["id"] if import_json_dict["material"]["id"] is not None else "Material: " + import_json_dict["material"]["name"]
+if import_json_dict["material"]["drying"]["dried"]:
+    main_info = "Material: " + import_json_dict["material"]["manufacturer"] + " " + import_json_dict["material"]["name"] + " (ID: " + str(import_json_dict["material"]["id"]) + "), dried at: " + str(import_json_dict["material"]["drying"]["drying_temperature"]) + " degC for " + str(import_json_dict["material"]["drying"]["drying_time"]) + " min"
+else:
+    main_info = "Material: " + import_json_dict["material"]["manufacturer"] + " " + import_json_dict["material"]["name"] + " (ID: " + str(import_json_dict["material"]["id"]) + ")"
+
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Manufacturer: " + import_json_dict["material"]["manufacturer"]
+main_info = "Machine: " + import_json_dict["machine"]["manufacturer"] + " " + import_json_dict["machine"]["model"]+ " (SN: " + str(import_json_dict["machine"]["sn"]) + ")"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Machine: " + import_json_dict["machine"]["manufacturer"] + " " + import_json_dict["machine"]["model"]+ ", SN: " + str(import_json_dict["machine"]["sn"])
-elements.append(Paragraph(main_info, style=style_text))
-main_info = "Nozzle: " + str(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm, " + str(import_json_dict["machine"]["nozzle"]["type"])
+main_info = "Nozzle: " + "{:.2f}".format(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm, " + str(import_json_dict["machine"]["nozzle"]["type"])
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Part cooling: " + str(import_json_dict["settings"]["ventilator_part_cooling"]) + " %"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Retraction distance: " + str(import_json_dict["settings"]["retraction_distance"]) + " mm"
+main_info = "Retraction distance: " + "{:.2f}".format(import_json_dict["settings"]["retraction_distance"]) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Retraction speed: " + str(import_json_dict["settings"]["retraction_speed"]) + " mm/s"
+main_info = "Retraction speed: " + "{:.1f}".format(import_json_dict["settings"]["retraction_speed"]) + " mm/s"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Critical overhang angle: " + str(import_json_dict["settings"]["critical_overhang_angle"]) + " deg"
+main_info = "Critical overhang angle: " + "{:.1f}".format(import_json_dict["settings"]["critical_overhang_angle"]) + " deg"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Extruder temperature (raft): " + str(import_json_dict["settings"]["temperature_extruder_raft"]) + " degC"
+main_info = "Extruder temperature (raft): " + "{:.0f}".format(import_json_dict["settings"]["temperature_extruder_raft"]) + " degC"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Track width (first layer): " + str(import_json_dict["settings"]["track_width_raft"]) + " mm"
+main_info = "Track width (first layer): " + "{:.2f}".format(import_json_dict["settings"]["track_width_raft"]) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Printbed temperature: " + str(import_json_dict["settings"]["temperature_printbed"]) + " degC"
-elements.append(Paragraph(main_info, style=style_text))
+if import_json_dict["machine"]["printbed"]["printbed_heatable"]:
+    main_info = "Printbed temperature: " + "{:.0f}".format(import_json_dict["settings"]["temperature_printbed"]) + " degC"
+    elements.append(Paragraph(main_info, style=style_text))
 
 consumed_filament = 0
 for dummy in import_json_dict["session"]["previous_tests"]:
