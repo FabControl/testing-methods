@@ -90,6 +90,7 @@ except:
         "track_height": 0.2,
         "track_width": 0.4,
         "speed_printing": 40,
+        "speed_travel": 150,
         "extrusion_multiplier": 1.0,
         "retraction_distance": 0,
         "retraction_restart_distance": 0.0,
