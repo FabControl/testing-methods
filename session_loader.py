@@ -1,5 +1,5 @@
 """
-Mass Portal Feedstock Testing Suite
+FabControl Feedstock Testing Suite
 Command Line Interface
 Usage:
     CLI.py [-v] [-q]

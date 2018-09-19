@@ -130,6 +130,7 @@ if quiet:
         persistence["settings"]["track_width_raft"] = np.mean(ts.track_width)
 
     current_test = {"test_name": ts.test_name,
+                    "executed": True,
                     "tested_parameter_values": [round(k, int(re.search("[0-9]", ts.test_info.precision).group())) for k in ts.get_values()],
                     "tested_printing-speed_values": [round(k, 1) for k in tested_speed_values],
                     "tested_volumetric_flow-rate_values": ts.volumetric_flow_rate,
@@ -190,6 +191,7 @@ else:
         tested_speed_values = []
 
     current_test = {"test_name": ts.test_name,
+                    "executed": True,
                     "tested_parameter_values": [round(k, int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
                     "tested_printing-speed_values": [round(k, 1) for k in tested_speed_values],
                     "tested_volumetric_flow-rate_values": ts.volumetric_flow_rate,

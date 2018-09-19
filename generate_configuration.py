@@ -11,9 +11,7 @@ import datetime
 import json
 import re
 from collections import OrderedDict
-
 from docopt import docopt
-
 from CLI_helpers import separator
 from Globals import filename
 from conversion_dictionary import Slicer, Param, Params
@@ -121,7 +119,7 @@ params.populate(persistence_flat, auto=True)
 params.populate(target_overrides[persistence["session"]["target"]])
 
 
-if "prusa" in slicer.lower():
+if "prusa" in slicer.strip().lower():
     """
     Writes a Prusa Slic3r config
     """
@@ -135,18 +133,15 @@ if "prusa" in slicer.lower():
         param = params.get(item, mode="prusa")
         if param is not None:
             configuration[item]["value"] = param.prusa.value
-    with open(cwd + (output_name("ini", folder=config_folder)), mode='w') as file:
+    with open(cwd + config_folder + str(persistence["session-id"]), mode='w') as file:
         file.write(assemble_ini(configuration))
 
-elif slicer == "simplify3d":
+elif "simplify" in slicer.strip().lower():
     import xml.etree.ElementTree as ET
 
     tree = ET.parse('simplify_config.fff')
     root = tree.getroot()
-    root.attrib["name"] = "{0}_{1}_{2}_for_{3}_um_nozzle".format(persistence["material"]["manufacturer"],
-                                                                 persistence["material"]["name"],
-                                                                 str(persistence["material"]["size_od"]).format("{:.2f}"),
-                                                                 str(persistence["machine"]["nozzle"]["size_id"]*1000))
+    root.attrib["name"] = str(persistence["session-id"])
     root.attrib["version"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     for param in params.parameters:

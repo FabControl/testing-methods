@@ -4,9 +4,7 @@ import jsonpickle
 import math
 import numpy as np
 import os
-
-header = r'header'
-footer = r'footer'
+from paths import header, footer
 
 class DryingProcess(object):
     """

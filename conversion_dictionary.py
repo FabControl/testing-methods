@@ -10,6 +10,7 @@ import gc
 from CLI_helpers import clear, round
 import jsonpickle
 from docopt import docopt
+from paths import setting_repository
 
 gc.enable()  # Enable garbage collection
 
@@ -47,6 +48,7 @@ def generate_reverse_modifier(input_obj):
 def generate_dict_entry(persistence):
     """
     Generate a dict entry for each value in settings
+    Obsolete.
     """
     new_dictionary = []
     for key, value in persistence["settings"]:
@@ -63,6 +65,7 @@ def generate_dict_entry(persistence):
 def assign_modifiers(persistence):
     """
     Assign modifiers and parent parameters
+    Obsolete.
     """
     with open("relational_dict.json", mode="r") as file:
         input_json = json.load(file)
@@ -446,7 +449,7 @@ if __name__ == "__main__":
     """
 
     arguments = docopt(__doc__, version="Conversion dictionary tool 0.3")
-    params = Params("conversion.json")
+    params = Params(setting_repository)
 
     if arguments["add-slicer"]:
         params.add_slicer(arguments["<slicer>"])
