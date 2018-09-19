@@ -46,7 +46,6 @@ style_text = ParagraphStyle(name="Normal",
                             fontSize=10)
 
 elements = []
-cwd = os.getcwd()
 
 im = Image(logo_path, 4.28*inch, 0.7*inch)
 im.hAlign = "RIGHT"
