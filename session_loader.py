@@ -4,6 +4,7 @@ Command Line Interface
 Usage:
     CLI.py [-v] [-q]
     CLI.py <session-id> [-v] [-q]
+    CLI.py <session-id> <test-number>
     CLI.py new-test
     CLI.py --help
 """
