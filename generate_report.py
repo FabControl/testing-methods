@@ -75,7 +75,7 @@ main_info = "Retraction speed: " + "{:.1f}".format(import_json_dict["settings"][
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Critical overhang angle: " + "{:.1f}".format(import_json_dict["settings"]["critical_overhang_angle"]) + " deg"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Extruder temperature (raft): " + "{:.0f}".format(import_json_dict["settings"]["temperature_extruder_raft"]) + " degC"
+main_info = "Extruder temperature (first layer): " + "{:.0f}".format(import_json_dict["settings"]["temperature_extruder_raft"]) + " degC"
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Track width (first layer): " + "{:.2f}".format(import_json_dict["settings"]["track_width_raft"]) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
@@ -85,12 +85,13 @@ if import_json_dict["machine"]["printbed"]["printbed_heatable"]:
 
 consumed_filament = 0
 for dummy in import_json_dict["session"]["previous_tests"]:
-    consumed_filament = consumed_filament + round(float(dummy["extruded_filament"]), 3)
+    if dummy["executed"]:
+        consumed_filament = consumed_filament + round(float(dummy["extruded_filament"]), 3)
 main_info = "Consumed filament: " + "{:.1f}".format(consumed_filament) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
 elements.append(Spacer(1, 0.5*inch))
 
-performed_tests = import_json_dict["session"]["previous_tests"]
+performed_tests = filter(lambda x: x["executed"] is True, import_json_dict["session"]["previous_tests"])
 data = [" ", "Test name", "Units"]
 for dummy in range(import_json_dict["session"]["number_of_test_structures"]):
     data.append("Tested values")
