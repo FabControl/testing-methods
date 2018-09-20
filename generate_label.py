@@ -19,6 +19,7 @@ def add_logo(mfname, lfname, outfname):
     wpercent = (wsize/float(limage.size[0]))
     hsize = int((float(limage.size[1]) * float(wpercent)))
 
+
     simage = limage.resize((wsize, hsize))
     mbox = mimage.getbbox()
     sbox = simage.getbbox()
@@ -29,7 +30,7 @@ def add_logo(mfname, lfname, outfname):
 
 
 def generate_label(import_json_dict):
-    if import_json_dict["previous_tests"][-1]["executed"]:
+    if import_json_dict["session"]["previous_tests"][-1]["executed"]:
         font_size = 25
         font_size_small = 20
         font = ImageFont.truetype(font_path, font_size)
