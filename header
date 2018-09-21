@@ -1,7 +1,0 @@
-;Mass Portal Material Testing gcode
-;--- start header ---
-G28; move to the home position
-G21; unit in mm
-G92 E0; reset extruder
-M83; set extruder to relative mode
-M302 S1; allow cold extrusion

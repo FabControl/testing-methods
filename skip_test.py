@@ -20,6 +20,6 @@ current_test = {"test_name": test_dict[arguments["<test-number>"]].name,
 
 persistence["session"]["previous_tests"].append(current_test)
 
-with open(filename(cwd, session_uid, "json"), mode="w") as file:
+with open(filename(session_uid, "json"), mode="w") as file:
     output = json.dumps(persistence, indent=4, sort_keys=False)
     file.write(output)

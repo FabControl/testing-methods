@@ -20,7 +20,7 @@ from paths import *
 arguments = docopt(__doc__)
 session_id = str(arguments["<session_id>"])
 
-json_path = filename(cwd, session_id, "json")
+json_path = filename(session_id, "json")
 
 with open(json_path, mode="r") as file:
     persistence = json.load(file)
@@ -30,7 +30,7 @@ slicer = str(persistence["session"]["slicer"]).lower()
 persistence_flat = dict(persistence["settings"], **persistence["machine"]["nozzle"])
 persistence_flat["material_name"] = persistence["material"]["name"]
 persistence_flat["density_rt"] = persistence["material"]["density_rt"]
-with open("target_overrides.json") as overrides:
+with open(target_overrides_json) as overrides:
     target_overrides = json.load(overrides)
 
 
@@ -109,8 +109,8 @@ def output_name(extension: str, folder: str = None):
         return folder + separator() + output.replace(' ', '_')
 
 
-params = Params("conversion.json")
-defaults = read_ini("config.ini", output_type=dict)
+params = Params(conversion_json)
+defaults = read_ini(config_ini, output_type=dict)
 for key, value in defaults.items():
     defaults[key] = value["value"]
     del key, value
@@ -127,7 +127,7 @@ if "prusa" in slicer.strip().lower():
     material = persistence["material"]
     session = persistence["session"]
 
-    configuration = read_ini("config.ini")
+    configuration = read_ini(config_ini)
 
     for item in configuration:
         param = params.get(item, mode="prusa")
@@ -139,7 +139,7 @@ if "prusa" in slicer.strip().lower():
 elif "simplify" in slicer.strip().lower():
     import xml.etree.ElementTree as ET
 
-    tree = ET.parse('simplify_config.fff')
+    tree = ET.parse(simplify_config_fff)
     root = tree.getroot()
     root.attrib["name"] = str(persistence["session-id"])
     root.attrib["version"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

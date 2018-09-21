@@ -1,13 +1,13 @@
 from Definitions import Material, Settings, Machine, TestInfo, DryingProcess
 import json
 from session_loader import session_uid
-from paths import cwd, json_folder
+from paths import json_folder
 from CLI_helpers import separator, exception_handler
 
 try:
     try:
         print("Attempting to load the persistence file with ID {}".format(session_uid))
-        with open(str(cwd + json_folder + separator() + session_uid + ".json"), mode="r") as file:
+        with open(str(json_folder + separator() + session_uid + ".json"), mode="r") as file:
             persistence = json.load(file)
         print("Loaded a testing session ID {} from the existing JSON file".format(persistence["session"]["uid"]))
         file.close()
@@ -156,12 +156,11 @@ machine = Machine(**persistence["machine"])
 machine.settings = Settings(nozzle=machine.nozzle, material=material, **persistence["settings"])
 
 
-def filename(cwd: str, session_id: str, extension: str) -> str:
+def filename(session_id: str, extension: str) -> str:
     """
     Takes a filename extension and returns a full file-name based on the following convention:
     'cwd\\folder\\YYYYMMDDxxx_TestNumber.extension' where x is a number character from [0-9a-z] and TestNumber is a
     double-digit zero-padded number.
-    :param cwd:
     :param session_id:
     :param extension:
     :return:
@@ -185,9 +184,9 @@ def filename(cwd: str, session_id: str, extension: str) -> str:
         folder = png_folder
 
     if extension == ".gcode":
-        output = str(cwd + folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
+        output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
     elif extension == ".png":
-        output = str(cwd + folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
+        output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
     else:
-        output = str(cwd + folder + separator() + session_id + extension)
+        output = str(folder + separator() + session_id + extension)
     return output

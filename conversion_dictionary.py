@@ -10,7 +10,7 @@ import gc
 from CLI_helpers import clear, round
 import jsonpickle
 from docopt import docopt
-from paths import setting_repository
+from paths import *
 
 gc.enable()  # Enable garbage collection
 
@@ -56,7 +56,7 @@ def generate_dict_entry(persistence):
                             "slic3r": "",
                             "simplify3d": input("{} in {}: ".format(key, "simplify3d")),
                             "kissslicer": ""}
-        with open("relational_dict.json", mode="w") as file:
+        with open(relational_dict_json, mode="w") as file:
             output = json.dumps(new_dictionary, indent=4, sort_keys=True)
             file.write(output)
             file.close()
@@ -228,7 +228,7 @@ class Params(object):
 
         for parameter in self.parameters:
             clear()
-            print("Curent working parameter: {}.".format(parameter.parameter))
+            print("Current working parameter: {}.".format(parameter.parameter))
             parameter._add_slicer(slicer)
             _slicer = parameter.__getattribute__(slicer)
             _slicer.parameter = input("{} equivalent of {} parameter: ".format(slicer, parameter.parameter))
@@ -449,7 +449,7 @@ if __name__ == "__main__":
     """
 
     arguments = docopt(__doc__, version="Conversion dictionary tool 0.3")
-    params = Params(setting_repository)
+    params = Params(conversion_json)
 
     if arguments["add-slicer"]:
         params.add_slicer(arguments["<slicer>"])

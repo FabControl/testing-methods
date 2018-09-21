@@ -1,6 +1,0 @@
-; end of the test routine
-M106 S0 ; turn off the cooling fans
-M104 S0 ; turn off the heating of the extruder
-M140 S0 ; turn off the heating of the printbed
-G28 ; move to the home position
-M84 ; disable motors

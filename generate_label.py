@@ -31,8 +31,8 @@ def add_logo(mfname, lfname, outfname):
 
 def generate_label(import_json_dict):
     if import_json_dict["session"]["previous_tests"][-1]["executed"]:
-        font_size = 25
-        font_size_small = 20
+        font_size = 20
+        font_size_small = 15
         font = ImageFont.truetype(font_path, font_size)
         font_bold = ImageFont.truetype(font_bold_path, font_size)
         font_small = ImageFont.truetype(font_path, font_size_small)
@@ -72,13 +72,13 @@ def generate_label(import_json_dict):
         square_size = 35
 
         for ind, parameter_value in enumerate(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_values"]):
-            draw.text((3.5*ind*font_size_small+150, n*font_size), import_json_dict["session"]["previous_tests"][-1]["parameter_precision"].format(parameter_value), (0, 0, 0), font=font_small)
+            draw.text((4.5*ind*font_size_small+150, n*font_size), import_json_dict["session"]["previous_tests"][-1]["parameter_precision"].format(parameter_value), (0, 0, 0), font=font_small)
         print(n)
         n += 2
 
         for printing_speed_ind in range(len(import_json_dict["session"]["previous_tests"][-1]["tested_printing-speed_values"])):
             parameter_value = import_json_dict["session"]["previous_tests"][-1]["tested_printing-speed_values"][printing_speed_ind]
-            draw.text((10, 2*printing_speed_ind*square_size+n*font_size), "{} mm/s".format(parameter_value), (0, 0, 0), font=font_small)
+            draw.text((10, 2.75*printing_speed_ind*square_size+n*font_size), "{} mm/s".format(parameter_value), (0, 0, 0), font=font_small)
 
             for parameter_ind in range(len(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_values"])):
                 draw.rectangle(((2*square_size*parameter_ind+6*font_size, 2*square_size*printing_speed_ind+horizontal_offset),
@@ -87,5 +87,5 @@ def generate_label(import_json_dict):
         ImageDraw.Draw(img)
 
         label = img.rotate(angle=90, expand=True)
-        label.save(filename(cwd, str(import_json_dict["session"]["uid"]), ".png"))
-        add_logo(filename(cwd, str(import_json_dict["session"]["uid"]), ".png"), logo_path, filename(cwd, str(import_json_dict["session"]["uid"]), ".png"))
+        label.save(filename(str(import_json_dict["session"]["uid"]), ".png"))
+        add_logo(filename(str(import_json_dict["session"]["uid"]), ".png"), logo_path, filename(str(import_json_dict["session"]["uid"]), ".png"))

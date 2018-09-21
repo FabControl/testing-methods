@@ -29,7 +29,7 @@ verbose = False
 
 def initialize_test():
     if persistence["session"]["test_type"] == "A":
-        ts = TestSetupA(machine, material, test_info, path=filename(cwd, session_id, "gcode"),
+        ts = TestSetupA(machine, material, test_info, path=filename(session_id, "gcode"),
                         min_max_argument=min_max_argument,
                         min_max_speed_printing=min_max_speed_printing)
 
@@ -43,7 +43,7 @@ def initialize_test():
             flat_test_single_parameter_vs_speed_printing(ts)
 
     elif persistence["session"]["test_type"] == "B":  # 'perimeter', 'overlap', 'path height', 'temperature'
-        ts = TestSetupB(machine, material, test_info, path=filename(cwd, session_id, "gcode"),
+        ts = TestSetupB(machine, material, test_info, path=filename(session_id, "gcode"),
                         min_max_argument=min_max_argument,
                         min_max_speed_printing=min_max_speed_printing,
                         raft=True if persistence["settings"]["raft_density"] > 0 else False)
@@ -59,20 +59,6 @@ if __name__ == '__main__':
     verbose = arguments["-v"]
     quiet = arguments["-q"]
     session_id = arguments["<session-id>"] if arguments["<session-id>"] is not None else session_idn
-
-#     if arguments["generate-configuration"]:
-#         slicer_arg = str(arguments["<slicer>"]).lower()
-#         if slicer_arg == 'prusa' or slicer_arg == "simplify3d":
-#             persistence["session"]["slicer"] = slicer_arg
-#             import generate_configuration
-#         else:
-#             raise ValueError("{} not recognized. Accepted slicers are 'Prusa', 'Simplify3D'.".format(slicer_arg))
-#         quit()
-#
-# if arguments["generate-gcode-iso"]:
-#     config = arguments["<config>"]
-#     generate_gcode(arguments['<orientation>'], arguments['<count>'], arguments['<rotation>'], arguments["<file>"], config)
-#     quit()
 
 session = persistence["session"]
 start = time.time()
@@ -139,9 +125,9 @@ if quiet:
                     "selected_volumetric_flow-rate_value": 0,
                     "units": ts.test_info.units,
                     "parameter_precision": ts.test_info.precision,
-                    "extruded_filament": extruded_filament(filename(cwd, session_id, "gcode")),
-                    "gcode_path": filename(cwd, session_id, "gcode"),
-                    "label_path": filename(cwd, session_id, "png"),
+                    "extruded_filament": extruded_filament(filename(session_id, "gcode")),
+                    "gcode_path": filename(session_id, "gcode"),
+                    "label_path": filename(session_id, "png"),
                     "comments": 0,
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -200,9 +186,9 @@ else:
                     "selected_volumetric_flow-rate_value": evaluate(input("Enter the volumetric flow-rate value (mm3/s) which corresponds to the best strucuture: ")),
                     "units": ts.test_info.units,
                     "parameter_precision": ts.test_info.precision,
-                    "extruded_filament": extruded_filament(filename(cwd, session_id, "gcode")),
-                    "gcode_path": filename(cwd, session_id, "gcode"),
-                    "label_path": filename(cwd, session_id, "png"),
+                    "extruded_filament": extruded_filament(filename(session_id, "gcode")),
+                    "gcode_path": filename(session_id, "gcode"),
+                    "label_path": filename(session_id, "png"),
                     "comments": input("Comments: "),
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -241,7 +227,7 @@ else:
 
 persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2 * persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
 
-with open(filename(cwd, session_id, "json"), mode="w") as file:
+with open(filename(session_id, "json"), mode="w") as file:
     output = json.dumps(persistence, indent=4, sort_keys=False)
     file.write(output)
 
