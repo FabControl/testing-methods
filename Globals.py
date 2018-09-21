@@ -44,6 +44,7 @@ except:
             "manufacturer": "Mass Portal",
             "model": "Pharaoh D20",
             "sn": 0,
+            "form": "elliptic",  # "elliptic", "cartesian"
             "buildarea_maxdim1": 145,
             "buildarea_maxdim2": 145,
             "max_dimension_z": 200,

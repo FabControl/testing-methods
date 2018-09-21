@@ -220,13 +220,14 @@ class Machine(object):
     heater_power - total heaters power (W)
     """
 
-    def __init__(self, id: str=None, manufacturer: str=None, model: str=None, sn: str=None, buildarea_maxdim1: float=None, buildarea_maxdim2: float=None, temperature_extruder_max: float=None, temperature_extruder_min: float=None,
+    def __init__(self, id: str=None, manufacturer: str=None, model: str=None, sn: str=None, form: str=None, buildarea_maxdim1: float=None, buildarea_maxdim2: float=None, temperature_extruder_max: float=None, temperature_extruder_min: float=None,
                  temperature_printbed_max: float = None, temperature_printbed_min: float = None, moment_max: float=None, gear_size_od: float=12, heater_power: float=80, *args, **kwargs):
 
         self.id = id
         self.manufacturer = manufacturer
         self.model = model
         self.sn = sn
+        self.form = form
         self.buildarea_maxdim1 = buildarea_maxdim1  # respect the units: mm
         self.buildarea_maxdim2 = buildarea_maxdim2  # respect the units: mm
         self.temperature_extruder_max = temperature_extruder_max  # the maximum achievable temperature: degC

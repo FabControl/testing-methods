@@ -20,6 +20,10 @@ class Gplus(G):
         self.track_height = machine.settings.track_height
         self.track_width = machine.settings.track_width
 
+        self.form = machine.form
+        self.buildarea_maxdim1 = machine.buildarea_maxdim1
+        self.buildarea_maxdim2 = machine.buildarea_maxdim2
+
         self.coef_w = machine.settings.track_width / machine.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
 
@@ -67,6 +71,11 @@ class Gplus(G):
         """ Pause code executions for the given amount of time """
         self.write("G4 P{}".format(time * 1000) + " T0; set the waiting time in ms")
 
+    def home(self):
+        """ Move the tool head to the home position (X=0, Y=0).
+        """
+        self.abs_move(x=0, y=0, extrude=False)
+
     def move(self, x=None, y=None, z=None, rapid=False, extrude=None, extrusion_multiplier=None, coef_w=None,
              coef_h=None, **kwargs):
         """ Move the tool head to the given position. This method operates in
@@ -104,7 +113,7 @@ class Gplus(G):
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * ((self.coef_w - self.coef_h) * self.coef_h + (math.pi / 4) * (
                     self.coef_h) ** 2) * line_length * self.extrusion_multiplier
             else:
-                exception_handler("path height of {:.3f} mm is too thin".format(self.coef_h * self.nozzle_diameter)) # TODO Reinis!!!
+                exception_handler("path height of {:.3f} mm is too thin".format(self.coef_h * self.nozzle_diameter))
                 filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * (self.coef_w * self.coef_h) * line_length * self.extrusion_multiplier
 
             kwargs["E"] = filament_length + current_extruder_position
@@ -124,6 +133,16 @@ class Gplus(G):
     def abs_move(self, x=None, y=None, z=None, rapid=False, extrude=None, extrusion_multiplier=None, **kwargs):
         """ Same as `move` method, but positions are interpreted as absolute.
         """
+        if self.form != "elliptic":
+            offset_x = self.buildarea_maxdim1/2
+            offset_y = self.buildarea_maxdim2/2
+        else:
+            offset_x = 0
+            offset_y = 0
+
+        x_offset = x + offset_x if x is not None else x
+        y_offset = y + offset_y if y is not None else y
+
         if extrude is not None:
             self.extrude = extrude
         if extrusion_multiplier is not None:
@@ -131,10 +150,10 @@ class Gplus(G):
 
         if self.is_relative:
             self.absolute()
-            self.move(x=x, y=y, z=z, rapid=rapid, extrude=extrude, extrusion_multiplier=extrusion_multiplier, **kwargs)
+            self.move(x=x_offset, y=y_offset, z=z, rapid=rapid, extrude=extrude, extrusion_multiplier=extrusion_multiplier, **kwargs)
             self.relative()
         else:
-            self.move(x=x, y=y, z=z, rapid=rapid, extrude=extrude, extrusion_multiplier=extrusion_multiplier, **kwargs)
+            self.move(x=x_offset, y=y_offset, z=z, rapid=rapid, extrude=extrude, extrusion_multiplier=extrusion_multiplier, **kwargs)
 
     def travel(self, x=None, y=None, z=None, speed=None, lift=0.2, retraction_speed=60, retraction_distance=3,  **kwargs):
         """
