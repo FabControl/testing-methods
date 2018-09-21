@@ -133,7 +133,7 @@ if "prusa" in slicer.strip().lower():
         param = params.get(item, mode="prusa")
         if param is not None:
             configuration[item]["value"] = param.prusa.value
-    with open(cwd + config_folder + str(persistence["session-id"]), mode='w') as file:
+    with open(config_folder + str(session_id), mode='w') as file:
         file.write(assemble_ini(configuration))
 
 elif "simplify" in slicer.strip().lower():
@@ -141,7 +141,7 @@ elif "simplify" in slicer.strip().lower():
 
     tree = ET.parse(simplify_config_fff)
     root = tree.getroot()
-    root.attrib["name"] = str(persistence["session-id"])
+    root.attrib["name"] = str(session_id)
     root.attrib["version"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     for param in params.parameters:
