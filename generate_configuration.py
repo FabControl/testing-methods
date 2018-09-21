@@ -123,6 +123,7 @@ if "prusa" in slicer.strip().lower():
     """
     Writes a Prusa Slic3r config
     """
+    print("generating config for Prusa Slic3r")
     settings = persistence["settings"]
     material = persistence["material"]
     session = persistence["session"]
@@ -133,7 +134,8 @@ if "prusa" in slicer.strip().lower():
         param = params.get(item, mode="prusa")
         if param is not None:
             configuration[item]["value"] = param.prusa.value
-    with open(config_folder + str(session_id), mode='w') as file:
+    print("writing file in {}".format(config_folder + str(session_id)))
+    with open(config_folder + separator() + str(session_id) + ".ini", mode='w') as file:
         file.write(assemble_ini(configuration))
 
 elif "simplify" in slicer.strip().lower():
