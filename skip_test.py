@@ -7,7 +7,6 @@ from docopt import docopt
 from Globals import persistence, test_dict, filename
 from session_loader import session_uid
 from datetime import datetime
-from paths import cwd
 import json
 
 arguments = docopt(__doc__)
