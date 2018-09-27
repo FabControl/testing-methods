@@ -31,7 +31,7 @@ setup(
     # There are some restrictions on what makes a valid project name
     # specification here:
     # https://packaging.python.org/specifications/core-metadata/#name
-    name='Mass Portal Feedstock Testing Suite',  # Required
+    name='FabControl 3D Printing Testing Framework',  # Required
 
     # Versions should comply with PEP 440:
     # https://www.python.org/dev/peps/pep-0440/
@@ -44,7 +44,7 @@ setup(
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
-    description='A 3D printing feedstock testing suite which enables a user to arrive to optimal slicing parameters.',  # Required
+    description='FabControl 3D Printing Testing Framework which enables a user to arrive to optimal slicing parameters.',  # Required
 
     # This is an optional longer description of your project that represents
     # the body of text which users will see when they visit PyPI.
@@ -60,15 +60,15 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://bitbucket.org/MassPortal/mp-testing-methods/',  # Optional
+    url='https://bitbucket.org/fabcontrol/',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
-    author='Mass Portal',  # Optional
+    author='FabControl',  # Optional
 
     # This should be a valid email address corresponding to the author listed
     # above.
-    author_email='sales@massportal.com',  # Optional
+    author_email='info@fabcontrol.com',  # Optional
 
     # Classifiers help users find your project by categorizing it.
     #
@@ -95,7 +95,7 @@ setup(
     # project page. What does your project relate to?
     #
     # Note that this is a string of words separated by whitespace, not a list.
-    keywords='material testing 3D printing feedstock mass portal',  # Optional
+    keywords='material testing 3D-printing feedstock fabcontrol',  # Optional
 
     # You can just specify package directories manually here if your project is
     # simple. Or you can use find_packages().
@@ -123,18 +123,5 @@ setup(
     # MANIFEST.in as well.
     package_data={  # Optional
         'sample': ['package_data.dat'],
-    },
-
-    # To provide executable scripts, use entry points in preference to the
-    # "scripts" keyword. Entry points provide cross-platform support and allow
-    # `pip` to create the appropriate form of executable for the target
-    # platform.
-    #
-    # For example, the following would provide a command called `sample` which
-    # executes the function `main` from this package when invoked:
-    entry_points={  # Optional
-        'console_scripts': [
-            'mptesting=CLI.py:__main__'
-        ],
-    },
+    }
 )

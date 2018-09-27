@@ -1,5 +1,5 @@
 """
-Mass Portal Feedstock Testing Suite
+FabControl 3D Printing Testing Framework
 Command Line Interface
 Usage:
     CLI.py [-v] [-q]
@@ -19,7 +19,6 @@ from DefinitionsTestsA import flat_test_single_parameter_vs_speed_printing, retr
 from Globals import machine, material, persistence, test_number_list, test_name_list, test_dict, filename, session_idn
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
-from paths import cwd
 from generate_label import generate_label
 from session_loader import session_uid
 

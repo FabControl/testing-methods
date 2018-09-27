@@ -1,5 +1,5 @@
-# MP-Material-Test-Framework
-Mass Portal Material Testing and Gcode generation software repository.
+# FabControl 3D Printing Materials Testing Framework
+FabControl 3D Printing Materials Testing Framework and Gcode generation software repository.
 
 **List of objects:**
 
