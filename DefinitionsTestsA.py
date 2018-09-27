@@ -395,7 +395,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
     return
 
 
-# GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER vs. PRINTING SPEED
+# BRIDGING EXTRUSION MULTIPLIER vs. BRIDGING PRINTING SPEED
 def bridging_test(ts: TestSetupA):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
