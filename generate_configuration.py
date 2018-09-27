@@ -1,10 +1,12 @@
 #!/usr/local/bin/python
 """
-Mass Portal Feedstock Testing Suite
+FabControl Feedstock Testing Suite
 Configuration file Generator
 
 Usage:
     generate_configuration.py <session_id>
+    generate_configuration.py optimizer <session_id>
+    generate_configuration.py cast <source_path> <slicer>
 """
 
 import datetime
@@ -13,25 +15,26 @@ import re
 from collections import OrderedDict
 from docopt import docopt
 from CLI_helpers import separator
-from Globals import filename
+# from Globals import filename
 from conversion_dictionary import Slicer, Param, Params
 from paths import *
 
 arguments = docopt(__doc__)
 session_id = str(arguments["<session_id>"])
+source_path = str(arguments["<source_path>"])
 
-json_path = filename(session_id, "json")
+json_path = json_folder + separator() + str(session_id) + ".json"
+if not arguments["cast"]:
+    with open(json_path, mode="r") as file:
+        persistence = json.load(file)
 
-with open(json_path, mode="r") as file:
-    persistence = json.load(file)
+    slicer = str(persistence["session"]["slicer"]).lower()
 
-slicer = str(persistence["session"]["slicer"]).lower()
-
-persistence_flat = dict(persistence["settings"], **persistence["machine"]["nozzle"])
-persistence_flat["material_name"] = persistence["material"]["name"]
-persistence_flat["density_rt"] = persistence["material"]["density_rt"]
-with open(target_overrides_json) as overrides:
-    target_overrides = json.load(overrides)
+    persistence_flat = dict(persistence["settings"], **persistence["machine"]["nozzle"])
+    persistence_flat["material_name"] = persistence["material"]["name"]
+    persistence_flat["density_rt"] = persistence["material"]["density_rt"]
+    with open(target_overrides_json) as overrides:
+        target_overrides = json.load(overrides)
 
 
 def numeral_eval(value):
@@ -115,65 +118,116 @@ for key, value in defaults.items():
     defaults[key] = value["value"]
     del key, value
 params.populate(defaults, auto=True)
-params.populate(persistence_flat, auto=True)
-params.populate(target_overrides[persistence["session"]["target"]])
+if not arguments["cast"]:
+    params.populate(persistence_flat, auto=True)
+    params.populate(target_overrides[persistence["session"]["target"]])
+else:
+    with open(arguments["<source_path>"]) as file:
+        raw_config = json.load(file)["optimizer"]
+        params.populate(raw_config)
+        slicer = arguments["<slicer>"]
 
 
-if "prusa" in slicer.strip().lower():
-    """
-    Writes a Prusa Slic3r config
-    """
-    print("generating config for Prusa Slic3r")
-    settings = persistence["settings"]
-    material = persistence["material"]
-    session = persistence["session"]
+if not arguments["cast"] and not arguments["optimizer"]:
+    if "prusa" in slicer.strip().lower():
+        """
+        Writes a Prusa Slic3r config
+        """
+        print("generating config for Prusa Slic3r")
+        settings = persistence["settings"]
+        material = persistence["material"]
+        session = persistence["session"]
 
-    configuration = read_ini(config_ini)
+        configuration = read_ini(config_ini)
 
-    for item in configuration:
-        param = params.get(item, mode="prusa")
-        if param is not None:
-            configuration[item]["value"] = param.prusa.value
-    print("writing file in {}".format(config_folder + str(session_id)))
-    with open(config_folder + separator() + str(session_id) + ".ini", mode='w') as file:
-        file.write(assemble_ini(configuration))
+        for item in configuration:
+            param = params.get(item, mode="prusa")
+            if param is not None:
+                configuration[item]["value"] = param.prusa.value
+        print("writing file in {}".format(config_folder + str(session_id)))
+        with open(config_folder + separator() + str(session_id) + ".ini", mode='w') as file:
+            file.write(assemble_ini(configuration))
 
-elif "simplify" in slicer.strip().lower():
-    import xml.etree.ElementTree as ET
+    elif "simplify" in slicer.strip().lower():
+        import xml.etree.ElementTree as ET
 
-    tree = ET.parse(simplify_config_fff)
-    root = tree.getroot()
-    root.attrib["name"] = str(session_id)
-    root.attrib["version"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        tree = ET.parse(simplify_config_fff)
+        root = tree.getroot()
+        root.attrib["name"] = str(session_id)
+        root.attrib["version"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    for param in params.parameters:
-        if param.simplify3d.parameter is not None:
-            element = root.find(param.simplify3d.parameter)
-            if element is None:
-                element = root.find("extruder").find(param.simplify3d.parameter)
-            if "temperature" in param.parameter:
-                temp_controllers = root.findall("temperatureController")
-                for controller in temp_controllers:
-                    if controller.attrib["name"] == param.simplify3d.parameter:
-                        setpoints = controller.findall("setpoint")
-                        if len(setpoints) > 1:
-                            if param.parameter == "temperature_extruder":
-                                element = setpoints[-1]
+        for param in params.parameters:
+            if param.simplify3d.parameter is not None:
+                element = root.find(param.simplify3d.parameter)
+                if element is None:
+                    element = root.find("extruder").find(param.simplify3d.parameter)
+                if "temperature" in param.parameter:
+                    temp_controllers = root.findall("temperatureController")
+                    for controller in temp_controllers:
+                        if controller.attrib["name"] == param.simplify3d.parameter:
+                            setpoints = controller.findall("setpoint")
+                            if len(setpoints) > 1:
+                                if param.parameter == "temperature_extruder":
+                                    element = setpoints[-1]
+                                else:
+                                    element = setpoints[0]
                             else:
-                                element = setpoints[0]
-                        else:
-                            element = controller.find("setpoint")
-                        element.attrib["temperature"] = str(param.simplify3d.value)
-                continue
-            if param.parameter == "ventilator_part_cooling":
-                element = root.find("fanSpeed").findall("setpoint")[-1]
-                element.attrib["speed"] = str(param.simplify3d.value)
-                continue
-            if element is not None:
-                if element.text is not None:
-                    element.text = str(numeral_eval(param.simplify3d.value))
-                elif param.parameter == "":
-                    element.attrib = str(numeral_eval(param.simplify3d.value))
+                                element = controller.find("setpoint")
+                            element.attrib["temperature"] = str(param.simplify3d.value)
+                    continue
+                if param.parameter == "ventilator_part_cooling":
+                    element = root.find("fanSpeed").findall("setpoint")[-1]
+                    element.attrib["speed"] = str(param.simplify3d.value)
+                    continue
+                if element is not None:
+                    if element.text is not None:
+                        element.text = str(numeral_eval(param.simplify3d.value))
+                    elif param.parameter == "":
+                        element.attrib = str(numeral_eval(param.simplify3d.value))
 
-    tree.write(str(cwd + output_name("fff", config_folder)), xml_declaration=True, encoding="utf-8")
-    print("{} succesfully written".format(output_name("fff", folder=config_folder)))
+        tree.write(str(cwd + output_name("fff", config_folder)), xml_declaration=True, encoding="utf-8")
+        print("{} succesfully written".format(output_name("fff", folder=config_folder)))
+
+    elif "cura" in slicer.strip().lower():
+        import configparser
+        import zipfile
+        import shutil
+        config = configparser.ConfigParser()
+        config["general"] = {"version": 4, "name": "Great Quality", "definition": "fdmprinter"}
+        config["metadata"] = {"setting_version": 4, "quality_type": "fast", "type": "quality_changes"}
+        config["values"] = {}
+        for param in params.parameters:
+            if param.cura.parameter is not None:
+                if param.cura.value is not None:
+                    config["values"][param.cura.parameter] = str(param.cura.value)
+        with open(cura_temp_folder + separator() + "custom_great_quality", mode="w") as file:
+            config.write(file)
+
+        for file in os.listdir(cura_deserialized):
+            if file != "custom_great_quality":
+                shutil.copy(src=cura_deserialized + separator() + file, dst=cura_temp_folder + separator() + file)
+
+        destination = output_name("curaprofile",config_folder)
+        shutil.copy(src=cura_configuration_template + separator() + "empty.curaprofile", dst=destination)
+        containers = os.listdir(cura_temp_folder)
+
+        for container in containers:
+            with zipfile.ZipFile(destination, mode="a") as zip:
+                if container not in ["empty.curaprofile", ".keep"]:
+                    container_fullpath = cura_temp_folder + separator() + container
+                    zip.write(container_fullpath, container)
+
+elif arguments["optimizer"]:
+    output_dictionary = {"optimizer":{},
+                         "prusa":{},
+                         "simplify3d":{}}
+
+    for parameter in params.parameters:
+        if parameter.value is not None:
+            output_dictionary["optimizer"][parameter.parameter] = parameter.value
+        if parameter.simplify3d.value is not None:
+            output_dictionary["simplify3d"][parameter.simplify3d.parameter] = parameter.simplify3d.value
+        if parameter.prusa.value is not None:
+            output_dictionary["prusa"][parameter.prusa.parameter] = parameter.prusa.value
+    with open(raw_config_folder + separator() + session_id + ".json", mode="w") as file:
+        json.dump(output_dictionary, file)
