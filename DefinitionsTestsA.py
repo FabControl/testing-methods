@@ -6,10 +6,12 @@ from TestSetupB import TestSetupB
 
 
 # WIPE
-def wipe(ts: TestSetupA or TestSetupB, full = True):
+def wipe(ts: TestSetupA or TestSetupB, length_multiplier=1):
+    wipe_length_initial = 6 * ts.test_structure_size/10
+    wipe_length = wipe_length_initial * length_multiplier
     ts.g.home()
     ts.g.feed(machine.settings.speed_travel)  # respect the units: mm/min
-    ts.g.abs_move(x=-6 * ts.test_structure_size/10,
+    ts.g.abs_move(x=-wipe_length,
                   y=-6 * ts.test_structure_size/10,
                   z=+2 * ts.coef_h_raft * machine.nozzle.size_id,
                   extrude=False, extrusion_multiplier=0)
@@ -30,7 +32,7 @@ def wipe(ts: TestSetupA or TestSetupB, full = True):
     ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
 
     if isinstance(ts, TestSetupA):
-        ts.g.abs_move(x=+6 * ts.test_structure_size/10,
+        ts.g.abs_move(x=+wipe_length,
                       y=-6 * ts.test_structure_size/10,
                       z=0,
                       extrude=True, extrusion_multiplier=2.25, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
@@ -38,7 +40,7 @@ def wipe(ts: TestSetupA or TestSetupB, full = True):
                   y=+ts.test_structure_size/10,
                   z=+ts.coef_h_raft * machine.nozzle.size_id,
                   extrude=False, extrusion_multiplier=0)
-        ts.g.move(x=-ts.test_structure_size/10,
+        ts.g.move(x=-wipe_length_initial/6+(1-length_multiplier)*wipe_length_initial,
                   y=0,
                   z=0,
                   extrude=False, extrusion_multiplier=0)
@@ -157,7 +159,7 @@ def print_raft_new(ts: TestSetupA):
 def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
-    wipe(ts)
+    wipe(ts, length_multiplier=1 if machine.nozzle.size_id < 0.59 else 0.85)
 
     print_raft(ts) if ts.raft and ts.test_name != "first layer height" else raft_perimeter(ts) # print the raft to support the test structure
 
@@ -261,7 +263,7 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
 def retraction_distance(ts: TestSetupA):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
-    wipe(ts) # perform wipe of the nozzle
+    wipe(ts, length_multiplier=1 if machine.nozzle.size_id < 0.59 else 0.85) # perform wipe of the nozzle
     print_raft(ts) # print the raft to support the test structure
 
     ts.g.write("; --- start to print the test structure ---")
@@ -323,7 +325,7 @@ def retraction_distance(ts: TestSetupA):
 def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
-    wipe(ts) # perform wipe of the nozzle
+    wipe(ts, length_multiplier=1 if machine.nozzle.size_id < 0.59 else 0.85) # perform wipe of the nozzle
     print_raft(ts) # print the raft to support the test structure
     ts.g.write("; --- start to print the test structure ---")
     ts.g.feed(machine.settings.speed_printing)
@@ -399,7 +401,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: TestSetupA):
 def bridging_test(ts: TestSetupA):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
-    wipe(ts)
+    wipe(ts, length_multiplier=1 if machine.nozzle.size_id < 0.59 else 0.85)
 
     if ts.raft:
         print_raft(ts)  # print the raft to support the test structure
