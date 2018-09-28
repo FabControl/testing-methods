@@ -28,7 +28,8 @@ verbose = False
 
 def initialize_test():
     if persistence["session"]["test_type"] == "A":
-        ts = TestSetupA(machine, material, test_info, path=filename(session_id, "gcode"),
+        ts = TestSetupA(machine, material, test_info,
+                        path=filename(session_id, "gcode"),
                         min_max_argument=min_max_argument,
                         min_max_speed_printing=min_max_speed_printing)
 
@@ -42,7 +43,8 @@ def initialize_test():
             flat_test_single_parameter_vs_speed_printing(ts)
 
     elif persistence["session"]["test_type"] == "B":  # 'perimeter', 'overlap', 'path height', 'temperature'
-        ts = TestSetupB(machine, material, test_info, path=filename(session_id, "gcode"),
+        ts = TestSetupB(machine, material, test_info,
+                        path=filename(session_id, "gcode"),
                         min_max_argument=min_max_argument,
                         min_max_speed_printing=min_max_speed_printing,
                         raft=True if persistence["settings"]["raft_density"] > 0 else False)
