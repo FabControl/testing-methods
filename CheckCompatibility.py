@@ -3,11 +3,11 @@ from CLI_helpers import exception_handler
 
 def check_compatibility(machine, material):
 
-    if abs(machine.nozzle.size_extruder_id - material.size_od) > 0.2: # Stratasys patent
-        # Compare the inner diameter of the liquefier with the outer diameter of the filament
-        output = ("The inner diameter of the liquefier ({:0.2f} mm) is not compatible with the outer diameter of the filament ({:0.2f} mm)!"
-            .format(machine.id, machine.nozzle.size_extruder_id, material.size_od))
-        exception_handler("Compatibility issue: " + output, fatal=True)
+    # if abs(machine.nozzle.size_extruder_id - material.size_od) > 0.2: # Stratasys patent
+    #     # Compare the inner diameter of the liquefier with the outer diameter of the filament
+    #     output = ("The inner diameter of the liquefier ({:0.2f} mm) is not compatible with the outer diameter of the filament ({:0.2f} mm)!"
+    #         .format(machine.id, machine.nozzle.size_extruder_id, material.size_od))
+    #     exception_handler("Compatibility issue: " + output, fatal=True)
 
 
     if machine.temperature_extruder_max < material.temperature_melting:
