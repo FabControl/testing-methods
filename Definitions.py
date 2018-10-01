@@ -88,11 +88,12 @@ class Nozzle(object):
     metal - nozzle metal (e.g. brass or steel)
     """
 
-    def __init__(self, size_id: float, size_od: float, size_capillary_length: float, size_angle: float, type: str, size_extruder_id: float, *args, **kwargs):
+    def __init__(self, size_id: float, size_od: float, type: str, size_capillary_length=None, size_angle=None, size_extruder_id=None, *args, **kwargs):
         self.size_id = size_id  # respect the units: mm
         self.size_od = size_od  # respect the units: mm
         self.size_capillary_length = size_capillary_length  # respect the units: mm
-        self.size_angle = math.radians(size_angle)  # respect the units: conversion from angles to radians
+        if size_angle:
+            self.size_angle = math.radians(size_angle)  # respect the units: conversion from angles to radians
         self.type = type
         self.size_extruder_id = size_extruder_id  # respect the units: mm
 
@@ -109,7 +110,7 @@ class Printbed(object):
 
 class Ventilators(object):
     """
-    ventilator_part_cooling 
+    ventilator_part_cooling
     ventilator_entry
     ventilator_exit
     """
