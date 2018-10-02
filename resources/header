@@ -1,4 +1,4 @@
-;FabControl Material Testing gcode
+;FabControl Material Testing G-code
 ;--- start header ---
 G28; move to the home position
 G21; unit in mm

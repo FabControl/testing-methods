@@ -55,8 +55,7 @@ def check_printing_speed_pressure(machine, material, delta_p, param_power_law):
 
     # Suggest another printing speed:
     if force2 > force_max:
-        output = ('filament is likely to slip! maximum printing speed should be below %.2f mm/s!' % (
-               force_max / (0.5 * material.density_rt * flow_rate(machine) * 10**(-6))))
+        output = ('filament is likely to slip! maximum printing speed should be below %.2f mm/s!' % (force_max / (0.5 * material.density_rt * flow_rate(machine) * 10**(-6))))
         print(output)
         machine.settings.speed_printing = round(machine.settings.speed_printing * (flow_rate(machine)/flow_rate(machine,  machine.settings.speed_printing))**(parameters[1]), 2)
         print('--> printing_speed optimized! (pressure)')

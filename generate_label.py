@@ -43,7 +43,7 @@ def generate_label(import_json_dict):
         draw.text((0, n * font_size), "Session ID: {}, User ID: {}".format(import_json_dict["session"]["uid"],
                                                                import_json_dict["session"]["user_id"]), (0, 0, 0), font=font_bold)
         n += 1
-        draw.text((0, n * font_size), "Feedstock material: {0} {1} (ID: {2}), {3} mm".format(import_json_dict["material"]["manufacturer"],
+        draw.text((0, n * font_size), "Feedstock material: {0} {1} (batch: {2}), {3} mm".format(import_json_dict["material"]["manufacturer"],
                                                                                              import_json_dict["material"]["name"],
                                                                                              import_json_dict["material"]["id"],
                                                                                              import_json_dict["material"]["size_od"]), (0, 0, 0), font=font)
@@ -68,21 +68,20 @@ def generate_label(import_json_dict):
         draw.text((0, n*font_size), "Target: {}".format(import_json_dict["session"]["target"]), (0, 0, 0), font=font)
         n += 2
 
-        horizontal_offset = 250
+        horizontal_offset = 200
         square_size = 35
 
-        for ind, parameter_value in enumerate(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_values"]):
-            draw.text((4.5*ind*font_size_small+150, n*font_size), import_json_dict["session"]["previous_tests"][-1]["parameter_precision"].format(parameter_value), (0, 0, 0), font=font_small)
-        print(n)
-        n += 2
+        for ind, parameter_value in enumerate(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_values"][::-1]):
+            draw.text((4.5*ind*font_size_small+80, n*font_size), import_json_dict["session"]["previous_tests"][-1]["parameter_precision"].format(parameter_value), (0, 0, 0), font=font_small)
+        n += 1
 
         for printing_speed_ind in range(len(import_json_dict["session"]["previous_tests"][-1]["tested_printing-speed_values"])):
             parameter_value = import_json_dict["session"]["previous_tests"][-1]["tested_printing-speed_values"][printing_speed_ind]
-            draw.text((10, 2.75*printing_speed_ind*square_size+n*font_size), "{} mm/s".format(parameter_value), (0, 0, 0), font=font_small)
+            draw.text((0, 2.*printing_speed_ind*square_size+n*font_size), "{} mm/s".format(parameter_value), (0, 0, 0), font=font_small)
 
             for parameter_ind in range(len(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_values"])):
-                draw.rectangle(((2*square_size*parameter_ind+6*font_size, 2*square_size*printing_speed_ind+horizontal_offset),
-                                (square_size*(2*parameter_ind+1)+6*font_size, square_size*(2*printing_speed_ind+1)+horizontal_offset)), fill="white", outline="black")
+                draw.rectangle(((2*square_size*parameter_ind+4*font_size, 2*square_size*printing_speed_ind+horizontal_offset),
+                                (square_size*(2*parameter_ind+1)+4*font_size, square_size*(2*printing_speed_ind+1)+horizontal_offset)), fill="white", outline="black")
 
         ImageDraw.Draw(img)
 

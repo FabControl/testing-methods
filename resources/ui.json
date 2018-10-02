@@ -1,0 +1,67 @@
+{
+  "help": {
+    "01": {
+      "title": "The first test is the First-layer-track-height test. In this test two parameters will be determined: <b>First-layer track height</b> and <b>First-layer printing speed</b>.",
+      "1_parameter_values_to_be_tested": "You can change these limiting values manually if you want to.",
+      "1_speed_values_to_be_tested": "Typically, the values in the range of 5-15 mm/s are adequate for printing flexible materials; and for harder materials, you can go up to 10-25 mm/s. If you set the printing speed too high, the melt will not have time to spread over the build platform, and it will result in the voids in between the tracks and bad adhesion to the build platform.",
+      "1_first_layer_extrusion_temperature": "Monitor the temperature when the extrudate starts to exit the nozzle at a steady speed or if the diameter of the extrudate is too thin, try to increase the hotend temperature. Set the <b>First-layer extrusion temperature</b> to print the raft structure to 20 degrees C higher. If a characteristic popping or hissing noise occurs while extruding, dry the filament.",
+      "1_first_layer_track_width": "For this test the <b>First-layer-track-width</b> value is set equal to the nozzle-inner-diameter value, but, if needed, it can be tested in a separate test.",
+      "2_matrix": "Inspect the printed test structure. Select one combination of parameters which results in the best test structure. If the track does not adhere to the build platform, increase the <b>First-layer extrusion temperature</b> and run the test once again. If this does not help, try either to decrease the <b>First-layer printing speed</b> or to increase the <b>Printbed temperature</b> and/or try to apply another coating on the build platform. <br/>A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves, it has uniform track heights and widths, with good melt together, and no bubbles or colour changes in the material. Inspect the bottom side of the printed structure as well. If you cannot find acceptable combination of two parameters, run the test again with different <b>First-layer-extrusion-temperature</b> value and/or using different <b>Printing-speed</b> range."
+    },
+    "02": {
+      "title": "The next optional test is the First-layer-track-width test. Run it only if you see the voids in between the tracks in the previous test. By skipping this test, the <b>First-layer-track-width</b> value will be set to the <b>Nozzle inner diameter</b>. In this test only one parameter will be determined: <b>First-layer track width</b>. To generate this test structure the <b>First-layer-track-height</b> and <b>First-layer-printing-speed</b> values determined in the previous test will be used.",
+      "1_parameter_values_to_be_tested": "You can change these limiting values manually if you want to.",
+      "1_speed_values_to_be_tested": "The <b>First-layer-printing-speed</b> value determined in the previous test will be used to generate this test structure.",
+      "2_matrix": "Inspect the printed test structure. By clicking on the value, select one first-layer-track-width value which results in the best test structure. A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves, it has uniform track heights and widths, with good melt together, and no bubbles or colour changes in the material. Inspect the bottom side of the printed structure as well."
+    },
+    "03": {
+      "title": "The next test is the Extrusion-temperature test. In this test two parameters will be determined: <b>Extrusion temperature</b> and <b>Printing speed</b>. To generate this test structure <b>First-layer-track-height</b> and <b>First-layer track-width</b>, as well as <b>First-layer printing-speed</b> values validated in the previous test(-s) will be used.",
+      "1_parameter_values_to_be_tested": "You can change these limiting values manually if you want to. The minimum value of the extrusion temperature is equal to the <b>First-layer extrusion temperature</b>, the maximum value of the extrusion temperature is limited to the <b>Maximum extrusion temperature</b> of the hotend.",
+      "1_speed_values_to_be_tested": "Define the printing-speed range. The <b>Minimum printing-speed</b> value can be approximately double the <b>First-layer printing-speed</b> value you determined in the previous test.",
+      "1_track_height": "Set the desired track height. It depends on your <b>Target</b>: for <b>Aesthetics</b> use 0.05-0.10 mm, for <b>Mechanical strength</b>: 0.20-0.25 mm, for <b>Short printing time</b>: 0.10-0.35 mm.",
+      "1_track_width": "Set the desired track width. The default value is equal to the nozzle inner diameter.",
+      "1_part_cooling": "Generally, active part cooling is needed when printing using high deposition rates and when printing fine details (i.e. when your <b>Target</b> is either <b>Short printing time</b> or <b>Aesthetics</b>, respectively). We strongly recommend you to perform the tests in a closed printing environment, as it keeps uncontrollable draughts low, gives you more control over the process and leads to more reproducible results.",
+      "2_matrix": "Inspect the printed test structure. By clicking on the value, select one combination of the <b>Printing-speed</b> and one <b>Extrusion-temperature</b> value which results in the best test structure. A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves. It has uniform track heights and widths, with good melt together, no bubbles or colour changes in the material. If you cannot find acceptable values, re-run the test with the <b>Extrusion-temperature</b> range and/or <b>Printing-speed</b> range. Depending on what your <b>Target</b> is, select appropriate <b>Track-height</b> value. When selecting succeeded test structures, give preference to the higher <b>Printing-speed</b>  and <b>Extrusion-temperatures</b> values if your <b>Target</b> is <b>Short printing time</b>. Give preference to the lower <b>Printing-speed</b>  and higher  <b>Extrusion-temperatures</b> values if your <b>Target</b> is <b>Mechanical strength</b>. Give preference to the lower <b>Printing-speed</b>  and lower <b>Extrusion-temperatures</b> values if your <b>Target</b> is <b>Aesthetics</b>."
+    },
+    "04": {
+      "title": "The next optional test is the Track-height test. Run it only if you are not satisfied with the quality of the tracks in the previous test. By skipping this test, the <b>Track-height</b> value will be set to the value defined in the previous test. In this test only one parameter will be determined: <b>Track height</b>. To generate this test structure the values validated in the previous test(-s) will be used.",
+      "1_parameter_values_to_be_tested": "You can change these limiting values manually if you want to. The minimum value of the extrusion temperature is equal to the <b>First-layer extrusion temperature</b>, the maximum value of the extrusion temperature is limited to the <b>Maximum extrusion temperature</b> of the hotend.",
+      "1_speed_values_to_be_tested": "The Printing-speed range has been defined in the Extrusion-temperature test.",
+      "2_matrix": "Inspect the printed test structure. By clicking on the value, select one combination of the <b>Printing-speed</b> and one <b>track-height</b> value which results in the best test structure. A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves. It has uniform track heights and widths, with good melt together, no bubbles or colour changes in the material. If you cannot find acceptable values, re-run the test with another the <b>Track-height</b> range. Depending on what your <b>Target</b> is, select appropriate <b>Track-height</b> value. When selecting succeeded test structures, give preference to the higher <b>Printing-speed</b> values if your <b>Target</b> is <b>Short printing time</b>. Give preference to the lower <b>Printing-speed</b> values if your <b>Target</b> is <b>Mechanical strength</b>. Give preference to the lower <b>Printing-speed</b> values if your <b>Target</b> is <b>Aesthetics</b>."
+    },
+    "05": {
+      "title": "The next optional test is the Track-width test. Run it only if you are not satisfied with the quality of the tracks in the previous test. By skipping this test, the <b>Track-width</b> value will be set to the value defined in the Extrusion-temperature test. In this test only one parameter will be determined: <b>Track width</b>. To generate this test structure the values validated in all previous test(-s) will be used.",
+      "1_parameter_values_to_be_tested": "You can change these limiting values manually if you want to. The minimum value of the extrusion temperature is equal to the <b>First-layer extrusion temperature</b>, the maximum value of the extrusion temperature is limited to the <b>Maximum extrusion temperature</b> of the hotend.",
+      "1_speed_values_to_be_tested": "The Printing-speed range has been defined in the Extrusion-temperature test.",
+      "2_matrix": "Inspect the printed test structure. By clicking on the value, select one combination of <b>Printing-speed</b> and <b>Track-width</b> values which result in the best test structure. A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves. It has uniform track heights and widths, with good melt together, no bubbles or colour changes in the material."
+    },
+    "06": {
+      "title": "The next optional test is the Extrusion multiplier test. Run it only if you are not satisfied with the quality of the tracks in the previous test. By skipping this test, the <b>Extrusion-multiplier</b> value will be set to 1.00. In this test only one parameter will be determined: <b>Extrusion-multiplier</b>. To generate this test structure the values validated in all previous test(-s) will be used.",
+      "1_parameter_values_to_be_tested": "You can change these limiting values manually if you want to.",
+      "1_speed_values_to_be_tested": "The Printing-speed range has been defined in the Extrusion-temperature test.",
+      "2_matrix": "Inspect the printed test structure. By clicking on the value, select one combination of <b>Printing-speed</b> and <b>Extrusion-multiplier</b> values which result in the best test structure. A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves. It has uniform track heights and widths, with good melt together, no bubbles or colour changes in the material."
+    },
+    "07": {
+      "title": "The next test is the Printing-speed test. In this test only one parameter will be determined: <b>Printing speed</b>. To generate this test structure the values validated in all previous test(-s) will be used.",
+      "1_parameter_values_to_be_tested": "Set the desired range of printing speeds.",
+      "1_speed_values_to_be_tested": "",
+      "2_matrix": "Inspect the printed test structure. By clicking on the value, select the <b>Printing-speed</b> value which result in the best test structure. A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves. It has uniform track heights and widths, with good melt together, no bubbles or colour changes in the material."
+    },
+    "08": {
+      "title": "The next test is the Retraction-distance test. In this test only one parameter will be determined: <b>Retraction distance</b>. To generate this test structure the values validated in all previous test(-s) will be used.",
+      "1_parameter_values_to_be_tested": "You can change these limiting values manually if you want to.",
+      "1_retraction_speed": "Set the desired retraction speed.",
+      "1_speed_values_to_be_tested": "",
+      "2_matrix": "Inspect the printed test structure. By clicking on the value, select the <b>Printing-speed</b> value which result in the best test structure. A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves. It has uniform track heights and widths, with good melt together, no bubbles or colour changes in the material."
+    }
+  },
+  "prior_session": {
+	"checkbox_1": "Check that the pulleys are not loose.",
+	"checkbox_2": "Check that the belts are not loose.",
+	"checkbox_3": "Check that the bearings or rods are not worn or dirty.",
+	"checkbox_4": "Calibrate the feeder.",
+	"checkbox_5": "Calibrate the 3D printer.",
+	"checkbox_6": "Level the build platform each time you manipulate it (e.g. clean, reapply the coating etc.).",
+	"checkbox_7": "Decide whether you dry your feedstock material or not."
+  }
+}

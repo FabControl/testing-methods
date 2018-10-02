@@ -63,7 +63,7 @@ else:
     main_info = "Material: " + import_json_dict["material"]["manufacturer"] + " " + import_json_dict["material"]["name"] + " (ID: " + str(import_json_dict["material"]["id"]) + ")"
 
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Machine: " + import_json_dict["machine"]["manufacturer"] + " " + import_json_dict["machine"]["model"]+ " (SN: " + str(import_json_dict["machine"]["sn"]) + ")"
+main_info = "3D Printer: " + import_json_dict["machine"]["manufacturer"] + " " + import_json_dict["machine"]["model"]+ " (SN: " + str(import_json_dict["machine"]["sn"]) + ")"
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Nozzle: " + "{:.2f}".format(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm, " + str(import_json_dict["machine"]["nozzle"]["type"])
 elements.append(Paragraph(main_info, style=style_text))
@@ -135,7 +135,13 @@ colwidths.append(80)
 data2 = [[Paragraph(cell, style_text) for cell in row] for row in data]
 t = Table(data2, colwidths)
 t.setStyle(style)
+elements.append(t)
+
+if "notes" in import_json_dict["session"]:
+    elements.append(Spacer(1, 0.5 * inch))
+    main_info = "Notes: {0}".format(str(import_json_dict["session"]["notes"]))
+    elements.append(Paragraph(main_info, style=style_text))
 
 # Send the data and build the file
-elements.append(t)
+
 doc.build(elements)

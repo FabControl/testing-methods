@@ -256,7 +256,7 @@ class TestSetupA(object):
 
 
 def addtitle(test_info: TestInfo, material: Material, machine: Machine):
-    title = str("; --- 2D test for " + test_info.name + " of {0} from {1} (ID: {2}) using {3} {4} (SN: {5}) and {6} mm {7} nozzle---".format(material.name, material.manufacturer, material.id, machine.manufacturer, machine.model, machine.sn, machine.nozzle.size_id, machine.nozzle.type))
+    title = str("; --- 2D test for " + test_info.name + " of {0} from {1} (batch: {2}) using {3} {4} (SN: {5}) and {6} mm {7} nozzle---".format(material.name, material.manufacturer, material.id, machine.manufacturer, machine.model, machine.sn, machine.nozzle.size_id, machine.nozzle.type))
     return title
 
 

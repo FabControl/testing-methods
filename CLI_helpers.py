@@ -145,7 +145,7 @@ def round(input: float, depth: int = 3):
 def exception_handler(message, fatal: bool = False):
 
     traceback.print_exc()
-    print("MPException: " + message)
+    print("FCException: " + message)
     if fatal:
         sys.exit(15)
 

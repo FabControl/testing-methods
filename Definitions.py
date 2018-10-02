@@ -85,7 +85,8 @@ class Nozzle(object):
     size_od - outer diameter of the nozzle (mm)
     size_capillary_length - length of the capillary in the nozzle (mm)
     size_angle - angle in the nozzle (deg)
-    metal - nozzle metal (e.g. brass or steel)
+    size_extruder_id - inner diameter of the extruder (mm)
+    type - nozzle metal (e.g. brass or steel)
     """
 
     def __init__(self, size_id: float, size_od: float, type: str, size_capillary_length=None, size_angle=None, size_extruder_id=None, *args, **kwargs):
@@ -94,8 +95,8 @@ class Nozzle(object):
         self.size_capillary_length = size_capillary_length  # respect the units: mm
         if size_angle:
             self.size_angle = math.radians(size_angle)  # respect the units: conversion from angles to radians
-        self.type = type
         self.size_extruder_id = size_extruder_id  # respect the units: mm
+        self.type = type
 
 
 class Printbed(object):
