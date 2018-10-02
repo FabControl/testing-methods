@@ -15,7 +15,7 @@ from docopt import docopt
 
 args = docopt(__doc__)
 session_id = args["<session-id>"]
-path = paths.cwd + paths.json_folder + separator() + session_id + ".json"
+path = paths.json_folder + separator() + session_id + ".json"
 
 # Load persistence
 with open(path, mode='r') as file:
