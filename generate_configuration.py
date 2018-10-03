@@ -138,6 +138,7 @@ else:
         raw_config = json.load(file)["optimizer"]
         params.populate(raw_config)
         slicer = arguments["<slicer>"]
+        session_id = str(arguments["<source_path>"]).split(separator())[-1].split(".")[0]
 
 
 if not optimizer:
@@ -156,7 +157,7 @@ if not optimizer:
             param = params.get(item, mode="prusa")
             if param is not None:
                 configuration[item]["value"] = param.prusa.value
-        print("writing file in {}".format(config_folder + str(session_id)))
+        print("writing file in {}".format(config_folder + "" + str(session_id)))
         with open(config_folder + separator() + str(session_id) + ".ini", mode='w') as file:
             file.write(assemble_ini(configuration))
 
@@ -229,7 +230,7 @@ if not optimizer:
                     container_fullpath = cura_temp_folder + separator() + container
                     zip.write(container_fullpath, container)
 
-elif arguments["optimizer"]:
+elif optimizer:
     output_dictionary = {"optimizer": {},
                          "prusa": {},
                          "simplify3d": {}}
