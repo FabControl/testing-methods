@@ -19,23 +19,6 @@ from CLI_helpers import separator
 from conversion_dictionary import Slicer, Param, Params
 from paths import *
 
-arguments = docopt(__doc__)
-session_id = str(arguments["<session_id>"])
-source_path = str(arguments["<source_path>"])
-
-json_path = json_folder + separator() + str(session_id) + ".json"
-if not arguments["cast"]:
-    with open(json_path, mode="r") as file:
-        persistence = json.load(file)
-
-    slicer = str(persistence["session"]["slicer"]).lower()
-
-    persistence_flat = dict(persistence["settings"], **persistence["machine"]["nozzle"])
-    persistence_flat["material_name"] = persistence["material"]["name"]
-    persistence_flat["density_rt"] = persistence["material"]["density_rt"]
-    with open(target_overrides_json) as overrides:
-        target_overrides = json.load(overrides)
-
 
 def numeral_eval(value):
     """
@@ -81,7 +64,7 @@ def assemble_ini(dictionary: OrderedDict):
     :rtype: str
     """
     outstring = ""
-    outstring += "# Created with Mass Portal Material Testing Suite\n"
+    outstring += "# Created with FabControl Optimizer\n"
 
     for key, values in dictionary.items():
         value = values["value"]
@@ -112,15 +95,44 @@ def output_name(extension: str, folder: str = None):
         return folder + separator() + output.replace(' ', '_')
 
 
+"""
+Conversion dictionary PARAMS init
+"""
 params = Params(conversion_json)
 defaults = read_ini(config_ini, output_type=dict)
 for key, value in defaults.items():
     defaults[key] = value["value"]
     del key, value
 params.populate(defaults, auto=True)
-if not arguments["cast"]:
+
+"""
+Arguments pre-load block
+"""
+arguments = docopt(__doc__)
+session_id = str(arguments["<session_id>"])
+source_path = str(arguments["<source_path>"])
+optimizer = arguments["optimizer"]  # TODO change the name to something else. Too general
+cast = arguments["cast"]
+
+
+# Apply target overrides
+with open(target_overrides_json) as overrides:
+    target_overrides = json.load(overrides)
+
+"""
+Persistence pre-load block
+"""
+if not cast:
+    json_path = json_folder + separator() + str(session_id) + ".json"
+    with open(json_path, mode="r") as file:
+        persistence = json.load(file)
+    persistence_flat = dict(persistence["settings"], **persistence["machine"]["nozzle"])
+    persistence_flat["material_name"] = persistence["material"]["name"]
+    persistence_flat["density_rt"] = persistence["material"]["density_rt"]
+    slicer = str(persistence["session"]["slicer"]).lower()
     params.populate(persistence_flat, auto=True)
     params.populate(target_overrides[persistence["session"]["target"]])
+
 else:
     with open(arguments["<source_path>"]) as file:
         raw_config = json.load(file)["optimizer"]
@@ -128,15 +140,15 @@ else:
         slicer = arguments["<slicer>"]
 
 
-if not arguments["cast"] and not arguments["optimizer"]:
+if not optimizer:
     if "prusa" in slicer.strip().lower():
         """
         Writes a Prusa Slic3r config
         """
         print("generating config for Prusa Slic3r")
-        settings = persistence["settings"]
-        material = persistence["material"]
-        session = persistence["session"]
+        # settings = persistence["settings"]
+        # material = persistence["material"]
+        # session = persistence["session"]
 
         configuration = read_ini(config_ini)
 
@@ -218,9 +230,9 @@ if not arguments["cast"] and not arguments["optimizer"]:
                     zip.write(container_fullpath, container)
 
 elif arguments["optimizer"]:
-    output_dictionary = {"optimizer":{},
-                         "prusa":{},
-                         "simplify3d":{}}
+    output_dictionary = {"optimizer": {},
+                         "prusa": {},
+                         "simplify3d": {}}
 
     for parameter in params.parameters:
         if parameter.value is not None:
