@@ -34,8 +34,8 @@ class Gplus(G):
         G.write(self, "M109 S{:.0f}".format(temperature) + " T0; set the extruder temperature and wait till it has been reached")
 
     def set_printbed_temperature(self, temperature: float):
-        """Set the printbed temperature in degC"""
-        G.write(self, "M190 S{:.0f}".format(temperature) + " T0; set the printbed temperature and wait till it has been reached")
+        """Set the print bed temperature in degC"""
+        G.write(self, "M190 S{:.0f}".format(temperature) + " T0; set the print bed temperature and wait till it has been reached")
 
     def set_ventilator_part_cooling(self, cooling_power: float):
         """Set the cooler power in percent"""

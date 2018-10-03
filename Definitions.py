@@ -372,7 +372,7 @@ def get_test_structure_size(machine):
             test_structure_size = 100
             if machine.nozzle.size_id > 0.59:
                 test_structure_size = 125
-                if machine.nozzle.size_id > 0.9:
+                if machine.nozzle.size_id > 0.99:
                     test_structure_size = 150
 
     return test_structure_size

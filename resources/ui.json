@@ -61,7 +61,7 @@
 	"checkbox_3": "Check that the bearings or rods are not worn or dirty.",
 	"checkbox_4": "Calibrate the feeder.",
 	"checkbox_5": "Calibrate the 3D printer.",
-	"checkbox_6": "Level the build platform each time you manipulate it (e.g. clean, reapply the coating etc.).",
+	"checkbox_6": "Level the build platform each time you manipulate it (e.g. clean it, reapply the coating etc.).",
 	"checkbox_7": "Decide whether you dry your feedstock material or not."
   }
 }

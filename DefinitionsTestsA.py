@@ -181,7 +181,7 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
 
         if ts.test_name == "extrusion temperature":
             ts.g.travel(x=0,
-                        y=+ts.test_structure_size/5,
+                        y=+ts.test_structure_size/7,
                         z=+ts.abs_z[current_test_structure], retraction_speed=ts.retraction_speed, retraction_distance=ts.retraction_distance[current_test_structure])
             ts.g.set_extruder_temperature(ts.temperature_extruder[current_test_structure])
             ts.g.dwell(30)
@@ -189,7 +189,7 @@ def flat_test_single_parameter_vs_speed_printing(ts: TestSetupA):
                      "; extrude " + "{:.3f}".format(4 * ts.temperature_extruder[current_test_structure] / ts.temperature_extruder[0]) + " mm of material"
             ts.g.write(output)
             ts.g.move(x=0,
-                      y=-ts.test_structure_size/5,
+                      y=-ts.test_structure_size/7,
                       z=-ts.abs_z[current_test_structure],
                       extrude=True, extrusion_multiplier=0)
 
