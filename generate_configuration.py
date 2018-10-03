@@ -157,7 +157,7 @@ if not optimizer:
             param = params.get(item, mode="prusa")
             if param is not None:
                 configuration[item]["value"] = param.prusa.value
-        print("writing file in {}".format(config_folder + "" + str(session_id)))
+        print("writing file in {}".format(config_folder + separator() + str(session_id)))
         with open(config_folder + separator() + str(session_id) + ".ini", mode='w') as file:
             file.write(assemble_ini(configuration))
 
