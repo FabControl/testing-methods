@@ -138,8 +138,7 @@ else:
         raw_config = json.load(file)["optimizer"]
         params.populate(raw_config)
         slicer = arguments["<slicer>"]
-        session_id = str(arguments["<source_path>"]).split(separator())[-1].split(".")[0]
-
+        session_id = str(arguments["<source_path>"]).split("/")[-1].split(".")[0]
 
 if not optimizer:
     if "prusa" in slicer.strip().lower():
