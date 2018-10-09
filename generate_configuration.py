@@ -197,8 +197,8 @@ if not optimizer:
                     elif param.parameter == "":
                         element.attrib = str(numeral_eval(param.simplify3d.value))
 
-        tree.write(str(cwd + output_name("fff", config_folder)), xml_declaration=True, encoding="utf-8")
-        print("{} succesfully written".format(output_name("fff", folder=config_folder)))
+        tree.write(config_folder + separator() + str(session_id) + ".xml", xml_declaration=True, encoding="utf-8")
+        print("{} succesfully written".format(config_folder + separator() + str(session_id) + ".xml"))
 
     elif "cura" in slicer.strip().lower():
         import configparser
