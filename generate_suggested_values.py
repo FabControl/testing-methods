@@ -18,7 +18,7 @@ material = Material(**persistence["material"])
 machine = Machine(**persistence["machine"])
 machine.settings = Settings(**persistence["settings"])
 
-speed = 2 * persistence["session"]["previous_tests"][0]["selected_volumetric_flow-rate_value"]/machine.nozzle.size_id**2
+speed = 2 * persistence["session"]["previous_tests"][0]["selected_volumetric_flow-rate_value"]/machine.nozzle.size_id**2 if persistence["session"]["previous_tests"][0] is not None else None
 
 suggested_values = {"temperature": border_values(minmax_temperature(material, machine, 7)),
                    "track_height": [x * machine.nozzle.size_id for x in border_values(minmax_track_height(machine, 7))],
