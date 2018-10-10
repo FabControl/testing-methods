@@ -330,7 +330,7 @@ def minmax_track_width_height_raft(machine: Machine, number_of_test_structures=N
     coef_w_raft = (coef_w_min_raft + coef_w_max_raft)/2
 
     if number_of_test_structures is not None:
-        coef_h_raft_all = np.linspace(0.9*coef_h_min_raft, 1.1*coef_h_max_raft, number_of_test_structures).tolist()
+        coef_h_raft_all = np.linspace(0.90*coef_h_min_raft, 1.10*coef_h_max_raft, number_of_test_structures).tolist()
         coef_w_raft_all = np.linspace(0.95*coef_w_min_raft, 1.15*coef_w_max_raft, number_of_test_structures).tolist()
         return coef_h_raft, coef_w_raft, coef_h_raft_all, coef_w_raft_all
     else:
@@ -341,25 +341,10 @@ def minmax_temperature(material: Material, machine: Machine, number_of_test_stru
     temperature_all = None
 
     temperature_extruder_min = machine.settings.temperature_extruder_raft
+    temperature_extruder_max = min(machine.temperature_extruder_max, 1.070 * (machine.settings.temperature_extruder_raft + 273.15) - 273.15)
 
-    temperature_extruder_max = 1.060 * (machine.settings.temperature_extruder + 273.15) - 273.15
-
-    if material.temperature_destr < machine.temperature_extruder_max:
-        if temperature_extruder_max < material.temperature_destr:
-            temperature_all = np.linspace(temperature_extruder_min,
-                                          temperature_extruder_max, number_of_test_structures).tolist()
-        else:
-            temperature_all = np.linspace(temperature_extruder_min,
-                                          0.975 * (material.temperature_destr + 273.15) - 273.15, number_of_test_structures).tolist()
-    elif material.temperature_destr >= machine.temperature_extruder_max:
-        if temperature_extruder_max < machine.temperature_extruder_max:
-            temperature_all = np.linspace(temperature_extruder_min,
-                                          0.975 * (temperature_extruder_max + 273.15) - 273.15, number_of_test_structures).tolist()
-        elif temperature_extruder_max >= machine.temperature_extruder_max:
-            temperature_all = np.linspace(temperature_extruder_min,
-                                          temperature_extruder_max, number_of_test_structures).tolist()
-    else:
-        pass
+    temperature_all = np.linspace(temperature_extruder_min,
+                                  temperature_extruder_max, number_of_test_structures).tolist()
 
     return temperature_all
 

@@ -45,14 +45,14 @@
       "title": "The next test is the Printing-speed test. In this test only one parameter will be determined: <b>Printing speed</b>. To generate this test structure the values validated in all previous test(-s) will be used.",
       "1_parameter_values_to_be_tested": "Set the desired range of printing speeds.",
       "1_speed_values_to_be_tested": "",
-      "2_matrix": "Inspect the printed test structure. By clicking on the value, select the <b>Printing-speed</b> value which result in the best test structure. A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves. It has uniform track heights and widths, with good melt together, no bubbles or colour changes in the material."
+      "2_matrix": "Inspect the printed test structure. By clicking on the value, select the <b>Printing-speed</b> value which results in the best test structure. A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves. It has uniform track heights and widths, with good melt together, no bubbles or colour changes in the material."
     },
     "08": {
       "title": "The next test is the Retraction-distance test. In this test only one parameter will be determined: <b>Retraction distance</b>. To generate this test structure the values validated in all previous test(-s) will be used.",
       "1_parameter_values_to_be_tested": "You can change these limiting values manually if you want to.",
       "1_retraction_speed": "Set the desired retraction speed.",
       "1_speed_values_to_be_tested": "",
-      "2_matrix": "Inspect the printed test structure. By clicking on the value, select the <b>Printing-speed</b> value which result in the best test structure. A good test structure has flat, continuous tracks with no gaps between the tracks, and no grooves. It has uniform track heights and widths, with good melt together, no bubbles or colour changes in the material."
+      "2_matrix": "Inspect the printed test structure. By clicking on the value, select the minimum <b>Retraction-distance</b> value which results in no or minimum stringing."
     }
   },
   "prior_session": {
