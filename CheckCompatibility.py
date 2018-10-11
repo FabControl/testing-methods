@@ -10,12 +10,12 @@ def check_compatibility(machine, material):
     #     exception_handler("Compatibility issue: " + output, fatal=True)
 
 
-    if machine.temperature_extruder_max < material.temperature_melting:
-        # Compare the 'melting/softening point' of the material and the maximum achievable temperature of the liquefier
-        output = ("{} {} 3D printer is incapable of printing this material: "
-                  "the melting (softening) temperature of {:0.0f} degC is higher than the maximum achievable temperature in the liquefier {:0.0f} degC!"
-            .format(machine.manufacturer, machine.model, material.temperature_melting, machine.temperature_extruder_max))
-        exception_handler("Compatibility issue: " + output, fatal=True)
+    # if machine.temperature_extruder_max < material.temperature_melting:
+    #     # Compare the 'melting/softening point' of the material and the maximum achievable temperature of the liquefier
+    #     output = ("{} {} 3D printer is incapable of printing this material: "
+    #               "the melting (softening) temperature of {:0.0f} degC is higher than the maximum achievable temperature in the liquefier {:0.0f} degC!"
+    #         .format(machine.manufacturer, machine.model, material.temperature_melting, machine.temperature_extruder_max))
+    #     exception_handler("Compatibility issue: " + output, fatal=True)
 
 
     # if max(machine.settings.temperature_extruder, machine.settings.temperature_extruder_raft) > material.temperature_destr:
