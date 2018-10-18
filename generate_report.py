@@ -55,12 +55,12 @@ elements.append(Spacer(1, 0.5*inch))
 
 datetime_info = "Report generated on: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 elements.append(Paragraph(datetime_info, style=style_text))
-main_info = "Target: " + import_json_dict["session"]["target"]
+main_info = "Target: " + str(import_json_dict["session"]["target"]).replace("_", " ")
 elements.append(Paragraph(main_info, style=style_text))
 if import_json_dict["material"]["drying"]["dried"]:
-    main_info = "Material: " + import_json_dict["material"]["manufacturer"] + " " + import_json_dict["material"]["name"] + " (ID: " + str(import_json_dict["material"]["id"]) + "), dried at: " + str(import_json_dict["material"]["drying"]["drying_temperature"]) + " degC for " + str(import_json_dict["material"]["drying"]["drying_time"]) + " min"
+    main_info = "Material: " + import_json_dict["material"]["manufacturer"] + " " + import_json_dict["material"]["name"] + " (batch: " + str(import_json_dict["material"]["id"]) + "), dried at: " + str(import_json_dict["material"]["drying"]["drying_temperature"]) + " degC for " + str(import_json_dict["material"]["drying"]["drying_time"]) + " min"
 else:
-    main_info = "Material: " + import_json_dict["material"]["manufacturer"] + " " + import_json_dict["material"]["name"] + " (ID: " + str(import_json_dict["material"]["id"]) + ")"
+    main_info = "Material: " + import_json_dict["material"]["manufacturer"] + " " + import_json_dict["material"]["name"] + " (batch: " + str(import_json_dict["material"]["id"]) + ")"
 
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "3D Printer: " + import_json_dict["machine"]["manufacturer"] + " " + import_json_dict["machine"]["model"]+ " (SN: " + str(import_json_dict["machine"]["sn"]) + ")"
@@ -77,11 +77,23 @@ main_info = "Critical overhang angle: " + "{:.1f}".format(import_json_dict["sett
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Extruder temperature (first layer): " + "{:.0f}".format(import_json_dict["settings"]["temperature_extruder_raft"]) + " degC"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Track width (first layer): " + "{:.2f}".format(import_json_dict["settings"]["track_width_raft"]) + " mm"
-elements.append(Paragraph(main_info, style=style_text))
+
 if import_json_dict["machine"]["printbed"]["printbed_heatable"]:
     main_info = "Printbed temperature: " + "{:.0f}".format(import_json_dict["settings"]["temperature_printbed"]) + " degC"
     elements.append(Paragraph(main_info, style=style_text))
+
+if "first-layer track width" not in import_json_dict["session"]["previous_tests"]:
+        main_info = "Track width (first layer): " + "{:.2f}".format(import_json_dict["settings"]["track_width_raft"]) + " mm"
+        elements.append(Paragraph(main_info, style=style_text))
+if "track height" not in import_json_dict["session"]["previous_tests"]:
+        main_info = "Track height: " + "{:.2f}".format(import_json_dict["settings"]["track_height"]) + " mm"
+        elements.append(Paragraph(main_info, style=style_text))
+if "track width" not in import_json_dict["session"]["previous_tests"]:
+        main_info = "Track width: " + "{:.2f}".format(import_json_dict["settings"]["track_width"]) + " mm"
+        elements.append(Paragraph(main_info, style=style_text))
+if "extrusion multiplier" not in import_json_dict["session"]["previous_tests"]:
+        main_info = "Extrusion multiplier: " + "{:.2f}".format(import_json_dict["settings"]["extrusion_multiplier"])
+        elements.append(Paragraph(main_info, style=style_text))
 
 consumed_filament = 0
 for dummy in import_json_dict["session"]["previous_tests"]:
