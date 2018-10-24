@@ -63,5 +63,8 @@
 	"checkbox_5": "Calibrate the 3D printer.",
 	"checkbox_6": "Level the build platform each time you manipulate it (e.g. clean it, reapply the coating etc.).",
 	"checkbox_7": "Decide whether you dry your feedstock material or not."
+  },
+  "prior_manual": {
+	"checkbox_1": "By accessing this file you acknowledge that you have right to print only a SINGLE copy of this Manual. That is, you get access to an electronic file of the Manual (or portion of the Manual) for temporary storage on one computer for purposes of viewing, and/or printing one copy of the Manual for individual use. Neither the electronic file nor the single hard copy print may be reproduced in any way. In addition, the electronic file may not be distributed elsewhere over computer networks or otherwise. That is, the electronic file cannot be e-mailed, copied to another hard drive or otherwise shared. The single hard copy print may only be distributed to others for their internal use within your organization; it may not be copied. The electronic or hard copy of the Manual may not otherwise be sold or resold, rented, leased, lent or sub-licensed."
   }
 }
