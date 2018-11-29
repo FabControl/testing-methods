@@ -26,7 +26,7 @@ else:
 suggested_values = {"temperature": border_values(minmax_temperature(material, machine, 7)),
                    "track_height": [x * machine.nozzle.size_id for x in border_values(minmax_track_height(machine, 7))],
                    "track_width": [x * machine.nozzle.size_id for x in border_values(list(minmax_track_width(machine, 7)[0]))],
-                   "track_width_raft": border_values(minmax_track_width_height_raft(machine, 7)[2]),
+                   "track_width_raft": border_values(minmax_track_width_height_raft(machine, 7)[3]),
                    "track_height_raft": [x * machine.nozzle.size_id for x in border_values(minmax_track_width_height_raft(machine, 7)[2])],
                    "speed_printing": [0.75*speed, 1.5*speed] if speed is not None else None,
                    "extrusion_multiplier": border_values([test_dict["06"].min_default, test_dict["06"].max_default]),
