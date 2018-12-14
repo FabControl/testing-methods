@@ -4,17 +4,30 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 2
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "coasting distance",
       "parameter": "coasting_distance",
       "params": {
-        "py/object": "conversion_dictionary.Params",
+        "py/object": "__main__.Params",
         "parameters": {
           "py/id": 1
         },
         "supported_slicers": [
           "prusa",
-          "simplify3d"
+          "simplify3d",
+          "cura"
         ]
       },
       "parent": null,
@@ -50,11 +63,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": "int(x*100)",
+        "name": null,
+        "parameter": "material_flow",
+        "parent_parameter": null,
+        "reverse_modifier": "x/100",
+        "root": {
+          "py/id": 8
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "extrusion multiplier",
       "parameter": "extrusion_multiplier",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -65,7 +90,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 7
+          "py/id": 8
         },
         "units": null
       },
@@ -78,7 +103,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 7
+          "py/id": 8
         },
         "units": null
       },
@@ -89,11 +114,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "skin_overlap",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 12
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "overlap",
       "parameter": "overlap",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -104,7 +141,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 10
+          "py/id": 12
         },
         "units": "percentage"
       },
@@ -117,7 +154,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 10
+          "py/id": 12
         },
         "units": "percentage"
       },
@@ -128,11 +165,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "cool_fan_speed",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 16
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "ventilator part cooling",
       "parameter": "ventilator_part_cooling",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -143,7 +192,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 13
+          "py/id": 16
         },
         "units": "percentage"
       },
@@ -156,7 +205,7 @@
         "parent_parameter": null,
         "reverse_modifier": "100 if x != 0 else 0",
         "root": {
-          "py/id": 13
+          "py/id": 16
         },
         "units": "percentage"
       },
@@ -167,11 +216,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "layer_height",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 20
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "track height",
       "parameter": "track_height",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -182,7 +243,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 16
+          "py/id": 20
         },
         "units": "mm"
       },
@@ -195,7 +256,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 16
+          "py/id": 20
         },
         "units": "mm"
       },
@@ -206,11 +267,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "layer_height_0",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 24
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "first layer height",
       "parameter": "track_height_raft",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -221,7 +294,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 19
+          "py/id": 24
         },
         "units": "mm"
       },
@@ -234,7 +307,7 @@
         "parent_parameter": "track_height",
         "reverse_modifier": "y*x/100",
         "root": {
-          "py/id": 19
+          "py/id": 24
         },
         "units": "percentage"
       },
@@ -245,11 +318,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "line_width",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 28
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "track width",
       "parameter": "track_width",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -260,7 +345,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 22
+          "py/id": 28
         },
         "units": "mm"
       },
@@ -273,7 +358,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 22
+          "py/id": 28
         },
         "units": "mm"
       },
@@ -284,11 +369,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "wall_line_width_0",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 32
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "first layer track width",
       "parameter": "track_width_raft",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -299,7 +396,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 25
+          "py/id": 32
         },
         "units": "mm"
       },
@@ -312,7 +409,7 @@
         "parent_parameter": "track_width",
         "reverse_modifier": "round(y*x/100)",
         "root": {
-          "py/id": 25
+          "py/id": 32
         },
         "units": "percentage"
       },
@@ -323,11 +420,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 36
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "perimeter",
       "parameter": "perimeter",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -338,7 +447,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 28
+          "py/id": 36
         },
         "units": null
       },
@@ -351,7 +460,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 28
+          "py/id": 36
         },
         "units": null
       },
@@ -362,11 +471,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "retraction_amount",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 40
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "retraction distance",
       "parameter": "retraction_distance",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -377,7 +498,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 31
+          "py/id": 40
         },
         "units": "mm"
       },
@@ -390,7 +511,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 31
+          "py/id": 40
         },
         "units": "mm"
       },
@@ -401,11 +522,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "retraction_extra_prime_amount",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 44
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "retraction restart distance",
       "parameter": "retraction_restart_distance",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -416,7 +549,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 34
+          "py/id": 44
         },
         "units": "mm"
       },
@@ -429,7 +562,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 34
+          "py/id": 44
         },
         "units": "mm"
       },
@@ -440,11 +573,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "machine_nozzle_size",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 48
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "nozzle inner diameter size",
       "parameter": "size_id",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -455,7 +600,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 37
+          "py/id": 48
         },
         "units": "mm"
       },
@@ -468,7 +613,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 37
+          "py/id": 48
         },
         "units": "mm"
       },
@@ -479,11 +624,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "speed_print",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 52
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "printing speed",
       "parameter": "speed_printing",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -494,7 +651,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 40
+          "py/id": 52
         },
         "units": "mm/s"
       },
@@ -507,7 +664,7 @@
         "parent_parameter": null,
         "reverse_modifier": "x/60",
         "root": {
-          "py/id": 40
+          "py/id": 52
         },
         "units": "mm/min"
       },
@@ -518,11 +675,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "speed_print_layer_0",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 56
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "first layer printing speed",
       "parameter": "speed_printing_raft",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -533,7 +702,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 43
+          "py/id": 56
         },
         "units": "mm/s"
       },
@@ -546,7 +715,7 @@
         "parent_parameter": "speed_printing",
         "reverse_modifier": "round(x*y, 2)",
         "root": {
-          "py/id": 43
+          "py/id": 56
         },
         "units": "fraction"
       },
@@ -557,11 +726,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "material_print_temperature",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 60
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "extrusion temperature",
       "parameter": "temperature_extruder",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -572,7 +753,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 46
+          "py/id": 60
         },
         "units": "degC"
       },
@@ -585,7 +766,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 46
+          "py/id": 60
         },
         "units": "degC"
       },
@@ -596,11 +777,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "material_print_temperature_layer_0",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 64
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "first layer extrusion temperature",
       "parameter": "temperature_extruder_raft",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -611,7 +804,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 49
+          "py/id": 64
         },
         "units": "degC"
       },
@@ -624,7 +817,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 49
+          "py/id": 64
         },
         "units": "degC"
       },
@@ -635,11 +828,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "material_bed_temperature",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 68
+        },
+        "units": null
+      },
       "modifier": null,
       "name": "printbed temperature",
       "parameter": "temperature_printbed",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -650,7 +855,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 52
+          "py/id": 68
         },
         "units": "degC"
       },
@@ -663,7 +868,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 52
+          "py/id": 68
         },
         "units": "degC"
       },
@@ -674,11 +879,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "material_bed_temperature_layer_0",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 72
+        },
+        "units": null
+      },
       "modifier": "y",
       "name": "first layer printbed temperature",
       "parameter": "temperature_printbed_raft",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "temperature_printbed",
       "prusa": {
@@ -689,7 +906,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 55
+          "py/id": 72
         },
         "units": "degC"
       },
@@ -702,7 +919,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 55
+          "py/id": 72
         },
         "units": "degC"
       },
@@ -713,11 +930,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "bottom_layers",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 76
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "bottom_solid_layers",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -728,7 +957,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 58
+          "py/id": 76
         },
         "units": null
       },
@@ -741,7 +970,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 58
+          "py/id": 76
         },
         "units": null
       },
@@ -752,11 +981,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "brim_line_count",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 80
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "brim_outlines",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -767,7 +1008,7 @@
         "parent_parameter": "size_id",
         "reverse_modifier": "x/y",
         "root": {
-          "py/id": 61
+          "py/id": 80
         },
         "units": "mm"
       },
@@ -780,7 +1021,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 61
+          "py/id": 80
         },
         "units": null
       },
@@ -791,13 +1032,25 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
-      "modifier": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "wall_line_width_x",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 84
+        },
+        "units": null
+      },
+      "modifier": "y",
       "name": null,
       "parameter": "external_perimeter_extrusion_width",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
-      "parent": null,
+      "parent": "track_width",
       "prusa": {
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
@@ -806,7 +1059,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 64
+          "py/id": 84
         },
         "units": "mm"
       },
@@ -819,7 +1072,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 64
+          "py/id": 84
         },
         "units": null
       },
@@ -830,11 +1083,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 88
+        },
+        "units": null
+      },
       "modifier": "y*0.9",
       "name": null,
       "parameter": "speed_external_perimeter",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "speed_printing",
       "prusa": {
@@ -845,7 +1110,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 67
+          "py/id": 88
         },
         "units": "mm/s"
       },
@@ -858,7 +1123,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 67
+          "py/id": 88
         },
         "units": null
       },
@@ -869,11 +1134,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "outer_inset_first",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 92
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "external_perimeters_first",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -884,7 +1161,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 70
+          "py/id": 92
         },
         "units": null
       },
@@ -897,7 +1174,7 @@
         "parent_parameter": null,
         "reverse_modifier": "x*(-1)",
         "root": {
-          "py/id": 70
+          "py/id": 92
         },
         "units": null
       },
@@ -908,11 +1185,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "cool_min_layer_time",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 96
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "cooling_below_layer_time",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -923,7 +1212,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 73
+          "py/id": 96
         },
         "units": "s"
       },
@@ -936,7 +1225,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 73
+          "py/id": 96
         },
         "units": "s"
       },
@@ -947,11 +1236,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 100
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "max_volumetric_speed",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -962,7 +1263,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 76
+          "py/id": 100
         },
         "units": "mm^3/s"
       },
@@ -975,7 +1276,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 76
+          "py/id": 100
         },
         "units": null
       },
@@ -986,11 +1287,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "infill_sparse_density",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 104
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "infill_density",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1001,7 +1314,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 79
+          "py/id": 104
         },
         "units": "percentage"
       },
@@ -1014,7 +1327,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 79
+          "py/id": 104
         },
         "units": "percentage"
       },
@@ -1025,11 +1338,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": "'lines' if x == 'rectilinear' else x",
+        "name": null,
+        "parameter": "infill_pattern",
+        "parent_parameter": null,
+        "reverse_modifier": "'rectilinear' if x == 'lines' else x",
+        "root": {
+          "py/id": 108
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "infill_pattern",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1040,7 +1365,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 82
+          "py/id": 108
         },
         "units": null
       },
@@ -1053,7 +1378,7 @@
         "parent_parameter": null,
         "reverse_modifier": "x.lower()",
         "root": {
-          "py/id": 82
+          "py/id": 108
         },
         "units": null
       },
@@ -1064,11 +1389,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "infill_line_width",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 112
+        },
+        "units": null
+      },
       "modifier": "y",
       "name": null,
       "parameter": "track_width_infill",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "track_width",
       "prusa": {
@@ -1079,7 +1416,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 85
+          "py/id": 112
         },
         "units": "mm"
       },
@@ -1092,7 +1429,7 @@
         "parent_parameter": "track_width",
         "reverse_modifier": "round(y/x)*100",
         "root": {
-          "py/id": 85
+          "py/id": 112
         },
         "units": "percentage"
       },
@@ -1103,11 +1440,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 116
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "infill_first",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1118,7 +1467,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 88
+          "py/id": 116
         },
         "units": "bool"
       },
@@ -1131,7 +1480,7 @@
         "parent_parameter": null,
         "reverse_modifier": "-1*x",
         "root": {
-          "py/id": 88
+          "py/id": 116
         },
         "units": "bool"
       },
@@ -1142,11 +1491,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "infill_overlap",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 120
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "overlap_infill",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1157,7 +1518,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 91
+          "py/id": 120
         },
         "units": "percentage"
       },
@@ -1170,7 +1531,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 91
+          "py/id": 120
         },
         "units": null
       },
@@ -1181,11 +1542,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "speed_infill",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 124
+        },
+        "units": null
+      },
       "modifier": "y*0.9",
       "name": null,
       "parameter": "speed_printing_infill",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "speed_printing",
       "prusa": {
@@ -1196,7 +1569,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 94
+          "py/id": 124
         },
         "units": "mm/s"
       },
@@ -1209,7 +1582,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 94
+          "py/id": 124
         },
         "units": "mm/min"
       },
@@ -1220,11 +1593,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 128
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "flow_rate_max",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1235,7 +1620,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 97
+          "py/id": 128
         },
         "units": "mm^3/s"
       },
@@ -1248,7 +1633,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 97
+          "py/id": 128
         },
         "units": null
       },
@@ -1259,11 +1644,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 132
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "retract_only_when_crossing_perimeters",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1274,7 +1671,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 100
+          "py/id": 132
         },
         "units": "bool"
       },
@@ -1287,7 +1684,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 100
+          "py/id": 132
         },
         "units": null
       },
@@ -1298,11 +1695,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "infill_support_angle",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 136
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "critical_overhang_angle",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1313,7 +1722,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 103
+          "py/id": 136
         },
         "units": "deg"
       },
@@ -1326,7 +1735,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 103
+          "py/id": 136
         },
         "units": "deg"
       },
@@ -1337,11 +1746,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "wall_line_width",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 140
+        },
+        "units": null
+      },
       "modifier": "x",
       "name": null,
       "parameter": "track_width_perimeter",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "track_width",
       "prusa": {
@@ -1352,7 +1773,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 106
+          "py/id": 140
         },
         "units": "mm"
       },
@@ -1365,7 +1786,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 106
+          "py/id": 140
         },
         "units": null
       },
@@ -1376,11 +1797,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 144
+        },
+        "units": null
+      },
       "modifier": "y*0.95",
       "name": null,
       "parameter": "speed_printing_perimeter",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "speed_printing",
       "prusa": {
@@ -1391,7 +1824,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 109
+          "py/id": 144
         },
         "units": "mm/s"
       },
@@ -1404,7 +1837,7 @@
         "parent_parameter": "speed_printing",
         "reverse_modifier": "x*y",
         "root": {
-          "py/id": 109
+          "py/id": 144
         },
         "units": "fraction"
       },
@@ -1415,11 +1848,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 148
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "retract_before_travel",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1430,7 +1875,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 112
+          "py/id": 148
         },
         "units": "bool"
       },
@@ -1443,7 +1888,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 112
+          "py/id": 148
         },
         "units": "mm"
       },
@@ -1454,11 +1899,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 152
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "retract_before_wipe",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1469,7 +1926,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 115
+          "py/id": 152
         },
         "units": "bool"
       },
@@ -1482,7 +1939,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 115
+          "py/id": 152
         },
         "units": null
       },
@@ -1493,11 +1950,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 156
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "retract_layer_change",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1508,7 +1977,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 118
+          "py/id": 156
         },
         "units": "bool"
       },
@@ -1521,7 +1990,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 118
+          "py/id": 156
         },
         "units": "bool"
       },
@@ -1532,11 +2001,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "retraction_hop",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 160
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "retract_lift",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1547,7 +2028,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 121
+          "py/id": 160
         },
         "units": "mm"
       },
@@ -1560,7 +2041,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 121
+          "py/id": 160
         },
         "units": "mm"
       },
@@ -1571,11 +2052,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "z_seam_type",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 164
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "seam_position",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1586,7 +2079,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 124
+          "py/id": 164
         },
         "units": null
       },
@@ -1599,7 +2092,7 @@
         "parent_parameter": null,
         "reverse_modifier": "'Aligned' if x == 2 else 'Random'",
         "root": {
-          "py/id": 124
+          "py/id": 164
         },
         "units": null
       },
@@ -1610,11 +2103,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 168
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "brim_offset",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1625,7 +2130,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 127
+          "py/id": 168
         },
         "units": "mm"
       },
@@ -1638,7 +2143,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 127
+          "py/id": 168
         },
         "units": "mm"
       },
@@ -1649,11 +2154,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 172
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "brim_layers",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1664,7 +2181,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 130
+          "py/id": 172
         },
         "units": null
       },
@@ -1677,7 +2194,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 130
+          "py/id": 172
         },
         "units": null
       },
@@ -1688,11 +2205,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 176
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "speed_printing_slowdown_below_time",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1703,7 +2232,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 133
+          "py/id": 176
         },
         "units": "s"
       },
@@ -1716,7 +2245,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 133
+          "py/id": 176
         },
         "units": "s"
       },
@@ -1727,11 +2256,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 180
+        },
+        "units": null
+      },
       "modifier": "y*0.33",
       "name": null,
       "parameter": "speed_printing_small_perimeters",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "speed_printing",
       "prusa": {
@@ -1742,7 +2283,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 136
+          "py/id": 180
         },
         "units": "mm/s"
       },
@@ -1755,7 +2296,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 136
+          "py/id": 180
         },
         "units": null
       },
@@ -1766,11 +2307,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 184
+        },
+        "units": null
+      },
       "modifier": "x",
       "name": null,
       "parameter": "track_width_solid_infill",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "track_width",
       "prusa": {
@@ -1781,7 +2334,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 139
+          "py/id": 184
         },
         "units": "mm"
       },
@@ -1794,7 +2347,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 139
+          "py/id": 184
         },
         "units": null
       },
@@ -1805,11 +2358,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 188
+        },
+        "units": null
+      },
       "modifier": "y*0.9",
       "name": null,
       "parameter": "speed_printing_solid_infill",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "speed_printing",
       "prusa": {
@@ -1820,7 +2385,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 142
+          "py/id": 188
         },
         "units": "mm/s"
       },
@@ -1833,7 +2398,7 @@
         "parent_parameter": "speed_printing",
         "reverse_modifier": "x*y",
         "root": {
-          "py/id": 142
+          "py/id": 188
         },
         "units": "fraction"
       },
@@ -1844,11 +2409,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 192
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "spiral_mode",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -1859,7 +2436,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 145
+          "py/id": 192
         },
         "units": "bool"
       },
@@ -1872,7 +2449,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 145
+          "py/id": 192
         },
         "units": "bool"
       },
@@ -1883,11 +2460,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 196
+        },
+        "units": null
+      },
       "modifier": "x",
       "name": null,
       "parameter": "track_width_support",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "track_width",
       "prusa": {
@@ -1898,7 +2487,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 148
+          "py/id": 196
         },
         "units": "mm"
       },
@@ -1911,7 +2500,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 148
+          "py/id": 196
         },
         "units": null
       },
@@ -1922,11 +2511,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "speed_support",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 200
+        },
+        "units": null
+      },
       "modifier": "y*0.5",
       "name": null,
       "parameter": "speed_printing_support",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "speed_printing",
       "prusa": {
@@ -1937,7 +2538,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 151
+          "py/id": 200
         },
         "units": "mm/s"
       },
@@ -1950,7 +2551,7 @@
         "parent_parameter": "speed_printing",
         "reverse_modifier": "x*y",
         "root": {
-          "py/id": 151
+          "py/id": 200
         },
         "units": "fraction"
       },
@@ -1961,11 +2562,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "roofing_line_width",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 204
+        },
+        "units": null
+      },
       "modifier": "y*1.05",
       "name": null,
       "parameter": "track_width_top_solid",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "track_width",
       "prusa": {
@@ -1976,7 +2589,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 154
+          "py/id": 204
         },
         "units": "mm"
       },
@@ -1989,7 +2602,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 154
+          "py/id": 204
         },
         "units": null
       },
@@ -2000,11 +2613,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 208
+        },
+        "units": null
+      },
       "modifier": "y*0.9",
       "name": null,
       "parameter": "speed_printing_top_solid",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": "speed_printing",
       "prusa": {
@@ -2015,7 +2640,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 157
+          "py/id": 208
         },
         "units": "mm/s"
       },
@@ -2028,7 +2653,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 157
+          "py/id": 208
         },
         "units": null
       },
@@ -2039,11 +2664,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "top_layers",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 212
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "top_solid_layers",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2054,7 +2691,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 160
+          "py/id": 212
         },
         "units": null
       },
@@ -2067,7 +2704,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 160
+          "py/id": 212
         },
         "units": null
       },
@@ -2078,11 +2715,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": "speed_travel",
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 216
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "speed_travel",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2093,7 +2742,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 163
+          "py/id": 216
         },
         "units": "mm/s"
       },
@@ -2106,7 +2755,7 @@
         "parent_parameter": null,
         "reverse_modifier": "x/60",
         "root": {
-          "py/id": 163
+          "py/id": 216
         },
         "units": "mm/min"
       },
@@ -2117,11 +2766,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 220
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "wipe",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2132,7 +2793,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 166
+          "py/id": 220
         },
         "units": "bool"
       },
@@ -2145,7 +2806,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 166
+          "py/id": 220
         },
         "units": "bool"
       },
@@ -2156,11 +2817,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 224
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "part_cooling_disable_first_layers",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2171,7 +2844,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 169
+          "py/id": 224
         },
         "units": null
       },
@@ -2184,7 +2857,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 169
+          "py/id": 224
         },
         "units": null
       },
@@ -2195,11 +2868,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 228
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "density_rt",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2210,7 +2895,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 172
+          "py/id": 228
         },
         "units": "g/cm^3"
       },
@@ -2223,7 +2908,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 172
+          "py/id": 228
         },
         "units": "g/cm^3"
       },
@@ -2234,11 +2919,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 232
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "filament_diameter",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2249,7 +2946,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 175
+          "py/id": 232
         },
         "units": "mm"
       },
@@ -2262,7 +2959,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 175
+          "py/id": 232
         },
         "units": "mm"
       },
@@ -2273,11 +2970,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 236
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "firmware_type",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2288,7 +2997,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 178
+          "py/id": 236
         },
         "units": null
       },
@@ -2301,7 +3010,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 178
+          "py/id": 236
         },
         "units": null
       },
@@ -2312,11 +3021,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 240
+        },
+        "units": null
+      },
       "modifier": "max(self.params.get('track_height').value, self.params.get('track_height_raft').value)",
       "name": null,
       "parameter": "track_height_max",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2327,7 +3048,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 181
+          "py/id": 240
         },
         "units": "mm"
       },
@@ -2340,7 +3061,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 181
+          "py/id": 240
         },
         "units": null
       },
@@ -2351,11 +3072,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 244
+        },
+        "units": null
+      },
       "modifier": "min(self.params.get('track_height').value, self.params.get('track_height_raft').value)",
       "name": null,
       "parameter": "track_height_min",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2366,7 +3099,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 184
+          "py/id": 244
         },
         "units": "mm"
       },
@@ -2379,7 +3112,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 184
+          "py/id": 244
         },
         "units": null
       },
@@ -2390,11 +3123,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 248
+        },
+        "units": null
+      },
       "modifier": "min(self.params.get('speed_printing_small_perimeters').value, self.params.get('speed_printing_raft').value)",
       "name": null,
       "parameter": "speed_printing_min",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2405,7 +3150,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 187
+          "py/id": 248
         },
         "units": "mm/s"
       },
@@ -2418,7 +3163,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 187
+          "py/id": 248
         },
         "units": null
       },
@@ -2429,11 +3174,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 252
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "material_name",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2444,7 +3201,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 190
+          "py/id": 252
         },
         "units": null
       },
@@ -2457,7 +3214,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 190
+          "py/id": 252
         },
         "units": null
       },
@@ -2468,11 +3225,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 256
+        },
+        "units": null
+      },
       "modifier": "max(self.params.get('speed_printing').value, self.params.get('speed_printing_raft').value)",
       "name": null,
       "parameter": "speed_printing_max",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2483,7 +3252,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 193
+          "py/id": 256
         },
         "units": "mm/s"
       },
@@ -2496,7 +3265,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 193
+          "py/id": 256
         },
         "units": null
       },
@@ -2507,11 +3276,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": true,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": "'lines' if x == 'rectilinear' else x",
+        "name": null,
+        "parameter": "top_bottom_pattern",
+        "parent_parameter": null,
+        "reverse_modifier": "'rectilinear' if x == 'lines' else x",
+        "root": {
+          "py/id": 260
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "solid_infill_pattern",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2522,7 +3303,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 196
+          "py/id": 260
         },
         "units": null
       },
@@ -2535,7 +3316,7 @@
         "parent_parameter": null,
         "reverse_modifier": "str(x).lower()",
         "root": {
-          "py/id": 196
+          "py/id": 260
         },
         "units": null
       },
@@ -2546,11 +3327,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 264
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "bridging_part_cooling",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2561,7 +3354,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 199
+          "py/id": 264
         },
         "units": "percentage"
       },
@@ -2574,7 +3367,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 199
+          "py/id": 264
         },
         "units": "percentage"
       },
@@ -2585,11 +3378,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 268
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "bridging_extrusion_multiplier",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2600,7 +3405,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 202
+          "py/id": 268
         },
         "units": null
       },
@@ -2613,7 +3418,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 202
+          "py/id": 268
         },
         "units": null
       },
@@ -2624,11 +3429,23 @@
       "py/object": "conversion_dictionary.Param",
       "_manual": false,
       "_value": null,
+      "cura": {
+        "py/object": "conversion_dictionary.Slicer",
+        "modifier": null,
+        "name": null,
+        "parameter": null,
+        "parent_parameter": null,
+        "reverse_modifier": null,
+        "root": {
+          "py/id": 272
+        },
+        "units": null
+      },
       "modifier": null,
       "name": null,
       "parameter": "speed_printing_bridge",
       "params": {
-        "py/id": 3
+        "py/id": 4
       },
       "parent": null,
       "prusa": {
@@ -2639,7 +3456,7 @@
         "parent_parameter": null,
         "reverse_modifier": null,
         "root": {
-          "py/id": 205
+          "py/id": 272
         },
         "units": "mm/s"
       },
@@ -2652,7 +3469,7 @@
         "parent_parameter": "speed_printing",
         "reverse_modifier": "x*y",
         "root": {
-          "py/id": 205
+          "py/id": 272
         },
         "units": null
       },
@@ -2661,6 +3478,6 @@
     }
   ],
   {
-    "py/id": 4
+    "py/id": 5
   }
 ]

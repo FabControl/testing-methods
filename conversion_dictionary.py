@@ -156,7 +156,7 @@ class Params(object):
     Contains all the parameters and methods to retrieve them
     """
     def __init__(self, dictionary_path: str):
-        self.supported_slicers = ["prusa", "simplify3d"]
+        self.supported_slicers = ["prusa", "simplify3d", "cura"]
         self.parameters = []
         self.load(dictionary_path)
 
@@ -226,22 +226,25 @@ class Params(object):
         """
         self.supported_slicers.append(slicer)
 
-        for parameter in self.parameters:
+        def add_new_parameter(param: Param, modifier: str = None, reverse_modifier: str = None, parent_parameter: str = None):
             clear()
             print("Current working parameter: {}.".format(parameter.parameter))
-            parameter._add_slicer(slicer)
+            param._add_slicer(slicer)
             _slicer = parameter.__getattribute__(slicer)
             _slicer.parameter = input("{} equivalent of {} parameter: ".format(slicer, parameter.parameter))
             if _slicer.parameter is None:
-                continue
-            _slicer.modifier = numeral_input("Modifier: ")
+                return
+            _slicer.modifier = modifier
             if _slicer.modifier is not None:
-                _slicer.reverse_modifier = numeral_input("Reverse modifier: ")
+                _slicer.reverse_modifier = reverse_modifier
                 if "y" in _slicer.modifier:
-                    _slicer.parent_parameter = numeral_input("Parent parameter: ")
+                    _slicer.parent_parameter = parent_parameter
             else:
                 _slicer.reverse_modifier = None
                 _slicer.parent_parameter = None
+
+        for parameter in self.parameters:
+            add_new_parameter(parameter)
 
     def dump(self, filename: str):
         """

@@ -1,0 +1,13 @@
+[general]
+version = 4
+name = Great Quality
+definition = fdmprinter
+
+[metadata]
+setting_version = 4
+quality_type = fast
+position = 0
+type = quality_changes
+
+[values]
+
