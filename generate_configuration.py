@@ -5,7 +5,7 @@ Configuration file Generator
 
 Usage:
     generate_configuration.py <session_id>
-    generate_configuration.py optimizer <session_id>
+    generate_configuration.py raw <session_id>
     generate_configuration.py cast <source_path> <slicer>
 """
 
@@ -111,7 +111,7 @@ Arguments pre-load block
 arguments = docopt(__doc__)
 session_id = str(arguments["<session_id>"])
 source_path = str(arguments["<source_path>"])
-optimizer = arguments["optimizer"]  # TODO change the name to something else. Too general
+raw = arguments["raw"]
 cast = arguments["cast"]
 
 
@@ -135,20 +135,17 @@ if not cast:
 
 else:
     with open(arguments["<source_path>"]) as file:
-        raw_config = json.load(file)["optimizer"]
+        raw_config = json.load(file)["raw"]
         params.populate(raw_config)
         slicer = arguments["<slicer>"]
         session_id = str(arguments["<source_path>"]).split("/")[-1].split(".")[0]
 
-if not optimizer:
+if not raw:
     if "prusa" in slicer.strip().lower():
         """
         Writes a Prusa Slic3r config
         """
         print("generating config for Prusa Slic3r")
-        # settings = persistence["settings"]
-        # material = persistence["material"]
-        # session = persistence["session"]
 
         configuration = read_ini(config_ini)
 
@@ -197,46 +194,31 @@ if not optimizer:
                     elif param.parameter == "":
                         element.attrib = str(numeral_eval(param.simplify3d.value))
 
-        tree.write(config_folder + separator() + str(session_id) + ".xml", xml_declaration=True, encoding="utf-8")
-        print("{} succesfully written".format(config_folder + separator() + str(session_id) + ".xml"))
+        tree.write(config_folder + separator() + str(session_id) + ".fff", xml_declaration=True, encoding="utf-8")
+        print("{} succesfully written".format(config_folder + separator() + str(session_id) + ".fff"))
 
     elif "cura" in slicer.strip().lower():
-        import configparser
-        import zipfile
-        import shutil
-        config = configparser.ConfigParser()
-        config["general"] = {"version": 4, "name": "Great Quality", "definition": "fdmprinter"}
-        config["metadata"] = {"setting_version": 4, "quality_type": "fast", "type": "quality_changes"}
-        config["values"] = {}
+        from cura_ops import decode_cura, encode_cura
+        cura_params = []
+
         for param in params.parameters:
             if param.cura.parameter is not None:
                 if param.cura.value is not None:
-                    config["values"][param.cura.parameter] = str(param.cura.value)
-        with open(cura_temp_folder + separator() + "custom_great_quality", mode="w") as file:
-            config.write(file)
+                    cura_params.append([param.cura.parameter, param.cura.value, 0])
 
-        for file in os.listdir(cura_deserialized):
-            if file != "custom_great_quality":
-                shutil.copy(src=cura_deserialized + separator() + file, dst=cura_temp_folder + separator() + file)
+        encode_cura(cura_params, str(session_id), config_folder + separator() + str(session_id))
+        print("{} succesfully written".format(config_folder + separator() + str(session_id) + ".curaprofile"))
 
-        destination = output_name("curaprofile",config_folder)
-        shutil.copy(src=cura_configuration_template + separator() + "empty.curaprofile", dst=destination)
-        containers = os.listdir(cura_temp_folder)
 
-        for container in containers:
-            with zipfile.ZipFile(destination, mode="a") as zip:
-                if container not in ["empty.curaprofile", ".keep"]:
-                    container_fullpath = cura_temp_folder + separator() + container
-                    zip.write(container_fullpath, container)
-
-elif optimizer:
-    output_dictionary = {"optimizer": {},
+elif raw:
+    output_dictionary = {"raw": {},
                          "prusa": {},
-                         "simplify3d": {}}
+                         "simplify3d": {},
+                         "cura": {}}
 
     for parameter in params.parameters:
         if parameter.value is not None:
-            output_dictionary["optimizer"][parameter.parameter] = parameter.value
+            output_dictionary["raw"][parameter.parameter] = parameter.value
         if parameter.simplify3d.value is not None:
             output_dictionary["simplify3d"][parameter.simplify3d.parameter] = parameter.simplify3d.value
         if parameter.prusa.value is not None:
