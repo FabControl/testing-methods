@@ -104,10 +104,6 @@ def encode_cura(parameters: list, name: str, outpath: str):
                 output.append(parameter)
         return output
 
-    if not outpath.endswith(".zip"):
-        if "." in outpath:
-            outpath = "".join(outpath.split(".")[0:-1]) + ".zip"  # Strip path of extension and add zip extension
-        else: outpath = outpath + ".zip"
     tempdir = tf.TemporaryDirectory()
 
     # Get the base template for a container, containing Meta and General data
