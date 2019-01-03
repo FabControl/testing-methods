@@ -1,4 +1,5 @@
 from CLI_helpers import separator
+from paths import cwd
 
 
 def numeral_eval(value):
@@ -110,7 +111,7 @@ def encode_cura(parameters: list, name: str, outpath: str):
     tempdir = tf.TemporaryDirectory()
 
     # Get the base template for a container, containing Meta and General data
-    with open("resources/cura_configuration_template/custom_extruder_") as file:
+    with open(cwd + "/resources/cura_configuration_template/custom_extruder_") as file:
         empty_cura_container = file.read()
     # Write each of the new containers in a temporary directory
     zip_archive = zf.ZipFile(outpath, mode="a")
