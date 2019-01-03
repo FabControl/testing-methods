@@ -90,7 +90,7 @@ check_compatibility(machine, material)
 #     check_printing_speed_shear_rate(machine, gamma_dot_out, quiet)
 #     check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
 
-if quiet:
+if not verbose:
     test_info = test_dict[str(persistence["session"]["test_name"])]
     min_max_argument = session["min_max"] if session["min_max"] != "" else None
 
