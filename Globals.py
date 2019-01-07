@@ -1,8 +1,9 @@
-from Definitions import Material, Settings, Machine, TestInfo, DryingProcess
+from Definitions import Material, Settings, Machine, TestInfo, DryingProcess, Parameter
 import json
 from session_loader import session_uid
 from paths import json_folder
 from CLI_helpers import separator, exception_handler
+from test_info import test_info
 
 try:
     try:
@@ -116,45 +117,25 @@ except:
         }
     }
 
-test_dict = {"01": TestInfo("first-layer track height", "first-layer-track-height", "mm", "{:.3f}",
-                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=False),
-             "02": TestInfo("first-layer track width", "first-layer-track-width", "mm", "{:.3f}",
-                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=1, raft=False),
-             "03": TestInfo("extrusion temperature", "extrusion-temperature", "degC", "{:.0f}",
-                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
-             "04": TestInfo("track height", "track-height", "mm", "{:.3f}",
-                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
-             "05": TestInfo("track width", "track-width", "mm", "{:.3f}",
-                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True),
-             "06": TestInfo("extrusion multiplier", "extrusion-multiplier", "-", "{:.3f}",
-                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0.80, 1.40]),
-             "07": TestInfo("printing speed", "printing-speed", "mm/s", "{:.1f}",
-                           number_of_layers=2, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0.80, 1.75]),
-             "08": TestInfo("retraction distance", "retraction-distance", "mm", "{:.3f}",
-                           number_of_layers=3, number_of_test_structures=7, number_of_substructures=1, raft=True, default_value=[0.0, 4.0]),
-             "09": TestInfo("retraction-restart distance", "retraction-restart-distance", "mm", "{:.3f}",
-                           number_of_layers=1, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[0.0, 0.4]),
-             "10": TestInfo("bridging extrusion-multiplier", "bridging-extrusion-multiplier", "-", "{:.3f}",
-                           number_of_layers=8, number_of_test_structures=7, number_of_substructures=4, raft=True, default_value=[1.0, 2.0])}
-
-test_info = test_dict[str(persistence["session"]["test_name"])]
 session_idn = str(persistence["session"]["uid"])
 
-persistence["session"]["number_of_test_structures"] = test_info.number_of_test_structures
+test_info = test_info(persistence)
+#persistence["session"]["number_of_test_structures"] = test_info.number_of_test_structures not needed
 
-test_name_list, test_precision_list, test_units_list = [], [], []
-test_number_list = sorted(test_dict.keys())
+test_name_list, test_parameter_one_name_list, test_parameter_one_precision_list, test_parameter_one_units_list, test_parameter_two_precision_list, test_parameter_two_units_list, test_other_parameters_list = [], [], [], [], [], [], []
 
-for test_number in test_number_list:
-    test = test_dict[test_number]
-    test_name_list.append(test.name)
-    test_precision_list.append(test.precision)
-    test_units_list.append(test.units)
+comment = ""
+for parameter, order_number in zip(test_info.other_parameters, range(len(test_info.other_parameters))):
+    comment_to_add = str("; --- {}: {} {}".format(parameter.name, parameter.precision, parameter.units)).format(parameter.value)
+    if order_number == len(test_info.other_parameters)-1:
+        comment += comment_to_add
+    else:
+        comment += comment_to_add + "\n"
 
 material = Material(**persistence["material"])
 material.drying = DryingProcess(**persistence["material"]["drying"])
 machine = Machine(**persistence["machine"])
-machine.settings = Settings(nozzle=machine.nozzle, material=material, **persistence["settings"])
+machine.settings = Settings(nozzle=machine.temperaturecontrollers.extruder.nozzle, material=material, machine=machine, **persistence["settings"])
 
 
 def filename(session_id: str, extension: str) -> str:

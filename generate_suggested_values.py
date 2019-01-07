@@ -5,7 +5,7 @@ Usage:
    generate_suggested_values.py <session-id>
 """
 from Definitions import *
-from Globals import persistence, test_info, test_dict
+from Globals import persistence, test_info
 from docopt import docopt
 
 arguments = docopt(__doc__)

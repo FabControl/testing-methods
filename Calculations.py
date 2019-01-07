@@ -1,8 +1,6 @@
-import math, sys
+import math
 import numpy as np
 from scipy.optimize import curve_fit
-import matplotlib.pyplot as plt
-from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 from Definitions import  minmax_temperature, minmax_track_width_height_raft
 
 
@@ -15,7 +13,7 @@ def rheology(material, machine, delta_p_out, number_of_test_structures):
         try:
             mfr = material.mfi / 1000 / (material.density_rt * 1000 / (1 + 3 * material.lcte * (material.temperature_mfr - 20)))
         except AttributeError:
-            raise ValueError("You have to specify either both MFI AND density values OR MVR values!")
+            raise ValueError("You have to specify either both MFI (g/ 10 min) AND density (g/cm3) values OR MVR (mm3/ 10 min) values!")
 
     points = int(10000)  # smoothness of the curves
 
@@ -62,7 +60,6 @@ def rheology(material, machine, delta_p_out, number_of_test_structures):
 
 
 def shear_rate(machine, param_power_law):
-    # def shear_rate(machine: Machine, material: Material, settings: Settings, nozzle: Nozzle, param_power_law):
     # Function to estimate shear deformation rates in the nozzle.
 
     m = param_power_law[0]  # m, proportionality coefficient (N s^n/m2)
@@ -71,18 +68,17 @@ def shear_rate(machine, param_power_law):
 
     q_v = flow_rate(machine)
 
-    gamma_dot_tube = 8 * (k + 3) * q_v / (math.pi * (machine.size_extruder_id) ** 3)
-    gamma_dot_cone = 64 * (k + 3) * q_v / (math.pi * (machine.nozzle.size_capillary_length * math.tan(machine.nozzle.size_angle / 2) + machine.nozzle.size_id) ** 3)
-    gamma_dot_nozzle = 8 * (k + 3) * q_v / (math.pi * (machine.nozzle.size_id) ** 3)
-    gamma_dot_eff = 32 * q_v / (math.pi * (machine.nozzle.size_id) ** 3)
+    gamma_dot_tube   =  8 * (k + 3) * q_v / (math.pi * (machine.temperaturecontrollers.extruder.nozzle.size_extruder_id) ** 3)
+    gamma_dot_cone   = 64 * (k + 3) * q_v / (math.pi * (machine.temperaturecontrollers.extruder.nozzle.size_capillary_length * math.tan(machine.temperaturecontrollers.extruder.nozzle.size_angle / 2) + machine.temperaturecontrollers.extruder.nozzle.size_id) ** 3)
+    gamma_dot_nozzle =  8 * (k + 3) * q_v / (math.pi * (machine.temperaturecontrollers.extruder.nozzle.size_id) ** 3)
+    gamma_dot_eff = 32 * q_v / (math.pi * (machine.temperaturecontrollers.extruder.nozzle.size_id) ** 3)
 
     q_v_raft = flow_rate_raft(machine)
 
-    gamma_dot_eff_raft = 32 * q_v_raft / (math.pi * (machine.nozzle.size_id) ** 3)
+    gamma_dot_eff_raft = 32 * q_v_raft / (math.pi * (machine.temperaturecontrollers.extruder.nozzle.size_id) ** 3)
 
     gamma_dot = [gamma_dot_tube, gamma_dot_cone, gamma_dot_nozzle, gamma_dot_eff, gamma_dot_eff_raft]
 
-    # print(gamma_dot)
     return gamma_dot
 
 
@@ -94,14 +90,14 @@ def pressure_drop(machine, param_power_law):
 
     q_v = flow_rate(machine)
 
-    multiplier = ((32 * (q_v / 10 ** 9) / (math.pi * (machine.nozzle.size_id / 1000) ** 3)) * ((3 * n + 1) /(4 * n)))**n
+    multiplier = ((32 * (q_v / 10 ** 9) / (math.pi * (machine.temperaturecontrollers.extruder.nozzle.size_id / 1000) ** 3)) * ((3 * n + 1) /(4 * n)))**n
 
-    delta_p_cone = m * multiplier * (2 / (3 * n * math.sin(machine.nozzle.size_angle/2))) * ((3 * math.sin(machine.nozzle.size_angle/2)) / (4 * n * (1 - math.cos(machine.nozzle.size_angle/2)) ** (2) * (1 + 2 * math.cos(machine.nozzle.size_angle/2)))) ** (n)
+    delta_p_cone = m * multiplier * (2 / (3 * n * math.sin(machine.temperaturecontrollers.extruder.nozzle.size_angle/2))) * ((3 * math.sin(machine.temperaturecontrollers.extruder.nozzle.size_angle/2)) / (4 * n * (1 - math.cos(machine.temperaturecontrollers.extruder.nozzle.size_angle/2)) ** (2) * (1 + 2 * math.cos(machine.temperaturecontrollers.extruder.nozzle.size_angle/2)))) ** (n)
     delta_p_cone_capillary = m * multiplier * 1.18 * n ** (-0.7)
-    delta_p_capillary = m * multiplier * 4 * (machine.nozzle.size_capillary_length / machine.nozzle.size_id)
+    delta_p_capillary = m * multiplier * 4 * (machine.temperaturecontrollers.extruder.nozzle.size_capillary_length / machine.temperaturecontrollers.extruder.nozzle.size_id)
     delta_p = (delta_p_cone + delta_p_cone_capillary + delta_p_capillary) / 10 ** 5  # total pressure drop (bar)
 
-    tau_wall = (delta_p_capillary * (machine.nozzle.size_id / 2000) / (2 * machine.nozzle.size_capillary_length / 1000)) / 1000000  # shear stress on the wall (MPa)
+    tau_wall = (delta_p_capillary * (machine.temperaturecontrollers.extruder.nozzle.size_id / 2000) / (2 * machine.temperaturecontrollers.extruder.nozzle.size_capillary_length / 1000)) / 1000000  # shear stress on the wall (MPa)
     shear_stress = "the shear stress at the walls is {:.2f} MPa, the total pressure drop is {:.1f} MPa".format(tau_wall, delta_p/10)
     q_v_output = "the volumetric flow rate at the deposition speed of {:.3f} mm/s is {:.3f} mm3/s".format(machine.settings.speed_printing, q_v)
     comment = shear_stress + "\n" + q_v_output
@@ -124,9 +120,9 @@ def flow_rate_raft(machine):
     coef_h_raft, coef_w_raft = minmax_track_width_height_raft(machine)
 
     if machine.settings.track_height < machine.settings.track_width / (2 - math.pi / 2):
-        q_v_raft = machine.settings.extrusion_multiplier_raft * machine.settings.speed_printing_raft * (machine.nozzle.size_id * coef_h_raft * (machine.nozzle.size_id * coef_w_raft - machine.nozzle.size_id * coef_h_raft) + math.pi * (machine.nozzle.size_id * coef_h_raft / 2) ** 2)
+        q_v_raft = machine.settings.extrusion_multiplier_raft * machine.settings.speed_printing_raft * (machine.temperaturecontrollers.extruder.nozzle.size_id * coef_h_raft * (machine.temperaturecontrollers.extruder.nozzle.size_id * coef_w_raft - machine.temperaturecontrollers.extruder.nozzle.size_id * coef_h_raft) + math.pi * (machine.temperaturecontrollers.extruder.nozzle.size_id * coef_h_raft / 2) ** 2)
     else:
-        q_v_raft = machine.settings.extrusion_multiplier_raft * machine.settings.speed_printing_raft * machine.nozzle.size_id * coef_h_raft * machine.nozzle.size_id * coef_w_raft
+        q_v_raft = machine.settings.extrusion_multiplier_raft * machine.settings.speed_printing_raft * machine.temperaturecontrollers.extruder.nozzle.size_id * coef_h_raft * machine.temperaturecontrollers.extruder.nozzle.size_id * coef_w_raft
 
     return q_v_raft
 

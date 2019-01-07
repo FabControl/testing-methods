@@ -9,14 +9,18 @@ def check_compatibility(machine, material):
     #         .format(machine.id, machine.nozzle.size_extruder_id, material.size_od))
     #     exception_handler("Compatibility issue: " + output, fatal=True)
 
+    temperature_limit = []
 
-    # if machine.temperature_extruder_max < material.temperature_melting:
-    #     # Compare the 'melting/softening point' of the material and the maximum achievable temperature of the liquefier
-    #     output = ("{} {} 3D printer is incapable of printing this material: "
-    #               "the melting (softening) temperature of {:0.0f} degC is higher than the maximum achievable temperature in the liquefier {:0.0f} degC!"
-    #         .format(machine.manufacturer, machine.model, material.temperature_melting, machine.temperature_extruder_max))
-    #     exception_handler("Compatibility issue: " + output, fatal=True)
+    if material.temperature_melting is not None:
+        temperature_limit.append(material.temperature_melting)
+    if material.temperature_glass is not None:
+        temperature_limit.append(material.temperature_glass)
 
+    if machine.temperaturecontrollers.extruder.temperature_max < max(temperature_limit):
+        # Compare the 'melting/softening point' of the material and the maximum achievable temperature of the liquefier
+        output = ("{} {} 3D printer is incapable of printing this material:\n the melting (glass transition or softening) temperature of {:0.0f} degC is higher than the maximum achievable temperature in the liquefier {:0.0f} degC!"
+            .format(machine.manufacturer, machine.model, max(temperature_limit), machine.temperaturecontrollers.extruder.temperature_max))
+        exception_handler("Compatibility issue: " + output, fatal=True)
 
     # if max(machine.settings.temperature_extruder, machine.settings.temperature_extruder_raft) > material.temperature_destr:
     #     # Compare the preset extrusion temperature and the destruction temperature:
@@ -25,9 +29,16 @@ def check_compatibility(machine, material):
     #     print("Compatibility issue: " + output)
     #     quit()
 
-    if machine.printbed.printbed_heatable:
-        if machine.settings.temperature_printbed > machine.printbed.temperature_printbed_max:
+    if machine.temperaturecontrollers.printbed.printbed_heatable:
+        if machine.temperaturecontrollers.printbed.temperature_printbed_setpoint > machine.temperaturecontrollers.printbed.temperature_max:
             # Compare the preset extrusion temperature and the destruction temperature:
             output = ("The set printbed temperature of {:0.0f} degC is higher than the maximum achievable printbed temperature of {:0.0f} degC"
-                .format(machine.settings.temperature_printbed,machine.printbed.temperature_printbed_max))
+                .format(machine.temperaturecontrollers.printbed.temperature_printbed_setpoint,machine.temperaturecontrollers.printbed.temperature_max))
+            exception_handler("Compatibility issue: " + output, fatal=True)
+
+    if machine.temperaturecontrollers.printbed.printbed_heatable:
+        if machine.temperaturecontrollers.printbed.temperature_printbed_setpoint > machine.temperaturecontrollers.printbed.temperature_max:
+            # Compare the preset extrusion temperature and the destruction temperature:
+            output = ("The set printbed temperature of {:0.0f} degC is higher than the maximum achievable printbed temperature of {:0.0f} degC"
+                .format(machine.temperaturecontrollers.printbed.temperature_printbed_setpoint,machine.temperaturecontrollers.printbed.temperature_max))
             exception_handler("Compatibility issue: " + output, fatal=True)

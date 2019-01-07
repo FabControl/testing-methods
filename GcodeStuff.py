@@ -5,79 +5,77 @@ from CLI_helpers import exception_handler
 
 track_list = []
 
-# TODO Second extruder support
-
-
 class Gplus(G):
     # Build on the G class from mecode. Gplus class redefines some of the commands, creates new commands
     def __init__(self, material: Material, machine: Machine, *args, **kwargs):
         super(Gplus, self).__init__(*args, **kwargs)
 
         self.filament_diameter = material.size_od
-        self.nozzle_diameter = machine.nozzle.size_id
-        self.nozzle_od = machine.nozzle.size_od
+        self.nozzle_diameter = machine.temperaturecontrollers.extruder.nozzle.size_id
+        self.nozzle_od = machine.temperaturecontrollers.extruder.nozzle.size_od
         self.extrusion_multiplier = machine.settings.extrusion_multiplier
         self.track_height = machine.settings.track_height
         self.track_width = machine.settings.track_width
 
         self.form = machine.form
+        self.tool = machine.temperaturecontrollers.extruder.tool
         self.buildarea_maxdim1 = machine.buildarea_maxdim1
         self.buildarea_maxdim2 = machine.buildarea_maxdim2
 
-        self.coef_w = machine.settings.track_width / machine.nozzle.size_id
+        self.coef_w = machine.settings.track_width / machine.temperaturecontrollers.extruder.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
 
         self.track_list = [] # TODO Is it used?
 
-    def set_extruder_temperature(self, temperature: float):
+    def set_extruder_temperature(self, temperature: float, extruder: Extruder):
         """Set the liquefier temperature in degC"""
-        G.write(self, "M109 S{:.0f}".format(temperature) + " T0; set the extruder temperature and wait till it has been reached")
+        G.write(self, extruder.gcode_command.format(temperature, extruder.tool) + "; set the extruder temperature")
 
-    def set_printbed_temperature(self, temperature: float):
-        """Set the print bed temperature in degC"""
-        G.write(self, "M190 S{:.0f}".format(temperature) + " T0; set the print bed temperature and wait till it has been reached")
+    def set_printbed_temperature(self, temperature: float, printbed: Printbed):
+        """Set the printbed temperature in degC"""
+        G.write(self, printbed.gcode_command.format(temperature, printbed.tool) + "; set the print bed temperature")
 
-    def set_ventilator_part_cooling(self, cooling_power: float):
+    def set_chamber_temperature(self, temperature: float, chamber: Chamber):
+        """Set the printbed temperature in degC"""
+        G.write(self, chamber.gcode_command.format(temperature, chamber.tool) + "; set the chamber temperature")
+
+    def set_part_cooling(self, cooling_power: float, extruder: Extruder):
+        """Set the cooler power in percent"""
+        if cooling_power >= 100:
+            cooling_power = 100
+        elif cooling_power <= 0:
+            pass
+        # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
+        G.write(self, extruder.part_cooling_gcode_command.format(int(255 * (cooling_power / 100))) + "; set the cooler speed for part cooling")
+
+    def set_ventilator_exit(self, cooling_power: float, chamber: Chamber):
         """Set the cooler power in percent"""
         if cooling_power > 100:
             cooling_power = 100
         elif cooling_power < 0:
             pass
         # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-        output = "M106 S{:.0f}".format(255 * (cooling_power / 100)) + "; set the cooler speed for part cooling"
-        G.write(self, output)
+        G.write(self, chamber.ventilator_exit_gcode_command.format(chamber.ventilator_exit_tool, int(255 * (cooling_power / 100))) + "; set the speed for exit ventilator")
 
-    def set_ventilator_exit(self, cooling_power: float):
+    def set_ventilator_entry(self, cooling_power: float, chamber: Chamber):
         """Set the cooler power in percent"""
         if cooling_power > 100:
             cooling_power = 100
         elif cooling_power < 0:
             pass
         # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-        output = "M106 P1 S{:.0f}".format(255 * (cooling_power / 100)) + "; set the speed for exit ventilator"
-        G.write(self, output)
+        G.write(self, chamber.ventilator_entry_gcode_command.format(chamber.ventilator_entry_tool, int(255 * (cooling_power / 100)) + "; set the speed for entry ventilator"))
 
-    def set_ventilator_entry(self, cooling_power: float):
-        """Set the cooler power in percent"""
-        if cooling_power > 100:
-            cooling_power = 100
-        elif cooling_power < 0:
-            pass
-        # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-        output = "M106 P2 S{:.0f}".format(255 * (cooling_power / 100)) + "; set the speed for entry ventilator"
-        G.write(self, output)
-
-    def dwell(self, time: int):
+    def dwell(self, time: int, extruder: Extruder):
         """ Pause code executions for the given amount of time """
-        self.write("G4 P{}".format(time * 1000) + " T0; set the waiting time in ms")
+        self.write("G4 P{0} ".format(time * 1000) + extruder.tool + "; set the waiting time in ms")
 
     def home(self):
-        """ Move the tool head to the home position (X=0, Y=0).
+        """ Move the tool head to the home position (as defined in firmware).
         """
-        self.abs_move(x=0, y=0, extrude=False)
+        self.write("G28; move to the home position")
 
-    def move(self, x=None, y=None, z=None, rapid=False, extrude=None, extrusion_multiplier=None, coef_w=None,
-             coef_h=None, **kwargs):
+    def move(self, x=None, y=None, z=None, rapid=False, extrude=None, extrusion_multiplier=None, coef_w=None, coef_h=None, **kwargs):
         """ Move the tool head to the given position. This method operates in
         relative mode unless a manual call to `absolute` was given previously.
         If an absolute movement is desired, the `abs_move` method is

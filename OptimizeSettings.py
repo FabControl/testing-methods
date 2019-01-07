@@ -39,30 +39,30 @@ def check_printing_speed_shear_rate(machine, gamma_dot, quiet: bool):
     return
 
 
-def check_printing_speed_pressure(machine, material, delta_p, param_power_law):
-    str = ('total pressure drop in liquefier and nozzle is {:.1f} bar'.format(delta_p))
-    print(str)
-
-    force = (delta_p * 100000) * math.pi * (machine.size_extruder_id / 2000) ** 2  # the force on the filament (N)
-    force2 = (0.5 * material.density_rt * 1000 * (machine.settings.speed_printing/1000)**2 + delta_p * 100000) * (machine.size_extruder_id/1000)**2 * (math.pi / 4) # the force on the filament (N)
-    #force_max = 2 * (machine.moment_max / 10) / (machine.gear_size_od / 2000)  # TODO: check machine.moment_max value!!!
-
-    output = ('actual tangential force on the gears is {:.1f} N, maximum allowed tangential force of the gears is {:.1f} N'.format(force2, force_max))
-    print(output)
-
-    parameters = (param_power_law[int(len(param_power_law)/ 2)])
-    print(feeder_speed(machine, material))
-
-    # Suggest another printing speed:
-    if force2 > force_max:
-        output = ('filament is likely to slip! maximum printing speed should be below %.2f mm/s!' % (force_max / (0.5 * material.density_rt * flow_rate(machine) * 10**(-6))))
-        print(output)
-        machine.settings.speed_printing = round(machine.settings.speed_printing * (flow_rate(machine)/flow_rate(machine,  machine.settings.speed_printing))**(parameters[1]), 2)
-        print('--> printing_speed optimized! (pressure)')
-    else: pass
-
-    return
-
+# def check_printing_speed_pressure(machine, material, delta_p, param_power_law):
+#     str = ('total pressure drop in liquefier and nozzle is {:.1f} bar'.format(delta_p))
+#     print(str)
+#
+#     force = (delta_p * 100000) * math.pi * (machine.nozzle.size_extruder_id / 2000) ** 2  # the force on the filament (N)
+#     force2 = (0.5 * material.density_rt * 1000 * (machine.settings.speed_printing/1000)**2 + delta_p * 100000) * (machine.nozzle.size_extruder_id/1000)**2 * (math.pi / 4) # the force on the filament (N)
+#     #force_max = 2 * (machine.moment_max / 10) / (machine.gear_size_od / 2000)  # TODO: check machine.moment_max value!!!
+#
+#     output = ('actual tangential force on the gears is {:.1f} N, maximum allowed tangential force of the gears is {:.1f} N'.format(force2, force_max))
+#     print(output)
+#
+#     parameters = (param_power_law[int(len(param_power_law)/ 2)])
+#     print(feeder_speed(machine, material))
+#
+#     # Suggest another printing speed:
+#     if force2 > force_max:
+#         output = ('filament is likely to slip! maximum printing speed should be below %.2f mm/s!' % (force_max / (0.5 * material.density_rt * flow_rate(machine) * 10**(-6))))
+#         print(output)
+#         machine.settings.speed_printing = round(machine.settings.speed_printing * (flow_rate(machine)/flow_rate(machine,  machine.settings.speed_printing))**(parameters[1]), 2)
+#         print('--> printing_speed optimized! (pressure)')
+#     else: pass
+#
+#     return
+#
 
 # def check_track_height(machine, gamma_dot): # should be selected by the user!
 #     gamma_dot_nozzle = max(gamma_dot)  # max shear rate in the polymer melt going through the given nozzle (with the set path width, path height, printing speed)
