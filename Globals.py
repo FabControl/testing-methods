@@ -126,11 +126,16 @@ test_name_list, test_parameter_one_name_list, test_parameter_one_precision_list,
 
 comment = ""
 for parameter, order_number in zip(test_info.other_parameters, range(len(test_info.other_parameters))):
-    comment_to_add = str("; --- {}: {} {}".format(parameter.name, parameter.precision, parameter.units)).format(parameter.value)
-    if order_number == len(test_info.other_parameters)-1:
-        comment += comment_to_add
-    else:
-        comment += comment_to_add + "\n"
+    if hasattr(parameter, "value"):
+        if parameter.value is not None:
+            if parameter.value != []:
+                comment_to_add = str("; --- {}: {} {}".format(parameter.name, parameter.precision, parameter.units)).format(parameter.value)
+        else:
+            comment_to_add = str("; --- {} was not tested".format(parameter.name))
+        if order_number == len(test_info.other_parameters)-1:
+            comment += comment_to_add
+        else:
+            comment += comment_to_add + "\n"
 
 material = Material(**persistence["material"])
 material.drying = DryingProcess(**persistence["material"]["drying"])

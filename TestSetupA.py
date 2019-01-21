@@ -6,7 +6,7 @@ import numpy as np
 
 
 class TestSetupA(object):
-    def __init__(self, machine: Machine, material: Material, test_info: TestInfo, path: str, parameter_one_min_max: list=None, parameter_two_min_max: list=None, offset: list=None):
+    def __init__(self, machine: Machine, material: Material, test_info: TestInfo, path: str, parameter_one_min_max: list=None, parameter_two_min_max: list=None, offset: list=None, parameter_three_min_max: list=None, ):
         """
         :param machine:
         :param material:
@@ -18,18 +18,25 @@ class TestSetupA(object):
         self.offset_x = offset[0] if offset else 0
         self.offset_y = offset[1] if offset else 0
 
+        self.extruder = machine.temperaturecontrollers.extruder
+
         self.part_cooling = machine.temperaturecontrollers.extruder.part_cooling
         if self.part_cooling:
-            self.set_part_cooling = machine.settings.part_cooling
+            self.part_cooling_setpoint = machine.temperaturecontrollers.extruder.part_cooling_setpoint
+
         self.ventilator_entry = machine.temperaturecontrollers.chamber.ventilator_entry
         if self.ventilator_entry:
-            self.set_ventilator_entry = machine.settings.ventilator_entry
+            self.ventilator_entry_setpoint = machine.settings.ventilator_entry_setpoint
+
         self.ventilator_exit = machine.temperaturecontrollers.chamber.ventilator_exit
         if self.ventilator_exit:
-            self.set_ventilator_exit = machine.settings.ventilator_exit
+            self.ventilator_exit_setpoint = machine.settings.ventilator_exit_setpoint
 
-        self.extruder = machine.temperaturecontrollers.extruder
-        self.chamber = machine.temperaturecontrollers.chamber
+        if machine.temperaturecontrollers.chamber.chamber_heatable:
+            self.chamber = machine.temperaturecontrollers.chamber
+
+        if machine.temperaturecontrollers.printbed.printbed_heatable:
+            self.printbed = machine.temperaturecontrollers.printbed
 
         self.test_info = test_info
         self.number_of_test_structures = test_info.number_of_test_structures
@@ -66,9 +73,6 @@ class TestSetupA(object):
 
         self.extrusion_multiplier = [x * machine.settings.extrusion_multiplier for x in [1] * self.number_of_test_structures]
         self.extrusion_multiplier_raft = machine.settings.extrusion_multiplier_raft
-
-        self.temperature_printbed = machine.settings.temperature_printbed
-        self.temperature_chamber = machine.settings.temperature_chamber
 
         self.temperature_extruder = [x * machine.settings.temperature_extruder for x in [1] * self.number_of_test_structures]
         self.temperature_extruder_raft = machine.settings.temperature_extruder_raft
@@ -123,7 +127,7 @@ class TestSetupA(object):
             self.abs_z = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
 
             self.parameter_one.values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_w]
-            self.parameter_two.values = [self.speed_printing_raft] * self.number_of_test_structures
+            self.parameter_two.values = [self.speed_printing_raft] * self.number_of_substructures
             self.speed_printing = self.parameter_two.values
 
             self.track_width = self.parameter_one.values
@@ -195,7 +199,23 @@ class TestSetupA(object):
                 self.retraction_distance = np.linspace(parameter_one_min_max[0], parameter_one_min_max[1], self.number_of_test_structures).tolist()
             self.parameter_one.values = self.retraction_distance
 
-        elif self.test_name == "retraction-restart distance":
+        elif self.test_name == "retraction distance vs printing speed": #TODO
+            # RETRACTION DISTANCE test parameters
+            if parameter_one_min_max is None:
+                self.retraction_distance = np.linspace(test_info.parameter_one.min_default, test_info.parameter_one.max_default, self.number_of_test_structures).tolist()
+            else:
+                self.retraction_distance = np.linspace(parameter_one_min_max[0], parameter_one_min_max[1], self.number_of_test_structures).tolist()
+            self.parameter_one.values = self.retraction_distance
+
+        elif self.test_name == "retraction distance vs retraction speed": #TODO
+            # RETRACTION DISTANCE test parameters
+            if parameter_one_min_max is None:
+                self.retraction_distance = np.linspace(test_info.parameter_one.min_default, test_info.parameter_one.max_default, self.number_of_test_structures).tolist()
+            else:
+                self.retraction_distance = np.linspace(parameter_one_min_max[0], parameter_one_min_max[1], self.number_of_test_structures).tolist()
+            self.parameter_one.values = self.retraction_distance
+
+        elif self.test_name == "retraction-restart distance": #TODO
             # RETRACTION RESTART DISTANCE amd COASTING DISTANCE test parameters
             if parameter_one_min_max is None:
                 self.retraction_restart_distance = np.linspace(test_info.min_default, test_info.max_default, self.number_of_test_structures).tolist()
@@ -213,35 +233,31 @@ class TestSetupA(object):
             self.parameter_one.values = self.extrusion_multiplier_bridging
 
         elif self.test_name == "extrusion temperature vs retraction distance":
-            # RETRACTION DISTANCE vs EXTRUSION TEMPERATURE
-            if parameter_two_min_max is None:
-                self.retraction_distance = np.linspace(np.mean(self.retraction_distance)-0.25*(self.number_of_substructures-1)/2, np.mean(self.retraction_distance)+0.25*(self.number_of_substructures-1)/2, self.number_of_substructures).tolist()
-            else:
-                self.retraction_distance = np.linspace(parameter_two_min_max[0], parameter_two_min_max[1], self.number_of_substructures).tolist()
-
+            #  EXTRUSION TEMPERATURE vs RETRACTION DISTANCE and RETRACTION SPEED
+            self.number_of_lines = number_of_lines(self.test_structure_size, self.number_of_test_structures, self.track_width)
             if parameter_one_min_max is not None:
                 self.temperature_extruder = np.linspace(parameter_one_min_max[0], parameter_one_min_max[1], self.number_of_test_structures).tolist()
             else:
                 self.temperature_extruder = np.linspace(np.mean(self.temperature_extruder)-5*(self.number_of_test_structures-1)/2, np.mean(self.temperature_extruder)+5*(self.number_of_test_structures-1)/2, self.number_of_test_structures).tolist()
 
+            if parameter_two_min_max is None:
+                self.retraction_distance = np.linspace(np.mean(self.retraction_distance)-0.25*(self.number_of_substructures-1)/2, np.mean(self.retraction_distance)+0.25*(self.number_of_substructures-1)/2, self.number_of_substructures).tolist()
+            else:
+                self.retraction_distance = np.linspace(parameter_two_min_max[0], parameter_two_min_max[1], self.number_of_substructures).tolist()
+
+            if parameter_three_min_max is not None:
+                self.retraction_speed = np.linspace(parameter_three_min_max[0], parameter_three_min_max[1], self.number_of_lines).tolist()
+            else:
+                self.retraction_speed = [round(x) for x in np.linspace(60, 120, self.number_of_lines).tolist()]
+
             self.parameter_one.values = self.temperature_extruder
             self.parameter_two.values = self.retraction_distance
+            self.parameter_three.values = self.retraction_speed
 
         else:
             raise ValueError("{} is not a valid test.".format(test_info.name))
 
-        self.number_of_lines = int(2*self.test_structure_size/((3*self.number_of_test_structures + 1)*np.mean(self.track_width)))
-
-        if self.number_of_lines % 4 == 0:
-            pass
-        else:
-            if self.number_of_lines % 4 == 1:
-                self.number_of_lines = self.number_of_lines -1
-            if self.number_of_lines % 4 == 2:
-                self.number_of_lines = self.number_of_lines -2
-            if self.number_of_lines % 4 == 3:
-                self.number_of_lines = self.number_of_lines -3
-
+        self.number_of_lines = number_of_lines(self.test_structure_size, self.number_of_test_structures, self.track_width)
         self.test_structure_width = [0.]
 
         for current_test_structure in range(self.number_of_test_structures):
@@ -262,25 +278,25 @@ class TestSetupA(object):
         volumetric_flow_rate = []
         volumetric_flow_rate_row = []
 
-        if self.number_of_substructures != 1:
-
-            for speed in self.speed_printing:
-                for dummy in range(self.number_of_test_structures):
-                    if self.test_name == "bridging extrusion-multiplier":
-                        value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier_bridging[dummy]), 3)
-                    else:
-                        value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
-                    volumetric_flow_rate_row.append(value)
-                    if dummy == self.number_of_test_structures-1:
-                        volumetric_flow_rate.append(volumetric_flow_rate_row)
-                        volumetric_flow_rate_row = []
-        else:
+        for speed in self.speed_printing:
             for dummy in range(self.number_of_test_structures):
-                value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], self.speed_printing[dummy], self.extrusion_multiplier[dummy]), 3)
+                if self.test_name == "bridging extrusion-multiplier vs bridging printing speed":
+                    value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier_bridging[dummy]), 3)
+                else:
+                    value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
                 volumetric_flow_rate_row.append(value)
                 if dummy == self.number_of_test_structures-1:
                     volumetric_flow_rate.append(volumetric_flow_rate_row)
                     volumetric_flow_rate_row = []
+        # else:
+        #     for dummy in range(self.number_of_test_structures):
+        #         print(self.speed_printing)
+        #         value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], self.speed_printing[dummy], self.extrusion_multiplier[dummy]), 3)
+        #
+        #         volumetric_flow_rate_row.append(value)
+        #         if dummy == self.number_of_test_structures-1:
+        #             volumetric_flow_rate.append(volumetric_flow_rate_row)
+        #             volumetric_flow_rate_row = []
 
         self.volumetric_flow_rate = volumetric_flow_rate
 
@@ -309,10 +325,14 @@ def addtitle(test_info: TestInfo, material: Material, machine: Machine):
 
 
 def addcomment1(test_info: TestInfo):
-    comment1 = str("; --- testing the following " + test_info.parameter_one.name + " values: " + ", ".join((test_info.parameter_one.precision + " {}").format(*k) for k in zip(test_info.parameter_one.values, len(test_info.parameter_one.values)*[test_info.parameter_one.units])) + " ---\n")
+    comment1 = str("; --- testing the following " + test_info.parameter_one.name + " values: " + ", ".join((test_info.parameter_one.precision + " {}").format(*k) for k in zip(test_info.parameter_one.values, len(test_info.parameter_one.values)*[test_info.parameter_one.units])) + " ---")
     if test_info.name not in ["first-layer track width", "track width", "printing speed", "retraction distance"]:
         comment2 = str("; --- and the following " + test_info.parameter_two.name + " values: " + ", ".join((test_info.parameter_two.precision + " {}").format(*k) for k in zip(test_info.parameter_two.values, len(test_info.parameter_two.values)*[test_info.parameter_two.units])) + " ---")
-        return comment1+comment2
+        if test_info.parameter_three:
+            comment3 = str("; --- and the following " + test_info.parameter_three.name + " values: " + ", ".join((test_info.parameter_three.precision + " {}").format(*k) for k in zip(test_info.parameter_three.values, len(test_info.parameter_three.values)*[test_info.parameter_three.units])) + " ---")
+            return comment1+"\n"+comment2+"\n"+comment3
+        else:
+            return comment1 + "\n" + comment2
     return comment1
 
 
@@ -336,3 +356,17 @@ def addcomment3(test_info: TestInfo):
         dummy.append(comment.format(test_info.parameter_one.values[k]))
 
     return dummy
+
+def number_of_lines(test_structure_size, number_of_test_structures, track_width):
+    lines = int(2*test_structure_size/((3*number_of_test_structures + 1)*np.mean(track_width)))
+    if lines % 4 == 0:
+        pass
+    else:
+        if lines % 4 == 1:
+            lines = lines -1
+        if lines % 4 == 2:
+            lines = lines -2
+        if lines % 4 == 3:
+            lines = lines -3
+
+    return lines

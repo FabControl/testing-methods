@@ -69,7 +69,7 @@ class Material(object):
         self.capillary_diameter_mfr = 2.095 if capillary_diameter_mfr is None else capillary_diameter_mfr  # respect the units: mm
         self.capillary_length_mfr = 8 if capillary_length_mfr is None else capillary_length_mfr  # respect the units: mm
         self.time_mfr = 10 if time_mfr is None else time_mfr  # respect the units: min
-        self.density_rt = density_rt  # respect the units: g/cm3
+        self.density_rt = 1 if density_rt is None else density_rt  # respect the units: g/cm3
         self.lcte = lcte
         self.load_mfr = load_mfr  # respect the units: kg
         self.heat_capacity = heat_capacity  # respect the units: J / K / g
@@ -82,12 +82,11 @@ class Chamber(object):
 
     """
 
-    def __init__(self, tool: str, gcode_command: str, chamber_heatable: bool, temperature_max: float, temperature_min: float, temperature_chamber_setpoint: float, ventilator_exit: bool, ventilator_exit_tool: str, ventilator_exit_gcode_command: str, ventilator_entry: bool, ventilator_entry_tool, ventilator_entry_gcode_command, *args, **kwargs):
-
+    def __init__(self, chamber_heatable: bool, ventilator_exit: bool, ventilator_entry: bool, tool: str=None, gcode_command: str=None, temperature_min: float=None, temperature_max: float=None, temperature_chamber_setpoint: float=None, ventilator_exit_tool: str=None, ventilator_exit_gcode_command: str=None, ventilator_exit_setpoint: float=None, ventilator_entry_tool: str=None, ventilator_entry_gcode_command: str=None, ventilator_entry_setpoint: float=None, *args, **kwargs):
         self.chamber_heatable = chamber_heatable
         if chamber_heatable:
             self.tool = tool  # tool number, e.g. T1, T2
-            self.gcode_command = gcode_command  # G-code command used to control the temperature, e.g. M104 {0} S{1}, where {0} is a tool string
+            self.gcode_command = gcode_command  # G-code command used to control the temperature of the nozzle, e.g. Mddd {0} S{1}, where {0} is a tool string
             self.temperature_max = temperature_max
             self.temperature_min = temperature_min
             self.temperature_chamber_setpoint = temperature_chamber_setpoint
@@ -98,10 +97,12 @@ class Chamber(object):
         if ventilator_exit:
             self.ventilator_exit_tool = ventilator_exit_tool
             self.ventilator_exit_gcode_command = ventilator_exit_gcode_command
+            self.ventilator_exit_setpoint = ventilator_exit_setpoint
 
         if ventilator_entry:
             self.ventilator_entry_tool = ventilator_entry_tool
             self.ventilator_entry_gcode_command = ventilator_entry_gcode_command
+            self.ventilator_entry_setpoint = ventilator_entry_setpoint
 
 
 class Printbed(object):
@@ -112,7 +113,7 @@ class Printbed(object):
         self.printbed_heatable = printbed_heatable
         if printbed_heatable:
             self.tool = tool
-            self.gcode_command = gcode_command  # G-code command used to control the temperature, e.g. M104 {0} S{1}, where {0} is a tool string
+            self.gcode_command = gcode_command  # G-code command used to control the temperature of the print bed, e.g. Mddd {0} S{1}, where {0} is a tool string
             self.temperature_max = temperature_max
             self.temperature_min = temperature_min
             self.temperature_printbed_setpoint = temperature_printbed_setpoint
@@ -162,7 +163,6 @@ class Extruder(object):
 
 class TemperatureControllers(object):
     """
-
     """
     def __init__(self, *args, **kwargs):
         self.extruder = Extruder(**kwargs["extruder"])
@@ -172,7 +172,6 @@ class TemperatureControllers(object):
 
 class Software(object):
     """
-    version
     """
 
     def __init__(self, version: str, *args, **kwargs):
@@ -181,8 +180,6 @@ class Software(object):
 
 class Firmware(object):
     """
-    fw_type
-    version
     """
 
     def __init__(self, fw_type: str, version: str, *args, **kwargs):
@@ -207,7 +204,7 @@ class Machine(object):
     """
 
     def __init__(self, id: str=None, manufacturer: str=None, model: str=None, sn: str=None, form: str=None, buildarea_maxdim1: float=None, buildarea_maxdim2: float=None,
-                 moment_max: float=None, gear_size_od: float=12, heater_power: float=80, *args, **kwargs):
+                 *args, **kwargs):
 
         self.id = id
         self.manufacturer = manufacturer
@@ -216,11 +213,6 @@ class Machine(object):
         self.form = form
         self.buildarea_maxdim1 = buildarea_maxdim1  # respect the units: mm
         self.buildarea_maxdim2 = buildarea_maxdim2  # respect the units: mm
-
-
-        if moment_max is not None: self.moment_max = moment_max  # maximum moment: N m
-        if gear_size_od is not None: self.gear_size_od = gear_size_od  # gear radius: m
-        if heater_power is not None: self.heater_power = heater_power
 
         self.temperaturecontrollers = TemperatureControllers(**kwargs["temperature_controllers"])
         self.software = Software(**kwargs["software"])
@@ -245,19 +237,24 @@ class Settings(object):
     retraction_distance - retraction distance (mm)
     """
 
-    def __init__(self, material=None, nozzle=None, machine=None, speed_travel = None, track_width=None, track_width_raft =None, track_height=None, track_height_raft=None, temperature_extruder_raft=None,
-                 speed_printing_raft=None, temperature_extruder=None, extrusion_multiplier=None,
-                 speed_printing=None, retraction_distance=None, retraction_restart_distance=None, retraction_speed=None, coasting_distance=None,
-                 ventilator_entry=None, ventilator_exit=None, raft_density=None,
+    def __init__(self, material=None, nozzle=None, machine=None,
+                 track_width=None, track_width_raft =None, track_height=None, track_height_raft=None,
+                 temperature_extruder_raft=None, temperature_extruder=None,
+                 speed_travel=None, speed_printing=None, speed_printing_raft=None, extrusion_multiplier=None,
+                 retraction_distance=None, retraction_restart_distance=None, retraction_speed=None, coasting_distance=None,
+                 raft_density=None,
                  optimize_temperature_printbed=None, optimize_speed_printing=None, optimize_track_height=None, *args, **kwargs):
 
         self.speed_travel = speed_travel
 
         self.material = Material(None, None, None, None, None) # TODO why 1.75
+        self.nozzle = nozzle
+
         self.track_width = track_width
         self.track_width_raft = track_width_raft
         self.track_height = track_height
         self.track_height_raft = track_height_raft
+
         self.speed_printing = speed_printing
         self.speed_printing_raft = speed_printing/2 if speed_printing_raft is None else speed_printing_raft
 
@@ -272,19 +269,26 @@ class Settings(object):
         self.retraction_speed = retraction_speed
         self.coasting_distance = coasting_distance
 
-        self.ventilator_entry = ventilator_entry  # (%)
-        self.ventilator_exit = ventilator_exit # (%)
-
         self.raft_density = 100 if raft_density is None else raft_density  # (%)
+
         self.optimize_temperature_printbed = optimize_temperature_printbed  # True if ones wants to optimize temperature_printbed
         self.optimize_speed_printing = optimize_speed_printing  # True if ones wants to optimize speed_printing
         self.optimize_track_height = optimize_track_height  # True if ones wants to optimize track_height
 
-        self.temperature_chamber = machine.temperaturecontrollers.chamber.temperature_chamber_setpoint if machine.temperaturecontrollers.chamber.chamber_heatable else None
-        self.temperature_printbed = machine.temperaturecontrollers.printbed.temperature_printbed_setpoint if machine.temperaturecontrollers.printbed.printbed_heatable else None
-        self.part_cooling = machine.temperaturecontrollers.extruder.part_cooling_setpoint if machine.temperaturecontrollers.extruder.part_cooling else None
+        self.part_cooling = machine.temperaturecontrollers.extruder.part_cooling
+        self.part_cooling_setpoint = machine.temperaturecontrollers.extruder.part_cooling_setpoint if self.part_cooling else None
 
-        self.nozzle = nozzle
+        self.chamber_heatable = machine.temperaturecontrollers.chamber.chamber_heatable
+        self.temperature_chamber_setpoint = machine.temperaturecontrollers.chamber.temperature_chamber_setpoint if self.chamber_heatable else None
+
+        self.printbed_heatable = machine.temperaturecontrollers.printbed.printbed_heatable
+        self.temperature_printbed_setpoint = machine.temperaturecontrollers.printbed.temperature_printbed_setpoint if self.printbed_heatable else None
+
+        self.ventilator_entry = machine.temperaturecontrollers.chamber.ventilator_entry
+        self.ventilator_entry_setpoint = machine.temperaturecontrollers.chamber.ventilator_entry_setpoint if self.ventilator_entry else None
+
+        self.ventilator_exit = machine.temperaturecontrollers.chamber.ventilator_exit
+        self.ventilator_exit_setpoint = machine.temperaturecontrollers.chamber.ventilator_exit_setpoint if self.ventilator_exit else None
 
 
 class Parameter(object):
@@ -293,10 +297,12 @@ class Parameter(object):
         self.units = units
         self.precision = precision
         if value:
-            self.values = []
-            self.value = value
+            if isinstance(value, list):
+                self.values = value
+            else:
+                self.value = value
         else:
-            self.values = None
+            self.value = None
             if default_value:
                 self.default_value = default_value
                 self.min_default = default_value[0]
@@ -389,8 +395,6 @@ def minmax_track_width_height_raft(machine: Machine, number_of_test_structures=N
 
 
 def minmax_temperature(material: Material, machine: Machine, number_of_test_structures: int):
-    temperature_all = None
-
     temperature_extruder_min = machine.settings.temperature_extruder_raft
     temperature_extruder_max = min(machine.temperaturecontrollers.extruder.temperature_max, 1.070 * (machine.settings.temperature_extruder_raft + 273.15) - 273.15)
 

@@ -154,6 +154,6 @@ if "notes" in import_json_dict["session"]:
     main_info = "Notes: {0}".format(str(import_json_dict["session"]["notes"]))
     elements.append(Paragraph(main_info, style=style_text))
 
-# Send the data and build the file
+# Build the file
 
 doc.build(elements)
