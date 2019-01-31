@@ -198,7 +198,7 @@ def flat_test_parameter_one_vs_parameter_two(ts: TestSetupA):
                         y=0 if (current_test_structure == 0 and ts.raft) else +ts.step_y,
                         lift=1)
 
-            ts.g.abs_travel(z=+ts.abs_z[current_test_structure])
+            ts.g.abs_move(z=+ts.abs_z[current_test_structure])
 
         for current_substructure in range(ts.number_of_substructures):
             if ts.test_info.parameter_two is None:
@@ -505,9 +505,11 @@ def retraction_distance(ts: TestSetupA):
 
     ts.g.write("; --- start to print the test structure ---")
 
-    test_structure_separation = (ts.test_structure_size - sum(map(lambda x, y: x * y, [ts.number_of_lines]*ts.number_of_test_structures, ts.step_x)))/(ts.number_of_test_structures+1)
-    test_structure_width = [0.]
-    test_structure_width.extend([ts.number_of_lines * k for k in ts.step_x])
+    ts.g.travel(x=-ts.test_structure_width[0] - ts.test_structure_separation,
+                y=0,  # +ts.step_y-ts.test_structure_size/ts.number_of_substructures if current_test_structure != 0 else
+                lift=1)
+
+    ts.g.abs_move(z=+ts.abs_z[0])
 
     for current_test_structure in range(ts.number_of_test_structures):
         if ts.test_name == "extrusion temperature vs retraction distance":
@@ -522,43 +524,41 @@ def retraction_distance(ts: TestSetupA):
         elif ts.test_name == "retraction distance vs retraction speed":
             return
 
-        ts.g.set_extruder_temperature(ts.temperature_extruder[current_test_structure], ts.extruder)
         ts.g.write(ts.comment2)
 
-        for current_layer in range(0, ts.number_of_layers): # layers
-            ts.g.abs_travel(x=+ts.test_structure_size/2 - (sum_of_list_elements(test_structure_width, current_test_structure) + (current_test_structure + 1) * test_structure_separation),
-                            y=+ts.test_structure_size/2,
-                            z=+ts.abs_z[current_test_structure]+current_layer*ts.track_height[current_test_structure],
-                            lift=1)
+        if ts.test_name == "extrusion temperature vs retraction distance":
+            ts.g.travel(x=0,
+                        y=+ts.test_structure_size/7,
+                        z=+ts.abs_z[current_test_structure],
+                        retraction_speed=ts.retraction_speed[0],
+                        retraction_distance=np.mean(ts.retraction_distance))
+            ts.g.set_extruder_temperature(ts.temperature_extruder[current_test_structure], ts.extruder)
+            ts.g.dwell(30, ts.extruder)
+            output = "G1 F500 E" + "{:.3f}".format(4*ts.temperature_extruder[current_test_structure] / ts.temperature_extruder[0]) + \
+                     "; extrude " + "{:.3f}".format(4*ts.temperature_extruder[current_test_structure] / ts.temperature_extruder[0]) + " mm of material"
+            ts.g.write(output)
+            ts.g.move(x=0,
+                      y=-ts.test_structure_size/7,
+                      z=-ts.abs_z[current_test_structure],
+                      extrude=True, extrusion_multiplier=0)
+
+        for current_substructure in range(ts.number_of_substructures):
+            if ts.test_name == "retraction distance":
+                current_retraction_distance = ts.retraction_distance[(current_test_structure)]
+                output = str("; --- testing the {0} of {1} {2} ---".format(ts.parameter_one.name, ts.parameter_one.precision, ts.parameter_one.units))
+                output = str(output.format(ts.parameter_one.values[current_test_structure]))
+                ts.g.write(output)
 
             if ts.test_name == "extrusion temperature vs retraction distance":
-                ts.g.travel(x=0,
-                            y=+ts.test_structure_size/7,
-                            z=+ts.abs_z[current_test_structure], retraction_speed=ts.retraction_speed[0], retraction_distance=np.mean(ts.retraction_distance))
-                ts.g.set_extruder_temperature(ts.temperature_extruder[current_test_structure], ts.extruder)
-                ts.g.dwell(30, ts.extruder)
-                output = "G1 F500 E" + "{:.3f}".format(4 * ts.temperature_extruder[current_test_structure] / ts.temperature_extruder[0]) + \
-                         "; extrude " + "{:.3f}".format(4 * ts.temperature_extruder[current_test_structure] / ts.temperature_extruder[0]) + " mm of material"
+                current_temperature_extruder = ts.temperature_extruder[current_test_structure]
+                current_retraction_distance = ts.retraction_distance[current_substructure]
+                output = str("; --- testing the {0} of {1} {2} ---".format(ts.parameter_two.name, ts.parameter_two.precision, ts.parameter_two.units))
+                output = str(output.format(ts.parameter_two.values[current_substructure]))
                 ts.g.write(output)
-                ts.g.move(x=0,
-                          y=-ts.test_structure_size/7,
-                          z=-ts.abs_z[current_test_structure],
-                          extrude=True, extrusion_multiplier=0)
 
-            for current_substructure in range(ts.number_of_substructures):
+            ts.g.set_extruder_temperature(current_temperature_extruder, ts.extruder)
 
-                if ts.test_name == "retraction distance":
-                    current_retraction_distance = ts.retraction_distance[(current_test_structure)]
-                    output = str("; --- testing the {0} of {1} {2} ---".format(ts.parameter_one.name, ts.parameter_one.precision, ts.parameter_one.units))
-                    output = str(output.format(ts.parameter_one.values[current_test_structure]))
-                    ts.g.write(output)
-
-                if ts.test_name == "extrusion temperature vs retraction distance":
-                    current_retraction_distance = ts.retraction_distance[current_substructure]
-                    output = str("; --- testing the {0} of {1} {2} ---".format(ts.parameter_two.name, ts.parameter_two.precision, ts.parameter_two.units))
-                    output = str(output.format(ts.parameter_two.values[current_substructure]))
-                    ts.g.write(output)
-
+            for current_layer in range(0, ts.number_of_layers):  # layers
                 for current_line in range(ts.number_of_lines):
                     step_x = ts.step_x[current_test_structure]
                     ts.g.move(x=-step_x,
@@ -570,7 +570,8 @@ def retraction_distance(ts: TestSetupA):
                     ts.g.move(x=0,
                               y=((-1)**(current_line+1))*ts.step_y/(3*ts.number_of_substructures),
                               z=0,
-                              extrude=True, extrusion_multiplier=ts.extrusion_multiplier[current_test_structure], coef_h=ts.coef_h[current_test_structure], coef_w=ts.coef_w[current_test_structure])
+                              extrude=True, extrusion_multiplier=ts.extrusion_multiplier[current_test_structure],
+                              coef_h=ts.coef_h[current_test_structure], coef_w=ts.coef_w[current_test_structure])
 
                     output = "G1 F"+str(ts.retraction_speed[current_line]*60)+" E{:.3f}".format(-current_retraction_distance)+"; retract the filament"
                     ts.g.write(output)
@@ -590,11 +591,25 @@ def retraction_distance(ts: TestSetupA):
                               z=0,
                               extrude=True, extrusion_multiplier=ts.extrusion_multiplier[current_test_structure], coef_h=ts.coef_h[current_test_structure], coef_w=ts.coef_w[current_test_structure])
 
-                if current_substructure != ts.number_of_substructures-1:
-                    ts.g.move(x=step_x*ts.number_of_lines,
-                              y=-ts.step_y/(ts.number_of_substructures),
-                              z=0,
-                              extrude=False, extrusion_multiplier=0)  # small X step
+                if current_layer == ts.number_of_layers - 1:
+                    if current_substructure == ts.number_of_substructures - 1:
+                        ts.g.travel(x=-ts.test_structure_separation,
+                                    y=+(ts.number_of_substructures - 1)*ts.step_y/ts.number_of_substructures,
+                                    lift=1)
+                        ts.g.abs_move(z=+ts.abs_z[current_test_structure],
+                                      extrude=False, extrusion_multiplier=0)
+                    else:
+                        ts.g.travel(x=+step_x*ts.number_of_lines,
+                                    y=-ts.step_y/ts.number_of_substructures,
+                                    lift=1)
+                        ts.g.abs_move(z=+ts.abs_z[current_test_structure],
+                                      extrude=False, extrusion_multiplier=0)
+                else:
+                        ts.g.travel(x=+step_x*ts.number_of_lines,
+                                    lift=1)
+                        ts.g.move(z=+ts.track_height[current_test_structure],
+                                  extrude=False, extrusion_multiplier=0)
+
 
     ts.g.write("; --- finish to print the test structure ---")
     ts.g.teardown()

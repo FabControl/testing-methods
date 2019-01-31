@@ -195,7 +195,7 @@ def test_info(persistence):
                                  Parameter("retraction speed", "mm/s", "{:.1f}", value=persistence["settings"]["retraction_speed"])])
 
         test_info = TestInfo("bridging extrusion-multiplier vs bridging printing speed", number_of_layers=8, number_of_test_structures=7, number_of_substructures=number_of_substructures, raft=True,
-                                parameter_one=Parameter("bridging extrusion multiplier", "-", "{:.3f}",default_value=[1.0, 2.0]),
+                                parameter_one=Parameter("bridging extrusion multiplier", "-", "{:.3f}", default_value=[1.0, 2.0]),
                                 parameter_two=Parameter("bridging printing speed", "mm/s", "{:.1f}"),
                                 other_parameters=other_parameters)
 
