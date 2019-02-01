@@ -36,7 +36,7 @@ def initialize_test():
                         parameter_three_min_max=parameter_three_min_max,
                         offset=persistence["session"]["offset"] if persistence["session"]["offset"] else None)
 
-        if persistence["session"]["test_name"] == ("08" or "10"):
+        if persistence["session"]["test_name"] == "08" or "10":
             retraction_distance(ts)
         elif persistence["session"]["test_name"] == "12":
             retraction_restart_distance_vs_coasting_distance(ts)
@@ -83,8 +83,8 @@ if machine.settings.optimize_speed_printing:
 
     for dummy0 in range(0, number_of_iterations + 1):
         gamma_dot, visc, param_power_law = rheology(material, machine, delta_p_estimate, 7)
-        gamma_dot_out = shear_rate(machine, param_power_law[int(len(param_power_law) / 2)])
-        delta_p_out, comment = pressure_drop(machine, param_power_law[int(len(param_power_law) / 2)])
+        gamma_dot_out = shear_rate(machine, param_power_law[int(len(param_power_law)/2)])
+        delta_p_out, comment = pressure_drop(machine, param_power_law[int(len(param_power_law)/2)])
 
         if dummy0 == number_of_iterations:
             plotting_mfr(material, machine, gamma_dot, visc, param_power_law, 7)
@@ -120,11 +120,6 @@ if quiet:
     persistence["settings"]["temperature_printbed_setpoint"] = machine.settings.temperature_printbed_setpoint
     persistence["settings"]["temperature_chamber_setpoint"] = machine.settings.temperature_chamber_setpoint
     persistence["settings"]["part_cooling_setpoint"] = machine.settings.part_cooling_setpoint
-
-    # if ts.test_name == "first-layer track height":
-    #     persistence["settings"]["track_width_raft"] = np.mean(ts.track_width)
-    # if ts.test_name == "track height":
-    #     persistence["settings"]["track_width"] = np.mean(ts.track_width)
 
     current_test = {"test_name": ts.test_name,
                     "executed": True,

@@ -278,25 +278,19 @@ class TestSetupA(object):
         volumetric_flow_rate = []
         volumetric_flow_rate_row = []
 
-        for speed in self.speed_printing:
-            for dummy in range(self.number_of_test_structures):
-                if self.test_name == "bridging extrusion-multiplier vs bridging printing speed":
-                    value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier_bridging[dummy]), 3)
-                else:
-                    value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
-                volumetric_flow_rate_row.append(value)
-                if dummy == self.number_of_test_structures-1:
-                    volumetric_flow_rate.append(volumetric_flow_rate_row)
-                    volumetric_flow_rate_row = []
-        # else:
-        #     for dummy in range(self.number_of_test_structures):
-        #         print(self.speed_printing)
-        #         value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], self.speed_printing[dummy], self.extrusion_multiplier[dummy]), 3)
-        #
-        #         volumetric_flow_rate_row.append(value)
-        #         if dummy == self.number_of_test_structures-1:
-        #             volumetric_flow_rate.append(volumetric_flow_rate_row)
-        #             volumetric_flow_rate_row = []
+        if self.test_name == "extrusion temperature vs retraction distance" or "retraction distance":
+            volumetric_flow_rate = round(flow_rate(self.track_height[0], self.track_width[0], self.speed_printing[0], self.extrusion_multiplier_bridging[0]), 3)
+        else:
+            for speed in self.speed_printing:
+                for dummy in range(self.number_of_test_structures):
+                    if self.test_name == "bridging extrusion-multiplier vs bridging printing speed":
+                        value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier_bridging[dummy]), 3)
+                    else:
+                        value = round(flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
+                    volumetric_flow_rate_row.append(value)
+                    if dummy == self.number_of_test_structures-1:
+                        volumetric_flow_rate.append(volumetric_flow_rate_row)
+                        volumetric_flow_rate_row = []
 
         self.volumetric_flow_rate = volumetric_flow_rate
 
@@ -332,7 +326,7 @@ def addcomment1(test_info: TestInfo):
             comment3 = str("; --- and the following " + test_info.parameter_three.name + " values: " + ", ".join((test_info.parameter_three.precision + " {}").format(*k) for k in zip(test_info.parameter_three.values, len(test_info.parameter_three.values)*[test_info.parameter_three.units])) + " ---")
             return comment1+"\n"+comment2+"\n"+comment3
         else:
-            return comment1 + "\n" + comment2
+            return comment1+"\n"+comment2
     return comment1
 
 
