@@ -22,100 +22,133 @@ try:
 except:
     exception_handler("falling back to hardcoded JSON")
     persistence = {
-        "material": {
-            "name": "Nanodiamond B",
-            "manufacturer": "?",
-            "material_group": "filled polymer",
-            "polymer_class": "PLA",
-            "id": "123456",
-            "size_od": 1.75,
-            "temperature_melting": 178,
-            "temperature_destr": 320,
-            "density_rt": 1.2,  # optional
-            "drying": {
-                "dried": True,
-                "drying_temperature": 80,
-                "drying_time": 240,
-                "drying_airflow": 40,
-                "feeding_temperature": 40,
-                "feeding_airflow": 10
+    "machine": {
+        "sn": 12345,
+        "model": "--",
+        "manufacturer": "Ultimaker",
+        "buildarea_maxdim1": 223,
+        "buildarea_maxdim2": 223,
+        "max_dimension_z": 205,
+        "form": "cartesian",
+        "temperature_controllers": {
+            "extruder": {
+                "gcode_command": "M109 S{0} {1}",
+                "temperature_max": 300,
+                "temperature_min": 30,
+                "part_cooling": False,
+                "part_cooling_gcode_command": "M106 S{0}",
+                "part_cooling_setpoint": 0,
+                "nozzle": {
+                    "type": "brass",
+                    "size_id": 0.4,
+                    "size_od": 5.0,
+                    "size_capillary_length": 5,
+                    "size_angle": 60,
+                    "size_extruder_id": 1.95
+                }
             },
-        },
-        "machine": {
-            "manufacturer": "Mass Portal",
-            "model": "Pharaoh D20",
-            "sn": 0,
-            "form": "elliptic",  # "elliptic", "cartesian"
-            "buildarea_maxdim1": 145,
-            "buildarea_maxdim2": 145,
-            "max_dimension_z": 200,
-            "temperature_extruder_max": 320,
-            "temperature_extruder_min": 190,
-            "nozzle": {
-                "size_id": 0.4,
-                "size_od": 0.64,
-                "size_capillary_length": 5,  # optional
-                "size_angle": 60,  # optional
-                "size_extruder_id": 1.95,
-                "type": "brass"
-            },
-            "ventilators": {
-                "ventilator_part_cooling": True,
-                "ventilator_entry": True,
-                "ventilator_exit": True
-            },
-            "software": {
-                "version": "2.1"
-            },
-            "firmware": {
-                "fw_type": "Repetier",
-                "version": "2.0"
+            "chamber": {
+                "tool": "",
+                "gcode_command": "M141 S{0}",
+                "temperature_min": 30,
+                "temperature_max": 80,
+                "chamber_heatable": False,
+                "temperature_chamber_setpoint": 80,
+                "ventilator_exit": False,
+                "ventilator_exit_tool": "P1",
+                "ventilator_exit_gcode_command": "M106 {0} S{1}",
+                "ventilator_entry": False,
+                "ventilator_entry_tool": "P2",
+                "ventilator_entry_gcode_command": "M106 {0} S{1}"
             },
             "printbed": {
+                "tool": "T1",
+                "gcode_command": "M190 S{0} {1}",
+                "temperature_min": 20,
+                "temperature_max": 100,
                 "printbed_heatable": True,
-                "temperature_printbed_max": 115,
-                "temperature_printbed_min": 40
+                "temperature_printbed_setpoint": 55,
+                "material": "?",
+                "coating": "None"
             }
         },
-        "settings": {
-            "optimize_speed_printing": True,  # optional
-            "ventilator_part_cooling": 0,
-            "ventilator_entry": 0,
-            "ventilator_exit": 0,
-            "raft_density": 100,
-            "temperature_printbed": 100,
-            "temperature_extruder_raft": 235,
-            "track_height_raft": 0.25,
-            "track_width_raft": 0.4,
-            "speed_printing_raft": 20,
-            "temperature_extruder": 235,
-            "track_height": 0.2,
-            "track_width": 0.4,
-            "speed_printing": 40,
-            "speed_travel": 150,
-            "extrusion_multiplier": 1.0,
-            "retraction_distance": 0,
-            "retraction_restart_distance": 0.0,
-            "retraction_speed": 80,
-            "coasting_distance": 0.0,
-            "critical_overhang_angle": 36.0,
-            "bridging_part_cooling": 100,
-            "bridging_extrusion_multiplier": 1,
-            "bridging_speed_printing": 40
+        "software": {
+            "version": "version"
         },
-        "session": {
-            "uid": 20180529,
-            "user_id": "GB",
-            "previous_tests": [],
-            "test_type": "A",
-            "test_name": "01",
-            "min_max": None,
-            "min_max_speed": [10, 30],
-            "slicer": "Prusa Slic3r",
-            "number_of_test_structures": 7,
-            "target": "aesthetics"
+        "firmware": {
+            "version": "2.0",
+            "fw_type": "fw_type"
         }
+    },
+    "material": {
+        "id": "79",
+        "drying": {
+            "dried": False,
+            "drying_time": 0,
+            "feeding_airflow": 0,
+            "drying_airflow": 0,
+            "feeding_temperature": 0,
+            "drying_temperature": 0
+        },
+        "size_od": 2.85,
+        "material_group": "non_filled",
+        "density_rt": 1.13,
+        "mvr": 2.3,
+        "load_mfr": 2.16,
+        "temperature_mfr": 200,
+        "temperature_glass": 255,
+        "name": "Novamid ID1030",
+        "manufacturer": "DSM"
+    },
+    "session": {
+        "uid": 129,
+        "target": "mechanical_strength",
+        "test_name": "08",
+        "min_max_parameter_one": None,
+        "min_max_parameter_two": [
+            0,
+            6
+        ],
+        "min_max_parameter_three": [
+            35,
+            80
+        ],
+        "test_type": "A",
+        "user_id": "Daniel Tom\u0106\u00a0s",
+        "offset": [
+            0,
+            0
+        ],
+        "slicer": "prusa slic3r",
+        "previous_tests": [],
+        "number_of_test_structures": 7
+    },
+    "settings": {
+        "speed_travel": 140,
+        "raft_density": 100,
+        "speed_printing_raft": 30.0,
+        "track_height": 0.2,
+        "track_height_raft": 0.25,
+        "track_width": 0.4,
+        "track_width_raft": 0.4,
+        "extrusion_multiplier": 1.1,
+        "temperature_extruder": 257,
+        "temperature_extruder_raft": 255,
+        "retraction_restart_distance": 0,
+        "retraction_speed": 50,
+        "bridging_extrusion_multiplier": 1,
+        "bridging_part_cooling": 100,
+        "bridging_speed_printing": 40,
+        "speed_printing": 50,
+        "optimize_speed_printing": True,
+        "retraction_distance": 6.0,
+        "coasting_distance": 0,
+        "critical_overhang_angle": 45.0,
+        "temperature_printbed_setpoint": 55,
+        "temperature_chamber_setpoint": None,
+        "part_cooling_setpoint": None
     }
+}
 
 session_idn = str(persistence["session"]["uid"])
 

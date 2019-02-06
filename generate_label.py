@@ -7,6 +7,7 @@ Label Generator
 from Globals import filename
 from paths import *
 
+
 from PIL import Image, ImageFont, ImageDraw
 scale = 3
 
@@ -40,7 +41,7 @@ def generate_label(import_json_dict):
 
         n = 0
         draw.text((0, n * font_size), "Session ID: {0}, User ID: {1}".format(import_json_dict["session"]["uid"],
-                                                                           import_json_dict["session"]["user_id"]), (0, 0, 0), font=font_bold)
+                                                                             import_json_dict["session"]["user_id"]), (0, 0, 0), font=font_bold)
         n += 1
         draw.text((0, n * font_size), "G-code name: {0}".format(import_json_dict["session"]["previous_tests"][-1]["gcode_path"].split("gcodes")[-1].translate("\\//"), (0, 0, 0), font=font))
         n += 1
@@ -89,13 +90,15 @@ def generate_label(import_json_dict):
                 draw.rectangle(((2*square_size*(1*parameter_ind+0)+4*font_size, 2*square_size + horizontal_offset),
                                 (1*square_size*(2*parameter_ind+1)+4*font_size, 1*square_size + horizontal_offset)), fill="white", outline="black")
         else:
-            for printing_speed_ind in range(len(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_two_values"])):
-                parameter_value = import_json_dict["session"]["previous_tests"][-1]["tested_parameter_two_values"][printing_speed_ind]
-                draw.text((0, 2*printing_speed_ind*square_size+n*font_size), "{0} {1}".format(parameter_value, import_json_dict["session"]["previous_tests"][-1]["parameter_two_units"]), (0, 0, 0), font=font_small)
+            if import_json_dict["session"]["previous_tests"][-1]["tested_parameter_two_values"]:
 
-                for parameter_ind in range(len(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_one_values"])):
-                    draw.rectangle(((square_size*(2*parameter_ind+0)+6*font_size, square_size*(2*printing_speed_ind+2)+horizontal_offset),
-                                    (square_size*(2*parameter_ind+1)+6*font_size, square_size*(2*printing_speed_ind+3)+horizontal_offset)), fill="white", outline="black")
+                for printing_speed_ind in range(len(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_two_values"])):
+                    parameter_value = import_json_dict["session"]["previous_tests"][-1]["tested_parameter_two_values"][printing_speed_ind]
+                    draw.text((0, 2*printing_speed_ind*square_size+n*font_size), "{0} {1}".format(parameter_value, import_json_dict["session"]["previous_tests"][-1]["parameter_two_units"]), (0, 0, 0), font=font_small)
+
+                    for parameter_ind in range(len(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_one_values"])):
+                        draw.rectangle(((square_size*(2*parameter_ind+0)+6*font_size, square_size*(2*printing_speed_ind+2)+horizontal_offset),
+                                        (square_size*(2*parameter_ind+1)+6*font_size, square_size*(2*printing_speed_ind+3)+horizontal_offset)), fill="white", outline="black")
 
         ImageDraw.Draw(img)
 

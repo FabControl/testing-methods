@@ -2,7 +2,7 @@ from Definitions import *
 from Globals import machine
 from TestSetupA import TestSetupA
 from TestSetupB import TestSetupB
-
+from paths import footer
 
 # WIPE
 def wipe(ts: TestSetupA or TestSetupB, length_multiplier=1):
@@ -249,6 +249,7 @@ def flat_test_parameter_one_vs_parameter_two(ts: TestSetupA):
                               extrude=False, extrusion_multiplier=0)
 
     ts.g.write("; --- finish to print the test structure ---")
+    generate_footer(ts)
     ts.g.teardown()
 
     return
@@ -427,6 +428,10 @@ def bridging_test(ts: TestSetupA):
                     retraction_speed=ts.retraction_speed,
                     retraction_distance=np.mean(ts.retraction_distance))
 
+    ts.g.write("; --- finish to print the test structure ---")
+    generate_footer(ts)
+    ts.g.teardown()
+
     return
 
 
@@ -551,6 +556,29 @@ def retraction_distance(ts: TestSetupA):
                               extrude=False, extrusion_multiplier=0)
 
     ts.g.write("; --- finish to print the test structure ---")
+    generate_footer(ts)
     ts.g.teardown()
 
     return
+
+def generate_footer(ts: TestSetupA):
+    custom_footer = ";--- start footer ---\n; end of the test routine\n"
+
+    if ts.chamber_heatable:
+        custom_footer = custom_footer + ts.chamber.gcode_command.format(ts.chamber.temperature_min, ts.chamber.tool) + "; set the chamber temperature\n"
+
+    if ts.printbed_heatable:
+        custom_footer = custom_footer + ts.printbed.gcode_command.format(ts.printbed.temperature_min, ts.printbed.tool) + "; set the print bed temperature\n"
+
+    custom_footer = custom_footer + ts.extruder.gcode_command.format(0, ts.extruder.tool) + "; set the extruder temperature\n"
+
+    if ts.part_cooling:
+        custom_footer = custom_footer + ts.part_cooling_gcode_command.format(0) + "; set the part cooling\n"
+
+    custom_footer = custom_footer + "G28; move to the home position\nM84; disable motors\n;--- end footer ---"
+
+    with open(footer, "w") as f:
+        f.write(custom_footer)
+
+    return custom_footer
+

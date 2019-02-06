@@ -23,6 +23,7 @@ class TestSetupA(object):
         self.part_cooling = machine.temperaturecontrollers.extruder.part_cooling
         if self.part_cooling:
             self.part_cooling_setpoint = machine.temperaturecontrollers.extruder.part_cooling_setpoint
+            self.part_cooling_gcode_command = machine.temperaturecontrollers.extruder.part_cooling_gcode_command
 
         self.ventilator_entry = machine.temperaturecontrollers.chamber.ventilator_entry
         if self.ventilator_entry:
@@ -32,10 +33,12 @@ class TestSetupA(object):
         if self.ventilator_exit:
             self.ventilator_exit_setpoint = machine.settings.ventilator_exit_setpoint
 
-        if machine.temperaturecontrollers.chamber.chamber_heatable:
+        self.chamber_heatable = machine.temperaturecontrollers.chamber.chamber_heatable
+        if self.chamber_heatable:
             self.chamber = machine.temperaturecontrollers.chamber
 
-        if machine.temperaturecontrollers.printbed.printbed_heatable:
+        self.printbed_heatable = machine.temperaturecontrollers.printbed.printbed_heatable
+        if self.printbed_heatable:
             self.printbed = machine.temperaturecontrollers.printbed
 
         self.test_info = test_info

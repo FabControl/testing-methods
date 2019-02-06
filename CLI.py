@@ -36,7 +36,9 @@ def initialize_test():
                         parameter_three_min_max=parameter_three_min_max,
                         offset=persistence["session"]["offset"] if persistence["session"]["offset"] else None)
 
-        if persistence["session"]["test_name"] == "08" or "10":
+        if persistence["session"]["test_name"] == "08":
+            retraction_distance(ts)
+        elif persistence["session"]["test_name"] == "10":
             retraction_distance(ts)
         elif persistence["session"]["test_name"] == "12":
             retraction_restart_distance_vs_coasting_distance(ts)
@@ -45,20 +47,11 @@ def initialize_test():
         else:
             flat_test_parameter_one_vs_parameter_two(ts)
 
-    elif persistence["session"]["test_type"] == "B":  # 'perimeter', 'overlap', 'path height', 'temperature'
-        ts = TestSetupB(machine, material, test_info,
-                        path=filename(session_id, "gcode"),
-                        min_max_argument=parameter_one_min_max,
-                        min_max_speed_printing=parameter_two_min_max,
-                        raft=True if persistence["settings"]["raft_density"] > 0 else False)
-
-        dimensional_test(ts)
-
     return ts
 
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='MP Feedstock Testing Suite')
+    arguments = docopt(__doc__, version='FabControl Feedstock Testing Suite')
 
     verbose = arguments["-v"]
     quiet = arguments["-q"]
