@@ -3,18 +3,19 @@ Populates persistence.json file with the selected values from a test. To be used
 interface after each test.
 
 Usage:
-    fill_values.py <session-id>
+    fill_values.py <session-id> <ind_one> [<ind_two>...]
 """
 
+from docopt import docopt
+import sys
 import json
 import numpy as np
 from CLI_helpers import separator
 import paths
-from docopt import docopt
-
 
 args = docopt(__doc__)
-session_id = args["<session-id>"]
+session_id = str(sys.argv[1])
+
 path = paths.json_folder + separator() + session_id + ".json"
 
 # Load persistence
@@ -23,42 +24,55 @@ with open(path, mode='r') as file:
 
 dummy = persistence["session"]["previous_tests"][-1]
 
-if dummy["test_name"] == "track height vs printing speed":
-    if dummy["executed"]:
-        persistence["settings"]["track_height"] = dummy["selected_parameter_one_value"]
-        persistence["settings"]["speed_printing"] = dummy["selected_parameter_two_value"]
-elif dummy["test_name"] == "first-layer track height vs first-layer printing speed":
-    print("hello")
+ind_parameter_one = int(sys.argv[2])
+dummy["selected_parameter_one_value"] = dummy["tested_parameter_one_values"][ind_parameter_one]
+
+if len(sys.argv) > 2:
+    ind_parameter_two = int(sys.argv[3])
+    dummy["selected_parameter_two_value"] = dummy["tested_parameter_two_values"][ind_parameter_two]
+    if len(sys.argv) > 3:
+        value_parameter_three = int(sys.argv[4])
+        dummy["selected_parameter_three_value"] = value_parameter_three
+
+if dummy["test_name"] == "first-layer track height vs first-layer printing speed":
     if dummy["executed"]:
         persistence["settings"]["track_height_raft"] = dummy["selected_parameter_one_value"]
         persistence["settings"]["speed_printing_raft"] = dummy["selected_parameter_two_value"]
-elif dummy["test_name"] == "track width":
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_two][ind_parameter_one]
+elif dummy["test_name"] == "first-layer track width":
     if dummy["executed"]:
-        persistence["settings"]["track_width"] = dummy["selected_parameter_one_value"]
-        persistence["settings"]["speed_printing"] = dummy["selected_parameter_two_value"]
+        persistence["settings"]["track_width_raft"] = dummy["selected_parameter_one_value"]
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_one]
 elif dummy["test_name"] == "extrusion temperature vs printing speed":
     if dummy["executed"]:
         persistence["settings"]["temperature_extruder"] = dummy["selected_parameter_one_value"]
         persistence["settings"]["speed_printing"] = dummy["selected_parameter_two_value"]
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_two][ind_parameter_one]
+elif dummy["test_name"] == "track height vs printing speed":
+    if dummy["executed"]:
+        persistence["settings"]["track_height"] = dummy["selected_parameter_one_value"]
+        persistence["settings"]["speed_printing"] = dummy["selected_parameter_two_value"]
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_two][ind_parameter_one]
+elif dummy["test_name"] == "track width":
+    if dummy["executed"]:
+        persistence["settings"]["track_width"] = dummy["selected_parameter_one_value"]
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_one]
 elif dummy["test_name"] == "extrusion multiplier vs printing speed":
     if dummy["executed"]:
         persistence["settings"]["extrusion_multiplier"] = dummy["selected_parameter_one_value"]
         persistence["settings"]["speed_printing"] = dummy["selected_parameter_two_value"]
-elif dummy["test_name"] == "bridging extrusion-multiplier":
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_two][ind_parameter_one]
+elif dummy["test_name"] == "bridging extrusion-multiplier vs bridging printing speed":
     if dummy["executed"]:
         persistence["settings"]["bridging_extrusion_multiplier"] = dummy["selected_parameter_one_value"]
         persistence["settings"]["bridging_speed_printing"] = dummy["selected_parameter_two_value"]
-
-index_one = dummy["tested_parameter_one_values"].index(dummy["selected_parameter_one_value"])
-index_two = dummy["tested_parameter_two_values"].index(dummy["selected_parameter_two_value"])
-persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][index_two][index_one]
-
-if (dummy["test_name"] == "printing speed") or (dummy["test_name"] == "first-layer track width") or (dummy["test_name"] == "retraction distance"):
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_two][ind_parameter_one]
+elif dummy["test_name"] == "extrusion temperature vs retraction distance":
     if dummy["executed"]:
-        persistence["settings"]["speed_printing"] = dummy["selected_parameter_one_value"]
-        index_one = dummy["tested_parameter_one_values"].index(dummy["selected_parameter_one_value"])
-        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][0][index_one]
-
+        persistence["settings"]["temperature_extruder"] = dummy["selected_parameter_one_value"]
+        persistence["settings"]["retraction_distance"] = dummy["selected_parameter_two_value"]
+        persistence["settings"]["retraction_speed"] = dummy["selected_parameter_three_value"]
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"]
 
 persistence["session"]["previous_tests"][-1]["estimated_printing_time_s"] = round(persistence["session"]["previous_tests"][-1]["extruded_filament_mm"]*np.pi*(persistence["material"]["size_od"]/2)**2/persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"],1)
 persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*persistence["settings"]["track_height"]/persistence["settings"]["track_width"])),0)
