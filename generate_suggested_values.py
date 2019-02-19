@@ -1,11 +1,15 @@
 """
-Returns suggested testing parameters, based on session specific Globals.
+FabControl Optimizer: Feedstock Material Testing
+Suggested Values Generator
+
+Returns suggested values of the testing parameters, based on session specific test_info.py.
 
 Usage:
    generate_suggested_values.py <session-id>
 """
 from Definitions import *
-from Globals import persistence, test_info
+from Globals import persistence
+from test_info import test_info
 from docopt import docopt
 
 arguments = docopt(__doc__)
@@ -19,13 +23,13 @@ machine = Machine(**persistence["machine"])
 machine.settings = Settings(**persistence["settings"])
 
 if len(persistence["session"]["previous_tests"]) > 0:
-    speed = 2 * persistence["session"]["previous_tests"][0]["selected_volumetric_flow-rate_value"]/machine.nozzle.size_id**2
+    speed = 2 * persistence["session"]["previous_tests"][0]["selected_volumetric_flow-rate_value"]/machine.temperaturecontrollers.extruder.nozzle.size_id**2
 else:
     speed = None
 
 suggested_values = {"temperature": border_values(minmax_temperature(material, machine, 7)),
-                   "track_height": [x * machine.nozzle.size_id for x in border_values(minmax_track_height(machine, 7))],
-                   "track_width": [x * machine.nozzle.size_id for x in border_values(list(minmax_track_width(machine, 7)[0]))],
+                   "track_height": [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(minmax_track_height(machine, 7))],
+                   "track_width": [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(list(minmax_track_width(machine, 7)[0]))],
                    "track_width_raft": border_values(minmax_track_width_height_raft(machine, 7)[3]),
                    "track_height_raft": [x * machine.nozzle.size_id for x in border_values(minmax_track_width_height_raft(machine, 7)[2])],
                    "speed_printing": [0.75*speed, 1.5*speed] if speed is not None else None,

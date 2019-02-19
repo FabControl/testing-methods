@@ -68,7 +68,7 @@ class Gplus(G):
 
     def dwell(self, time: int, extruder: Extruder):
         """ Pause code executions for the given amount of time """
-        self.write("G4 P{0} ".format(time * 1000) + extruder.tool + "; set the waiting time in ms")
+        self.write("G4 P{0:.0f} ".format(time) + extruder.tool + "; set the waiting time in ms")
 
     def home(self):
         """ Move the tool head to the home position (as defined in firmware).

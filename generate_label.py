@@ -1,6 +1,6 @@
 #!/usr/local/bin/python
 """
-Mass Portal Feedstock Testing Suite
+FabControl Optimizer: Feedstock Material Testing
 Label Generator
 """
 
@@ -91,11 +91,9 @@ def generate_label(import_json_dict):
                                 (1*square_size*(2*parameter_ind+1)+4*font_size, 1*square_size + horizontal_offset)), fill="white", outline="black")
         else:
             if import_json_dict["session"]["previous_tests"][-1]["tested_parameter_two_values"]:
-
                 for printing_speed_ind in range(len(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_two_values"])):
                     parameter_value = import_json_dict["session"]["previous_tests"][-1]["tested_parameter_two_values"][printing_speed_ind]
                     draw.text((0, 2*printing_speed_ind*square_size+n*font_size), "{0} {1}".format(parameter_value, import_json_dict["session"]["previous_tests"][-1]["parameter_two_units"]), (0, 0, 0), font=font_small)
-
                     for parameter_ind in range(len(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_one_values"])):
                         draw.rectangle(((square_size*(2*parameter_ind+0)+6*font_size, square_size*(2*printing_speed_ind+2)+horizontal_offset),
                                         (square_size*(2*parameter_ind+1)+6*font_size, square_size*(2*printing_speed_ind+3)+horizontal_offset)), fill="white", outline="black")

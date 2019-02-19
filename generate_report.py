@@ -1,6 +1,6 @@
 #!/usr/local/bin/python
 """
-Mass Portal Feedstock Testing Suite
+FabControl Optimizer: Feedstock Material Testing
 Test Report Generator
 
 Usage:

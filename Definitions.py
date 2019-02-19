@@ -356,7 +356,7 @@ def minmax_track_height(machine: Machine, number_of_test_structures: int):
 
 
 def minmax_track_width_height_raft(machine: Machine, number_of_test_structures=None):
-    coef_w_max_raft = machine.temperaturecontrollers.extruder.nozzle.size_od/machine.temperaturecontrollers.extruder.nozzle.size_id
+    coef_w_max_raft = 1.4
     coef_w_min_raft = 1.0
 
     if machine.temperaturecontrollers.extruder.nozzle.size_id == 0.1:
@@ -380,8 +380,8 @@ def minmax_track_width_height_raft(machine: Machine, number_of_test_structures=N
         coef_h_min_raft = 0.30
         coef_h_max_raft = 0.75
     else:
-        coef_h_min_raft = 1 / 4
-        coef_h_max_raft = 1 / 2
+        coef_h_min_raft = 1/4
+        coef_h_max_raft = 1/2
 
     coef_h_raft = (coef_h_min_raft + coef_h_max_raft)/2
     coef_w_raft = (coef_w_min_raft + coef_w_max_raft)/2
@@ -405,15 +405,15 @@ def minmax_temperature(material: Material, machine: Machine, number_of_test_stru
 
 
 def get_test_structure_size(machine):
-    test_structure_size = 55
+    test_structure_size = 60
     if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.29:
-        test_structure_size = 75
+        test_structure_size = 70
         if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.39:
-            test_structure_size = 100
+            test_structure_size = 80
             if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.59:
-                test_structure_size = 125
+                test_structure_size = 90
                 if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.99:
-                    test_structure_size = 150
+                    test_structure_size = 100
 
     return test_structure_size
 
