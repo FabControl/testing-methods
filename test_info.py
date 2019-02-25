@@ -115,9 +115,9 @@ def test_info(persistence):
                                  Parameter("printing speed", "mm/s", "{:.1f}", value=persistence["settings"]["speed_printing"])])
 
         test_info = TestInfo("extrusion temperature vs retraction distance", number_of_layers=3, number_of_test_structures=7, number_of_substructures=number_of_substructures, raft=True,
-                             parameter_one=Parameter("extrusion temperature", "degC", "{:.1f}"),
-                             parameter_two=Parameter("retraction distance", "mm", "{:.3f}"),
-                             parameter_three=Parameter("retraction speed", "mm/s", "{:.1f}"),
+                             parameter_one=Parameter("extrusion temperature", "degC", "{:.1f}", default_value=[persistence["settings"]["temperature_extruder"]-5, persistence["settings"]["temperature_extruder"]+5]),
+                             parameter_two=Parameter("retraction distance", "mm", "{:.3f}", default_value=[0.0, 4.0]),
+                             parameter_three=Parameter("retraction speed", "mm/s", "{:.1f}", default_value=[60, 120]),
                              other_parameters=other_parameters)
 
     elif persistence["session"]["test_name"] == "09":
@@ -132,7 +132,7 @@ def test_info(persistence):
 
         test_info = TestInfo("retraction distance vs printing speed", number_of_layers=3, number_of_test_structures=7, number_of_substructures=number_of_substructures, raft=True,
                              parameter_one=Parameter("retraction distance", "mm", "{:.3f}", default_value=[0.0, 4.0]),
-                             parameter_two=Parameter("printing speed", "mm/s", "{:.1f}",default_value=[0.80, 1.75]),
+                             parameter_two=Parameter("printing speed", "mm/s", "{:.1f}", default_value=[0.80, 1.75]),
                              other_parameters=other_parameters)
 
     elif persistence["session"]["test_name"] == "10":

@@ -22,7 +22,7 @@ class TestSetupA(object):
 
         self.part_cooling = machine.temperaturecontrollers.extruder.part_cooling
         if self.part_cooling:
-            self.part_cooling_setpoint = machine.temperaturecontrollers.extruder.part_cooling_setpoint
+            self.part_cooling_setpoint = machine.settings.part_cooling_setpoint
             self.part_cooling_gcode_command = machine.temperaturecontrollers.extruder.part_cooling_gcode_command
 
         self.ventilator_entry = machine.temperaturecontrollers.chamber.ventilator_entry
@@ -36,10 +36,12 @@ class TestSetupA(object):
         self.chamber_heatable = machine.temperaturecontrollers.chamber.chamber_heatable
         if self.chamber_heatable:
             self.chamber = machine.temperaturecontrollers.chamber
+            self.temperature_chamber_setpoint = machine.settings.temperature_chamber_setpoint
 
         self.printbed_heatable = machine.temperaturecontrollers.printbed.printbed_heatable
         if self.printbed_heatable:
             self.printbed = machine.temperaturecontrollers.printbed
+            self.temperature_printbed_setpoint = machine.settings.temperature_printbed_setpoint
 
         self.test_info = test_info
         self.number_of_test_structures = test_info.number_of_test_structures
@@ -54,7 +56,8 @@ class TestSetupA(object):
 
         self.raft = test_info.raft
 
-        self.coef_h_raft, self.coef_w_raft, self.coef_h_raft_all, self.coef_w_raft_all = minmax_track_width_height_raft(machine, self.number_of_test_structures)
+        self.coef_h_raft_all = minmax_track_height_raft(machine, self.number_of_test_structures)
+        self.coef_w_raft_all = minmax_track_width_raft(machine, self.number_of_test_structures)
 
         if machine.settings.track_height_raft is not None:
             self.coef_h_raft = machine.settings.track_height_raft/machine.temperaturecontrollers.extruder.nozzle.size_id
@@ -140,7 +143,7 @@ class TestSetupA(object):
         elif self.test_name == "extrusion temperature vs printing speed":
             # EXTRUSION TEMPERATURE test parameters
             if parameter_one_min_max is None:
-                self.temperature_extruder = minmax_temperature(material, machine, self.number_of_test_structures)
+                self.temperature_extruder = minmax_temperature(machine, self.number_of_test_structures)
             else:
                 self.temperature_extruder = np.linspace(parameter_one_min_max[0], parameter_one_min_max[1], self.number_of_test_structures).tolist()
 
@@ -221,7 +224,7 @@ class TestSetupA(object):
         elif self.test_name == "retraction-restart distance": #TODO
             # RETRACTION RESTART DISTANCE amd COASTING DISTANCE test parameters
             if parameter_one_min_max is None:
-                self.retraction_restart_distance = np.linspace(test_info.min_default, test_info.max_default, self.number_of_test_structures).tolist()
+                self.retraction_restart_distance = np.linspace(test_info.parameter_one.min_default, test_info.parameter_one.max_default, self.number_of_test_structures).tolist()
             else:
                 self.retraction_restart_distance = np.linspace(parameter_one_min_max[0], parameter_one_min_max[1], self.number_of_test_structures).tolist()
             self.coasting_distance = 1.25
@@ -241,17 +244,17 @@ class TestSetupA(object):
             if parameter_one_min_max is not None:
                 self.temperature_extruder = np.linspace(parameter_one_min_max[0], parameter_one_min_max[1], self.number_of_test_structures).tolist()
             else:
-                self.temperature_extruder = np.linspace(np.mean(self.temperature_extruder)-5*(self.number_of_test_structures-1)/2, np.mean(self.temperature_extruder)+5*(self.number_of_test_structures-1)/2, self.number_of_test_structures).tolist()
+                self.temperature_extruder = np.linspace(test_info.parameter_one.min_default, test_info.parameter_one.max_default, self.number_of_test_structures).tolist()
 
             if parameter_two_min_max is None:
-                self.retraction_distance = np.linspace(np.mean(self.retraction_distance)-0.25*(self.number_of_substructures-1)/2, np.mean(self.retraction_distance)+0.25*(self.number_of_substructures-1)/2, self.number_of_substructures).tolist()
+                self.retraction_distance = np.linspace(test_info.parameter_two.min_default, test_info.parameter_two.max_default, self.number_of_substructures).tolist()
             else:
                 self.retraction_distance = np.linspace(parameter_two_min_max[0], parameter_two_min_max[1], self.number_of_substructures).tolist()
 
             if parameter_three_min_max is not None:
                 self.retraction_speed = np.linspace(parameter_three_min_max[0], parameter_three_min_max[1], self.number_of_lines).tolist()
             else:
-                self.retraction_speed = [round(x) for x in np.linspace(60, 120, self.number_of_lines).tolist()]
+                self.retraction_speed = np.linspace(test_info.parameter_three.min_default, test_info.parameter_three.max_default, self.number_of_lines).tolist()
 
             self.parameter_one.values = self.temperature_extruder
             self.parameter_two.values = self.retraction_distance

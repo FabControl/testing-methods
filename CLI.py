@@ -15,12 +15,9 @@ from CLI_helpers import evaluate, clear, extruded_filament
 from CheckCompatibility import check_compatibility
 from Definitions import *
 from DefinitionsTestsA import flat_test_parameter_one_vs_parameter_two, retraction_restart_distance_vs_coasting_distance, retraction_distance, bridging_test
-# from DefinitionsTestsB import dimensional_test TODO not working at all
 from Globals import machine, material, persistence, filename, session_idn
 from TestSetupA import TestSetupA
-from TestSetupB import TestSetupB
 from generate_label import generate_label
-from session_loader import session_uid
 from test_info import test_info
 
 quiet = True
@@ -62,28 +59,6 @@ start = time.time()
 
 # Check compatibility
 check_compatibility(machine, material)
-
-# Some calculations
-# these functions work, but they need MVI data for them to work
-#from OptimizeSettings import check_printing_speed_shear_rate, check_printing_speed_pressure
-from Calculations import shear_rate, pressure_drop, rheology
-from Plotting import plotting_mfr
-if machine.settings.optimize_speed_printing:
-    gamma_dot_estimate = shear_rate(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
-    delta_p_estimate, _ = pressure_drop(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
-
-    number_of_iterations = 5
-
-    for dummy0 in range(0, number_of_iterations + 1):
-        gamma_dot, visc, param_power_law = rheology(material, machine, delta_p_estimate, 7)
-        gamma_dot_out = shear_rate(machine, param_power_law[int(len(param_power_law)/2)])
-        delta_p_out, comment = pressure_drop(machine, param_power_law[int(len(param_power_law)/2)])
-
-        if dummy0 == number_of_iterations:
-            plotting_mfr(material, machine, gamma_dot, visc, param_power_law, 7)
-
-    # check_printing_speed_shear_rate(machine, gamma_dot_out, quiet)
-    # check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
 
 if quiet:
     parameter_one_min_max = session["min_max_parameter_one"] if session["min_max_parameter_one"] != "" else None
@@ -141,6 +116,25 @@ if quiet:
     previous_tests.append(current_test)
 
     persistence["session"]["previous_tests"] = previous_tests
+
+    # # Some calculations
+    # # these functions work, but they need MVI data for them to work
+    # # from OptimizeSettings import check_printing_speed_shear_rate, check_printing_speed_pressure
+    # from Calculations import shear_rate, pressure_drop, rheology
+    # from Plotting import plotting_mfr
+    # gamma_dot_estimate = shear_rate(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
+    # delta_p_estimate, _ = pressure_drop(machine, [1000, 0.4])  # starting values (just to get the order of magnitude right)
+    # number_of_iterations = 5
+    # for dummy0 in range(0, number_of_iterations + 1):
+    #     gamma_dot, visc, param_power_law = rheology(material, machine, delta_p_estimate, 7)
+    #     gamma_dot_out = shear_rate(machine, param_power_law[int(len(param_power_law)/2)])
+    #     delta_p_out, comment = pressure_drop(machine, param_power_law[int(len(param_power_law)/2)])
+    #
+    #     if dummy0 == number_of_iterations:
+    #         plotting_mfr(material, machine, gamma_dot, visc, param_power_law, 7)
+    #     # # check_printing_speed_shear_rate(machine, gamma_dot_out, quiet)
+    # # # check_printing_speed_pressure(machine, material, delta_p_out, param_power_law)
+
 
 else:
     # TODO: to be rewritten
@@ -259,6 +253,9 @@ persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(
 with open(filename(session_id, "json"), mode="w") as file:
     output = json.dumps(persistence, indent=4, sort_keys=False)
     file.write(output)
+
+import os
+os.system("python generate_suggested_values.py "+str(session_id))
 
 generate_label(persistence)
 

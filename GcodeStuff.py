@@ -66,14 +66,26 @@ class Gplus(G):
         # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
         G.write(self, chamber.ventilator_entry_gcode_command.format(chamber.ventilator_entry_tool, int(255 * (cooling_power / 100)) + "; set the speed for entry ventilator"))
 
-    def dwell(self, time: int, extruder: Extruder):
+    def dwell(self, time: int):
         """ Pause code executions for the given amount of time """
-        self.write("G4 P{0:.0f} ".format(time) + extruder.tool + "; set the waiting time in ms")
+        self.write("G4 P{0:.0f} ".format(time) + "; set the waiting time in ms")
 
     def home(self):
         """ Move the tool head to the home position (as defined in firmware).
         """
         self.write("G28; move to the home position")
+
+    def retract(self, retraction_speed, retraction_distance, printing_speed):
+        """ Retracts the filament """
+        self.write("G1 F{:.0f}".format(retraction_speed*60) + " E{:.3f}".format(-retraction_distance) + "; retract the filament")
+        self.write("G1 F{:.0f}".format(printing_speed*60))
+
+    def deretract(self, retraction_speed, retraction_distance, printing_speed, retraction_restart_distance=None):
+        """ Deretracts the filament """
+        if retraction_restart_distance is None:
+            retraction_restart_distance = 0
+        self.write("G1 F{:.0f}".format(retraction_speed*60) + " E{:.3f}".format(+retraction_distance+retraction_restart_distance) + "; deretract the filament")
+        self.write("G1 F{:.0f}".format(printing_speed*60))
 
     def move(self, x=None, y=None, z=None, rapid=False, extrude=None, extrusion_multiplier=None, coef_w=None, coef_h=None, **kwargs):
         """ Move the tool head to the given position. This method operates in

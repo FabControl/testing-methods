@@ -1,12 +1,11 @@
 import math
 import numpy as np
 from scipy.optimize import curve_fit
-from Definitions import  minmax_temperature, minmax_track_width_height_raft
+from Definitions import  minmax_temperature
 
 
 def rheology(material, machine, delta_p_out, number_of_test_structures):
     # Function to get the rheological data from the MFR data.
-
     try:
         mfr = material.mvr / 1000000
     except AttributeError or TypeError:
@@ -37,7 +36,7 @@ def rheology(material, machine, delta_p_out, number_of_test_structures):
     p_star = (1 / 2) * (material.load_mfr * 9.81) / (math.pi * ((material.capillary_diameter_mfr / 1000) / 2) ** 2) / 100000
     eta_mfr = ((1 / 8) * (material.load_mfr * 9.81 / (material.capillary_length_mfr / 1000)) * (material.time_mfr * 60 / mfr) * ((material.capillary_diameter_mfr / 1000) / 2) ** 2)
 
-    temperature_all = minmax_temperature(material, machine, number_of_test_structures)
+    temperature_all = minmax_temperature(machine, number_of_test_structures)
 
     for dummy1 in range(0, number_of_test_structures):
         correction = temperature_all[dummy1] - (material.temperature_glass + 43 - 0.02 * (p_star - delta_p))
@@ -117,7 +116,8 @@ def flow_rate(machine, speed_override = None):
 
 
 def flow_rate_raft(machine):
-    coef_h_raft, coef_w_raft = minmax_track_width_height_raft(machine)
+    coef_h_raft = machine.settings.track_height_raft/machine.temperaturecontrollers.extruder.nozzle.size_id
+    coef_w_raft = machine.settings.track_width_raft/machine.temperaturecontrollers.extruder.nozzle.size_id
 
     if machine.settings.track_height < machine.settings.track_width / (2 - math.pi / 2):
         q_v_raft = machine.settings.extrusion_multiplier_raft * machine.settings.speed_printing_raft * (machine.temperaturecontrollers.extruder.nozzle.size_id * coef_h_raft * (machine.temperaturecontrollers.extruder.nozzle.size_id * coef_w_raft - machine.temperaturecontrollers.extruder.nozzle.size_id * coef_h_raft) + math.pi * (machine.temperaturecontrollers.extruder.nozzle.size_id * coef_h_raft / 2) ** 2)

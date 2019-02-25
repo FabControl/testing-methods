@@ -2,7 +2,6 @@ from CLI_helpers import exception_handler
 
 
 def check_compatibility(machine, material):
-
     # if abs(machine.nozzle.size_extruder_id - material.size_od) > 0.2: # Stratasys patent
     #     # Compare the inner diameter of the liquefier with the outer diameter of the filament
     #     output = ("The inner diameter of the liquefier ({:0.2f} mm) is not compatible with the outer diameter of the filament ({:0.2f} mm)!"
@@ -24,21 +23,10 @@ def check_compatibility(machine, material):
 
     # if max(machine.settings.temperature_extruder, machine.settings.temperature_extruder_raft) > material.temperature_destr:
     #     # Compare the preset extrusion temperature and the destruction temperature:
-    #     output = ("The set extrusion temperature of {:0.0f} degC is higher than the destruction temperature of feedstock material {:0.0f} degC"
-    #         .format(max(machine.settings.temperature_extruder, machine.settings.temperature_extruder_raft),material.temperature_destr))
-    #     print("Compatibility issue: " + output)
-    #     quit()
 
     if machine.temperaturecontrollers.printbed.printbed_heatable:
-        if machine.temperaturecontrollers.printbed.temperature_printbed_setpoint > machine.temperaturecontrollers.printbed.temperature_max:
-            # Compare the preset extrusion temperature and the destruction temperature:
+        if machine.settings.temperature_printbed_setpoint > machine.temperaturecontrollers.printbed.temperature_max:
+            # Compare the preset extrusion temperature and the achievable temperature:
             output = ("The set printbed temperature of {:0.0f} degC is higher than the maximum achievable printbed temperature of {:0.0f} degC"
-                .format(machine.temperaturecontrollers.printbed.temperature_printbed_setpoint,machine.temperaturecontrollers.printbed.temperature_max))
-            exception_handler("Compatibility issue: " + output, fatal=True)
-
-    if machine.temperaturecontrollers.printbed.printbed_heatable:
-        if machine.temperaturecontrollers.printbed.temperature_printbed_setpoint > machine.temperaturecontrollers.printbed.temperature_max:
-            # Compare the preset extrusion temperature and the destruction temperature:
-            output = ("The set printbed temperature of {:0.0f} degC is higher than the maximum achievable printbed temperature of {:0.0f} degC"
-                .format(machine.temperaturecontrollers.printbed.temperature_printbed_setpoint,machine.temperaturecontrollers.printbed.temperature_max))
+                .format(machine.settings.temperature_printbed_setpoint,machine.temperaturecontrollers.printbed.temperature_max))
             exception_handler("Compatibility issue: " + output, fatal=True)
