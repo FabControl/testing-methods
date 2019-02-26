@@ -310,7 +310,7 @@ class TestInfo(object):
         self.other_parameters = other_parameters
 
 
-def minmax_track_width(machine: Machine, number_of_test_structures: int):
+def get_minmax_track_width_coef(machine: Machine, number_of_test_structures: int):
     if machine.temperaturecontrollers.extruder.nozzle.size_id <= 0.6:
         coef_w_min = 0.90
         coef_w_max = 1.10
@@ -330,7 +330,7 @@ def minmax_track_width(machine: Machine, number_of_test_structures: int):
     return coef_w_all, coef_w_mean
 
 
-def minmax_track_height(machine: Machine, number_of_test_structures: int):
+def get_minmax_track_height_coef(machine: Machine, number_of_test_structures: int):
     if machine.temperaturecontrollers.extruder.nozzle.size_id == 0.1:
         coef_h_min = 0.10
         coef_h_max = 0.50
@@ -343,7 +343,7 @@ def minmax_track_height(machine: Machine, number_of_test_structures: int):
     return coef_h_all
 
 
-def minmax_track_height_raft(machine: Machine, number_of_test_structures=None):
+def get_minmax_track_height_raft_coef(machine: Machine, number_of_test_structures=None):
 
     if machine.temperaturecontrollers.extruder.nozzle.size_id == 0.1:
         coef_h_min_raft = 0.50
@@ -372,7 +372,7 @@ def minmax_track_height_raft(machine: Machine, number_of_test_structures=None):
     return coef_h_raft_all
 
 
-def minmax_track_width_raft(machine: Machine, number_of_test_structures=None):
+def get_minmax_track_width_raft_coef(machine: Machine, number_of_test_structures=None):
     coef_w_max_raft = 1.4
     coef_w_min_raft = 1.0
 
@@ -385,7 +385,7 @@ def minmax_track_width_raft(machine: Machine, number_of_test_structures=None):
     return coef_w_raft_all
 
 
-def minmax_temperature(machine: Machine, number_of_test_structures: int):
+def get_minmax_temperature(machine: Machine, number_of_test_structures: int):
     temperature_extruder_min = machine.settings.temperature_extruder_raft
     temperature_extruder_max = min(machine.temperaturecontrollers.extruder.temperature_max, 1.070 * (machine.settings.temperature_extruder_raft + 273.15) - 273.15)
 
@@ -409,7 +409,7 @@ def get_test_structure_size(machine):
     return test_structure_size
 
 
-def flow_rate(height, width, speed_printing, extrusion_multiplier=1):
+def get_flow_rate(height, width, speed_printing, extrusion_multiplier=1):
     if height < width / (2 - math.pi / 2):
         flow_rate = extrusion_multiplier * speed_printing * (height * (width - height) + math.pi * (height / 2) ** 2)
     else:
@@ -420,3 +420,41 @@ def flow_rate(height, width, speed_printing, extrusion_multiplier=1):
 def sum_of_list_elements(my_list, index):
     sum_of_elements = [sum(my_list[0:x + 1]) for x in range(0, index + 1)]
     return sum_of_elements[-1]
+
+
+def save_session_file_as(session_id: str, extension: str) -> str:
+    """
+    Takes a save_session_file_as extension and returns a full file-name based on the following convention:
+    'cwd\\folder\\YYYYMMDDxxx_TestNumber.extension' where x is a number character from [0-9a-z] and TestNumber is a
+    double-digit zero-padded number.
+    :param session_id:
+    :param extension:
+    :return:
+    """
+    from paths import gcode_folder, json_folder, pdf_folder, stl_folder, png_folder
+    from CLI_helpers import separator
+    from Globals import persistence
+
+    if not extension.startswith("."):
+        extension = "." + extension
+
+    folder = None
+
+    if extension == ".gcode":
+        folder = gcode_folder
+    elif extension == ".json":
+        folder = json_folder
+    elif extension == ".pdf":
+        folder = pdf_folder
+    elif extension == ".stl":
+        folder = stl_folder
+    elif extension == ".png":
+        folder = png_folder
+
+    if extension == ".gcode":
+        output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
+    elif extension == ".png":
+        output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
+    else:
+        output = str(folder + separator() + session_id + extension)
+    return output

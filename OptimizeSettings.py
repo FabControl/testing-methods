@@ -28,7 +28,7 @@ def check_printing_speed_shear_rate(machine, gamma_dot, quiet: bool):
                   "the printing speed should be around {:.2f} mm/s!".format(machine.settings.track_height, machine.settings.track_height * gamma_dot_out[0]))
 
         machine.settings.speed_printing = round(machine.settings.track_height * gamma_dot_out[0], 3)
-        # q_v = flow_rate(machine)
+        # q_v = get_flow_rate(machine)
         # output = ("maximum printing speed (mine): {:.2f} mm/s,"
         #           "maximum printing speed (Crocket): {:.2f} mm/s!".format(machine.settings.track_height * gamma_dot_out[0], q_v * math.pi / (machine.settings.track_height) ** 2))
         # print(output)
@@ -55,9 +55,9 @@ def check_printing_speed_shear_rate(machine, gamma_dot, quiet: bool):
 #
 #     # Suggest another printing speed:
 #     if force2 > force_max:
-#         output = ('filament is likely to slip! maximum printing speed should be below %.2f mm/s!' % (force_max / (0.5 * material.density_rt * flow_rate(machine) * 10**(-6))))
+#         output = ('filament is likely to slip! maximum printing speed should be below %.2f mm/s!' % (force_max / (0.5 * material.density_rt * get_flow_rate(machine) * 10**(-6))))
 #         print(output)
-#         machine.settings.speed_printing = round(machine.settings.speed_printing * (flow_rate(machine)/flow_rate(machine,  machine.settings.speed_printing))**(parameters[1]), 2)
+#         machine.settings.speed_printing = round(machine.settings.speed_printing * (get_flow_rate(machine)/get_flow_rate(machine,  machine.settings.speed_printing))**(parameters[1]), 2)
 #         print('--> printing_speed optimized! (pressure)')
 #     else: pass
 #
@@ -73,7 +73,7 @@ def check_printing_speed_shear_rate(machine, gamma_dot, quiet: bool):
 #     output = ('maximum shear rate during bonding is %.3f 1/s' % (gamma_dot_bonding))
 #     print(output)
 #
-#     q_v = flow_rate(machine)
+#     q_v = get_flow_rate(machine)
 #
 #     # Suggest another printing speed:
 #     if gamma_dot_bonding > gamma_dot_nozzle:

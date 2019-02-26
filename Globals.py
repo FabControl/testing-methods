@@ -3,7 +3,7 @@ import json
 from session_loader import session_uid
 from paths import json_folder
 from CLI_helpers import separator, exception_handler
-from test_info import test_info
+from test_info import test_info, get_comment
 
 try:
     try:
@@ -37,7 +37,6 @@ except:
                 "temperature_min": 30,
                 "part_cooling": False,
                 "part_cooling_gcode_command": "M106 S{0}",
-                "part_cooling_setpoint": 0,
                 "nozzle": {
                     "type": "brass",
                     "size_id": 0.4,
@@ -53,7 +52,6 @@ except:
                 "temperature_min": 30,
                 "temperature_max": 80,
                 "chamber_heatable": False,
-                "temperature_chamber_setpoint": 80,
                 "ventilator_exit": False,
                 "ventilator_exit_tool": "P1",
                 "ventilator_exit_gcode_command": "M106 {0} S{1}",
@@ -67,7 +65,6 @@ except:
                 "temperature_min": 20,
                 "temperature_max": 100,
                 "printbed_heatable": True,
-                "temperature_printbed_setpoint": 55,
                 "material": "?",
                 "coating": "None"
             }
@@ -114,7 +111,7 @@ except:
             80
         ],
         "test_type": "A",
-        "user_id": "Daniel Tom\u0106\u00a0s",
+        "user_id": "Daniel Tomas",
         "offset": [
             0,
             0
@@ -151,24 +148,8 @@ except:
 }
 
 session_idn = str(persistence["session"]["uid"])
-
 test_info = test_info(persistence)
-#persistence["session"]["number_of_test_structures"] = test_info.number_of_test_structures not needed
-
-test_name_list, test_parameter_one_name_list, test_parameter_one_precision_list, test_parameter_one_units_list, test_parameter_two_precision_list, test_parameter_two_units_list, test_other_parameters_list = [], [], [], [], [], [], []
-
-comment = ""
-for parameter, order_number in zip(test_info.other_parameters, range(len(test_info.other_parameters))):
-    if hasattr(parameter, "value"):
-        if parameter.value is not None:
-            if parameter.value != []:
-                comment_to_add = str("; --- {}: {} {}".format(parameter.name, parameter.precision, parameter.units)).format(parameter.value)
-        else:
-            comment_to_add = str("; --- {} was not tested".format(parameter.name))
-        if order_number == len(test_info.other_parameters)-1:
-            comment += comment_to_add
-        else:
-            comment += comment_to_add + "\n"
+comment = get_comment(test_info)
 
 material = Material(**persistence["material"])
 material.drying = DryingProcess(**persistence["material"]["drying"])
@@ -176,37 +157,3 @@ machine = Machine(**persistence["machine"])
 machine.settings = Settings(nozzle=machine.temperaturecontrollers.extruder.nozzle, material=material, machine=machine, **persistence["settings"])
 
 
-def filename(session_id: str, extension: str) -> str:
-    """
-    Takes a filename extension and returns a full file-name based on the following convention:
-    'cwd\\folder\\YYYYMMDDxxx_TestNumber.extension' where x is a number character from [0-9a-z] and TestNumber is a
-    double-digit zero-padded number.
-    :param session_id:
-    :param extension:
-    :return:
-    """
-    from paths import gcode_folder, json_folder, pdf_folder, stl_folder, png_folder
-
-    if not extension.startswith("."):
-        extension = "." + extension
-
-    folder = None
-
-    if extension == ".gcode":
-        folder = gcode_folder
-    elif extension == ".json":
-        folder = json_folder
-    elif extension == ".pdf":
-        folder = pdf_folder
-    elif extension == ".stl":
-        folder = stl_folder
-    elif extension == ".png":
-        folder = png_folder
-
-    if extension == ".gcode":
-        output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
-    elif extension == ".png":
-        output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
-    else:
-        output = str(folder + separator() + session_id + extension)
-    return output

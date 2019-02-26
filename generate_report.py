@@ -17,20 +17,20 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 
 from CLI_helpers import *
-from Globals import filename
+from Definitions import save_session_file_as
 from paths import *
 
 arguments = docopt(__doc__)
 session_id = str(arguments["<session_id>"])
 
-json_path = filename(session_id, "json")
+json_path = save_session_file_as(session_id, "json")
 
 with open(json_path, mode="r") as file:
     import_json_dict = json.load(file)
 
 report_head = "Test report for " + str(import_json_dict["material"]["manufacturer"]) + " " + str(import_json_dict["material"]["name"]) + " Ø" + str(import_json_dict["material"]["size_od"]) + " mm"
 
-doc = SimpleDocTemplate(filename(session_id, "pdf"),
+doc = SimpleDocTemplate(save_session_file_as(session_id, "pdf"),
                         pagesize=landscape(A4),
                         rightMargin=30,
                         leftMargin=25,

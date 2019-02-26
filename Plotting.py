@@ -2,7 +2,7 @@ import math, os
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter
-from Definitions import minmax_temperature
+from Definitions import get_minmax_temperature
 from Calculations import func1, shear_rate
 
 
@@ -17,7 +17,7 @@ def plotting_mfr(material, machine, gamma_dot, visc, param_power_law, number_of_
     axes1 = fig1.add_subplot(111)
     axes1.set_title('Calculated rheogram for ' + material.name + ' from ' + material.manufacturer)
 
-    temperature_all = minmax_temperature(machine, number_of_test_structures)
+    temperature_all = get_minmax_temperature(machine, number_of_test_structures)
 
     for dummy2 in range(0, number_of_test_structures):
         label = str("T = " + str(round(temperature_all[dummy2], 0)) + " degC")

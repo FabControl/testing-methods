@@ -4,7 +4,7 @@ FabControl Optimizer: Feedstock Material Testing
 Label Generator
 """
 
-from Globals import filename
+from Definitions import save_session_file_as
 from paths import *
 
 
@@ -101,5 +101,5 @@ def generate_label(import_json_dict):
         ImageDraw.Draw(img)
 
         label = img.rotate(angle=90, expand=True)
-        label.save(filename(str(import_json_dict["session"]["uid"]), ".png"))
-        add_logo(filename(str(import_json_dict["session"]["uid"]), ".png"), logo_path, filename(str(import_json_dict["session"]["uid"]), ".png"))
+        label.save(save_session_file_as(str(import_json_dict["session"]["uid"]), ".png"))
+        add_logo(save_session_file_as(str(import_json_dict["session"]["uid"]), ".png"), logo_path, save_session_file_as(str(import_json_dict["session"]["uid"]), ".png"))

@@ -14,9 +14,9 @@ from docopt import docopt
 from CLI_helpers import evaluate, clear, extruded_filament
 from CheckCompatibility import check_compatibility
 from Definitions import *
-from DefinitionsTestsA import flat_test_parameter_one_vs_parameter_two, retraction_restart_distance_vs_coasting_distance, retraction_distance, bridging_test
-from Globals import machine, material, persistence, filename, session_idn
-from TestSetupA import TestSetupA
+from TestsStructureGeometriesA import flat_test_parameter_one_vs_parameter_two, retraction_restart_distance_vs_coasting_distance, retraction_distance, bridging_test
+from Globals import machine, material, persistence, session_idn
+from GettingValuesA import GettingValuesA
 from generate_label import generate_label
 from test_info import test_info
 
@@ -26,25 +26,25 @@ verbose = False
 
 def initialize_test():
     if persistence["session"]["test_type"] == "A":
-        ts = TestSetupA(machine, material, test_info,
-                        path=filename(session_id, "gcode"),
-                        parameter_one_min_max=parameter_one_min_max,
-                        parameter_two_min_max=parameter_two_min_max,
-                        parameter_three_min_max=parameter_three_min_max,
-                        offset=persistence["session"]["offset"] if persistence["session"]["offset"] else None)
+        gv = GettingValuesA(machine, material, test_info,
+                            path=save_session_file_as(session_id, "gcode"),
+                            parameter_one_min_max=parameter_one_min_max,
+                            parameter_two_min_max=parameter_two_min_max,
+                            parameter_three_min_max=parameter_three_min_max,
+                            offset=persistence["session"]["offset"] if persistence["session"]["offset"] else None)
 
         if persistence["session"]["test_name"] == "08":
-            retraction_distance(ts)
+            retraction_distance(gv)
         elif persistence["session"]["test_name"] == "10":
-            retraction_distance(ts)
+            retraction_distance(gv)
         elif persistence["session"]["test_name"] == "12":
-            retraction_restart_distance_vs_coasting_distance(ts)
+            retraction_restart_distance_vs_coasting_distance(gv)
         elif persistence["session"]["test_name"] == "13":
-            bridging_test(ts)
+            bridging_test(gv)
         else:
-            flat_test_parameter_one_vs_parameter_two(ts)
+            flat_test_parameter_one_vs_parameter_two(gv)
 
-    return ts
+    return gv
 
 
 if __name__ == '__main__':
@@ -68,19 +68,19 @@ if quiet:
 
     if test_info.name == "retraction distance":
         parameter_two_min_max = [persistence["settings"]["speed_printing"]] * test_info.number_of_substructures
-        ts = initialize_test()
+        gv = initialize_test()
     elif test_info.name == "printing speed":
         parameter_two_min_max = None
-        ts = initialize_test()
+        gv = initialize_test()
     elif test_info.name == "first-layer track width":
         parameter_two_min_max = None
-        ts = initialize_test()
+        gv = initialize_test()
     elif test_info.name == "track width":
         parameter_two_min_max = None
-        ts = initialize_test()
+        gv = initialize_test()
     else:
         parameter_two_min_max = session["min_max_parameter_two"]
-        ts = initialize_test()
+        gv = initialize_test()
 
     # Add a step for selecting/approving of the result
     previous_tests = persistence["session"]["previous_tests"]
@@ -89,29 +89,29 @@ if quiet:
     persistence["settings"]["temperature_chamber_setpoint"] = machine.settings.temperature_chamber_setpoint
     persistence["settings"]["part_cooling_setpoint"] = machine.settings.part_cooling_setpoint
 
-    current_test = {"test_name": ts.test_name,
+    current_test = {"test_name": gv.test_name,
                     "executed": True,
-                    "tested_parameter_one_values": [round(k, int(re.search("[0-9]", ts.test_info.parameter_one.precision).group())) for k in ts.get_values_parameter_one()],
-                    "tested_parameter_two_values": None if ts.test_info.parameter_two.name is None else [round(k, int(re.search("[0-9]", ts.test_info.parameter_two.precision).group())) for k in ts.get_values_parameter_two()],
-                    "tested_volumetric_flow-rate_values": ts.volumetric_flow_rate,
+                    "tested_parameter_one_values": [round(k, int(re.search("[0-9]", gv.test_info.parameter_one.precision).group())) for k in gv.get_values_parameter_one()],
+                    "tested_parameter_two_values": None if gv.test_info.parameter_two.name is None else [round(k, int(re.search("[0-9]", gv.test_info.parameter_two.precision).group())) for k in gv.get_values_parameter_two()],
+                    "tested_volumetric_flow-rate_values": gv.volumetric_flow_rate,
                     "selected_parameter_one_value": 0,
-                    "selected_parameter_two_value": None if ts.test_info.parameter_two.name is None else 0,
-                    "selected_volumetric_flow-rate_value": np.mean(ts.volumetric_flow_rate) if ts.test_info.name == ("retraction distance" or "extrusion temperature vs retraction distance") else 0,
-                    "parameter_one_units": ts.test_info.parameter_one.units,
-                    "parameter_two_units": None if ts.test_info.parameter_two.name is None else ts.test_info.parameter_two.units,
-                    "parameter_one_precision": ts.test_info.parameter_one.precision,
-                    "parameter_two_precision": None if ts.test_info.parameter_two.name is None else ts.test_info.parameter_two.precision,
-                    "extruded_filament_mm": extruded_filament(filename(session_id, "gcode")),
-                    "gcode_path": filename(session_id, "gcode"),
-                    "label_path": filename(session_id, "png"),
+                    "selected_parameter_two_value": None if gv.test_info.parameter_two.name is None else 0,
+                    "selected_volumetric_flow-rate_value": np.mean(gv.volumetric_flow_rate) if gv.test_info.name == ("retraction distance" or "extrusion temperature vs retraction distance") else 0,
+                    "parameter_one_units": gv.test_info.parameter_one.units,
+                    "parameter_two_units": None if gv.test_info.parameter_two.name is None else gv.test_info.parameter_two.units,
+                    "parameter_one_precision": gv.test_info.parameter_one.precision,
+                    "parameter_two_precision": None if gv.test_info.parameter_two.name is None else gv.test_info.parameter_two.precision,
+                    "extruded_filament_mm": extruded_filament(save_session_file_as(session_id, "gcode")),
+                    "gcode_path": save_session_file_as(session_id, "gcode"),
+                    "label_path": save_session_file_as(session_id, "png"),
                     "comments": 0,
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
     if test_info.parameter_three:
-        current_test["tested_parameter_three_values"] = [ts.test_info.parameter_three.values[0], ts.test_info.parameter_three.values[-1]]
+        current_test["tested_parameter_three_values"] = [gv.test_info.parameter_three.values[0], gv.test_info.parameter_three.values[-1]]
         current_test["selected_parameter_three_value"] = 0
-        current_test["parameter_three_units"] = ts.test_info.parameter_three.units
-        current_test["parameter_three_precision"] = ts.test_info.parameter_three.precision
+        current_test["parameter_three_units"] = gv.test_info.parameter_three.units
+        current_test["parameter_three_precision"] = gv.test_info.parameter_three.precision
 
     previous_tests.append(current_test)
 
@@ -147,8 +147,8 @@ else:
                  "07": "printing speed",
                  "08": "retraction distance",
                  "09": "retraction-restart distance vs coasting distance",
-                 "10": "bridging extrusion-multiplier vs bridging printing speed",
-                 "11": "extrusion temperature vs retraction distance"}
+                 "13": "bridging extrusion-multiplier vs bridging printing speed",
+                 "08": "extrusion temperature vs retraction distance"}
 
     test_number = str(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(list(test_list.keys()), list(test_list.values()))) + ": "))
 
@@ -160,57 +160,57 @@ else:
 
     if test_info.name == "retraction distance" or "extrusion temperature vs retraction distance":
         parameter_two_min_max = [persistence["settings"]["speed_printing"]] * 4
-        ts = initialize_test()
-        tested_speed_values = [np.mean(ts.speed_printing)]
+        gv = initialize_test()
+        tested_speed_values = [np.mean(gv.speed_printing)]
     elif test_info.name == "printing speed":
         parameter_two_min_max = None
-        ts = initialize_test()
-        tested_speed_values = ts.get_values_parameter_one()
+        gv = initialize_test()
+        tested_speed_values = gv.get_values_parameter_one()
     else:
         parameter_two_min_max = evaluate(input("Printing-speed range [min, max] or None: "))
-        ts = initialize_test()
-        tested_speed_values = ts.parameter_two_min_max
+        gv = initialize_test()
+        tested_speed_values = gv.parameter_two_min_max
 
-    ts = initialize_test()
+    gv = initialize_test()
 
     if not verbose:
         clear()
     print("Tested Parameter values:")
-    print([round(k,int(re.search("[0-9]",ts.test_info.parameter_one.precision).group())) for k in ts.get_values_parameter_one()[::-1]])
+    print([round(k, int(re.search("[0-9]", gv.test_info.parameter_one.precision).group())) for k in gv.get_values_parameter_one()[::-1]])
     print("Corresponding Volumetric flow-rate values (mm3/s):")
-    [print(x[::-1]) for x in ts.volumetric_flow_rate]
+    [print(x[::-1]) for x in gv.volumetric_flow_rate]
 
     if parameter_two_min_max is not None:
         print("Printing-speed values (mm/s):")
-        parameter_two_min_max = ts.parameter_two_min_max
+        parameter_two_min_max = gv.parameter_two_min_max
         print([round(k, 1) for k in parameter_two_min_max])
 
     # Add a step for selecting/approving of the result
     previous_tests = persistence["session"]["previous_tests"]
 
-    if ts.test_name == "printing speed":
-        tested_speed_values = ts.get_values()
-    elif ts.test_name == "retraction distance":
-        tested_speed_values = [np.mean(ts.speed_printing)]
+    if gv.test_name == "printing speed":
+        tested_speed_values = gv.get_values()
+    elif gv.test_name == "retraction distance":
+        tested_speed_values = [np.mean(gv.speed_printing)]
     else:
-        tested_speed_values = persistence["settings"]["speed_printing"] if parameter_two_min_max is None else ts.parameter_two_min_max
+        tested_speed_values = persistence["settings"]["speed_printing"] if parameter_two_min_max is None else gv.parameter_two_min_max
 
-    if ts.test_name == "retraction distance" or parameter_two_min_max is None:
+    if gv.test_name == "retraction distance" or parameter_two_min_max is None:
         tested_speed_values = []
 
-    current_test = {"test_name": ts.test_name,
+    current_test = {"test_name": gv.test_name,
                     "executed": True,
-                    "tested_parameter_values": [round(k, int(re.search("[0-9]",ts.test_info.precision).group())) for k in ts.get_values()],
+                    "tested_parameter_values": [round(k, int(re.search("[0-9]", gv.test_info.precision).group())) for k in gv.get_values()],
                     "tested_printing-speed_values": [round(k, 1) for k in tested_speed_values],
-                    "tested_volumetric_flow-rate_values": ts.volumetric_flow_rate,
+                    "tested_volumetric_flow-rate_values": gv.volumetric_flow_rate,
                     "selected_parameter_value": evaluate(input("Enter the best parameter value: ")),
                     "selected_printing-speed_value": evaluate(input("Enter the printing-speed value (mm/s) which corresponds to the best strucuture: ")),
                     "selected_volumetric_flow-rate_value": evaluate(input("Enter the volumetric flow-rate value (mm3/s) which corresponds to the best strucuture: ")),
-                    "units": ts.test_info.units,
-                    "parameter_precision": ts.test_info.precision,
-                    "extruded_filament": extruded_filament(filename(session_id, "gcode")),
-                    "gcode_path": filename(session_id, "gcode"),
-                    "label_path": filename(session_id, "png"),
+                    "units": gv.test_info.units,
+                    "parameter_precision": gv.test_info.precision,
+                    "extruded_filament": extruded_filament(save_session_file_as(session_id, "gcode")),
+                    "gcode_path": save_session_file_as(session_id, "gcode"),
+                    "label_path": save_session_file_as(session_id, "png"),
                     "comments": input("Comments: "),
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -226,10 +226,10 @@ else:
                 persistence["settings"]["speed_printing"] = dummy["selected_printing-speed_value"]
             elif dummy["test_name"] == "first-layer track height":
                 persistence["settings"]["track_height_raft"] = dummy["selected_parameter_value"]
-                persistence["settings"]["track_width_raft"] = np.mean(ts.coef_w_raft) * machine.nozzle.size_id
+                persistence["settings"]["track_width_raft"] = np.mean(gv.coef_w_raft) * machine.nozzle.size_id
                 persistence["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
             elif dummy["test_name"] == "first-layer track width":
-                persistence["settings"]["track_height_raft"] = np.mean(ts.coef_h_raft) * machine.nozzle.size_id
+                persistence["settings"]["track_height_raft"] = np.mean(gv.coef_h_raft) * machine.nozzle.size_id
                 persistence["settings"]["track_width_raft"] = dummy["selected_parameter_value"]
                 persistence["settings"]["speed_printing_raft"] = dummy["selected_printing-speed_value"]
             elif dummy["test_name"] == "track width":
@@ -250,7 +250,7 @@ else:
 
 persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
 
-with open(filename(session_id, "json"), mode="w") as file:
+with open(save_session_file_as(session_id, "json"), mode="w") as file:
     output = json.dumps(persistence, indent=4, sort_keys=False)
     file.write(output)
 

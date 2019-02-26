@@ -1,7 +1,7 @@
 import math
 import numpy as np
 from scipy.optimize import curve_fit
-from Definitions import  minmax_temperature
+from Definitions import  get_minmax_temperature
 
 
 def rheology(material, machine, delta_p_out, number_of_test_structures):
@@ -36,7 +36,7 @@ def rheology(material, machine, delta_p_out, number_of_test_structures):
     p_star = (1 / 2) * (material.load_mfr * 9.81) / (math.pi * ((material.capillary_diameter_mfr / 1000) / 2) ** 2) / 100000
     eta_mfr = ((1 / 8) * (material.load_mfr * 9.81 / (material.capillary_length_mfr / 1000)) * (material.time_mfr * 60 / mfr) * ((material.capillary_diameter_mfr / 1000) / 2) ** 2)
 
-    temperature_all = minmax_temperature(machine, number_of_test_structures)
+    temperature_all = get_minmax_temperature(machine, number_of_test_structures)
 
     for dummy1 in range(0, number_of_test_structures):
         correction = temperature_all[dummy1] - (material.temperature_glass + 43 - 0.02 * (p_star - delta_p))

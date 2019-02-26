@@ -15,7 +15,7 @@ import re
 from collections import OrderedDict
 from docopt import docopt
 from CLI_helpers import separator
-# from Globals import filename
+# from Globals import save_session_file_as
 from conversion_dictionary import Slicer, Param, Params
 from paths import *
 
@@ -78,7 +78,7 @@ def assemble_ini(dictionary: OrderedDict):
 
 def output_name(extension: str, folder: str = None):
     """
-    Creates a filename based on material manufacturer, name, outer diameter and nozzle diameter.
+    Creates a save_session_file_as based on material manufacturer, name, outer diameter and nozzle diameter.
     Accepts a file extension as an input parameter.
     :param extension:
     :param folder:

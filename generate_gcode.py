@@ -6,7 +6,6 @@ usage:
 """
 
 
-from Globals import persistence
 from paths import *
 from CLI_helpers import separator
 import subprocess

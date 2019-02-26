@@ -64,7 +64,7 @@ def exclusive_write(path: str, output, limit=True):
 
     Used to prevent file overwriting.
 
-    split[0] is the filename,
+    split[0] is the save_session_file_as,
     split[1] is either a number or NoneType
     split[2] is a file extension
     :param path:
