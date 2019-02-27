@@ -91,47 +91,47 @@ def raft_perimeter(ts: GettingValuesA):
 
 
 # PRINTING RAFT
-def print_raft(ts: GettingValuesA):
-    ts.g.write("; --- start to print the raft ---")
-    raft_perimeter(ts)
-    ts.g.write("; --- print the infill with the density of {} % ---".format(machine.settings.raft_density))
-    ts.g.feed(ts.speed_printing_raft)  # print the filling of the raft
+def print_raft(gv: GettingValuesA):
+    gv.g.write("; --- start to print the raft ---")
+    raft_perimeter(gv)
+    gv.g.write("; --- print the infill with the density of {} % ---".format(machine.settings.raft_density))
+    gv.g.feed(gv.speed_printing_raft)  # print the filling of the raft
     raft_density = machine.settings.raft_density/100
-    step = ts.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id/raft_density  # step size
-    step_number = ts.test_structure_size/step
+    step = gv.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id / raft_density  # step size
+    step_number = gv.test_structure_size / step
 
-    ts.g.move(x=-ts.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id/2,
+    gv.g.move(x=-gv.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id / 2,
               y=0,
               z=0,
               extrude=False, extrusion_multiplier=0)
 
     for dummy in range(0, int(step_number)):
-        ts.g.move(x=0,
+        gv.g.move(x=0,
                   y=+step,
                   z=0,
                   extrude=False, extrusion_multiplier=0)
-        ts.g.move(x=(-1)**(dummy+1)*(ts.test_structure_size-ts.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id),
+        gv.g.move(x=(-1) ** (dummy + 1) * (gv.test_structure_size - gv.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id),
                   y=0,
                   z=0,
-                  extrude=True, extrusion_multiplier=ts.extrusion_multiplier_raft, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
+                  extrude=True, extrusion_multiplier=gv.extrusion_multiplier_raft, coef_h=gv.coef_h_raft, coef_w=gv.coef_w_raft)
 
-    ts.g.write("; --- finish to print the raft ---")
+    gv.g.write("; --- finish to print the raft ---")
 
-    if not ts.raft:
-        ts.g.move(x=0,
+    if not gv.raft:
+        gv.g.move(x=0,
                   y=20,
                   z=0,
                   extrude=False, extrusion_multiplier=0)
 
-    ts.g.set_extruder_temperature(ts.temperature_extruder[0], ts.extruder)
-    ts.g.dwell(30000)  # to unload the nozzle
+    gv.g.set_extruder_temperature(gv.temperature_extruder[0], gv.extruder)
+    gv.g.dwell(30000)  # to unload the nozzle
 
-    if ts.part_cooling:
-        ts.g.set_part_cooling(ts.part_cooling_setpoint, ts.extruder)
-    if ts.ventilator_entry:
-        ts.g.set_ventilator_entry(ts.ventilator_entry_setpoint, ts.chamber)
-    if ts.ventilator_exit:
-        ts.g.set_ventilator_exit(ts.ventilator_exit_setpoint, ts.chamber)
+    if gv.part_cooling:
+        gv.g.set_part_cooling(gv.part_cooling_setpoint, gv.extruder)
+    if gv.ventilator_entry:
+        gv.g.set_ventilator_entry(gv.ventilator_entry_setpoint, gv.chamber)
+    if gv.ventilator_exit:
+        gv.g.set_ventilator_exit(gv.ventilator_exit_setpoint, gv.chamber)
 
     return
 

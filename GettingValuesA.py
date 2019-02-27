@@ -21,6 +21,7 @@ class GettingValuesA(object):
         self.extruder = machine.temperaturecontrollers.extruder
 
         self.part_cooling = machine.temperaturecontrollers.extruder.part_cooling
+
         if self.part_cooling:
             self.part_cooling_setpoint = machine.settings.part_cooling_setpoint
             self.part_cooling_gcode_command = machine.temperaturecontrollers.extruder.part_cooling_gcode_command

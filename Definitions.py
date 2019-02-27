@@ -238,8 +238,8 @@ class Settings(object):
                  speed_travel=None, speed_printing=None, speed_printing_raft=None, extrusion_multiplier=None,
                  retraction_distance=None, retraction_restart_distance=None, retraction_speed=None, coasting_distance=None,
                  raft_density=None,
-                 temperature_chamber_setpoint=None, temperature_printbed_setpoint=None,
-                 part_cooling_setpoint=None, ventilator_entry_setpoint=None, ventilator_exit_setpoint=None, *args, **kwargs):
+                 temperature_chamber_setpoint:int=None, temperature_printbed_setpoint:int=None,
+                 part_cooling_setpoint:int=None, ventilator_entry_setpoint:int=None, ventilator_exit_setpoint:int=None, *args, **kwargs):
 
         self.speed_travel = speed_travel
 
@@ -271,12 +271,13 @@ class Settings(object):
         # self.optimize_speed_printing = optimize_speed_printing  # True if ones wants to optimize speed_printing
         # self.optimize_track_height = optimize_track_height  # True if ones wants to optimize track_height
 
-        self.temperature_chamber_setpoint = temperature_chamber_setpoint if temperature_chamber_setpoint else None
-        self.temperature_printbed_setpoint = temperature_printbed_setpoint if temperature_printbed_setpoint else None
+        self.temperature_chamber_setpoint = temperature_chamber_setpoint if temperature_chamber_setpoint else 0
+        self.temperature_printbed_setpoint = temperature_printbed_setpoint if temperature_printbed_setpoint else 0
 
-        self.part_cooling_setpoint = part_cooling_setpoint if part_cooling_setpoint else None
-        self.ventilator_entry_setpoint = ventilator_entry_setpoint if ventilator_entry_setpoint else None
-        self.ventilator_exit_setpoint = ventilator_exit_setpoint if ventilator_exit_setpoint else None
+        self.part_cooling_setpoint = part_cooling_setpoint if part_cooling_setpoint else 0
+
+        self.ventilator_entry_setpoint = ventilator_entry_setpoint if ventilator_entry_setpoint else 0
+        self.ventilator_exit_setpoint = ventilator_exit_setpoint if ventilator_exit_setpoint else 0
 
 
 class Parameter(object):

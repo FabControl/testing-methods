@@ -1,7 +1,7 @@
 from GettingValuesB import TestSetupB
 import slicing_functionality as sf
 from Definitions import *
-from TestsStructureGeometriesA import wipe
+from TestStructureGeometriesA import wipe
 from Globals import machine, material
 from oop_functionality import Prism
 

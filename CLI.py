@@ -14,7 +14,7 @@ from docopt import docopt
 from CLI_helpers import evaluate, clear, extruded_filament
 from CheckCompatibility import check_compatibility
 from Definitions import *
-from TestsStructureGeometriesA import flat_test_parameter_one_vs_parameter_two, retraction_restart_distance_vs_coasting_distance, retraction_distance, bridging_test
+from TestStructureGeometriesA import flat_test_parameter_one_vs_parameter_two, retraction_restart_distance_vs_coasting_distance, retraction_distance, bridging_test
 from Globals import machine, material, persistence, session_idn
 from GettingValuesA import GettingValuesA
 from generate_label import generate_label

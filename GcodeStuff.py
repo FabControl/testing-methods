@@ -50,7 +50,7 @@ class Gplus(G):
 
     def set_ventilator_exit(self, cooling_power: float, chamber: Chamber):
         """Set the cooler power in percent"""
-        if cooling_power > 100:
+        if cooling_power >= 100:
             cooling_power = 100
         elif cooling_power < 0:
             pass
@@ -59,7 +59,7 @@ class Gplus(G):
 
     def set_ventilator_entry(self, cooling_power: float, chamber: Chamber):
         """Set the cooler power in percent"""
-        if cooling_power > 100:
+        if cooling_power >= 100:
             cooling_power = 100
         elif cooling_power < 0:
             pass
