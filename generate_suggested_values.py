@@ -2,14 +2,14 @@
 FabControl Optimizer: Feedstock Material Testing
 Suggested Values Generator
 
-Returns suggested values of the testing parameters, based on session specific test_info.py.
+Returns suggested values of the testing parameters, based on session specific GetTestInfo.py.
 
 Usage:
    generate_suggested_values.py <session-id>
 """
 from Definitions import *
 from Globals import persistence
-from test_info import test_info
+from GetTestInfo import get_test_info
 from docopt import docopt
 
 arguments = docopt(__doc__)
@@ -26,7 +26,7 @@ if len(persistence["session"]["previous_tests"]) > 0:
 if len(persistence["session"]["previous_tests"]) > 0:
     temperature = persistence["settings"]["temperature_extruder"]
 
-test_info = test_info(persistence)
+test_info = get_test_info(persistence)
 
 if persistence["session"]["test_name"] == "01":
     suggested_values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(get_minmax_track_height_raft_coef(machine, test_info.number_of_test_structures))]

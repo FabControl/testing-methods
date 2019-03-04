@@ -18,7 +18,7 @@ from TestStructureGeometriesA import flat_test_parameter_one_vs_parameter_two, r
 from Globals import machine, material, persistence, session_idn
 from GettingValuesA import GettingValuesA
 from generate_label import generate_label
-from test_info import test_info
+from GetTestInfo import get_test_info
 
 quiet = True
 verbose = False
@@ -26,12 +26,9 @@ verbose = False
 
 def initialize_test():
     if persistence["session"]["test_type"] == "A":
-        gv = GettingValuesA(machine, material, test_info,
+        gv = GettingValuesA(machine, material, get_test_info(persistence),
                             path=save_session_file_as(session_id, "gcode"),
-                            parameter_one_min_max=parameter_one_min_max,
-                            parameter_two_min_max=parameter_two_min_max,
-                            parameter_three_min_max=parameter_three_min_max,
-                            offset=persistence["session"]["offset"] if persistence["session"]["offset"] else None)
+                            offset=persistence["session"]["offset"] if persistence["session"]["offset"] else [0,0])
 
         if persistence["session"]["test_name"] == "08":
             retraction_distance(gv)
@@ -61,30 +58,10 @@ start = time.time()
 check_compatibility(machine, material)
 
 if quiet:
-    parameter_one_min_max = session["min_max_parameter_one"] if session["min_max_parameter_one"] != "" else None
+    test_info = get_test_info(persistence)
+    gv = initialize_test()
 
-    test_info = test_info(persistence)
-    parameter_three_min_max = session["min_max_parameter_three"] if "min_max_parameter_three" in session else None
-
-    if test_info.name == "retraction distance":
-        parameter_two_min_max = [persistence["settings"]["speed_printing"]] * test_info.number_of_substructures
-        gv = initialize_test()
-    elif test_info.name == "printing speed":
-        parameter_two_min_max = None
-        gv = initialize_test()
-    elif test_info.name == "first-layer track width":
-        parameter_two_min_max = None
-        gv = initialize_test()
-    elif test_info.name == "track width":
-        parameter_two_min_max = None
-        gv = initialize_test()
-    else:
-        parameter_two_min_max = session["min_max_parameter_two"]
-        gv = initialize_test()
-
-    # Add a step for selecting/approving of the result
     previous_tests = persistence["session"]["previous_tests"]
-
     persistence["settings"]["temperature_printbed_setpoint"] = machine.settings.temperature_printbed_setpoint
     persistence["settings"]["temperature_chamber_setpoint"] = machine.settings.temperature_chamber_setpoint
     persistence["settings"]["part_cooling_setpoint"] = machine.settings.part_cooling_setpoint
@@ -153,7 +130,7 @@ else:
     test_number = str(input("Parameter to be tested:" + "".join("\n[{0}] for '{1}'".format(*k) for k in zip(list(test_list.keys()), list(test_list.values()))) + ": "))
 
     persistence["session"]["test_name"] = test_number.strip()
-    test_info = test_info(persistence)
+    test_info = get_test_info(persistence)
 
     min_max_argument_input = evaluate(input("Parameter range values [min, max] or None: "))
     parameter_one_min_max = min_max_argument_input if min_max_argument_input != "" else None
@@ -256,6 +233,9 @@ with open(save_session_file_as(session_id, "json"), mode="w") as file:
 
 import os
 os.system("python generate_suggested_values.py "+str(session_id))
+
+os.system("python generate_report.py "+str(session_id))
+
 
 generate_label(persistence)
 

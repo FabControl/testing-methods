@@ -275,7 +275,6 @@ class Settings(object):
         self.temperature_printbed_setpoint = temperature_printbed_setpoint if temperature_printbed_setpoint else 0
 
         self.part_cooling_setpoint = part_cooling_setpoint if part_cooling_setpoint else 0
-
         self.ventilator_entry_setpoint = ventilator_entry_setpoint if ventilator_entry_setpoint else 0
         self.ventilator_exit_setpoint = ventilator_exit_setpoint if ventilator_exit_setpoint else 0
 
@@ -299,8 +298,9 @@ class Parameter(object):
 
 
 class TestInfo(object):
-    def __init__(self, name: str, number_of_layers: int, number_of_test_structures: int, raft: bool, parameter_one: Parameter, parameter_two: Parameter, number_of_substructures: int, other_parameters: list, parameter_three: Parameter=None):
+    def __init__(self, name: str, test_number: str, number_of_layers: int, number_of_test_structures: int, raft: bool, parameter_one: Parameter, parameter_two: Parameter, number_of_substructures: int, other_parameters: list, parameter_three: Parameter=None):
         self.name = name
+        self.test_number = test_number
         self.number_of_layers = number_of_layers
         self.number_of_test_structures = number_of_test_structures
         self.number_of_substructures = number_of_substructures
@@ -311,84 +311,83 @@ class TestInfo(object):
         self.other_parameters = other_parameters
 
 
-def get_minmax_track_width_coef(machine: Machine, number_of_test_structures: int):
-    if machine.temperaturecontrollers.extruder.nozzle.size_id <= 0.6:
+def get_minmax_track_width_coef(size_id: float, number_of_test_structures: int):
+    if size_id < 0.6:
         coef_w_min = 0.90
         coef_w_max = 1.10
-    if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.6:
+    if size_id >= 0.6:
         coef_w_min = 0.90
         coef_w_max = 1.20
-    if machine.temperaturecontrollers.extruder.nozzle.size_id >= 0.8:
+    if size_id >= 0.8:
         coef_w_min = 1.00
         coef_w_max = 1.30
-    if machine.temperaturecontrollers.extruder.nozzle.size_id >= 1.0:
+    if size_id >= 1.0:
         coef_w_min = 0.90
         coef_w_max = 1.40
 
-    coef_w_all = np.linspace(coef_w_min, coef_w_max, number_of_test_structures)
-    coef_w_mean = (coef_w_min + coef_w_max) / 2
+    coef_w= np.linspace(coef_w_min, coef_w_max, number_of_test_structures).tolist()
 
-    return coef_w_all, coef_w_mean
+    return coef_w
 
 
-def get_minmax_track_height_coef(machine: Machine, number_of_test_structures: int):
-    if machine.temperaturecontrollers.extruder.nozzle.size_id == 0.1:
+def get_minmax_track_height_coef(size_id: float, number_of_test_structures: int):
+    if size_id == 0.1:
         coef_h_min = 0.10
         coef_h_max = 0.50
     else:
         coef_h_min = 1./5.
         coef_h_max = 2./3.
 
-    coef_h_all = np.linspace(0.90*coef_h_min, 1.10*coef_h_max, number_of_test_structures).tolist()
+    coef_h = np.linspace(0.90*coef_h_min, 1.10*coef_h_max, number_of_test_structures).tolist()
 
-    return coef_h_all
+    return coef_h
 
 
-def get_minmax_track_height_raft_coef(machine: Machine, number_of_test_structures=None):
+def get_minmax_track_height_raft_coef(size_id: float, number_of_test_structures=None):
 
-    if machine.temperaturecontrollers.extruder.nozzle.size_id == 0.1:
+    if size_id == 0.1:
         coef_h_min_raft = 0.50
         coef_h_max_raft = 0.70
-    elif machine.temperaturecontrollers.extruder.nozzle.size_id == 0.2:
+    elif size_id == 0.2:
         coef_h_min_raft = 0.50
         coef_h_max_raft = 0.75
-    elif machine.temperaturecontrollers.extruder.nozzle.size_id == 0.4:
+    elif size_id == 0.4:
         coef_h_min_raft = 0.33
         coef_h_max_raft = 0.50
-    elif machine.temperaturecontrollers.extruder.nozzle.size_id == 0.6:
+    elif size_id == 0.6:
         coef_h_min_raft = 0.30
         coef_h_max_raft = 0.66
-    elif machine.temperaturecontrollers.extruder.nozzle.size_id == 0.8:
+    elif size_id == 0.8:
         coef_h_min_raft = 0.30
         coef_h_max_raft = 0.50
-    elif machine.temperaturecontrollers.extruder.nozzle.size_id >= 1.0:
+    elif size_id >= 1.0:
         coef_h_min_raft = 0.30
         coef_h_max_raft = 0.75
     else:
         coef_h_min_raft = 1/4
         coef_h_max_raft = 1/2
 
-    coef_h_raft_all = np.linspace(0.90*coef_h_min_raft, 1.10*coef_h_max_raft, number_of_test_structures).tolist()
+    coef_h_raft = np.linspace(0.90*coef_h_min_raft, 1.10*coef_h_max_raft, number_of_test_structures).tolist()
 
-    return coef_h_raft_all
+    return coef_h_raft
 
 
-def get_minmax_track_width_raft_coef(machine: Machine, number_of_test_structures=None):
+def get_minmax_track_width_raft_coef(size_id: float, number_of_test_structures=None):
     coef_w_max_raft = 1.4
     coef_w_min_raft = 1.0
 
-    if machine.temperaturecontrollers.extruder.nozzle.size_id >= 1.0:
+    if size_id >= 1.0:
         coef_w_min_raft = 1.0
         coef_w_max_raft = 2.0
 
-    coef_w_raft_all = np.linspace(0.90*coef_w_min_raft, 1.00*coef_w_max_raft, number_of_test_structures).tolist()
+    coef_w_raft = np.linspace(0.90*coef_w_min_raft, 1.00*coef_w_max_raft, number_of_test_structures).tolist()
 
-    return coef_w_raft_all
+    return coef_w_raft
 
 
-def get_minmax_temperature(machine: Machine, number_of_test_structures: int):
-    temperature_extruder_min = machine.settings.temperature_extruder_raft
-    temperature_extruder_max = min(machine.temperaturecontrollers.extruder.temperature_max, 1.070 * (machine.settings.temperature_extruder_raft + 273.15) - 273.15)
+def get_minmax_temperature(temperature_extruder_raft: float, temperature_max: float, number_of_test_structures: int):
+    temperature_extruder_min = temperature_extruder_raft
+    temperature_extruder_max = min(temperature_max, 1.070 * (temperature_extruder_raft + 273.15) - 273.15)
 
     temperature_all = np.linspace(temperature_extruder_min,
                                   temperature_extruder_max, number_of_test_structures).tolist()

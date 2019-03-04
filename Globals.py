@@ -3,7 +3,7 @@ import json
 from session_loader import session_uid
 from paths import json_folder
 from CLI_helpers import separator, exception_handler
-from test_info import test_info, get_comment
+from GetTestInfo import get_test_info, get_comment
 
 try:
     try:
@@ -14,13 +14,8 @@ try:
         file.close()
     except:
         exception_handler("Session not found")
-        print("Attempting to load the persistence file without an ID".format(session_uid))
-        with open(str("persistence.json"), mode="r") as file:
-            persistence = json.load(file)
-        print("Loaded a testing session ID {} from the existing JSON file".format(persistence["session"]["uid"]))
-        file.close()
 except:
-    exception_handler("falling back to hardcoded JSON")
+    exception_handler("Falling back to hardcoded JSON")
     persistence = {
     "machine": {
         "sn": 12345,
@@ -148,7 +143,7 @@ except:
 }
 
 session_idn = str(persistence["session"]["uid"])
-test_info = test_info(persistence)
+test_info = get_test_info(persistence)
 comment = get_comment(test_info)
 
 material = Material(**persistence["material"])

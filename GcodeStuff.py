@@ -27,15 +27,15 @@ class Gplus(G):
 
         self.track_list = [] # TODO Is it used?
 
-    def set_extruder_temperature(self, temperature: float, extruder: Extruder):
+    def set_extruder_temperature(self, temperature: int, extruder: Extruder):
         """Set the liquefier temperature in degC"""
         G.write(self, extruder.gcode_command.format(temperature, extruder.tool) + "; set the extruder temperature")
 
-    def set_printbed_temperature(self, temperature: float, printbed: Printbed):
+    def set_printbed_temperature(self, temperature: int, printbed: Printbed):
         """Set the printbed temperature in degC"""
-        G.write(self, printbed.gcode_command.format(temperature, printbed.tool) + "; set the print bed temperature")
+        G.write(self, printbed.gcode_command.format(temperature) + "; set the print bed temperature")
 
-    def set_chamber_temperature(self, temperature: float, chamber: Chamber):
+    def set_chamber_temperature(self, temperature: int, chamber: Chamber):
         """Set the printbed temperature in degC"""
         G.write(self, chamber.gcode_command.format(temperature, chamber.tool) + "; set the chamber temperature")
 
@@ -218,5 +218,5 @@ class Gplus(G):
         The speed to move the tool head in mm/s.
 
         """
-        self.write("G1 F{}".format(rate * 60))
-        self.speed = rate * 60
+        self.write("G1 F{}".format(int(rate * 60)))
+        self.speed = int(rate * 60)
