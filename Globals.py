@@ -5,6 +5,7 @@ from paths import json_folder
 from CLI_helpers import separator, exception_handler
 from GetTestInfo import get_test_info, get_comment
 
+
 try:
     try:
         print("Attempting to load the persistence file with ID {}".format(session_uid))

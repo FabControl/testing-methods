@@ -5,7 +5,7 @@ from Globals import comment
 import numpy as np
 
 
-class GettingValuesA(object):
+class GetValuesA(object):
     def __init__(self, machine: Machine, material: Material, fixed_parameter_values: TestInfo, path: str, offset: list=None):
         """
         :param machine:
@@ -105,14 +105,14 @@ class GettingValuesA(object):
             self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
             self.temperature_extruder = self.temperature_extruder_raft
 
-            self.step_x = self.track_width
-
             self.track_height = self.parameter_one.values
             self.track_height_raft = self.parameter_one.values
+            self.abs_z = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
+
             self.track_width = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in [self.coef_w_raft] * self.number_of_test_structures]
             self.track_width_raft = self.track_width
 
-            self.abs_z = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
+            self.step_x = self.track_width
 
             self.speed_printing = self.parameter_two.values
             self.speed_printing_raft = self.parameter_two.values
@@ -126,14 +126,14 @@ class GettingValuesA(object):
             self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
             self.temperature_extruder = self.temperature_extruder_raft
 
-            self.speed_printing = self.parameter_two.values
-            self.speed_printing_raft = self.parameter_two.values
-
             self.track_height = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in [self.coef_h_raft] * self.number_of_test_structures]
-            self.track_width = self.parameter_one.values
             self.abs_z = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
 
+            self.track_width = self.parameter_one.values
             self.step_x = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_w]
+
+            self.speed_printing = self.parameter_two.values
+            self.speed_printing_raft = self.parameter_two.values
 
         elif self.test_number == "03":
             # EXTRUSION TEMPERATURE test parameters
@@ -194,13 +194,13 @@ class GettingValuesA(object):
                                                    fixed_parameter_values.parameter_one.values[-1],
                                                    self.number_of_test_structures).tolist()
 
-        elif self.test_number == "0":
+        elif self.test_number == "11":
             # RETRACTION DISTANCE test parameters
             self.retraction_distance = np.linspace(fixed_parameter_values.parameter_one.values[0],
                                                    fixed_parameter_values.parameter_one.values[-1],
                                                    self.number_of_test_structures).tolist()
 
-        elif self.test_number == "11":
+        elif self.test_number == "12":
             # RETRACTION RESTART DISTANCE amd COASTING DISTANCE test parameters
             self.retraction_restart_distance = np.linspace(fixed_parameter_values.parameter_one.values[0],
                                                            fixed_parameter_values.parameter_one.values[-1],
@@ -244,12 +244,12 @@ class GettingValuesA(object):
         volumetric_flow_rate = []
         volumetric_flow_rate_row = []
 
-        if self.test_name == "extrusion temperature vs retraction distance" or "retraction distance":
+        if self.test_number== "08" or "10":
             volumetric_flow_rate = round(get_flow_rate(self.track_height[0], self.track_width[0], self.speed_printing[0], self.extrusion_multiplier_bridging[0]), 3)
         else:
             for speed in self.speed_printing:
                 for dummy in range(self.number_of_test_structures):
-                    if self.test_name == "bridging extrusion-multiplier vs bridging printing speed":
+                    if self.test_number == "13":
                         value = round(get_flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier_bridging[dummy]), 3)
                     else:
                         value = round(get_flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
@@ -286,7 +286,7 @@ def addtitle(test_info: TestInfo, material: Material, machine: Machine):
 
 def addcomment1(test_info: TestInfo):
     comment1 = str("; --- testing the following " + test_info.parameter_one.name + " values: " + ", ".join((test_info.parameter_one.precision + " {}").format(*k) for k in zip(test_info.parameter_one.values, len(test_info.parameter_one.values)*[test_info.parameter_one.units])) + " ---")
-    if test_info.name not in ["first-layer track width", "track width", "printing speed", "retraction distance"]:
+    if test_info.test_number not in ["02", "05", "07", "10"]:
         comment2 = str("; --- and the following " + test_info.parameter_two.name + " values: " + ", ".join((test_info.parameter_two.precision + " {}").format(*k) for k in zip(test_info.parameter_two.values, len(test_info.parameter_two.values)*[test_info.parameter_two.units])) + " ---")
         if test_info.parameter_three:
             comment3 = str("; --- and the following " + test_info.parameter_three.name + " values: " + ", ".join((test_info.parameter_three.precision + " {}").format(*k) for k in zip(test_info.parameter_three.values, len(test_info.parameter_three.values)*[test_info.parameter_three.units])) + " ---")
@@ -298,24 +298,17 @@ def addcomment1(test_info: TestInfo):
 
 def addcomment2():
     comment2 = comment
-
-    # for dummy1 in range(0, get_test_info.number_of_test_structures):
-    #     addcomment2 = str("; --- " + "".join("{0}: {1} {2}, ".format(*k) for k in zip(test_parameter_one_name_list, test_parameter_one_precision_list, test_parameter_one_units_list)) +
-    #                       " ---").format(*list(map(list, zip(*argument_list)))[dummy1])
-    #     comment2.append(addcomment2)
-
     return comment2
 
 
 def addcomment3(test_info: TestInfo):
     dummy = []
-
     for k in range(test_info.number_of_test_structures):
         comment = str("; --- {0}: {1} {2} ---\n").format(test_info.parameter_one.name, test_info.parameter_one.precision, test_info.parameter_one.units)
 
         dummy.append(comment.format(np.linspace(test_info.parameter_one.values[0], test_info.parameter_one.values[1], test_info.number_of_test_structures).tolist()[k]))
-
     return dummy
+
 
 def number_of_lines(test_structure_size, number_of_test_structures, track_width):
     lines = int(2*test_structure_size/((3*number_of_test_structures + 1)*np.mean(track_width)))
@@ -328,5 +321,4 @@ def number_of_lines(test_structure_size, number_of_test_structures, track_width)
             lines = lines -2
         if lines % 4 == 3:
             lines = lines -3
-
     return lines

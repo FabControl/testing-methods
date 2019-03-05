@@ -18,6 +18,7 @@ def border_values(_list: list):
    return [_list[0], _list[-1]]
 
 machine = Machine(**persistence["machine"])
+nozzle_size_id = machine.temperaturecontrollers.extruder.nozzle.size_id
 machine.settings = Settings(**persistence["settings"])
 
 if len(persistence["session"]["previous_tests"]) > 0:
@@ -28,27 +29,27 @@ if len(persistence["session"]["previous_tests"]) > 0:
 
 test_info = get_test_info(persistence)
 
-if persistence["session"]["test_name"] == "01":
-    suggested_values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(get_minmax_track_height_raft_coef(machine, test_info.number_of_test_structures))]
-elif persistence["session"]["test_name"] == "02":
-    suggested_values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(get_minmax_track_width_raft_coef(machine, test_info.number_of_test_structures))]
-elif persistence["session"]["test_name"] == "03":
-    suggested_values = border_values(get_minmax_temperature(machine, 7))
-elif persistence["session"]["test_name"] == "04":
-    suggested_values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(get_minmax_track_height_coef(machine, test_info.number_of_test_structures))]
-elif persistence["session"]["test_name"] == "05":
-    suggested_values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(get_minmax_track_width_coef(machine, test_info.number_of_test_structures))]
-elif persistence["session"]["test_name"] == "06":
+if persistence["session"]["test_number"] == "01":
+    suggested_values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(get_minmax_track_height_raft_coef(nozzle_size_id, test_info.number_of_test_structures))]
+elif persistence["session"]["test_number"] == "02":
+    suggested_values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(get_minmax_track_width_raft_coef(nozzle_size_id, test_info.number_of_test_structures))]
+elif persistence["session"]["test_number"] == "03":
+    suggested_values = border_values(get_minmax_temperature(temperature, machine.temperaturecontrollers.extruder.temperature_max, test_info.number_of_test_structures))
+elif persistence["session"]["test_number"] == "04":
+    suggested_values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(get_minmax_track_height_coef(nozzle_size_id, test_info.number_of_test_structures))]
+elif persistence["session"]["test_number"] == "05":
+    suggested_values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in border_values(get_minmax_track_width_coef(nozzle_size_id, test_info.number_of_test_structures))]
+elif persistence["session"]["test_number"] == "06":
     suggested_values = [0.75, 1.5]
-elif persistence["session"]["test_name"] == "07":
+elif persistence["session"]["test_number"] == "07":
     suggested_values = [0.75*speed, 1.25*speed] if speed is not None else None
-elif persistence["session"]["test_name"] == "08":
-    suggested_values = [temperature-5, temperature+5] if temperature is not None else None
-elif persistence["session"]["test_name"] == "09":
+elif persistence["session"]["test_number"] == "08":
+    suggested_values = [temperature-5, temperature+5]
+elif persistence["session"]["test_number"] == "09":
     suggested_values = test_info.parameter_one.default_value
-elif persistence["session"]["test_name"] == "10":
+elif persistence["session"]["test_number"] == "10":
     suggested_values = test_info.parameter_one.default_value
-elif persistence["session"]["test_name"] == "13":
+elif persistence["session"]["test_number"] == "13":
     suggested_values = [1.25, 2.0]
 
 print(suggested_values)

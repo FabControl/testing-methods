@@ -1,11 +1,11 @@
 from Definitions import *
 from Globals import machine
-from GettingValuesA import GettingValuesA
-from GettingValuesB import TestSetupB
+from GetValuesA import GetValuesA
+from GetValuesB import TestSetupB
 from paths import footer
 
 # WIPE
-def wipe(ts: GettingValuesA or TestSetupB, length_multiplier=1):
+def wipe(ts: GetValuesA or TestSetupB, length_multiplier=1):
     wipe_length_initial = 6 * ts.test_structure_size/10
     wipe_length = wipe_length_initial * length_multiplier
     ts.g.home()
@@ -33,7 +33,7 @@ def wipe(ts: GettingValuesA or TestSetupB, length_multiplier=1):
     ts.g.dwell(5000)
     ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
 
-    if isinstance(ts, GettingValuesA):
+    if isinstance(ts, GetValuesA):
         ts.g.move(x=+2*wipe_length,
                   y=0,
                   z=-2*ts.coef_h_raft*machine.temperaturecontrollers.extruder.nozzle.size_id,
@@ -66,7 +66,7 @@ def wipe(ts: GettingValuesA or TestSetupB, length_multiplier=1):
 
 
 # RAFT PERIMETER
-def raft_perimeter(ts: GettingValuesA):
+def raft_perimeter(ts: GetValuesA):
     ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft, machine.temperaturecontrollers.extruder)
     ts.g.write("; --- print the outer perimeter ---")
     ts.g.feed(machine.settings.speed_printing_raft/3)  # print the outer perimeter of the raft
@@ -91,7 +91,7 @@ def raft_perimeter(ts: GettingValuesA):
 
 
 # PRINTING RAFT
-def print_raft(gv: GettingValuesA):
+def print_raft(gv: GetValuesA):
     gv.g.write("; --- start to print the raft ---")
     raft_perimeter(gv)
     gv.g.write("; --- print the infill with the density of {} % ---".format(machine.settings.raft_density))
@@ -136,31 +136,31 @@ def print_raft(gv: GettingValuesA):
     return
 
 
-# def print_raft_new(gv: GettingValuesA):
-#     gv.g.home()
-#     gv.g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
+# def print_raft_new(values: GetValuesA):
+#     values.g.home()
+#     values.g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
 #
-#     if hasattr(gv, "temperature_printbed"):
-#         gv.g.set_printbed_temperature(gv.temperature_printbed)
+#     if hasattr(values, "temperature_printbed"):
+#         values.g.set_printbed_temperature(values.temperature_printbed)
 #
-#     gv.g.abs_move(x=0,
+#     values.g.abs_move(x=0,
 #                   y=0,
-#                   z=gv.coef_h_raft * machine.nozzle.size_id,
+#                   z=values.coef_h_raft * machine.nozzle.size_id,
 #                   extrude=False, extrusion_multiplier=0)
-#     gv.g.write("; --- start to clean the nozzle ---")
-#     gv.g.set_extruder_temperature(gv.temperature_extruder_raft)
-#     gv.g.dwell(5000)
-#     gv.g.write("G1 F1000 E5; extrude 5 mm of material")
-#     gv.g.dwell(5000)
-#     gv.g.feed(machine.settings.speed_printing_raft)  # print the raft
-#     sf.infill(sf.raft_structure(gv.test_structure_size/2, structure="square"), outlines=2, g=gv.g, coef_w_raft=gv.coef_w_raft, coef_h_raft=gv.coef_h_raft)
-#     gv.g.write("; --- finish to print the raft ---")
+#     values.g.write("; --- start to clean the nozzle ---")
+#     values.g.set_extruder_temperature(values.temperature_extruder_raft)
+#     values.g.dwell(5000)
+#     values.g.write("G1 F1000 E5; extrude 5 mm of material")
+#     values.g.dwell(5000)
+#     values.g.feed(machine.settings.speed_printing_raft)  # print the raft
+#     sf.infill(sf.raft_structure(values.test_structure_size/2, structure="square"), outlines=2, g=values.g, coef_w_raft=values.coef_w_raft, coef_h_raft=values.coef_h_raft)
+#     values.g.write("; --- finish to print the raft ---")
 #
 #     return
 
 
 # GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER vs. PRINTING SPEED
-def flat_test_parameter_one_vs_parameter_two(ts: GettingValuesA):
+def flat_test_parameter_one_vs_parameter_two(ts: GetValuesA):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
     wipe(ts, length_multiplier=1 if machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)
@@ -201,7 +201,7 @@ def flat_test_parameter_one_vs_parameter_two(ts: GettingValuesA):
             ts.g.abs_move(z=+ts.abs_z[current_test_structure])
 
         for current_substructure in range(ts.number_of_substructures):
-            if ts.test_info.parameter_two is None:
+            if ts.test_info.parameter_two.values is None:
                 current_printing_speed = ts.speed_printing[current_test_structure]
             else:
                 current_printing_speed = ts.parameter_two.values[current_substructure]
@@ -256,7 +256,7 @@ def flat_test_parameter_one_vs_parameter_two(ts: GettingValuesA):
 
 
 # RETRACTION RESTART DISTANCE and COASTING DISTANCE
-def retraction_restart_distance_vs_coasting_distance(ts: GettingValuesA):
+def retraction_restart_distance_vs_coasting_distance(ts: GetValuesA):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
     wipe(ts, length_multiplier=1 if machine.nozzle.size_id < 0.59 else 0.85) # perform wipe of the nozzle
@@ -330,7 +330,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: GettingValuesA):
 
 
 # BRIDGING EXTRUSION MULTIPLIER vs. BRIDGING PRINTING SPEED
-def bridging_test(ts: GettingValuesA):
+def bridging_test(ts: GetValuesA):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
     wipe(ts, length_multiplier=1 if machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)
@@ -438,14 +438,14 @@ def bridging_test(ts: GettingValuesA):
 # VARIABLE RETRACTION DISTANCE at FIXED PRINTING SPEED and FIXED RETRACTION SPEED
 # VARIABLE EXTRUSION TEMPERATURE vs VARIABLE RETRACTION DISTANCE
 
-def retraction_distance(ts: GettingValuesA):
+def retraction_distance(ts: GetValuesA):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
     wipe(ts, length_multiplier=1 if machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85) # perform wipe of the nozzle
     print_raft(ts) # print the raft to support the test structure
     ts.g.write("; --- start to print the test structure ---")
     ts.g.travel(x=-ts.test_structure_width[0] - ts.test_structure_separation,
-                y=0,  # +gv.step_y-gv.test_structure_size/gv.number_of_substructures if current_test_structure != 0 else
+                y=0,  # +values.step_y-values.test_structure_size/values.number_of_substructures if current_test_structure != 0 else
                 lift=1)
 
     ts.g.abs_move(z=+ts.abs_z[0])
@@ -554,7 +554,7 @@ def retraction_distance(ts: GettingValuesA):
 
     return
 
-def generate_footer(ts: GettingValuesA):
+def generate_footer(ts: GetValuesA):
     custom_footer = ";--- start footer ---\n; end of the test routine\n"
 
     if ts.chamber_heatable:

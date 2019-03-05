@@ -1,4 +1,4 @@
-from GettingValuesB import TestSetupB
+from GetValuesB import TestSetupB
 import slicing_functionality as sf
 from Definitions import *
 from TestStructureGeometriesA import wipe

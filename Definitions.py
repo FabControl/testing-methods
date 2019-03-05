@@ -414,11 +414,13 @@ def get_flow_rate(height, width, speed_printing, extrusion_multiplier=1):
         flow_rate = extrusion_multiplier * speed_printing * (height * (width - height) + math.pi * (height / 2) ** 2)
     else:
         flow_rate = extrusion_multiplier * speed_printing * height * width
+
     return flow_rate
 
 
 def sum_of_list_elements(my_list, index):
     sum_of_elements = [sum(my_list[0:x + 1]) for x in range(0, index + 1)]
+
     return sum_of_elements[-1]
 
 
@@ -457,4 +459,5 @@ def save_session_file_as(session_id: str, extension: str) -> str:
         output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
     else:
         output = str(folder + separator() + session_id + extension)
+
     return output
