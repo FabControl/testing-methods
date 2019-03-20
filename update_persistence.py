@@ -1,0 +1,46 @@
+from get_test_info import get_test_info
+from Definitions import *
+import re
+from datetime import datetime
+from CLI_helpers import extruded_filament
+
+def update_persistence(persistence, values):
+
+    session_id = str(persistence["session"]["uid"])
+    test_info = get_test_info(persistence)
+    previous_tests = persistence["session"]["previous_tests"]
+
+    current_test = {"test_name": values.test_name,
+                    "test_number": values.test_number,
+                    "executed": True,
+                    "tested_parameter_one_values": [round(k, int(re.search("[0-9]", values.test_info.parameter_one.precision).group())) for k in values.get_values_parameter_one()],
+                    "tested_parameter_two_values": None if values.test_info.parameter_two.name is None else [round(k, int(re.search("[0-9]", values.test_info.parameter_two.precision).group())) for k in values.get_values_parameter_two()],
+                    "tested_volumetric_flow-rate_values": values.volumetric_flow_rate,
+                    "selected_parameter_one_value": 0,
+                    "selected_parameter_two_value": None if values.test_info.parameter_two.name is None else 0,
+                    "selected_volumetric_flow-rate_value": np.mean(values.volumetric_flow_rate) if values.test_info.name == ("retraction distance" or "extrusion temperature vs retraction distance") else 0,
+                    "parameter_one_units": values.test_info.parameter_one.units,
+                    "parameter_two_units": None if values.test_info.parameter_two.name is None else values.test_info.parameter_two.units,
+                    "parameter_one_precision": values.test_info.parameter_one.precision,
+                    "parameter_two_precision": None if values.test_info.parameter_two.name is None else values.test_info.parameter_two.precision,
+                    "extruded_filament_mm": extruded_filament(save_session_file_as(session_id, "gcode")),
+                    "gcode_path": save_session_file_as(session_id, "gcode"),
+                    "label_path": save_session_file_as(session_id, "png"),
+                    "comments": 0,
+                    "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+    if test_info.parameter_three:
+        current_test["tested_parameter_three_values"] = [values.test_info.parameter_three.values[0], values.test_info.parameter_three.values[-1]]
+        current_test["selected_parameter_three_value"] = 0
+        current_test["parameter_three_units"] = values.test_info.parameter_three.units
+        current_test["parameter_three_precision"] = values.test_info.parameter_three.precision
+
+    previous_tests.append(current_test)
+
+    persistence["session"]["previous_tests"] = previous_tests
+
+    persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2 * persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
+
+    with open(save_session_file_as(session_id, "json"), mode="w") as file:
+        output = json.dumps(persistence, indent=4, sort_keys=False)
+        file.write(output)

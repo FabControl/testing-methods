@@ -25,15 +25,17 @@ class Gplus(G):
         self.coef_w = machine.settings.track_width / machine.temperaturecontrollers.extruder.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
 
-        self.track_list = [] # TODO Is it used?
 
     def set_extruder_temperature(self, temperature: int, extruder: Extruder):
         """Set the liquefier temperature in degC"""
         G.write(self, extruder.gcode_command.format(temperature, extruder.tool) + "; set the extruder temperature")
 
-    def set_printbed_temperature(self, temperature: int, printbed: Printbed):
+    def set_printbed_temperature(self, temperature: float, printbed: Printbed):
         """Set the printbed temperature in degC"""
-        G.write(self, printbed.gcode_command.format(temperature) + "; set the print bed temperature")
+        if printbed.tool:
+            G.write(self, str(printbed.gcode_command+" {1}").format(temperature, printbed.tool) + "; set the print bed temperature")
+        else:
+            G.write(self, printbed.gcode_command.format(temperature) + "; set the print bed temperature")
 
     def set_chamber_temperature(self, temperature: int, chamber: Chamber):
         """Set the printbed temperature in degC"""

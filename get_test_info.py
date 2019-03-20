@@ -24,12 +24,15 @@ def get_test_info(persistence):
     else:
         values_parameter_one = []
 
+    if persistence["session"]["min_max_parameter_two"] == []:
+        persistence["session"]["min_max_parameter_two"] = [0]
+
     if persistence["session"]["test_number"] == "01":
         parameter_values_for_comments = TestInfo("first-layer track height vs first-layer printing speed", "01", number_of_layers=1, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=False,
                                                  parameter_one=Parameter("first-layer track height", "mm", "{:.3f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else [nozzle_size_id*_ for _ in get_minmax_track_height_raft_coef(nozzle_size_id, number_of_test_structures)]),
                                                  parameter_two=Parameter("first-layer printing speed", "mm/s", "{:.1f}",
-                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0],persistence["session"]["min_max_parameter_two"][1],number_of_substructures).tolist()),
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0],persistence["session"]["min_max_parameter_two"][-1],number_of_substructures).tolist()),
                                                  other_parameters=other_parameters)
 
     elif persistence["session"]["test_number"] == "02":
@@ -57,7 +60,7 @@ def get_test_info(persistence):
                                                  parameter_one=Parameter("extrusion temperature", "degC", "{:.0f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(persistence["settings"]["temperature_extruder_raft"], persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures)),
                                                  parameter_two=Parameter("printing speed","mm/s","{:.1f}",
-                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0],persistence["session"]["min_max_parameter_two"][1],number_of_substructures).tolist()),
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0],persistence["session"]["min_max_parameter_two"][-1],number_of_substructures).tolist()),
                                                  other_parameters=other_parameters)
 
     elif persistence["session"]["test_number"] == "04":
@@ -73,7 +76,7 @@ def get_test_info(persistence):
                                                  parameter_one=Parameter("track height","mm", "{:.3f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else [nozzle_size_id*_ for _ in get_minmax_track_height_coef(nozzle_size_id, number_of_test_structures)]),
                                                  parameter_two=Parameter("printing speed", "mm/s", "{:.1f}",
-                                                                         value=persistence["session"]["min_max_parameter_two"]),
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0],persistence["session"]["min_max_parameter_two"][-1],number_of_substructures).tolist()),
                                                  other_parameters=other_parameters)
 
     elif persistence["session"]["test_number"] == "05":

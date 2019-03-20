@@ -1,11 +1,11 @@
 from Definitions import *
 from Globals import machine
-from GetValuesA import GetValuesA
+from get_values_A import get_values_A
 from GetValuesB import TestSetupB
 from paths import footer
 
 # WIPE
-def wipe(ts: GetValuesA or TestSetupB, length_multiplier=1):
+def wipe(ts: get_values_A or TestSetupB, length_multiplier=1):
     wipe_length_initial = 6 * ts.test_structure_size/10
     wipe_length = wipe_length_initial * length_multiplier
     ts.g.home()
@@ -33,7 +33,7 @@ def wipe(ts: GetValuesA or TestSetupB, length_multiplier=1):
     ts.g.dwell(5000)
     ts.g.feed(machine.settings.speed_printing_raft)  # print the raft
 
-    if isinstance(ts, GetValuesA):
+    if isinstance(ts, get_values_A):
         ts.g.move(x=+2*wipe_length,
                   y=0,
                   z=-2*ts.coef_h_raft*machine.temperaturecontrollers.extruder.nozzle.size_id,
@@ -47,26 +47,13 @@ def wipe(ts: GetValuesA or TestSetupB, length_multiplier=1):
                   z=0,
                   extrude=False, extrusion_multiplier=0)
 
-    elif isinstance(ts, TestSetupB):
-        ts.g.abs_move(x=+6 * ts.test_structure_size/10,
-                      y=-6 * ts.test_structure_size/10,
-                      z=0,
-                      extrude=True, extrusion_multiplier=2.25, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
-        ts.g.move(x=0,
-                  y=-ts.test_structure_size/10,
-                  z=+ts.coef_h_raft * machine.temperaturecontrollers.extruder.nozzle.size_id,
-                  extrude=False, extrusion_multiplier=0)
-        ts.g.move(x=-ts.test_structure_size/10,
-                  y=0,
-                  z=0,
-                  extrude=False, extrusion_multiplier=0)
     ts.g.write("; --- end to clean the nozzle ---")
 
     return
 
 
 # RAFT PERIMETER
-def raft_perimeter(ts: GetValuesA):
+def raft_perimeter(ts: get_values_A):
     ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft, machine.temperaturecontrollers.extruder)
     ts.g.write("; --- print the outer perimeter ---")
     ts.g.feed(machine.settings.speed_printing_raft/3)  # print the outer perimeter of the raft
@@ -91,7 +78,7 @@ def raft_perimeter(ts: GetValuesA):
 
 
 # PRINTING RAFT
-def print_raft(gv: GetValuesA):
+def print_raft(gv: get_values_A):
     gv.g.write("; --- start to print the raft ---")
     raft_perimeter(gv)
     gv.g.write("; --- print the infill with the density of {} % ---".format(machine.settings.raft_density))
@@ -136,7 +123,7 @@ def print_raft(gv: GetValuesA):
     return
 
 
-# def print_raft_new(values: GetValuesA):
+# def print_raft_new(values: get_values_A):
 #     values.g.home()
 #     values.g.feed(2 * machine.settings.speed_printing)  # respect the units: mm/min
 #
@@ -160,7 +147,7 @@ def print_raft(gv: GetValuesA):
 
 
 # GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER vs. PRINTING SPEED
-def flat_test_parameter_one_vs_parameter_two(ts: GetValuesA):
+def flat_test_parameter_one_vs_parameter_two(ts: get_values_A):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
     wipe(ts, length_multiplier=1 if machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)
@@ -256,7 +243,7 @@ def flat_test_parameter_one_vs_parameter_two(ts: GetValuesA):
 
 
 # RETRACTION RESTART DISTANCE and COASTING DISTANCE
-def retraction_restart_distance_vs_coasting_distance(ts: GetValuesA):
+def retraction_restart_distance_vs_coasting_distance(ts: get_values_A):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
     wipe(ts, length_multiplier=1 if machine.nozzle.size_id < 0.59 else 0.85) # perform wipe of the nozzle
@@ -330,7 +317,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: GetValuesA):
 
 
 # BRIDGING EXTRUSION MULTIPLIER vs. BRIDGING PRINTING SPEED
-def bridging_test(ts: GetValuesA):
+def bridging_test(ts: get_values_A):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
     wipe(ts, length_multiplier=1 if machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)
@@ -438,7 +425,7 @@ def bridging_test(ts: GetValuesA):
 # VARIABLE RETRACTION DISTANCE at FIXED PRINTING SPEED and FIXED RETRACTION SPEED
 # VARIABLE EXTRUSION TEMPERATURE vs VARIABLE RETRACTION DISTANCE
 
-def retraction_distance(ts: GetValuesA):
+def retraction_distance(ts: get_values_A):
     ts.g.write(ts.title)
     ts.g.write(ts.comment1)
     wipe(ts, length_multiplier=1 if machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85) # perform wipe of the nozzle
@@ -554,19 +541,19 @@ def retraction_distance(ts: GetValuesA):
 
     return
 
-def generate_footer(ts: GetValuesA):
+def generate_footer(values: get_values_A): # TODO Rewrite!
     custom_footer = ";--- start footer ---\n; end of the test routine\n"
 
-    if ts.chamber_heatable:
-        custom_footer = custom_footer + ts.chamber.gcode_command.format(ts.chamber.temperature_min, ts.chamber.tool) + "; set the chamber temperature\n"
+    if values.chamber_heatable:
+        custom_footer = custom_footer + values.chamber.gcode_command.format(values.chamber.temperature_min, values.chamber.tool) + "; set the chamber temperature\n"
 
-    if ts.printbed_heatable:
-        custom_footer = custom_footer + ts.printbed.gcode_command.format(ts.printbed.temperature_min, ts.printbed.tool) + "; set the print bed temperature\n"
+    if values.printbed_heatable:
+        custom_footer = custom_footer + values.printbed.gcode_command.format(values.printbed.temperature_min, values.printbed.tool) + "; set the print bed temperature\n"
 
-    custom_footer = custom_footer + ts.extruder.gcode_command.format(0, ts.extruder.tool) + "; set the extruder temperature\n"
+    custom_footer = custom_footer + values.extruder.gcode_command.format(0, values.extruder.tool) + "; set the extruder temperature\n"
 
-    if ts.part_cooling:
-        custom_footer = custom_footer + ts.part_cooling_gcode_command.format(0) + "; set the part cooling\n"
+    if values.part_cooling:
+        custom_footer = custom_footer + values.part_cooling_gcode_command.format(0) + "; set the part cooling\n"
 
     custom_footer = custom_footer + "G28; move to the home position\nM84; disable motors\n;--- end footer ---"
 

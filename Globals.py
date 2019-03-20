@@ -3,7 +3,7 @@ import json
 from session_loader import session_uid
 from paths import json_folder
 from CLI_helpers import separator, exception_handler
-from GetTestInfo import get_test_info, get_comment
+from get_test_info import get_test_info, get_comment
 
 
 try:
@@ -143,7 +143,7 @@ except:
     }
 }
 
-session_idn = str(persistence["session"]["uid"])
+#session_idn = str(persistence["session"]["uid"])
 test_info = get_test_info(persistence)
 comment = get_comment(test_info)
 

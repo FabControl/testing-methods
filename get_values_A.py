@@ -5,7 +5,7 @@ from Globals import comment
 import numpy as np
 
 
-class GetValuesA(object):
+class get_values_A(object):
     def __init__(self, machine: Machine, material: Material, fixed_parameter_values: TestInfo, path: str, offset: list=None):
         """
         :param machine:

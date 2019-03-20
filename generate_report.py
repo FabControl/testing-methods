@@ -65,9 +65,9 @@ else:
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "3D Printer: " + import_json_dict["machine"]["manufacturer"] + " " + import_json_dict["machine"]["model"]+ " (SN: " + str(import_json_dict["machine"]["sn"]) + ")"
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Nozzle: " + "{:.2f}".format(import_json_dict["machine"]["nozzle"]["size_id"]) + " mm, " + str(import_json_dict["machine"]["nozzle"]["type"])
+main_info = "Nozzle: " + "{:.2f}".format(import_json_dict["machine"]["temperature_controllers"]["extruder"]["nozzle"]["size_id"]) + " mm, " + str(import_json_dict["machine"]["temperature_controllers"]["extruder"]["nozzle"]["type"])
 elements.append(Paragraph(main_info, style=style_text))
-main_info = "Part cooling: " + str(import_json_dict["settings"]["ventilator_part_cooling"]) + " %"
+main_info = "Part cooling: " + str(import_json_dict["settings"]["part_cooling_setpoint"]) + " %"
 elements.append(Paragraph(main_info, style=style_text))
 main_info = "Retraction distance: " + "{:.2f}".format(import_json_dict["settings"]["retraction_distance"]) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
@@ -78,8 +78,8 @@ elements.append(Paragraph(main_info, style=style_text))
 main_info = "Extruder temperature (first layer): " + "{:.0f}".format(import_json_dict["settings"]["temperature_extruder_raft"]) + " degC"
 elements.append(Paragraph(main_info, style=style_text))
 
-if import_json_dict["machine"]["printbed"]["printbed_heatable"]:
-    main_info = "Printbed temperature: " + "{:.0f}".format(import_json_dict["settings"]["temperature_printbed"]) + " degC"
+if import_json_dict["machine"]["temperature_controllers"]["printbed"]["printbed_heatable"]:
+    main_info = "Printbed temperature: " + "{:.0f}".format(import_json_dict["settings"]["temperature_printbed_setpoint"]) + " degC"
     elements.append(Paragraph(main_info, style=style_text))
 
 if "first-layer track width" not in import_json_dict["session"]["previous_tests"]:
@@ -98,7 +98,7 @@ if "extrusion multiplier" not in import_json_dict["session"]["previous_tests"]:
 consumed_filament = 0
 for dummy in import_json_dict["session"]["previous_tests"]:
     if dummy["executed"]:
-        consumed_filament = consumed_filament + round(float(dummy["extruded_filament"]), 3)
+        consumed_filament = consumed_filament + round(float(dummy["extruded_filament_mm"]), 3)
 main_info = "Consumed filament: " + "{:.1f}".format(consumed_filament) + " mm"
 elements.append(Paragraph(main_info, style=style_text))
 elements.append(Spacer(1, 0.5*inch))
@@ -115,12 +115,12 @@ data = [data]
 i = 1
 
 for single_test in performed_tests:
-    new_line = [str(i), single_test["test_name"], single_test["units"]]
-    for dummy in single_test["tested_parameter_values"]:
-        new_line.append(single_test["parameter_precision"].format(dummy))
+    new_line = [str(i), single_test["test_name"], single_test["parameter_one_units"]]
+    for dummy in single_test["tested_parameter_one_values"]:
+        new_line.append(single_test["parameter_one_precision"].format(dummy))
 
-    new_line.append(single_test["parameter_precision"].format(single_test["selected_parameter_value"]))
-    new_line.append("{:.1f}".format(single_test["selected_printing-speed_value"]))
+    new_line.append(single_test["parameter_one_precision"].format(single_test["selected_parameter_one_value"]))
+
 
     try:
         new_line.append("{:.3f}".format(single_test["selected_volumetric_flow-rate_value"]))
@@ -128,6 +128,21 @@ for single_test in performed_tests:
         pass
     data.append(new_line)
     i += 1
+
+    if single_test["tested_parameter_two_values"] is not []:
+        print(single_test["tested_parameter_two_values"])
+        new_line = [str(i), str("parameter_two"), single_test["parameter_two_units"]]
+        print(new_line)
+        for dummy in single_test["tested_parameter_two_values"]:
+            new_line.append(single_test["parameter_two_precision"].format(dummy))
+        new_line.append("")
+        new_line.append("")
+        new_line.append("")
+        new_line.append(single_test["parameter_two_precision"].format(single_test["selected_parameter_two_value"]))
+        new_line.append("")
+        new_line.append("")
+        data.append(new_line)
+        print(new_line)
 
 style = TableStyle([("ALIGN", (0, 0), (-1, -1), "CENTER"),
                     ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),

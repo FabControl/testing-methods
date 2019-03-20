@@ -454,10 +454,14 @@ def save_session_file_as(session_id: str, extension: str) -> str:
         folder = png_folder
 
     if extension == ".gcode":
-        output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
+        output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_number"])) + extension
     elif extension == ".png":
-        output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_name"])) + extension
+        output = str(folder + separator() + session_id) + "_{}".format(str(persistence["session"]["test_number"])) + extension
     else:
         output = str(folder + separator() + session_id + extension)
 
     return output
+
+
+def border_values(_list: list):
+   return [_list[0], _list[-1]]
