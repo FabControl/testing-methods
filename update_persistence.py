@@ -13,12 +13,14 @@ def update_persistence(persistence, values):
     current_test = {"test_name": values.test_name,
                     "test_number": values.test_number,
                     "executed": True,
-                    "tested_parameter_one_values": [round(k, int(re.search("[0-9]", values.test_info.parameter_one.precision).group())) for k in values.get_values_parameter_one()],
-                    "tested_parameter_two_values": None if values.test_info.parameter_two.name is None else [round(k, int(re.search("[0-9]", values.test_info.parameter_two.precision).group())) for k in values.get_values_parameter_two()],
+                    "tested_parameter_one_values": values.get_values_parameter_one(),
+                    "tested_parameter_two_values": None if values.test_info.parameter_two.name is None else values.get_values_parameter_two(),
                     "tested_volumetric_flow-rate_values": values.volumetric_flow_rate,
                     "selected_parameter_one_value": 0,
-                    "selected_parameter_two_value": None if values.test_info.parameter_two.name is None else 0,
-                    "selected_volumetric_flow-rate_value": np.mean(values.volumetric_flow_rate) if values.test_info.name == ("retraction distance" or "extrusion temperature vs retraction distance") else 0,
+                    "selected_parameter_two_value": None if values.test_info.parameter_two.name is None else (values.test_info.parameter_two.values[0] if len(values.test_info.parameter_two.values) == 1 else 0),
+                    "selected_volumetric_flow-rate_value": np.mean(values.volumetric_flow_rate) if values.test_info.test_number == ("10" or "08") else 0,
+                    "parameter_one_name": values.test_info.parameter_one.name,
+                    "parameter_two_name": values.test_info.parameter_two.name,
                     "parameter_one_units": values.test_info.parameter_one.units,
                     "parameter_two_units": None if values.test_info.parameter_two.name is None else values.test_info.parameter_two.units,
                     "parameter_one_precision": values.test_info.parameter_one.precision,
@@ -36,9 +38,7 @@ def update_persistence(persistence, values):
         current_test["parameter_three_precision"] = values.test_info.parameter_three.precision
 
     previous_tests.append(current_test)
-
     persistence["session"]["previous_tests"] = previous_tests
-
     persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2 * persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
 
     with open(save_session_file_as(session_id, "json"), mode="w") as file:

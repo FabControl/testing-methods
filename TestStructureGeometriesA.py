@@ -12,16 +12,19 @@ def wipe(ts: get_values_A or TestSetupB, length_multiplier=1):
     ts.g.feed(machine.settings.speed_travel) # respect the units: mm/min
     ts.g.abs_move(x=-wipe_length+ts.offset_x,
                   y=-6*ts.test_structure_size/10+ts.offset_y,
-                  z=+2*ts.coef_h_raft*machine.temperaturecontrollers.extruder.nozzle.size_id,
+                  z=+2*ts.coef_h_raft*ts.extruder.nozzle.size_id,
                   extrude=False, extrusion_multiplier=0)
 
     if machine.temperaturecontrollers.chamber.chamber_heatable:
         ts.g.set_chamber_temperature(ts.temperature_chamber_setpoint, ts.chamber)
 
     if machine.temperaturecontrollers.printbed.printbed_heatable:
+        ts.g.set_printbed_temperature(ts.temperature_printbed_setpoint, ts.printbed, immediate=True)
         ts.g.set_printbed_temperature(ts.temperature_printbed_setpoint, ts.printbed)
 
     ts.g.write("; --- start to clean the nozzle ---")
+
+    ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft, ts.extruder, immediate=True)
     ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft, ts.extruder)
     ts.g.dwell(5000)
     if machine.temperaturecontrollers.extruder.nozzle.size_id <= 0.4:
@@ -53,36 +56,34 @@ def wipe(ts: get_values_A or TestSetupB, length_multiplier=1):
 
 
 # RAFT PERIMETER
+# prints the outer perimeter of the raft
 def raft_perimeter(ts: get_values_A):
+    ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft, machine.temperaturecontrollers.extruder, immediate=True)
     ts.g.set_extruder_temperature(machine.settings.temperature_extruder_raft, machine.temperaturecontrollers.extruder)
     ts.g.write("; --- print the outer perimeter ---")
-    ts.g.feed(machine.settings.speed_printing_raft/3)  # print the outer perimeter of the raft
-    ts.g.move(x=0,
-              y=+ts.test_structure_size,
-              z=0,
-              extrude=True, extrusion_multiplier=1.5, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
-    ts.g.move(x=-ts.test_structure_size,
-              y=0,
-              z=0,
-              extrude=True, extrusion_multiplier=1.5, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
-    ts.g.move(x=0,
-              y=-ts.test_structure_size,
-              z=0,
-              extrude=True, extrusion_multiplier=1.5, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
-    ts.g.move(x=+ts.test_structure_size,
-              y=0,
-              z=0,
-              extrude=True, extrusion_multiplier=1.5, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
+    ts.g.feed(machine.settings.speed_printing_raft/3)
+    for dummy in range(2):
+        for _ in range(100):
+            ts.g.move(x=0,
+                      y=(-1)**dummy*ts.test_structure_size/100,
+                      z=0,
+                      extrude=True, extrusion_multiplier=1.5, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
+        for _ in range(100):
+            ts.g.move(x=(-1)**(dummy+1)*ts.test_structure_size/100,
+                      y=0,
+                      z=0,
+                      extrude=True, extrusion_multiplier=1.5, coef_h=ts.coef_h_raft, coef_w=ts.coef_w_raft)
 
     return
 
 
 # PRINTING RAFT
+# prints the filling of the raft
 def print_raft(gv: get_values_A):
     gv.g.write("; --- start to print the raft ---")
     raft_perimeter(gv)
-    gv.g.write("; --- print the infill with the density of {} % ---".format(machine.settings.raft_density))
-    gv.g.feed(gv.speed_printing_raft)  # print the filling of the raft
+    gv.g.write("; --- print the infill with the density of {0} % ---".format(machine.settings.raft_density))
+    gv.g.feed(gv.speed_printing_raft)
     raft_density = machine.settings.raft_density/100
     step = gv.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id / raft_density  # step size
     step_number = gv.test_structure_size / step
@@ -97,10 +98,11 @@ def print_raft(gv: get_values_A):
                   y=+step,
                   z=0,
                   extrude=False, extrusion_multiplier=0)
-        gv.g.move(x=(-1) ** (dummy + 1) * (gv.test_structure_size - gv.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id),
-                  y=0,
-                  z=0,
-                  extrude=True, extrusion_multiplier=gv.extrusion_multiplier_raft, coef_h=gv.coef_h_raft, coef_w=gv.coef_w_raft)
+        for _ in range(100):
+            gv.g.move(x=(-1) ** (dummy + 1) * (gv.test_structure_size - gv.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id)/100,
+                      y=0,
+                      z=0,
+                      extrude=True, extrusion_multiplier=gv.extrusion_multiplier_raft, coef_h=gv.coef_h_raft, coef_w=gv.coef_w_raft)
 
     gv.g.write("; --- finish to print the raft ---")
 
@@ -110,8 +112,9 @@ def print_raft(gv: get_values_A):
                   z=0,
                   extrude=False, extrusion_multiplier=0)
 
-    gv.g.set_extruder_temperature(gv.temperature_extruder[0], gv.extruder)
-    gv.g.dwell(30000)  # to unload the nozzle
+    gv.g.set_extruder_temperature(machine.settings.temperature_extruder, gv.extruder, immediate=True)
+    gv.g.set_extruder_temperature(machine.settings.temperature_extruder, gv.extruder)
+    gv.g.dwell(20000)  # to unload the nozzle
 
     if gv.part_cooling:
         gv.g.set_part_cooling(gv.part_cooling_setpoint, gv.extruder)
@@ -149,7 +152,7 @@ def print_raft(gv: get_values_A):
 # GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER vs. PRINTING SPEED
 def flat_test_parameter_one_vs_parameter_two(ts: get_values_A):
     ts.g.write(ts.title)
-    ts.g.write(ts.comment1)
+    ts.g.write(ts.comment_all_values_of_variable_parameters)
     wipe(ts, length_multiplier=1 if machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)
 
     print_raft(ts) if ts.raft else raft_perimeter(ts) # print the raft to support the test structure
@@ -158,8 +161,8 @@ def flat_test_parameter_one_vs_parameter_two(ts: get_values_A):
     ts.g.feed(machine.settings.speed_printing)
 
     for current_test_structure in range(ts.number_of_test_structures):
-        ts.g.write(ts.comment2)
-        ts.g.write(ts.comment3[current_test_structure])
+        ts.g.write(ts.comment_all_values_of_constant_parameters)
+        ts.g.write(ts.comment_current_values_of_variable_parameter[current_test_structure])
 
         if ts.test_name == "extrusion temperature vs printing speed":
             ts.g.travel(x=-ts.test_structure_width[current_test_structure]-ts.test_structure_separation,
@@ -188,7 +191,7 @@ def flat_test_parameter_one_vs_parameter_two(ts: get_values_A):
             ts.g.abs_move(z=+ts.abs_z[current_test_structure])
 
         for current_substructure in range(ts.number_of_substructures):
-            if ts.test_info.parameter_two.values is None:
+            if ts.test_info.parameter_two.values == []:
                 current_printing_speed = ts.speed_printing[current_test_structure]
             else:
                 current_printing_speed = ts.parameter_two.values[current_substructure]
@@ -245,7 +248,7 @@ def flat_test_parameter_one_vs_parameter_two(ts: get_values_A):
 # RETRACTION RESTART DISTANCE and COASTING DISTANCE
 def retraction_restart_distance_vs_coasting_distance(ts: get_values_A):
     ts.g.write(ts.title)
-    ts.g.write(ts.comment1)
+    ts.g.write(ts.comment_all_values_of_variable_parameters)
     wipe(ts, length_multiplier=1 if machine.nozzle.size_id < 0.59 else 0.85) # perform wipe of the nozzle
     print_raft(ts) # print the raft to support the test structure
     ts.g.write("; --- start to print the test structure ---")
@@ -256,7 +259,7 @@ def retraction_restart_distance_vs_coasting_distance(ts: get_values_A):
     test_structure_width.extend([ts.number_of_lines * k for k in ts.step_x])
 
     for current_test_structure in range(ts.number_of_test_structures):
-        ts.g.write(ts.comment2)
+        ts.g.write(ts.comment_all_values_of_constant_parameters)
         ts.g.feed(ts.speed_printing[current_test_structure])
 
         ts.g.abs_travel(x=+ts.test_structure_size/2 - (sum_of_list_elements(test_structure_width, current_test_structure) + (current_test_structure + 1) * test_structure_separation),
@@ -319,14 +322,15 @@ def retraction_restart_distance_vs_coasting_distance(ts: get_values_A):
 # BRIDGING EXTRUSION MULTIPLIER vs. BRIDGING PRINTING SPEED
 def bridging_test(ts: get_values_A):
     ts.g.write(ts.title)
-    ts.g.write(ts.comment1)
+    ts.g.write(ts.comment_all_values_of_variable_parameters)
+    ts.g.write(ts.comment_all_values_of_constant_parameters)
+
     wipe(ts, length_multiplier=1 if machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)
 
     if ts.raft:
         print_raft(ts)  # print the raft to support the test structure
 
     ts.g.write("; --- start to print the support structure ---")
-    ts.g.write(ts.comment2)
 
     ts.g.feed(machine.settings.speed_printing)
 
@@ -381,11 +385,13 @@ def bridging_test(ts: get_values_A):
     ts.g.write("; --- start to print the bridges ---")
 
     # Printing bridges
-    for current_speed_value in ts.parameter_two.values:
+    for index_current_speed, current_speed_value in enumerate(ts.parameter_two.values):
         ts.g.write("; --- testing the following bridging speed value: {:.1f} mm/s ---".format(current_speed_value))
         ts.g.feed(current_speed_value)
-        for index, current_extrusion_multiplier_value in enumerate(ts.extrusion_multiplier_bridging):
-            ts.g.write("; --- testing the following bridging extrusion multiplier value: {:.3f} - ---".format(current_extrusion_multiplier_value))
+
+        for index_current_extrusion_multiplier, current_extrusion_multiplier_value in enumerate(ts.extrusion_multiplier_bridging):
+            ts.g.write(ts.comment_all_values_of_constant_parameters)
+            ts.g.write(ts.comment_current_values_of_variable_parameter[index_current_extrusion_multiplier])
 
             for step in range(int(step_y/np.mean(ts.track_width))):
                 ts.g.move(x=(-1)**(step + 1)*2*(step_y - step*np.mean(ts.track_width))*step_x/step_y,
@@ -394,7 +400,7 @@ def bridging_test(ts: get_values_A):
                           extrude=True, extrusion_multiplier=current_extrusion_multiplier_value)
                 if step != range(int(step_y/np.mean(ts.track_width)))[-1]:
                     ts.g.move(x=0,
-                              y=(-1)**index*np.mean(ts.track_width),
+                              y=(-1)**index_current_extrusion_multiplier*np.mean(ts.track_width),
                               z=0,
                               extrude=False, extrusion_multiplier=0)
                     ts.g.move(x=(-1)**step*np.mean(ts.track_width)*step_x/step_y,
@@ -427,7 +433,7 @@ def bridging_test(ts: get_values_A):
 
 def retraction_distance(ts: get_values_A):
     ts.g.write(ts.title)
-    ts.g.write(ts.comment1)
+    ts.g.write(ts.comment_all_values_of_variable_parameters)
     wipe(ts, length_multiplier=1 if machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85) # perform wipe of the nozzle
     print_raft(ts) # print the raft to support the test structure
     ts.g.write("; --- start to print the test structure ---")
@@ -445,7 +451,7 @@ def retraction_distance(ts: get_values_A):
         if ts.test_name == "extrusion temperature vs retraction distance":
             ts.g.feed(np.mean(ts.speed_printing))
 
-        ts.g.write(ts.comment2)
+        ts.g.write(ts.comment_all_values_of_constant_parameters)
 
         for current_substructure in range(ts.number_of_substructures):
             current_temperature_extruder = ts.temperature_extruder[current_test_structure]

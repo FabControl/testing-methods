@@ -244,26 +244,30 @@ class get_values_A(object):
         volumetric_flow_rate = []
         volumetric_flow_rate_row = []
 
-        if self.test_number== "08" or "10":
+        if self.test_number in ["03", "08", "10", "11", "12"]:
             volumetric_flow_rate = round(get_flow_rate(self.track_height[0], self.track_width[0], self.speed_printing[0], self.extrusion_multiplier_bridging[0]), 3)
         else:
             for speed in self.speed_printing:
-                for dummy in range(self.number_of_test_structures):
-                    if self.test_number == "13":
-                        value = round(get_flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier_bridging[dummy]), 3)
-                    else:
-                        value = round(get_flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
-                    volumetric_flow_rate_row.append(value)
-                    if dummy == self.number_of_test_structures-1:
-                        volumetric_flow_rate.append(volumetric_flow_rate_row)
-                        volumetric_flow_rate_row = []
+                if self.test_number == "07":
+                    value = round(get_flow_rate(self.track_height[0], self.track_width[0], speed, self.extrusion_multiplier[0]), 3)
+                    volumetric_flow_rate.append(value)
+                else:
+                    for dummy in range(self.number_of_test_structures):
+                        if self.test_number == "13":
+                            value = round(get_flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier_bridging[dummy]), 3)
+                        else:
+                            value = round(get_flow_rate(self.track_height[dummy], self.track_width[dummy], speed, self.extrusion_multiplier[dummy]), 3)
+                        volumetric_flow_rate_row.append(value)
+                        if dummy == self.number_of_test_structures-1:
+                            volumetric_flow_rate.append(volumetric_flow_rate_row)
+                            volumetric_flow_rate_row = []
 
         self.volumetric_flow_rate = volumetric_flow_rate
 
         self.title = addtitle(fixed_parameter_values, material, machine)
-        self.comment1 = addcomment1(self.test_info)
-        self.comment2 = addcomment2()
-        self.comment3 = addcomment3(self.test_info)
+        self.comment_all_values_of_variable_parameters = addcomment1(self.test_info)
+        self.comment_all_values_of_constant_parameters = addcomment2()
+        self.comment_current_values_of_variable_parameter = addcomment3(self.test_info)
 
         self.g = Gplus(material, machine,
                        outfile=path,
@@ -306,7 +310,7 @@ def addcomment3(test_info: TestInfo):
     for k in range(test_info.number_of_test_structures):
         comment = str("; --- {0}: {1} {2} ---\n").format(test_info.parameter_one.name, test_info.parameter_one.precision, test_info.parameter_one.units)
 
-        dummy.append(comment.format(np.linspace(test_info.parameter_one.values[0], test_info.parameter_one.values[1], test_info.number_of_test_structures).tolist()[k]))
+        dummy.append(comment.format(np.linspace(test_info.parameter_one.values[0], test_info.parameter_one.values[-1], test_info.number_of_test_structures).tolist()[k]))
     return dummy
 
 

@@ -16,26 +16,34 @@ class Gplus(G):
         self.extrusion_multiplier = machine.settings.extrusion_multiplier
         self.track_height = machine.settings.track_height
         self.track_width = machine.settings.track_width
-
         self.form = machine.form
         self.tool = machine.temperaturecontrollers.extruder.tool
         self.buildarea_maxdim1 = machine.buildarea_maxdim1
         self.buildarea_maxdim2 = machine.buildarea_maxdim2
-
         self.coef_w = machine.settings.track_width / machine.temperaturecontrollers.extruder.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
 
-
-    def set_extruder_temperature(self, temperature: int, extruder: Extruder):
+    def set_extruder_temperature(self, temperature: int, extruder: Extruder, immediate: bool=None):
         """Set the liquefier temperature in degC"""
-        G.write(self, extruder.gcode_command.format(temperature, extruder.tool) + "; set the extruder temperature")
-
-    def set_printbed_temperature(self, temperature: float, printbed: Printbed):
-        """Set the printbed temperature in degC"""
-        if printbed.tool:
-            G.write(self, str(printbed.gcode_command+" {1}").format(temperature, printbed.tool) + "; set the print bed temperature")
+        if immediate:
+            if extruder.gcode_command_immediate != "":
+                G.write(self, extruder.gcode_command_immediate.format(temperature, extruder.tool) + "; set the extruder temperature")
         else:
-            G.write(self, printbed.gcode_command.format(temperature) + "; set the print bed temperature")
+            G.write(self, extruder.gcode_command.format(temperature, extruder.tool) + "; set the extruder temperature and wait")
+
+    def set_printbed_temperature(self, temperature: float, printbed: Printbed, immediate: bool=None):
+        """Set the printbed temperature in degC"""
+        if immediate:
+            if printbed.gcode_command_immediate != "":
+                if printbed.tool:
+                    G.write(self, str(printbed.gcode_command_immediate+" {1}").format(temperature, printbed.tool) + "; set the print bed temperature")
+                else:
+                    G.write(self, printbed.gcode_command_immediate.format(temperature) + "; set the print bed temperature")
+        else:
+            if printbed.tool:
+                G.write(self, str(printbed.gcode_command+" {1}").format(temperature, printbed.tool) + "; set the print bed temperature and wait")
+            else:
+                G.write(self, printbed.gcode_command.format(temperature) + "; set the print bed temperature and wait")
 
     def set_chamber_temperature(self, temperature: int, chamber: Chamber):
         """Set the printbed temperature in degC"""

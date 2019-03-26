@@ -106,11 +106,12 @@ class Printbed(object):
     """
 
     """
-    def __init__(self, printbed_heatable: bool, tool: str, gcode_command: str, temperature_max: float, temperature_min: float, material: str, coating: str, *args, **kwargs):
+    def __init__(self, printbed_heatable: bool, tool: str, gcode_command: str, temperature_max: float, temperature_min: float, material: str, coating: str, gcode_command_immediate=None, *args, **kwargs):
         self.printbed_heatable = printbed_heatable
         if printbed_heatable:
             self.tool = tool
             self.gcode_command = gcode_command  # G-code command used to control the temperature of the print bed, e.g. Mddd {0} S{1}, where {0} is a tool string
+            self.gcode_command_immediate = gcode_command_immediate  # G-code command used to control the temperature of the print bed, e.g. Mddd {0} S{1}, where {0} is a tool string
             self.temperature_max = temperature_max
             self.temperature_min = temperature_min
 
@@ -144,10 +145,13 @@ class Extruder(object):
     """
 
     """
-
-    def __init__(self, temperature_max: float, temperature_min: float, part_cooling: bool, tool: str="T0", gcode_command: str = "M109 S{} {}", part_cooling_gcode_command:str=None, *args, **kwargs):
-        self.tool = tool  # tool number, e.g. T1, T2
+    def __init__(self, temperature_max: float, temperature_min: float, part_cooling: bool, tool: str, gcode_command: str = "M109 S{} {}", gcode_command_immediate=None, part_cooling_gcode_command:str=None, *args, **kwargs):
+        if tool == "":
+            self.tool = "T0"  # tool number, e.g. T1, T2
+        else:
+            self.tool = tool
         self.gcode_command = gcode_command  # G-code command used to control the temperature, e.g. M104 {0} S{1}, where {0} is a tool string
+        self.gcode_command_immediate = gcode_command_immediate  # G-code command used to control the temperature, e.g. M104 {0} S{1}, where {0} is a tool string
         self.temperature_max = temperature_max
         self.temperature_min = temperature_min
         self.part_cooling = part_cooling
@@ -168,7 +172,6 @@ class TemperatureControllers(object):
 class Software(object):
     """
     """
-
     def __init__(self, version: str, *args, **kwargs):
         self.version = version
 
@@ -189,13 +192,8 @@ class Machine(object):
     manufacturer - machine's manufacturer
     model - machine's model
     sn - machine's SN
-    size_extruder_id - ID of the extruder (mm)
     buildarea_maxdim1 - maximum buildarea in dimension 1 (mm)
     buildarea_maxdim2 - maximum buildarea in dimension 2 (mm)
-    temperature_extruder_max - maximum heating block temperature (degC)
-    moment_max - maximum torque of the motor (N m)
-    gear_size_od - gear OD (m)
-    heater_power - total heaters power (W)
     """
 
     def __init__(self, id: str=None, manufacturer: str=None, model: str=None, sn: str=None, form: str=None, buildarea_maxdim1: float=None, buildarea_maxdim2: float=None,
@@ -284,17 +282,18 @@ class Parameter(object):
         self.name = name
         self.units = units
         self.precision = precision
-        if value:
-            if isinstance(value, list):
-                self.values = value
-            else:
-                self.value = value
-        else:
-            self.value = None
-            if default_value is not None:
-                self.default_value = default_value
-                self.min_default = default_value[0]
-                self.max_default = default_value[1]
+        self.values = value
+        #if value:
+        #     if isinstance(value, list):
+        #     else:
+        #         print(value) if name == "printing speed" else print("hello")
+        #         self.value = value
+        # else:
+        #     self.value = None
+        if default_value is not None:
+            self.default_value = default_value
+            self.min_default = default_value[0]
+            self.max_default = default_value[1]
 
 
 class TestInfo(object):
