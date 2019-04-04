@@ -21,22 +21,24 @@ except:
     "machine": {
         "sn": 12345,
         "model": "--",
-        "manufacturer": "Ultimaker",
-        "buildarea_maxdim1": 223,
-        "buildarea_maxdim2": 223,
-        "max_dimension_z": 205,
-        "form": "cartesian",
+        "manufacturer": "MP",
+        "buildarea_maxdim1": 200,
+        "buildarea_maxdim2": 200,
+        "max_dimension_z": 215,
+        "form": "elliptic",
         "temperature_controllers": {
             "extruder": {
+                "tool": "",
                 "gcode_command": "M109 S{0} {1}",
+                "gcode_command_immediate": "M104 S{0} {1}",
                 "temperature_max": 300,
                 "temperature_min": 30,
-                "part_cooling": False,
+                "part_cooling": true,
                 "part_cooling_gcode_command": "M106 S{0}",
                 "nozzle": {
                     "type": "brass",
-                    "size_id": 0.4,
-                    "size_od": 5.0,
+                    "size_id": 0.8,
+                    "size_od": 1.04,
                     "size_capillary_length": 5,
                     "size_angle": 60,
                     "size_extruder_id": 1.95
@@ -47,20 +49,23 @@ except:
                 "gcode_command": "M141 S{0}",
                 "temperature_min": 30,
                 "temperature_max": 80,
-                "chamber_heatable": False,
-                "ventilator_exit": False,
+                "chamber_heatable": false,
+                "temperature_chamber_setpoint": 80,
+                "ventilator_exit": false,
                 "ventilator_exit_tool": "P1",
                 "ventilator_exit_gcode_command": "M106 {0} S{1}",
-                "ventilator_entry": False,
+                "ventilator_entry": false,
                 "ventilator_entry_tool": "P2",
                 "ventilator_entry_gcode_command": "M106 {0} S{1}"
             },
             "printbed": {
-                "tool": "T1",
-                "gcode_command": "M190 S{0} {1}",
+                "tool": "",
+                "gcode_command": "M190 S{0}",
+                "gcode_command_immediate": "M140 S{0}",
                 "temperature_min": 20,
-                "temperature_max": 100,
-                "printbed_heatable": True,
+                "temperature_max": 115,
+                "printbed_heatable": true,
+                "temperature_printbed_setpoint": 30,
                 "material": "?",
                 "coating": "None"
             }
@@ -74,40 +79,40 @@ except:
         }
     },
     "material": {
-        "id": "79",
+        "id": "80",
         "drying": {
-            "dried": False,
+            "dried": false,
             "drying_time": 0,
             "feeding_airflow": 0,
             "drying_airflow": 0,
             "feeding_temperature": 0,
             "drying_temperature": 0
         },
-        "size_od": 2.85,
-        "material_group": "non_filled",
+        "size_od": 1.75,
+        "material_group": "non-filled",
         "density_rt": 1.13,
         "mvr": 2.3,
         "load_mfr": 2.16,
         "temperature_mfr": 200,
         "temperature_glass": 255,
-        "name": "Novamid ID1030",
-        "manufacturer": "DSM"
+        "name": "PA6 with Exolit",
+        "manufacturer": "Clariant"
     },
     "session": {
-        "uid": 129,
+        "uid": 210,
         "target": "mechanical_strength",
-        "test_name": "08",
-        "min_max_parameter_one": None,
-        "min_max_parameter_two": [
+        "test_number": "11",
+        "min_max_parameter_one": [
             0,
-            6
+            5
         ],
-        "min_max_parameter_three": [
-            35,
-            80
+        "min_max_parameter_two": [
+            100,
+            120
         ],
+        "min_max_parameter_three": [],
         "test_type": "A",
-        "user_id": "Daniel Tomas",
+        "user_id": "Georgijs Bakradze",
         "offset": [
             0,
             0
@@ -119,27 +124,26 @@ except:
     "settings": {
         "speed_travel": 140,
         "raft_density": 100,
-        "speed_printing_raft": 30.0,
+        "speed_printing_raft": 25,
         "track_height": 0.2,
-        "track_height_raft": 0.25,
-        "track_width": 0.4,
-        "track_width_raft": 0.4,
-        "extrusion_multiplier": 1.1,
-        "temperature_extruder": 257,
-        "temperature_extruder_raft": 255,
+        "track_height_raft": 0.2,
+        "track_width": 0.3,
+        "track_width_raft": 0.3,
+        "extrusion_multiplier": 1.0,
+        "temperature_extruder": 260,
+        "temperature_extruder_raft": 260,
         "retraction_restart_distance": 0,
-        "retraction_speed": 50,
+        "retraction_speed": 100,
+        "retraction_distance": 2.6,
         "bridging_extrusion_multiplier": 1,
         "bridging_part_cooling": 100,
         "bridging_speed_printing": 40,
-        "speed_printing": 50,
-        "optimize_speed_printing": True,
-        "retraction_distance": 6.0,
+        "speed_printing": 80,
         "coasting_distance": 0,
-        "critical_overhang_angle": 45.0,
-        "temperature_printbed_setpoint": 55,
-        "temperature_chamber_setpoint": None,
-        "part_cooling_setpoint": None
+        "critical_overhang_angle": 53.0,
+        "temperature_printbed_setpoint": 90,
+        "temperature_chamber_setpoint": 0,
+        "part_cooling_setpoint": 0
     }
 }
 

@@ -8,7 +8,7 @@ def initialize_test(machine: Machine, material: Material, persistence):
                               path=save_session_file_as(str(persistence["session"]["uid"]), "gcode"),
                               offset=persistence["session"]["offset"] if persistence["session"]["offset"] else [0,0])
 
-        if persistence["session"]["test_number"] in ["08", "10"]:
+        if persistence["session"]["test_number"] in ["08", "09", "10", "11"]:
             retraction_distance(values)
         elif persistence["session"]["test_number"] == "12":
             retraction_restart_distance_vs_coasting_distance(values)

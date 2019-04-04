@@ -26,9 +26,6 @@ def get_test_info(persistence):
     else:
         values_parameter_one = []
 
-    # if persistence["session"]["min_max_parameter_two"] == []:
-    #     persistence["session"]["min_max_parameter_two"] = []
-
     if persistence["session"]["test_number"] == "01":
         parameter_values_for_comments = TestInfo("first-layer track height vs first-layer printing speed", "01", number_of_layers=1, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=False,
                                                  parameter_one=Parameter("first-layer track height", "mm", "{:.3f}",
@@ -135,9 +132,9 @@ def get_test_info(persistence):
         other_parameters.extend([Parameter("first-layer track height", "mm", "{:.3f}", value=persistence["settings"]["track_height_raft"]),
                                  Parameter("first-layer track width", "mm", "{:.3f}", value=persistence["settings"]["track_width_raft"]),
                                  Parameter("first-layer printing speed", "mm/s", "{:.1f}", value=persistence["settings"]["speed_printing_raft"]),
-                                 Parameter("extrusion multiplier", "-", "{:.3f}", value=persistence["settings"]["extrusion_multiplier"]),
                                  Parameter("track height", "mm", "{:.3f}", value=persistence["settings"]["track_height"]),
                                  Parameter("track width", "mm", "{:.3f}", value=persistence["settings"]["track_width"]),
+                                 Parameter("extrusion multiplier", "-", "{:.3f}", value=persistence["settings"]["extrusion_multiplier"]),
                                  Parameter("printing speed", "mm/s", "{:.1f}", value=persistence["settings"]["speed_printing"])])
 
         parameter_values_for_comments = TestInfo("extrusion temperature vs retraction distance", "08", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
@@ -154,16 +151,17 @@ def get_test_info(persistence):
         other_parameters.extend([Parameter("first-layer track height", "mm", "{:.3f}", value=persistence["settings"]["track_height_raft"]),
                                  Parameter("first-layer track width", "mm", "{:.3f}", value=persistence["settings"]["track_width_raft"]),
                                  Parameter("first-layer printing speed", "mm/s", "{:.1f}", value=persistence["settings"]["speed_printing_raft"]),
-                                 Parameter("extrusion multiplier", "-", "{:.3f}", value=persistence["settings"]["extrusion_multiplier"]),
-                                 Parameter("extrusion temperature", "degC", "{:.0f}", value=persistence["settings"]["temperature_extruder"]),
                                  Parameter("track height", "mm", "{:.3f}", value=persistence["settings"]["track_height"]),
-                                 Parameter("track width", "mm", "{:.3f}", value=persistence["settings"]["track_width"])])
+                                 Parameter("track width", "mm", "{:.3f}", value=persistence["settings"]["track_width"]),
+                                 Parameter("extrusion temperature", "degC", "{:.0f}", value=persistence["settings"]["temperature_extruder"]),
+                                 Parameter("extrusion multiplier", "-", "{:.3f}", value=persistence["settings"]["extrusion_multiplier"]),
+                                 Parameter("retraction speed", "mm/s", "{:.1f}", value=persistence["settings"]["retraction_speed"])])
 
         parameter_values_for_comments = TestInfo("retraction distance vs printing speed", "09", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
                                                  parameter_one=Parameter("retraction distance", "mm", "{:.3f}",
-                                                                         default_value=[0.0, 4.0]),
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_one"][0], persistence["session"]["min_max_parameter_one"][-1], number_of_test_structures).tolist() if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.0, 4.0, number_of_test_structures).tolist()),
                                                  parameter_two=Parameter("printing speed", "mm/s", "{:.1f}",
-                                                                         default_value=[0.80, 1.75]),
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0], persistence["session"]["min_max_parameter_two"][-1], number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [] else np.linspace(0.80*persistence["settings"]["speed_printing"], 1.75*persistence["settings"]["speed_printing"], number_of_substructures).tolist()),
                                                  other_parameters=other_parameters)
 
     elif persistence["session"]["test_number"] == "10":
@@ -180,7 +178,7 @@ def get_test_info(persistence):
 
         parameter_values_for_comments = TestInfo("retraction distance", "10", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=True,
                                                  parameter_one=Parameter("retraction distance", "mm", "{:.3f}",
-                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.0, 4.0, number_of_substructures).tolist()),
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_one"][0], persistence["session"]["min_max_parameter_one"][-1], number_of_test_structures).tolist() if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.0, 4.0, number_of_test_structures).tolist()),
                                                  parameter_two=Parameter(None, None, None),
                                                  other_parameters=other_parameters)
 
@@ -193,17 +191,16 @@ def get_test_info(persistence):
                                  Parameter("track width", "mm", "{:.3f}", value=persistence["settings"]["track_width"]),
                                  Parameter("printing speed", "mm/s", "{:.1f}", value=persistence["settings"]["speed_printing"]),
                                  Parameter("extrusion temperature", "degC", "{:.0f}", value=persistence["settings"]["temperature_extruder"]),
-                                 Parameter("extrusion multiplier", "-", "{:.3f}", value=persistence["settings"]["extrusion_multiplier"]),
-                                 Parameter("retraction speed", "mm/s", "{:.1f}", value=persistence["settings"]["retraction_speed"])])
+                                 Parameter("extrusion multiplier", "-", "{:.3f}", value=persistence["settings"]["extrusion_multiplier"])])
 
         parameter_values_for_comments = TestInfo("retraction distance vs retraction speed", "11", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=True,
                                                  parameter_one=Parameter("retraction distance", "mm", "{:.3f}",
-                                                                         default_value=[0.0, 4.0]),
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_one"][0], persistence["session"]["min_max_parameter_one"][-1], number_of_test_structures).tolist() if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.0, 4.0, number_of_test_structures).tolist()),
                                                  parameter_two=Parameter("retraction speed", "mm/s", "{:.1f}",
-                                                                         default_value=[0.80, 1.75]),
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0], persistence["session"]["min_max_parameter_two"][-1], number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [] else np.linspace(0.75*persistence["settings"]["retraction_speed"], 1.25*persistence["settings"]["retraction_speed"], number_of_substructures).tolist()),
                                                  other_parameters=other_parameters)
 
-    elif persistence["session"]["test_number"] == "12":
+    elif persistence["session"]["test_number"] == "12": #TODO
         other_parameters.pop()
         other_parameters.extend([Parameter("first-layer track height", "mm", "{:.3f}", value=persistence["settings"]["track_height_raft"]),
                                  Parameter("first-layer track width", "mm", "{:.3f}", value=persistence["settings"]["track_width_raft"]),
@@ -216,9 +213,9 @@ def get_test_info(persistence):
 
         parameter_values_for_comments = TestInfo("retraction-restart distance vs coasting distance", "12", number_of_layers=1, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
                                                  parameter_one=Parameter("retraction-restart distance", "mm", "{:.3f}",
-                                                                         default_value=[0.0, 1.0]),
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_one"][0], persistence["session"]["min_max_parameter_one"][-1], number_of_test_structures).tolist() if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.0, 1.0, number_of_test_structures).tolist()),
                                                  parameter_two=Parameter("coasting distance", "mm", "{:.3f}",
-                                                                         default_value=[0.0, 1.0]),
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0], persistence["session"]["min_max_parameter_two"][-1], number_of_test_structures).tolist() if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.0, 1.0, number_of_test_structures).tolist()),
                                                  other_parameters=other_parameters)
 
     elif persistence["session"]["test_number"] == "13":

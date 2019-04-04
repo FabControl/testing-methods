@@ -63,6 +63,9 @@ elif dummy["test_number"] == "06":
         persistence["settings"]["extrusion_multiplier"] = dummy["selected_parameter_one_value"]
         persistence["settings"]["speed_printing"] = dummy["selected_parameter_two_value"]
         persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_two][ind_parameter_one]
+elif dummy["test_number"] == "07":
+    if dummy["executed"]:
+        persistence["settings"]["speed_printing"] = dummy["selected_parameter_one_value"]
 elif dummy["test_number"] == "08":
     if dummy["executed"]:
         persistence["settings"]["temperature_extruder"] = dummy["selected_parameter_one_value"]

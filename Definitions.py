@@ -143,7 +143,6 @@ class Nozzle(object):
 
 class Extruder(object):
     """
-
     """
     def __init__(self, temperature_max: float, temperature_min: float, part_cooling: bool, tool: str, gcode_command: str = "M109 S{} {}", gcode_command_immediate=None, part_cooling_gcode_command:str=None, *args, **kwargs):
         if tool == "":
@@ -235,6 +234,7 @@ class Settings(object):
                  temperature_extruder_raft=None, temperature_extruder=None,
                  speed_travel=None, speed_printing=None, speed_printing_raft=None, extrusion_multiplier=None,
                  retraction_distance=None, retraction_restart_distance=None, retraction_speed=None, coasting_distance=None,
+                 bridging_extrusion_multiplier=None, bridging_part_cooling=None, bridging_speed_printing=None,
                  raft_density=None,
                  temperature_chamber_setpoint:int=None, temperature_printbed_setpoint:int=None,
                  part_cooling_setpoint:int=None, ventilator_entry_setpoint:int=None, ventilator_exit_setpoint:int=None, *args, **kwargs):
@@ -263,11 +263,11 @@ class Settings(object):
         self.retraction_speed = retraction_speed
         self.coasting_distance = coasting_distance
 
+        self.bridging_extrusion_multiplier = bridging_extrusion_multiplier
+        self.bridging_part_cooling = bridging_part_cooling
+        self.bridging_speed_printing = bridging_speed_printing
+
         self.raft_density = 100 if raft_density is None else raft_density  # (%)
-        #
-        # self.optimize_temperature_printbed = optimize_temperature_printbed  # True if ones wants to optimize temperature_printbed
-        # self.optimize_speed_printing = optimize_speed_printing  # True if ones wants to optimize speed_printing
-        # self.optimize_track_height = optimize_track_height  # True if ones wants to optimize track_height
 
         self.temperature_chamber_setpoint = temperature_chamber_setpoint if temperature_chamber_setpoint else 0
         self.temperature_printbed_setpoint = temperature_printbed_setpoint if temperature_printbed_setpoint else 0
@@ -283,13 +283,7 @@ class Parameter(object):
         self.units = units
         self.precision = precision
         self.values = value
-        #if value:
-        #     if isinstance(value, list):
-        #     else:
-        #         print(value) if name == "printing speed" else print("hello")
-        #         self.value = value
-        # else:
-        #     self.value = None
+
         if default_value is not None:
             self.default_value = default_value
             self.min_default = default_value[0]
@@ -395,15 +389,15 @@ def get_minmax_temperature(temperature_extruder_raft: float, temperature_max: fl
 
 
 def get_test_structure_size(machine):
-    test_structure_size = 60
+    test_structure_size = 50
     if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.29:
-        test_structure_size = 70
+        test_structure_size = 60
         if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.39:
-            test_structure_size = 80
+            test_structure_size = 70
             if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.59:
-                test_structure_size = 90
+                test_structure_size = 80
                 if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.99:
-                    test_structure_size = 100
+                    test_structure_size = 90
 
     return test_structure_size
 

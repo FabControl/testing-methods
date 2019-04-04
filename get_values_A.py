@@ -11,7 +11,6 @@ class get_values_A(object):
         :param machine:
         :param material:
         :param path:
-
         """
 
         self.offset_x = offset[0] if offset else 0
@@ -69,8 +68,8 @@ class get_values_A(object):
         self.speed_printing = [x*machine.settings.speed_printing for x in [1] * self.number_of_test_structures]
         self.speed_printing_raft = machine.settings.speed_printing_raft
 
-        self.coef_h = [x * machine.settings.track_height / machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
-        self.coef_w = [x * machine.settings.track_width / machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
+        self.coef_h = [x * machine.settings.track_height/machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
+        self.coef_w = [x * machine.settings.track_width/machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
 
         if self.raft is False:
             self.abs_z = [x * self.coef_h_raft * machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
@@ -95,6 +94,10 @@ class get_values_A(object):
 
         self.track_height = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
         self.track_width = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_w]
+
+        self.bridging_extrusion_multiplier = [x * machine.settings.bridging_extrusion_multiplier for x in [1] * self.number_of_test_structures]
+        self.bridging_part_cooling = [x *  machine.settings.bridging_part_cooling for x in [1] * self.number_of_test_structures]
+        self.bridging_speed_printing = machine.settings.bridging_speed_printing
 
         if self.test_number == "01":
             # FIRST LAYER HEIGHT test parameters
@@ -182,37 +185,6 @@ class get_values_A(object):
                                               fixed_parameter_values.parameter_one.values[-1],
                                               self.number_of_test_structures).tolist()
 
-        elif self.test_number == "0":
-            # RETRACTION DISTANCE test parameters
-            self.retraction_distance = np.linspace(fixed_parameter_values.parameter_one.values[0],
-                                                   fixed_parameter_values.parameter_one.values[-1],
-                                                   self.number_of_test_structures).tolist()
-
-        elif self.test_number == "0":
-            # RETRACTION DISTANCE test parameters
-            self.retraction_distance = np.linspace(fixed_parameter_values.parameter_one.values[0],
-                                                   fixed_parameter_values.parameter_one.values[-1],
-                                                   self.number_of_test_structures).tolist()
-
-        elif self.test_number == "11":
-            # RETRACTION DISTANCE test parameters
-            self.retraction_distance = np.linspace(fixed_parameter_values.parameter_one.values[0],
-                                                   fixed_parameter_values.parameter_one.values[-1],
-                                                   self.number_of_test_structures).tolist()
-
-        elif self.test_number == "12":
-            # RETRACTION RESTART DISTANCE amd COASTING DISTANCE test parameters
-            self.retraction_restart_distance = np.linspace(fixed_parameter_values.parameter_one.values[0],
-                                                           fixed_parameter_values.parameter_one.values[-1],
-                                                           self.number_of_test_structures).tolist()
-            self.coasting_distance = 1.25
-
-        elif self.test_number == "13":
-            # BRIDGING test parameters
-            self.extrusion_multiplier_bridging = np.linspace(fixed_parameter_values.parameter_one.values[0],
-                                                             fixed_parameter_values.parameter_one.values[-1],
-                                                             self.number_of_test_structures).tolist()
-
         elif self.test_number == "08":
             # EXTRUSION TEMPERATURE vs RETRACTION DISTANCE and RETRACTION SPEED
             self.number_of_lines = number_of_lines(self.test_structure_size, self.number_of_test_structures, self.track_width)
@@ -228,6 +200,66 @@ class get_values_A(object):
             self.retraction_speed = np.linspace(fixed_parameter_values.parameter_three.values[0],
                                                 fixed_parameter_values.parameter_three.values[-1],
                                                 self.number_of_lines).tolist()
+
+        elif self.test_number == "09":
+            # RETRACTION DISTANCE vs PRINTING SPEED test
+            self.number_of_lines = number_of_lines(self.test_structure_size, self.number_of_test_structures, self.track_width)
+
+            self.retraction_distance = np.linspace(fixed_parameter_values.parameter_one.values[0],
+                                                   fixed_parameter_values.parameter_one.values[-1],
+                                                   self.number_of_test_structures).tolist()
+
+            self.speed_printing = np.linspace(fixed_parameter_values.parameter_two.values[0],
+                                              fixed_parameter_values.parameter_two.values[-1],
+                                              self.number_of_substructures).tolist()
+
+            self.retraction_speed = self.number_of_lines*[machine.settings.retraction_speed]
+
+        elif self.test_number == "10":
+            # RETRACTION DISTANCE test
+            self.number_of_lines = number_of_lines(self.test_structure_size, self.number_of_test_structures, self.track_width)
+
+            self.retraction_distance = np.linspace(fixed_parameter_values.parameter_one.values[0],
+                                                   fixed_parameter_values.parameter_one.values[-1],
+                                                   self.number_of_test_structures).tolist()
+
+            self.retraction_speed = self.number_of_lines*[machine.settings.retraction_speed]
+
+        elif self.test_number == "11":
+            # RETRACTION DISTANCE vs. RETRACTION SPEED test
+            self.retraction_distance = np.linspace(fixed_parameter_values.parameter_one.values[0],
+                                                   fixed_parameter_values.parameter_one.values[-1],
+                                                   self.number_of_test_structures).tolist()
+
+            self.retraction_speed = np.linspace(fixed_parameter_values.parameter_two.values[0],
+                                                fixed_parameter_values.parameter_two.values[-1],
+                                                self.number_of_substructures).tolist()
+
+        elif self.test_number == "12":
+            # RETRACTION RESTART DISTANCE vs. PRINTING SPEED and COASTING DISTANCE test parameters
+            self.number_of_lines = number_of_lines(self.test_structure_size, self.number_of_test_structures, self.track_width)
+
+            self.retraction_restart_distance = np.linspace(fixed_parameter_values.parameter_one.values[0],
+                                                           fixed_parameter_values.parameter_one.values[-1],
+                                                           self.number_of_test_structures).tolist()
+
+            self.speed_printing = np.linspace(fixed_parameter_values.parameter_two.values[0],
+                                              fixed_parameter_values.parameter_two.values[-1],
+                                              self.number_of_substructures).tolist()
+
+            self.coasting_distance = np.linspace(fixed_parameter_values.parameter_three.values[0],
+                                                fixed_parameter_values.parameter_three.values[-1],
+                                                self.number_of_lines).tolist()
+
+        elif self.test_number == "13":
+            # BRIDGING test parameters
+            self.extrusion_multiplier_bridging = np.linspace(fixed_parameter_values.parameter_one.values[0],
+                                                             fixed_parameter_values.parameter_one.values[-1],
+                                                             self.number_of_test_structures).tolist()
+
+            self.bridging_speed_printing = np.linspace(fixed_parameter_values.parameter_two.values[0],
+                                                   fixed_parameter_values.parameter_two.values[-1],
+                                                   self.number_of_substructures).tolist()
 
         else:
             raise ValueError("{} is not a valid test.".format(fixed_parameter_values.name))
@@ -320,9 +352,9 @@ def number_of_lines(test_structure_size, number_of_test_structures, track_width)
         pass
     else:
         if lines % 4 == 1:
-            lines = lines -1
+            lines = lines-1
         if lines % 4 == 2:
-            lines = lines -2
+            lines = lines-2
         if lines % 4 == 3:
-            lines = lines -3
+            lines = lines-3
     return lines

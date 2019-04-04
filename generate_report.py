@@ -22,24 +22,12 @@ from paths import *
 arguments = docopt(__doc__)
 session_id = str(arguments["<session_id>"])
 
-# from reportlab.platypus import BaseDocTemplate, SimpleDocTemplate, Frame, Paragraph, PageBreak, PageTemplate
-# from reportlab.lib.styles import getSampleStyleSheet
-# import random
-#
-# words = "lorem ipsum dolor sit amet consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt ut labore et".split()
-#
-# styles=getSampleStyleSheet()
-# Elements=[]
-#
-# doc = BaseDocTemplate('basedoc.pdf',showBoundary=1)
-
 json_path = save_session_file_as(session_id, "json")
 
 with open(json_path, mode="r") as file:
     import_json_dict = json.load(file)
 
 report_head = "Test report for " + str(import_json_dict["material"]["manufacturer"]) + " " + str(import_json_dict["material"]["name"]) + " Ø" + str(import_json_dict["material"]["size_od"]) + " mm"
-
 
 doc = SimpleDocTemplate(save_session_file_as(session_id, "pdf"),
                         pagesize=landscape(A4),
@@ -125,28 +113,33 @@ style_right = ParagraphStyle(name="right",
                              parent=styles["Normal"],
                              alignment=TA_RIGHT)
 
-if len(main_info)%2 == 0:
-    number_of_rows = int(len(main_info)/2)
+# Splitting the not tested data into three rows, and putting them into table1
+if len(main_info)%3 == 0:
+    number_of_rows = int(len(main_info)/3)
+elif len(main_info)%3 == 1:
+    number_of_rows = int((len(main_info)+2)/3)
 else:
-    number_of_rows = int((len(main_info)+1)/2)
+    number_of_rows = int((len(main_info)+1)/3)
 
 table_data_1 = []
 
 for i in range(number_of_rows):
     left_entry = Paragraph(main_info[i],style_text)
+    centre_entry = Paragraph(main_info[number_of_rows+i],style_text)
     try:
-        right_entry = Paragraph(main_info[number_of_rows+i], style_text)
+        right_entry = Paragraph(main_info[2*number_of_rows+i], style_text)
     except IndexError:
         right_entry = Paragraph("", style_text)
 
-    table_data_1_entry = [left_entry, right_entry]
+    table_data_1_entry = [left_entry, centre_entry, right_entry]
     table_data_1.append(table_data_1_entry)
 
-colwidths_1 = [250, 250]
+colwidths_1 = [250, 250, 250]
 table1 = Table(table_data_1, colwidths_1)
 elements.append(table1)
 elements.append(Spacer(1, 0.5*inch))
 
+# Preparing the tested data and putting them into table2
 performed_tests = filter(lambda x: x["executed"] is True, import_json_dict["session"]["previous_tests"])
 table_data_2 = [" ", "Test name", "Parameters", "Units"]
 for dummy in range(import_json_dict["session"]["number_of_test_structures"]):
@@ -182,17 +175,16 @@ for single_test in performed_tests:
 
         spaces_to_skip = len(single_test["tested_parameter_one_values"])-len(single_test["tested_parameter_two_values"])
         for _ in range(spaces_to_skip):
-            new_line.append("")
+            new_line.append("-")
         new_line.append(single_test["parameter_two_precision"].format(single_test["selected_parameter_two_value"]))
-        new_line.append("")
+        new_line.append("-")
         table_data_2.append(new_line)
         row_number += 1
 
-    if single_test["test_number"] in ("01", "02", "03", "04", "08", "13"):
+    if single_test["test_number"] in ("01", "02", "03", "04", "08", "09", "11", "13"):
         table_2_style.append(("SPAN", (0, row_number-1), (0, row_number)))
         table_2_style.append(("SPAN", (1, row_number-1), (1, row_number)))
         table_2_style.append(("SPAN", (12, row_number-1), (12, row_number)))
-
 
 style = TableStyle(table_2_style)
 
