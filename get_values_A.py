@@ -98,7 +98,7 @@ class get_values_A(object):
         self.track_width = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_w]
 
         self.bridging_extrusion_multiplier = [x * machine.settings.bridging_extrusion_multiplier for x in [1] * self.number_of_test_structures]
-        self.bridging_part_cooling = [x *  machine.settings.bridging_part_cooling for x in [1] * self.number_of_test_structures]
+        self.bridging_part_cooling = machine.settings.bridging_part_cooling
         self.bridging_speed_printing = machine.settings.bridging_speed_printing
 
         if self.test_number == "01":
