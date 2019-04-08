@@ -10,7 +10,9 @@ class get_values_A(object):
         """
         :param machine:
         :param material:
+        :param fixed_parameter_values:
         :param path:
+        :param offset:
         """
 
         self.offset_x = offset[0] if offset else 0
@@ -276,8 +278,8 @@ class get_values_A(object):
         volumetric_flow_rate = []
         volumetric_flow_rate_row = []
 
-        if self.test_number in ["03", "08", "10", "11", "12"]:
-            volumetric_flow_rate = round(get_flow_rate(self.track_height[0], self.track_width[0], self.speed_printing[0], self.extrusion_multiplier_bridging[0]), 3)
+        if self.test_number in ["08", "10", "11", "12"]:
+            volumetric_flow_rate = [round(get_flow_rate(self.track_height[0], self.track_width[0], self.speed_printing[0], self.extrusion_multiplier_bridging[0]), 3)]
         else:
             for speed in self.speed_printing:
                 if self.test_number == "07":

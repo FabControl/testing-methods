@@ -14,6 +14,7 @@ from CLI_helpers import separator
 import paths
 
 args = docopt(__doc__)
+
 session_id = str(sys.argv[1])
 
 path = paths.json_folder + separator() + session_id + ".json"
@@ -23,14 +24,13 @@ with open(path, mode='r') as file:
     persistence = json.load(file)
 
 dummy = persistence["session"]["previous_tests"][-1]
-
 ind_parameter_one = int(sys.argv[2])
 dummy["selected_parameter_one_value"] = dummy["tested_parameter_one_values"][ind_parameter_one]
 
-if len(sys.argv) > 2:
+if len(sys.argv) > 3:
     ind_parameter_two = int(sys.argv[3])
     dummy["selected_parameter_two_value"] = dummy["tested_parameter_two_values"][ind_parameter_two]
-    if len(sys.argv) > 3:
+    if len(sys.argv) > 4:
         value_parameter_three = int(sys.argv[4])
         dummy["selected_parameter_three_value"] = value_parameter_three
 
@@ -66,12 +66,28 @@ elif dummy["test_number"] == "06":
 elif dummy["test_number"] == "07":
     if dummy["executed"]:
         persistence["settings"]["speed_printing"] = dummy["selected_parameter_one_value"]
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_one]
 elif dummy["test_number"] == "08":
     if dummy["executed"]:
         persistence["settings"]["temperature_extruder"] = dummy["selected_parameter_one_value"]
         persistence["settings"]["retraction_distance"] = dummy["selected_parameter_two_value"]
         persistence["settings"]["retraction_speed"] = dummy["selected_parameter_three_value"]
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][0]
+elif dummy["test_number"] == "09":
+    if dummy["executed"]:
+        persistence["settings"]["retraction_distance"] = dummy["selected_parameter_one_value"]
+        persistence["settings"]["speed_printing"] = dummy["selected_parameter_two_value"]
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_two][ind_parameter_one]
+elif dummy["test_number"] == "10":
+    if dummy["executed"]:
+        persistence["settings"]["retraction_distance"] = dummy["selected_parameter_one_value"]
         persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"]
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][0]
+elif dummy["test_number"] == "11":
+    if dummy["executed"]:
+        persistence["settings"]["retraction_distance"] = dummy["selected_parameter_one_value"]
+        persistence["settings"]["retraction_speed"] = dummy["selected_parameter_two_value"]
+        persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][0]
 elif dummy["test_number"] == "13":
     if dummy["executed"]:
         persistence["settings"]["bridging_extrusion_multiplier"] = dummy["selected_parameter_one_value"]
