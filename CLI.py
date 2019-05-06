@@ -16,7 +16,7 @@ from Globals import machine, material, persistence  # TODO Why machine is inacti
 from TestStructureGeometriesA import *
 from generate_label import generate_label
 from update_persistence import update_persistence
-from initialize_test import initialize_test
+from initialize_test import OptimizerSession
 
 if __name__ == '__main__':
 
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     check_compatibility(machine, material)
 
     if quiet:
-        values = initialize_test(persistence)
+        values = OptimizerSession(persistence).values
         update_persistence(persistence, values)
 
     import os

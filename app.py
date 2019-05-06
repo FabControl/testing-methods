@@ -3,7 +3,7 @@ from flask import Flask, jsonify, make_response, abort, request, send_file
 from persistence import Persistence
 import os
 from fill_values import fill_values
-from initialize_test import initialize_test
+from initialize_test import OptimizerSession
 from base64 import b64encode
 
 app = Flask(__name__)
@@ -19,9 +19,9 @@ def initialize():
         return jsonify(Persistence(None).dict)
     else:
         persistence = Persistence(request.json)
-        gcode = initialize_test(persistence)
+        session = OptimizerSession(persistence)
         fill_values(persistence)
-        return jsonify(json_coupler(persistence, gcode))
+        return jsonify(json_coupler(persistence, session.g.buffer))
 
 
 @app.route('/test_json', methods=['POST'])

@@ -25,9 +25,9 @@ class Gplus(G):
         self.coef_w = machine.settings.track_width / machine.temperaturecontrollers.extruder.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
         self.buffer = buffer
-        self.gcode = []
+        self._gcode = []
         with open(self.header) as hd:
-            self.gcode.append(hd.readlines())
+            [self._gcode.append(statement) for statement in hd.readlines()]
 
     def set_extruder_temperature(self, temperature: int, extruder: Extruder, immediate: bool=None):
         """Set the liquefier temperature in degC"""
@@ -238,7 +238,7 @@ class Gplus(G):
         self.speed = int(rate * 60)
     
     def write(self, statement_in, resp_needed=False):
-        self.gcode.append(statement_in)
+        self._gcode.append(statement_in)
 
     def teardown(self, wait=True):
         """ Close the outfile file after writing the footer if opened. This
@@ -253,6 +253,10 @@ class Gplus(G):
         """
         if self.footer is not None:
             with open(self.footer) as fd:
-                [self.gcode.append(statement) for statement in fd.readlines()]
+                [self._gcode.append(statement) for statement in fd.readlines()]
 
-        self.buffer.write("\n".join(self.gcode))
+        # self.buffer.write("\n".join(self._gcode))
+
+    @property
+    def gcode(self):
+        return "\n".join(self._gcode)
