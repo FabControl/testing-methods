@@ -33,7 +33,7 @@ except:
                 "gcode_command_immediate": "M104 S{0} {1}",
                 "temperature_max": 300,
                 "temperature_min": 30,
-                "part_cooling": true,
+                "part_cooling": True,
                 "part_cooling_gcode_command": "M106 S{0}",
                 "nozzle": {
                     "type": "brass",
@@ -49,12 +49,12 @@ except:
                 "gcode_command": "M141 S{0}",
                 "temperature_min": 30,
                 "temperature_max": 80,
-                "chamber_heatable": false,
+                "chamber_heatable": False,
                 "temperature_chamber_setpoint": 80,
-                "ventilator_exit": false,
+                "ventilator_exit": False,
                 "ventilator_exit_tool": "P1",
                 "ventilator_exit_gcode_command": "M106 {0} S{1}",
-                "ventilator_entry": false,
+                "ventilator_entry": False,
                 "ventilator_entry_tool": "P2",
                 "ventilator_entry_gcode_command": "M106 {0} S{1}"
             },
@@ -64,7 +64,7 @@ except:
                 "gcode_command_immediate": "M140 S{0}",
                 "temperature_min": 20,
                 "temperature_max": 115,
-                "printbed_heatable": true,
+                "printbed_heatable": True,
                 "temperature_printbed_setpoint": 30,
                 "material": "?",
                 "coating": "None"
@@ -81,7 +81,7 @@ except:
     "material": {
         "id": "80",
         "drying": {
-            "dried": false,
+            "dried": False,
             "drying_time": 0,
             "feeding_airflow": 0,
             "drying_airflow": 0,

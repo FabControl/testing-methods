@@ -2,12 +2,14 @@ from mecode import G
 from Definitions import *
 from paths import gcode_folder
 from CLI_helpers import exception_handler
+import io
 
 track_list = []
 
+
 class Gplus(G):
     # Build on the G class from mecode. Gplus class redefines some of the commands, creates new commands
-    def __init__(self, material: Material, machine: Machine, *args, **kwargs):
+    def __init__(self, material: Material, machine: Machine, buffer, *args, **kwargs):
         super(Gplus, self).__init__(*args, **kwargs)
 
         self.filament_diameter = material.size_od
@@ -22,32 +24,36 @@ class Gplus(G):
         self.buildarea_maxdim2 = machine.buildarea_maxdim2
         self.coef_w = machine.settings.track_width / machine.temperaturecontrollers.extruder.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
+        self.buffer = buffer
+        self.gcode = []
+        with open(self.header) as hd:
+            self.gcode.append(hd.readlines())
 
     def set_extruder_temperature(self, temperature: int, extruder: Extruder, immediate: bool=None):
         """Set the liquefier temperature in degC"""
         if immediate:
             if extruder.gcode_command_immediate != "":
-                G.write(self, extruder.gcode_command_immediate.format(temperature, extruder.tool) + "; set the extruder temperature")
+                self.write(extruder.gcode_command_immediate.format(temperature, extruder.tool) + "; set the extruder temperature")
         else:
-            G.write(self, extruder.gcode_command.format(temperature, extruder.tool) + "; set the extruder temperature and wait")
+            self.write(extruder.gcode_command.format(temperature, extruder.tool) + "; set the extruder temperature and wait")
 
     def set_printbed_temperature(self, temperature: float, printbed: Printbed, immediate: bool=None):
         """Set the printbed temperature in degC"""
         if immediate:
             if printbed.gcode_command_immediate != "":
                 if printbed.tool:
-                    G.write(self, str(printbed.gcode_command_immediate+" {1}").format(temperature, printbed.tool) + "; set the print bed temperature")
+                    self.write(str(printbed.gcode_command_immediate+" {1}").format(temperature, printbed.tool) + "; set the print bed temperature")
                 else:
-                    G.write(self, printbed.gcode_command_immediate.format(temperature) + "; set the print bed temperature")
+                    self.write(printbed.gcode_command_immediate.format(temperature) + "; set the print bed temperature")
         else:
             if printbed.tool:
-                G.write(self, str(printbed.gcode_command+" {1}").format(temperature, printbed.tool) + "; set the print bed temperature and wait")
+                self.write(str(printbed.gcode_command+" {1}").format(temperature, printbed.tool) + "; set the print bed temperature and wait")
             else:
-                G.write(self, printbed.gcode_command.format(temperature) + "; set the print bed temperature and wait")
+                self.write(printbed.gcode_command.format(temperature) + "; set the print bed temperature and wait")
 
     def set_chamber_temperature(self, temperature: int, chamber: Chamber):
         """Set the printbed temperature in degC"""
-        G.write(self, chamber.gcode_command.format(temperature, chamber.tool) + "; set the chamber temperature")
+        self.write(chamber.gcode_command.format(temperature, chamber.tool) + "; set the chamber temperature")
 
     def set_part_cooling(self, cooling_power: float, extruder: Extruder):
         """Set the cooler power in percent"""
@@ -56,7 +62,7 @@ class Gplus(G):
         elif cooling_power <= 0:
             pass
         # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-        G.write(self, extruder.part_cooling_gcode_command.format(int(255 * (cooling_power / 100))) + "; set the cooler speed for part cooling")
+        self.write(extruder.part_cooling_gcode_command.format(int(255 * (cooling_power / 100))) + "; set the cooler speed for part cooling")
 
     def set_ventilator_exit(self, cooling_power: float, chamber: Chamber):
         """Set the cooler power in percent"""
@@ -65,7 +71,7 @@ class Gplus(G):
         elif cooling_power < 0:
             pass
         # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-        G.write(self, chamber.ventilator_exit_gcode_command.format(chamber.ventilator_exit_tool, int(255 * (cooling_power / 100))) + "; set the speed for exit ventilator")
+        self.write(chamber.ventilator_exit_gcode_command.format(chamber.ventilator_exit_tool, int(255 * (cooling_power / 100))) + "; set the speed for exit ventilator")
 
     def set_ventilator_entry(self, cooling_power: float, chamber: Chamber):
         """Set the cooler power in percent"""
@@ -74,7 +80,7 @@ class Gplus(G):
         elif cooling_power < 0:
             pass
         # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-        G.write(self, chamber.ventilator_entry_gcode_command.format(chamber.ventilator_entry_tool, int(255 * (cooling_power / 100)) + "; set the speed for entry ventilator"))
+        self.write(chamber.ventilator_entry_gcode_command.format(chamber.ventilator_entry_tool, int(255 * (cooling_power / 100)) + "; set the speed for entry ventilator"))
 
     def dwell(self, time: int):
         """ Pause code executions for the given amount of time """
@@ -230,3 +236,23 @@ class Gplus(G):
         """
         self.write("G1 F{}".format(int(rate * 60)))
         self.speed = int(rate * 60)
+    
+    def write(self, statement_in, resp_needed=False):
+        self.gcode.append(statement_in)
+
+    def teardown(self, wait=True):
+        """ Close the outfile file after writing the footer if opened. This
+        method must be called once after all commands.
+
+        Parameters
+        ----------
+        wait : Bool (default: True)
+            Only used if direct_write_model == 'serial'. If True, this method
+            waits to return until all buffered lines have been acknowledged.
+
+        """
+        if self.footer is not None:
+            with open(self.footer) as fd:
+                [self.gcode.append(statement) for statement in fd.readlines()]
+
+        self.buffer.write("\n".join(self.gcode))

@@ -1,20 +1,20 @@
 from __future__ import print_function
 from Definitions import *
 from GcodeStuff import Gplus
-from Globals import comment
 import numpy as np
+from persistence import Persistence
 
 
 class get_values_A(object):
-    def __init__(self, machine: Machine, material: Material, fixed_parameter_values: TestInfo, path: str, offset: list=None):
+    def __init__(self, persistence: Persistence, fixed_parameter_values: TestInfo, path: str, offset: list=None):
         """
-        :param machine:
-        :param material:
         :param path:
         """
 
         self.offset_x = offset[0] if offset else 0
         self.offset_y = offset[1] if offset else 0
+        machine = persistence.machine
+        material = persistence.material
 
         self.extruder = machine.temperaturecontrollers.extruder
 
@@ -96,7 +96,7 @@ class get_values_A(object):
         self.track_width = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_w]
 
         self.bridging_extrusion_multiplier = [x * machine.settings.bridging_extrusion_multiplier for x in [1] * self.number_of_test_structures]
-        self.bridging_part_cooling = [x *  machine.settings.bridging_part_cooling for x in [1] * self.number_of_test_structures]
+        self.bridging_part_cooling = machine.settings.bridging_part_cooling
         self.bridging_speed_printing = machine.settings.bridging_speed_printing
 
         if self.test_number == "01":
@@ -298,11 +298,11 @@ class get_values_A(object):
 
         self.title = addtitle(fixed_parameter_values, material, machine)
         self.comment_all_values_of_variable_parameters = addcomment1(self.test_info)
-        self.comment_all_values_of_constant_parameters = addcomment2()
+        self.comment_all_values_of_constant_parameters = addcomment2(persistence)
         self.comment_current_values_of_variable_parameter = addcomment3(self.test_info)
 
         self.g = Gplus(material, machine,
-                       outfile=path,
+                       buffer=buffer,
                        layer_height=self.coef_h_raft * machine.temperaturecontrollers.extruder.nozzle.size_id,
                        extrusion_width=self.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id,
                        aerotech_include=False, footer=footer, header=header, extrude=True,
@@ -332,8 +332,8 @@ def addcomment1(test_info: TestInfo):
     return comment1
 
 
-def addcomment2():
-    comment2 = comment
+def addcomment2(persistence):
+    comment2 = persistence.test_comment
     return comment2
 
 

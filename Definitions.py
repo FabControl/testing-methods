@@ -417,18 +417,18 @@ def sum_of_list_elements(my_list, index):
     return sum_of_elements[-1]
 
 
-def save_session_file_as(session_id: str, extension: str) -> str:
+def save_session_file_as(persistence: dict, session_id: str, extension: str) -> str:
     """
     Takes a save_session_file_as extension and returns a full file-name based on the following convention:
     'cwd\\folder\\YYYYMMDDxxx_TestNumber.extension' where x is a number character from [0-9a-z] and TestNumber is a
     double-digit zero-padded number.
+    :param persistence:
     :param session_id:
     :param extension:
     :return:
     """
     from paths import gcode_folder, json_folder, pdf_folder, stl_folder, png_folder
     from CLI_helpers import separator
-    from Globals import persistence
 
     if not extension.startswith("."):
         extension = "." + extension

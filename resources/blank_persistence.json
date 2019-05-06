@@ -1,38 +1,38 @@
 {
     "machine": {
-        "sn": 12345,
-        "model": "--",
-        "manufacturer": "MP",
-        "buildarea_maxdim1": 200,
-        "buildarea_maxdim2": 200,
-        "max_dimension_z": 215,
-        "form": "elliptic",
+        "sn": null,
+        "model": null,
+        "manufacturer": null,
+        "buildarea_maxdim1": null,
+        "buildarea_maxdim2": null,
+        "max_dimension_z": null,
+        "form": null,
         "temperature_controllers": {
             "extruder": {
                 "tool": "",
                 "gcode_command": "M109 S{0} {1}",
                 "gcode_command_immediate": "M104 S{0} {1}",
-                "temperature_max": 300,
-                "temperature_min": 30,
+                "temperature_max": null,
+                "temperature_min": null,
                 "part_cooling": true,
                 "part_cooling_gcode_command": "M106 S{0}",
-                "part_cooling_setpoint": 100,
+                "part_cooling_setpoint": null,
                 "nozzle": {
-                    "type": "brass",
-                    "size_id": 0.8,
-                    "size_od": 1.04,
-                    "size_capillary_length": 5,
-                    "size_angle": 60,
+                    "type": null,
+                    "size_id": null,
+                    "size_od": null,
+                    "size_capillary_length": null,
+                    "size_angle": null,
                     "size_extruder_id": 1.95
                 }
             },
             "chamber": {
                 "tool": "",
                 "gcode_command": "M141 S{0}",
-                "temperature_min": 30,
-                "temperature_max": 80,
+                "temperature_min": null,
+                "temperature_max": null,
                 "chamber_heatable": false,
-                "temperature_chamber_setpoint": 80,
+                "temperature_chamber_setpoint": null,
                 "ventilator_exit": false,
                 "ventilator_exit_tool": "P1",
                 "ventilator_exit_gcode_command": "M106 {0} S{1}",
@@ -44,9 +44,9 @@
                 "tool": "T1",
                 "gcode_command": "M190 S{0}",
                 "gcode_command_immediate": "M140 S{0}",
-                "temperature_min": 20,
-                "temperature_max": 115,
-                "printbed_heatable": true,
+                "temperature_min": null,
+                "temperature_max": null,
+                "printbed_heatable": false,
                 "material": "?",
                 "coating": "None"
             }
@@ -60,7 +60,7 @@
         }
     },
     "material": {
-        "id": "80",
+        "id": null,
         "drying": {
             "dried": false,
             "drying_time": 0,
@@ -69,699 +69,44 @@
             "feeding_temperature": 0,
             "drying_temperature": 0
         },
-        "size_od": 1.75,
+        "size_od": null,
         "material_group": "non-filled",
-        "density_rt": 1.13,
-        "mvr": 2.3,
-        "load_mfr": 2.16,
-        "temperature_mfr": 200,
-        "temperature_glass": 255,
-        "name": "PA6 with Exolit",
-        "manufacturer": "Clariant"
+        "density_rt": null,
+        "mvr": null,
+        "load_mfr": null,
+        "temperature_mfr": null,
+        "temperature_glass": null,
+        "name": null,
+        "manufacturer": null
     },
     "session": {
         "uid": 135,
         "target": "mechanical_strength",
-        "test_number": "13",
+        "test_number": "01",
         "min_max_parameter_one": [],
-        "min_max_parameter_two": [
-            40,
-            60
-        ],
-        "min_max_parameter_three": [
-            40,
-            120
-        ],
+        "min_max_parameter_two": [],
+        "min_max_parameter_three": [],
         "test_type": "A",
-        "user_id": "Egils Arajs",
+        "user_id": null,
         "offset": [
             0,
             0
         ],
         "slicer": "prusa slic3r",
-        "previous_tests": [
-            {
-                "test_name": "first-layer track height vs first-layer printing speed",
-                "test_number": "01",
-                "executed": true,
-                "tested_parameter_one_values": [
-                    0.216,
-                    0.253,
-                    0.291,
-                    0.328,
-                    0.365,
-                    0.403,
-                    0.44
-                ],
-                "tested_parameter_two_values": [
-                    20.0,
-                    26.7,
-                    33.3,
-                    40.0
-                ],
-                "tested_volumetric_flow-rate_values": [
-                    [
-                        3.256,
-                        3.778,
-                        4.288,
-                        4.786,
-                        5.272,
-                        5.747,
-                        6.209
-                    ],
-                    [
-                        4.341,
-                        5.037,
-                        5.717,
-                        6.382,
-                        7.03,
-                        7.662,
-                        8.279
-                    ],
-                    [
-                        5.426,
-                        6.296,
-                        7.147,
-                        7.977,
-                        8.787,
-                        9.578,
-                        10.348
-                    ],
-                    [
-                        6.512,
-                        7.556,
-                        8.576,
-                        9.572,
-                        10.545,
-                        11.494,
-                        12.418
-                    ]
-                ],
-                "selected_parameter_one_value": 0.253,
-                "selected_parameter_two_value": 33.3,
-                "selected_volumetric_flow-rate_value": 6.296,
-                "parameter_one_name": "first-layer track height",
-                "parameter_two_name": "first-layer printing speed",
-                "parameter_one_units": "mm",
-                "parameter_two_units": "mm/s",
-                "parameter_one_precision": "{:.3f}",
-                "parameter_two_precision": "{:.1f}",
-                "extruded_filament_mm": 555.665,
-                "gcode_path": "gcodes/135_01.gcode",
-                "label_path": "pngs/135_01.png",
-                "comments": 0,
-                "datetime_info": "2019-04-04 14:40:21",
-                "selected_parameter_three_value": 0,
-                "estimated_printing_time_s": 212.3
-            },
-            {
-                "test_name": "extrusion temperature vs printing speed",
-                "test_number": "03",
-                "executed": true,
-                "tested_parameter_one_values": [
-                    230.0,
-                    236.0,
-                    242.0,
-                    248.0,
-                    253.0,
-                    259.0,
-                    265.0
-                ],
-                "tested_parameter_two_values": [
-                    40.0,
-                    46.7,
-                    53.3,
-                    60.0
-                ],
-                "tested_volumetric_flow-rate_values": 6.057,
-                "selected_parameter_one_value": 265,
-                "selected_parameter_two_value": 46.7,
-                "selected_volumetric_flow-rate_value": 0,
-                "parameter_one_name": "extrusion temperature",
-                "parameter_two_name": "printing speed",
-                "parameter_one_units": "degC",
-                "parameter_two_units": "mm/s",
-                "parameter_one_precision": "{:.0f}",
-                "parameter_two_precision": "{:.1f}",
-                "extruded_filament_mm": 1304.649,
-                "gcode_path": "gcodes/135_03.gcode",
-                "label_path": "pngs/135_03.png",
-                "comments": 0,
-                "datetime_info": "2019-04-04 15:23:36"
-            },
-            {
-                "test_name": "extrusion temperature vs retraction distance",
-                "test_number": "08",
-                "executed": true,
-                "tested_parameter_one_values": [
-                    260.0,
-                    261.7,
-                    263.3,
-                    265.0,
-                    266.7,
-                    268.3,
-                    270.0
-                ],
-                "tested_parameter_two_values": [
-                    1.0,
-                    3.0,
-                    5.0,
-                    7.0
-                ],
-                "tested_volumetric_flow-rate_values": 7.071,
-                "selected_parameter_one_value": 0,
-                "selected_parameter_two_value": 0,
-                "selected_volumetric_flow-rate_value": 7.071,
-                "parameter_one_name": "extrusion temperature",
-                "parameter_two_name": "retraction distance",
-                "parameter_one_units": "degC",
-                "parameter_two_units": "mm",
-                "parameter_one_precision": "{:.1f}",
-                "parameter_two_precision": "{:.3f}",
-                "extruded_filament_mm": 1234.496,
-                "gcode_path": "gcodes/135_08.gcode",
-                "label_path": "pngs/135_08.png",
-                "comments": 0,
-                "datetime_info": "2019-04-04 16:09:32",
-                "tested_parameter_three_values": [
-                    40,
-                    120
-                ],
-                "selected_parameter_three_value": 0,
-                "parameter_three_units": "mm/s",
-                "parameter_three_precision": "{:.1f}"
-            },
-            {
-                "test_name": "bridging extrusion multiplier vs bridging printing speed",
-                "test_number": "13",
-                "executed": true,
-                "tested_parameter_one_values": [
-                    1.0,
-                    1.167,
-                    1.333,
-                    1.5,
-                    1.667,
-                    1.833,
-                    2.0
-                ],
-                "tested_parameter_two_values": [
-                    40.0,
-                    46.7,
-                    53.3,
-                    60.0
-                ],
-                "tested_volumetric_flow-rate_values": [
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ]
-                ],
-                "selected_parameter_one_value": 0,
-                "selected_parameter_two_value": 0,
-                "selected_volumetric_flow-rate_value": 0,
-                "parameter_one_name": "bridging extrusion multiplier",
-                "parameter_two_name": "bridging printing speed",
-                "parameter_one_units": "-",
-                "parameter_two_units": "mm/s",
-                "parameter_one_precision": "{:.3f}",
-                "parameter_two_precision": "{:.1f}",
-                "extruded_filament_mm": 2270.321,
-                "gcode_path": "gcodes/135_13.gcode",
-                "label_path": "pngs/135_13.png",
-                "comments": 0,
-                "datetime_info": "2019-04-08 13:16:59"
-            },
-            {
-                "test_name": "bridging extrusion multiplier vs bridging printing speed",
-                "test_number": "13",
-                "executed": true,
-                "tested_parameter_one_values": [
-                    1.0,
-                    1.167,
-                    1.333,
-                    1.5,
-                    1.667,
-                    1.833,
-                    2.0
-                ],
-                "tested_parameter_two_values": [
-                    40.0,
-                    46.7,
-                    53.3,
-                    60.0
-                ],
-                "tested_volumetric_flow-rate_values": [
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ]
-                ],
-                "selected_parameter_one_value": 0,
-                "selected_parameter_two_value": 0,
-                "selected_volumetric_flow-rate_value": 0,
-                "parameter_one_name": "bridging extrusion multiplier",
-                "parameter_two_name": "bridging printing speed",
-                "parameter_one_units": "-",
-                "parameter_two_units": "mm/s",
-                "parameter_one_precision": "{:.3f}",
-                "parameter_two_precision": "{:.1f}",
-                "extruded_filament_mm": 2270.321,
-                "gcode_path": "gcodes/135_13.gcode",
-                "label_path": "pngs/135_13.png",
-                "comments": 0,
-                "datetime_info": "2019-04-08 13:24:31"
-            },
-            {
-                "test_name": "bridging extrusion multiplier vs bridging printing speed",
-                "test_number": "13",
-                "executed": true,
-                "tested_parameter_one_values": [
-                    1.0,
-                    1.167,
-                    1.333,
-                    1.5,
-                    1.667,
-                    1.833,
-                    2.0
-                ],
-                "tested_parameter_two_values": [
-                    40.0,
-                    46.7,
-                    53.3,
-                    60.0
-                ],
-                "tested_volumetric_flow-rate_values": [
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ]
-                ],
-                "selected_parameter_one_value": 0,
-                "selected_parameter_two_value": 0,
-                "selected_volumetric_flow-rate_value": 0,
-                "parameter_one_name": "bridging extrusion multiplier",
-                "parameter_two_name": "bridging printing speed",
-                "parameter_one_units": "-",
-                "parameter_two_units": "mm/s",
-                "parameter_one_precision": "{:.3f}",
-                "parameter_two_precision": "{:.1f}",
-                "extruded_filament_mm": 2270.321,
-                "gcode_path": "gcodes/135_13.gcode",
-                "label_path": "pngs/135_13.png",
-                "comments": 0,
-                "datetime_info": "2019-04-08 13:27:24"
-            },
-            {
-                "test_name": "bridging extrusion multiplier vs bridging printing speed",
-                "test_number": "13",
-                "executed": true,
-                "tested_parameter_one_values": [
-                    1.0,
-                    1.167,
-                    1.333,
-                    1.5,
-                    1.667,
-                    1.833,
-                    2.0
-                ],
-                "tested_parameter_two_values": [
-                    40.0,
-                    46.7,
-                    53.3,
-                    60.0
-                ],
-                "tested_volumetric_flow-rate_values": [
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ]
-                ],
-                "selected_parameter_one_value": 0,
-                "selected_parameter_two_value": 0,
-                "selected_volumetric_flow-rate_value": 0,
-                "parameter_one_name": "bridging extrusion multiplier",
-                "parameter_two_name": "bridging printing speed",
-                "parameter_one_units": "-",
-                "parameter_two_units": "mm/s",
-                "parameter_one_precision": "{:.3f}",
-                "parameter_two_precision": "{:.1f}",
-                "extruded_filament_mm": 2270.321,
-                "gcode_path": "gcodes/135_13.gcode",
-                "label_path": "pngs/135_13.png",
-                "comments": 0,
-                "datetime_info": "2019-04-08 13:29:30"
-            },
-            {
-                "test_name": "bridging extrusion multiplier vs bridging printing speed",
-                "test_number": "13",
-                "executed": true,
-                "tested_parameter_one_values": [
-                    1.0,
-                    1.167,
-                    1.333,
-                    1.5,
-                    1.667,
-                    1.833,
-                    2.0
-                ],
-                "tested_parameter_two_values": [
-                    40.0,
-                    46.7,
-                    53.3,
-                    60.0
-                ],
-                "tested_volumetric_flow-rate_values": [
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ],
-                    [
-                        7.071,
-                        8.25,
-                        9.428,
-                        10.607,
-                        11.785,
-                        12.964,
-                        14.142
-                    ]
-                ],
-                "selected_parameter_one_value": 1.667,
-                "selected_parameter_two_value": 40.0,
-                "selected_volumetric_flow-rate_value": 11.785,
-                "parameter_one_name": "bridging extrusion multiplier",
-                "parameter_two_name": "bridging printing speed",
-                "parameter_one_units": "-",
-                "parameter_two_units": "mm/s",
-                "parameter_one_precision": "{:.3f}",
-                "parameter_two_precision": "{:.1f}",
-                "extruded_filament_mm": 2270.321,
-                "gcode_path": "gcodes/135_13.gcode",
-                "label_path": "pngs/135_13.png",
-                "comments": 0,
-                "datetime_info": "2019-04-08 13:32:22",
-                "selected_parameter_three_value": 0,
-                "estimated_printing_time_s": 463.4
-            }
-        ],
+        "previous_tests": [],
         "number_of_test_structures": 7
     },
     "settings": {
         "speed_travel": 140,
         "raft_density": 100,
-        "speed_printing_raft": 33.3,
-        "track_height": 0.2,
-        "track_height_raft": 0.253,
-        "track_width": 0.8,
-        "track_width_raft": 0.8,
-        "extrusion_multiplier": 1.0,
-        "temperature_extruder": 270,
-        "temperature_extruder_raft": 230,
+        "speed_printing_raft": null,
+        "track_height": null,
+        "track_height_raft": null,
+        "track_width": null,
+        "track_width_raft": null,
+        "extrusion_multiplier": null,
+        "temperature_extruder": null,
+        "temperature_extruder_raft": null,
         "retraction_restart_distance": 0,
         "retraction_speed": 100,
         "retraction_distance": 2.3,

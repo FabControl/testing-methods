@@ -4,6 +4,7 @@ import numpy as np
 number_of_substructures=4
 number_of_test_structures=7
 
+
 def get_test_info(persistence):
     nozzle_size_id = persistence["machine"]["temperature_controllers"]["extruder"]["nozzle"]["size_id"]
 

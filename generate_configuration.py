@@ -126,7 +126,7 @@ if not cast:
     json_path = json_folder + separator() + str(session_id) + ".json"
     with open(json_path, mode="r") as file:
         persistence = json.load(file)
-    persistence_flat = dict(persistence["settings"], **persistence["machine"]["nozzle"])
+    persistence_flat = dict(persistence["settings"], **persistence["machine"]["temperature_controllers"]["extruder"]["nozzle"])
     persistence_flat["material_name"] = persistence["material"]["name"]
     persistence_flat["density_rt"] = persistence["material"]["density_rt"]
     slicer = str(persistence["session"]["slicer"]).lower()

@@ -4,8 +4,8 @@ import re
 from datetime import datetime
 from CLI_helpers import extruded_filament
 
-def update_persistence(persistence, values):
 
+def update_persistence(persistence, values):
     session_id = str(persistence["session"]["uid"])
     test_info = get_test_info(persistence)
     previous_tests = persistence["session"]["previous_tests"]
