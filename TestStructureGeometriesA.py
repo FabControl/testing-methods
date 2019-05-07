@@ -8,7 +8,6 @@ class TestStructure(object):
     def __init__(self, persistence):
         self.persistence = persistence
         self.machine = self.persistence.machine
-        self.g = gv.g
 
     # WIPE
 
