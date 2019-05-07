@@ -20,7 +20,7 @@ def initialize():
     else:
         persistence = Persistence(request.json)
         session = OptimizerSession(persistence)
-        fill_values(persistence)
+        persistence.fill_values()
         return jsonify(json_coupler(persistence, session.g.buffer))
 
 

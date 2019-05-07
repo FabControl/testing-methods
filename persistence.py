@@ -1,6 +1,7 @@
 import json
 from Definitions import Material, Machine, Settings
 from get_test_info import get_test_info, get_comment
+from fill_values import fill_values as fv
 
 
 class Persistence(object):
@@ -46,3 +47,6 @@ class Persistence(object):
             self.id = self.dict["session"]["uid"]
             self.test_info = get_test_info(self.dict)
             self.test_comment = get_comment(self.test_info)
+
+    def fill_values(self):
+        fv(self)
