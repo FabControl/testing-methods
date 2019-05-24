@@ -21,7 +21,7 @@ def initialize():
         persistence = Persistence(request.json)
         session = OptimizerSession(persistence)
         persistence.fill_values()
-        return jsonify(json_coupler(persistence, session.g.buffer))
+        return jsonify(json_coupler(persistence.dict, str(session.g.gcode).encode()))
 
 
 @app.route('/test_json', methods=['POST'])

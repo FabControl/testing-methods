@@ -302,7 +302,6 @@ class get_values_A(object):
         self.comment_current_values_of_variable_parameter = addcomment3(self.test_info)
 
         self.g = Gplus(material, machine,
-                       buffer=buffer,
                        layer_height=self.coef_h_raft * machine.temperaturecontrollers.extruder.nozzle.size_id,
                        extrusion_width=self.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id,
                        aerotech_include=False, footer=footer, header=header, extrude=True,

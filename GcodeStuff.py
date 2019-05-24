@@ -9,8 +9,7 @@ track_list = []
 
 class Gplus(G):
     # Build on the G class from mecode. Gplus class redefines some of the commands, creates new commands
-    def __init__(self, material: Material, machine: Machine, buffer, *args, **kwargs):
-        super(Gplus, self).__init__(*args, **kwargs)
+    def __init__(self, material: Material, machine: Machine, *args, **kwargs):
 
         self.filament_diameter = material.size_od
         self.nozzle_diameter = machine.temperaturecontrollers.extruder.nozzle.size_id
@@ -24,10 +23,11 @@ class Gplus(G):
         self.buildarea_maxdim2 = machine.buildarea_maxdim2
         self.coef_w = machine.settings.track_width / machine.temperaturecontrollers.extruder.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
-        self.buffer = buffer
         self._gcode = []
+        super(Gplus, self).__init__(*args, **kwargs)
         with open(self.header) as hd:
             [self._gcode.append(statement) for statement in hd.readlines()]
+
 
     def set_extruder_temperature(self, temperature: int, extruder: Extruder, immediate: bool=None):
         """Set the liquefier temperature in degC"""

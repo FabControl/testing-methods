@@ -8,6 +8,7 @@ class TestStructure(object):
     def __init__(self, persistence):
         self.persistence = persistence
         self.machine = self.persistence.machine
+        self.gcode = None
 
     # WIPE
 
@@ -583,6 +584,7 @@ class TestStructure(object):
         values.g.teardown()
 
         return
+
 
     def generate_footer(self, values: get_values_A):
         custom_footer = ";--- start footer ---\n; end of the test routine\n"
