@@ -39,26 +39,39 @@ def generate_label(import_json_dict):
         img = Image.new("RGBA", (scale*700, scale*550), (255, 255, 255))
         draw = ImageDraw.Draw(img)
 
+        try:
+            material_name = str(import_json_dict["material"]["name"]).strip() + " "
+        except KeyError:
+            material_name = str()
+        try:
+            machine_model = " (SN: " + str(import_json_dict["machine"]["model"]).strip() + ")"
+        except KeyError:
+            machine_model = str()
+        try:
+            nozzle_size = str(import_json_dict["machine"]["temperature_controllers"]["extruder"]["nozzle"]["size_id"]).strip() + " mm"
+        except KeyError:
+            nozzle_size = str()
+        try:
+            nozzle_type = str(import_json_dict["machine"]["temperature_controllers"]["extruder"]["nozzle"]["type"]).strip() + "nozzle "
+        except KeyError:
+            nozzle_type = str()
+
+
         n = 0
         draw.text((0, n * font_size), "Session ID: {0}, User ID: {1}".format(import_json_dict["session"]["uid"],
                                                                              import_json_dict["session"]["user_id"]), (0, 0, 0), font=font_bold)
         n += 1
         draw.text((0, n * font_size), "G-code name: {0}".format(import_json_dict["session"]["previous_tests"][-1]["gcode_path"].split("gcodes")[-1].translate("\\//"), (0, 0, 0), font=font))
         n += 1
-        draw.text((0, n * font_size), "Feedstock material: {0} {1} (batch: {2}), {3} mm".format(import_json_dict["material"]["manufacturer"],
-                                                                                                import_json_dict["material"]["name"],
-                                                                                                import_json_dict["material"]["id"],
-                                                                                                import_json_dict["material"]["size_od"]), (0, 0, 0), font=font)
+        draw.text((0, n * font_size), "Feedstock material: {0}, {1} mm".format(material_name,
+                                                                               import_json_dict["material"]["size_od"]), (0, 0, 0), font=font)
         n += 1
         if import_json_dict["material"]["drying"]["dried"]:
-            draw.text((0, n * font_size), "Feedstock material dried prior to printing: at {0} degC for {1} min".format(import_json_dict["material"]["drying"]["drying_temperature"],
-                                                                                                                       import_json_dict["material"]["drying"]["drying_time"]), (0, 0, 0), font=font)
+            draw.text((0, n * font_size), "Feedstock material dried prior to printing", (0, 0, 0), font=font)
         else:
-            draw.text((0, n * font_size), "Feedstock material dried prior to printing: not dried", (0, 0, 0), font=font)
+            draw.text((0, n * font_size), "Feedstock material not dried prior to printing", (0, 0, 0), font=font)
         n += 1
-        draw.text((0, n*font_size), "3D printer: {0} {1} (SN: {2})".format(import_json_dict["machine"]["manufacturer"],
-                                                                           import_json_dict["machine"]["model"],
-                                                                           import_json_dict["machine"]["sn"]), (0, 0, 0), font=font)
+        draw.text((0, n*font_size), "3D printer: {0}".format(machine_model), (0, 0, 0), font=font)
         n += 1
         if import_json_dict["machine"]["temperature_controllers"]["chamber"]["chamber_heatable"]:
             draw.text((0, n * font_size), "Build chamber temperature: {0} degC".format(import_json_dict["settings"]["temperature_chamber_setpoint"]), (0, 0, 0), font=font)
@@ -66,12 +79,8 @@ def generate_label(import_json_dict):
         if import_json_dict["machine"]["temperature_controllers"]["extruder"]["part_cooling"]:
             draw.text((0, n * font_size), "Part cooling: {0} %".format(import_json_dict["settings"]["part_cooling_setpoint"]), (0, 0, 0), font=font)
             n += 1
-        if import_json_dict["machine"]["temperature_controllers"]["printbed"]["coating"] is not None:
-            draw.text((0, n * font_size), "Print bed coating: {0}".format(import_json_dict["machine"]["temperature_controllers"]["printbed"]["coating"]), (0, 0, 0), font=font)
-            n += 1
 
-        draw.text((0, n*font_size), "Nozzle: {0} mm {1} nozzle".format(import_json_dict["machine"]["temperature_controllers"]["extruder"]["nozzle"]["size_id"],
-                                                                       import_json_dict["machine"]["temperature_controllers"]["extruder"]["nozzle"]["type"]), (0, 0, 0), font=font)
+        draw.text((0, n*font_size), "Nozzle: {0}".format(nozzle_size+nozzle_type), (0, 0, 0), font=font)
         n += 1
         draw.text((0, n*font_size), "Tested parameters: {0}".format(import_json_dict["session"]["previous_tests"][-1]["test_name"].replace("_", " ")), (0,0,0), font=font)
         n += 1

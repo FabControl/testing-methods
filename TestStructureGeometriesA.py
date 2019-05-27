@@ -2,7 +2,6 @@ from Definitions import *
 from Globals import machine
 from get_values_A import get_values_A
 from GetValuesB import TestSetupB
-from paths import footer
 
 # WIPE
 def wipe(gv: get_values_A or TestSetupB, length_multiplier=1):
@@ -118,10 +117,6 @@ def print_raft(values: get_values_A):
 
     if values.part_cooling:
         values.g.set_part_cooling(values.part_cooling_setpoint, values.extruder)
-    if values.ventilator_entry:
-        values.g.set_ventilator_entry(values.ventilator_entry_setpoint, values.chamber)
-    if values.ventilator_exit:
-        values.g.set_ventilator_exit(values.ventilator_exit_setpoint, values.chamber)
 
     return
 
@@ -239,7 +234,7 @@ def flat_test_parameter_one_vs_parameter_two(values: get_values_A):
                                   extrude=False, extrusion_multiplier=0)
 
     values.g.write("; --- finish to print the test structure ---")
-    generate_footer(values)
+    values.g.write(generate_footer(values))
     values.g.teardown()
 
     return
@@ -263,8 +258,8 @@ def retraction_restart_distance_vs_coasting_distance(values: get_values_A):
         values.g.feed(current_printing_speed)
 
         values.g.travel(x=-values.test_structure_width[current_test_structure] - values.test_structure_separation,
-                            y=0 if (current_test_structure == 0 and values.raft) else +values.step_y,
-                            lift=1)
+                        y=0 if (current_test_structure == 0 and values.raft) else +values.step_y,
+                        lift=1)
 
         values.g.abs_move(z=+values.abs_z[current_test_structure])
         step_x = values.step_x[current_test_structure]
@@ -309,6 +304,7 @@ def retraction_restart_distance_vs_coasting_distance(values: get_values_A):
                 values.g.retract(values.retraction_speed, values.retraction_distance[current_test_structure], values.retraction_restart_distance[current_test_structure])
 
     values.g.write("; --- finish to print the test structure ---")
+    values.g.write(generate_footer(values))
     values.g.teardown()
 
     return
@@ -418,7 +414,7 @@ def bridging_test(values: get_values_A):
                         retraction_distance=np.mean(values.retraction_distance))
 
     values.g.write("; --- finish to print the test structure ---")
-    generate_footer(values)
+    values.g.write(generate_footer(values))
     values.g.teardown()
 
     return
@@ -538,29 +534,20 @@ def retraction_distance(values: get_values_A):
                                   extrude=False, extrusion_multiplier=0)
 
     values.g.write("; --- finish to print the test structure ---")
-    generate_footer(values)
+    values.g.write(generate_footer(values))
     values.g.teardown()
 
     return
 
 def generate_footer(values: get_values_A):
     custom_footer = ";--- start footer ---\n; end of the test routine\n"
-
     if values.chamber_heatable:
-        custom_footer = custom_footer + values.chamber.gcode_command.format(values.chamber.temperature_min, values.chamber.tool) + "; set the chamber temperature\n"
-
+        custom_footer = custom_footer + values.g.set_printbed_temperature(0, values.chamber, immediate=True, return_string=True)+"\n"
     if values.printbed_heatable:
-        custom_footer = custom_footer + values.printbed.gcode_command.format(values.printbed.temperature_min, values.printbed.tool) + "; set the print bed temperature\n"
-
-    custom_footer = custom_footer + values.extruder.gcode_command.format(0, values.extruder.tool) + "; set the extruder temperature\n"
-
+        custom_footer = custom_footer + values.g.set_printbed_temperature(0, values.printbed, immediate=True, return_string=True) + "\n"
+    custom_footer = custom_footer + values.g.set_extruder_temperature(0, values.extruder, immediate=True, return_string=True) + "\n"
     if values.part_cooling:
-        custom_footer = custom_footer + values.part_cooling_gcode_command.format(0) + "; set the part cooling\n"
-
+        custom_footer = custom_footer + values.g.set_part_cooling(0, values.extruder, return_string=True) + "\n"
     custom_footer = custom_footer + "G28; move to the home position\nM84; disable motors\n;--- end footer ---"
 
-    with open(footer, "w") as f:
-        f.write(custom_footer)
-
     return custom_footer
-

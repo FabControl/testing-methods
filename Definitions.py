@@ -3,7 +3,7 @@ import json
 import jsonpickle
 import math
 import numpy as np
-from paths import header, footer
+from paths import header
 
 class DryingProcess(object):
     """
@@ -15,114 +15,93 @@ class DryingProcess(object):
     feeding_temperature   - feeding temperature(degC)
     feeding_airflow       - airflow during feeding(%)
     """
-    def __init__(self, dried: bool, drying_temperature: int, drying_time: int, drying_airflow: int, feeding_temperature: int, feeding_airflow: int, *args, **kwargs):
+    def __init__(self,
+                 dried: bool, *args, **kwargs):
         self.dried = dried
-        if self.dried:
-            self.drying_temperature = drying_temperature
-            self.drying_time = drying_time
-            self.drying_airflow = drying_airflow
-            self.feeding_temperature = feeding_temperature
-            self.feeding_airflow = feeding_airflow
 
 
 class Material(object):
     """
     definition of the filament properties:
-    name                   - filament name
-    manufacturer           - manufacturer's/supplier's name
-    id                     - material ID
-    size_od                - outer diameter
-    temperature_melting    - melting point (degC)
-    temperature_destr      - destruction temperature in air (degC)
-    temperature_glass      - glass transition temperature (degC)
-    temperature_vicat      - Vicat softening point (degC)
-    mvr                    - melt flow rate (cm3)
-    mfi                    - melt flow index (g)
-    temperature_mfr        - temperature at which MFR has been determined (degC)
-    load_mfr               - load under which the MFR has been determined (kg)
-    capillary_length_mfr   - capillary length in the MFR measurement device (mm)
-    capillary_diameter_mfr - capillary diameter in the MFR measurement device (mm)
-    time_mfr               - extrusion time in the MFR experiment (min)
-    density_rt             - density at RT (g/cc)
-    lcte                   - linear coefficient of thermal expansion (1/K)
-    heat_capacity          - specific heat capacity (J/kg/K)
+    name                        - filament name
+    size_od                     - outer diameter
+    manufacturer                - manufacturer's/supplier's name
+    id                          - material ID
+    temperature_destr           - destruction temperature in air (degC)
+    temperature_glass           - glass transition temperature (degC)
+    temperature_vicat           - Vicat softening point (degC)
+    mvr                         - melt flow rate (cm3)
+    mfi                         - melt flow index (g)
+    temperature_mfr             - temperature at which MFR has been determined (degC)
+    load_mfr                    - load under which the MFR has been determined (kg)
+    capillary_length_mfr        - capillary length in the MFR measurement device (mm)
+    capillary_diameter_mfr      - capillary diameter in the MFR measurement device (mm)
+    time_mfr                    - extrusion time in the MFR experiment (min)
+    density_rt                  - density at RT (g/cc)
+    lcte                        - linear coefficient of thermal expansion (1/K)
+    heat_capacity               - specific heat capacity (J/kg/K)
     """
 
-    def __init__(self, name, manufacturer, material_group=None, polymer_class=None, id=None, size_od: float=None,
-                 temperature_melting=None, temperature_destr=None, temperature_glass=None, temperature_vicat=None,
-                 mvr=None, mfi=None, temperature_mfr=None, load_mfr=None, capillary_length_mfr=None, capillary_diameter_mfr=None,
-                 time_mfr=None, density_rt=None, lcte=None, heat_capacity=None, price_eur_per_kg=None, *args, **kwargs):
+    def __init__(self,
+                 name: str,
+                 size_od: float=None,
+                 temperature_characteristic=None, *args, **kwargs):
         self.name = name
-        self.material_group = material_group
-        self.polymer_class = polymer_class
-        self.manufacturer = manufacturer
-        self.id = id
         self.size_od = size_od
-        self.temperature_melting = temperature_melting
-        self.temperature_destr = temperature_destr
-        self.temperature_glass = temperature_glass
-        self.temperature_vicat = temperature_vicat
-        self.mvr = mvr  # respect the units: mm3/time
-        self.mfi = mfi  # respect the units: g/time
-        self.temperature_mfr = 220 if temperature_mfr is None else temperature_mfr
-        self.capillary_diameter_mfr = 2.095 if capillary_diameter_mfr is None else capillary_diameter_mfr  # respect the units: mm
-        self.capillary_length_mfr = 8 if capillary_length_mfr is None else capillary_length_mfr  # respect the units: mm
-        self.time_mfr = 10 if time_mfr is None else time_mfr  # respect the units: min
-        self.density_rt = 1 if density_rt is None else density_rt  # respect the units: g/cm3
-        self.lcte = lcte
-        self.load_mfr = load_mfr  # respect the units: kg
-        self.heat_capacity = heat_capacity  # respect the units: J / K / g
-        self.price_eur_per_kg = price_eur_per_kg
         self.drying = None
 
 
 class Chamber(object):
     """
-
+    chamber_heatable
+    tool
+    gcode_command
+    gcode_command_immediate
+    temperature_min
+    ventilator_exit
+    ventilator_entry
+    ventilator_exit_tool
+    ventilator_exit_gcode_command
+    ventilator_entry_tool
+    ventilator_entry_gcode_command
     """
-
-    def __init__(self, chamber_heatable: bool, ventilator_exit: bool, ventilator_entry: bool, tool: str=None, gcode_command: str=None, temperature_min: float=None, temperature_max: float=None, temperature_chamber_setpoint: float=None, ventilator_exit_tool: str=None, ventilator_exit_gcode_command: str=None, ventilator_entry_tool: str=None, ventilator_entry_gcode_command: str=None, *args, **kwargs):
+    def __init__(self,
+                 chamber_heatable: bool,
+                 tool: str,
+                 gcode_command: str,
+                 gcode_command_immediate: str=None,
+                 temperature_max: float=None, *args, **kwargs):
         self.chamber_heatable = chamber_heatable
         if chamber_heatable:
-            self.tool = tool  # tool number, e.g. T1, T2
-            self.gcode_command = gcode_command  # G-code command used to control the temperature of the nozzle, e.g. Mddd {0} S{1}, where {0} is a tool string
+            self.tool = tool # tool number, e.g. T1, T2
+            self.gcode_command = gcode_command # G-code command used to control the temperature of the chamber, e.g. Mddd {0} S{1}, where {0} is a tool string
+            self.gcode_command_immediate = gcode_command_immediate # G-code command used to control the temperature of the chamber, e.g. Mddd {0} S{1}, where {0} is a tool string
             self.temperature_max = temperature_max
-            self.temperature_min = temperature_min
-            self.temperature_chamber_setpoint = temperature_chamber_setpoint
-
-        self.ventilator_exit = ventilator_exit
-        self.ventilator_entry = ventilator_entry
-
-        if ventilator_exit:
-            self.ventilator_exit_tool = ventilator_exit_tool
-            self.ventilator_exit_gcode_command = ventilator_exit_gcode_command
-
-        if ventilator_entry:
-            self.ventilator_entry_tool = ventilator_entry_tool
-            self.ventilator_entry_gcode_command = ventilator_entry_gcode_command
 
 
 class Printbed(object):
     """
 
     """
-    def __init__(self, printbed_heatable: bool, tool: str, gcode_command: str, temperature_max: float, temperature_min: float, material: str, coating: str, gcode_command_immediate=None, *args, **kwargs):
+    def __init__(self,
+                 printbed_heatable: bool,
+                 temperature_printbed_setpoint: int,
+                 tool: str ="",
+                 gcode_command: str = "M119 S$temp",
+                 gcode_command_immediate: str = "M114 Stemp",
+                 *args, **kwargs):
+
         self.printbed_heatable = printbed_heatable
         if printbed_heatable:
+            self.temperature_printbed_setpoint = temperature_printbed_setpoint
             self.tool = tool
-            self.gcode_command = gcode_command  # G-code command used to control the temperature of the print bed, e.g. Mddd {0} S{1}, where {0} is a tool string
-            self.gcode_command_immediate = gcode_command_immediate  # G-code command used to control the temperature of the print bed, e.g. Mddd {0} S{1}, where {0} is a tool string
-            self.temperature_max = temperature_max
-            self.temperature_min = temperature_min
-
-        self.material = material
-        self.coating = coating
+            self.gcode_command = gcode_command  # G-code command used to control the temperature of the print bed, e.g. Mddd S$temp ($tool)
+            self.gcode_command_immediate = gcode_command_immediate  # G-code command used to control the temperature of the print bed, e.g. Mddd S$temp ($tool)
 
 
 class Nozzle(object):
     """
     definition of the nozzle properties:
-    id - nozzle id
     size_id - inner diameter of the nozzle (mm)
     size_od - outer diameter of the nozzle (mm)
     size_capillary_length - length of the capillary in the nozzle (mm)
@@ -130,29 +109,30 @@ class Nozzle(object):
     size_extruder_id - inner diameter of the extruder (mm)
     type - nozzle metal (e.g. brass or steel)
     """
+    def __init__(self,
+                 size_id: float, *args, **kwargs):
 
-    def __init__(self, size_id: float, size_od: float, type: str, size_capillary_length=None, size_angle=None, size_extruder_id=None, *args, **kwargs):
         self.size_id = size_id  # respect the units: mm
-        self.size_od = size_od  # respect the units: mm
-        self.size_capillary_length = size_capillary_length  # respect the units: mm
-        if size_angle:
-            self.size_angle = math.radians(size_angle)  # respect the units: conversion from angles to radians
-        self.size_extruder_id = size_extruder_id  # respect the units: mm
-        self.type = type
 
 
 class Extruder(object):
     """
+    tool - tool number, e.g. T1, T2
+    gcode_command - G-code command to set the temperature and wait till it has been reached, e.g. M109 S$temp $tool, where tool is a tool string
+    gcode_command_immediate - G-code command to set the temperature immediately, e.g. M104 S$temp $tool, where tool is a tool string
     """
-    def __init__(self, temperature_max: float, temperature_min: float, part_cooling: bool, tool: str, gcode_command: str = "M109 S{} {}", gcode_command_immediate=None, part_cooling_gcode_command:str=None, *args, **kwargs):
-        if tool == "":
-            self.tool = "T0"  # tool number, e.g. T1, T2
-        else:
-            self.tool = tool
-        self.gcode_command = gcode_command  # G-code command used to control the temperature, e.g. M104 {0} S{1}, where {0} is a tool string
-        self.gcode_command_immediate = gcode_command_immediate  # G-code command used to control the temperature, e.g. M104 {0} S{1}, where {0} is a tool string
+    def __init__(self,
+                 temperature_max: int,
+                 part_cooling: bool,
+                 tool: str = "T0",
+                 gcode_command: str = "M109 S$temp $tool",
+                 gcode_command_immediate: str = "M104 S$temp $tool",
+                 part_cooling_gcode_command: str = "M106 S$cool", *args, **kwargs):
+
+        self.tool = tool
+        self.gcode_command = gcode_command
+        self.gcode_command_immediate = gcode_command_immediate
         self.temperature_max = temperature_max
-        self.temperature_min = temperature_min
         self.part_cooling = part_cooling
         if part_cooling:
             self.part_cooling_gcode_command = part_cooling_gcode_command
@@ -161,6 +141,7 @@ class Extruder(object):
 
 class TemperatureControllers(object):
     """
+    all temperature controllers
     """
     def __init__(self, *args, **kwargs):
         self.extruder = Extruder(**kwargs["extruder"])
@@ -168,47 +149,30 @@ class TemperatureControllers(object):
         self.printbed = Printbed(**kwargs["printbed"])
 
 
-class Software(object):
-    """
-    """
-    def __init__(self, version: str, *args, **kwargs):
-        self.version = version
-
-
-class Firmware(object):
-    """
-    """
-
-    def __init__(self, fw_type: str, version: str, *args, **kwargs):
-        self.fw_type = fw_type
-        self.version = version
-
-
 class Machine(object):
     """
     definition of the machine (i.e. 3D printer):
+    sn - machine's SN
+    form - form factor
+    buildarea_maxdim1 - maximum buildarea in dimension 1 (mm)
+    buildarea_maxdim2 - maximum buildarea in dimension 2 (mm)
     id - machine ID
     manufacturer - machine's manufacturer
     model - machine's model
-    sn - machine's SN
-    buildarea_maxdim1 - maximum buildarea in dimension 1 (mm)
-    buildarea_maxdim2 - maximum buildarea in dimension 2 (mm)
     """
 
-    def __init__(self, id: str=None, manufacturer: str=None, model: str=None, sn: str=None, form: str=None, buildarea_maxdim1: float=None, buildarea_maxdim2: float=None,
+    def __init__(self,
+                 sn: str=None,
+                 form: str="",
+                 buildarea_maxdim1: float=None,
+                 buildarea_maxdim2: float=None,
                  *args, **kwargs):
 
-        self.id = id
-        self.manufacturer = manufacturer
-        self.model = model
         self.sn = sn
         self.form = form
         self.buildarea_maxdim1 = buildarea_maxdim1  # respect the units: mm
         self.buildarea_maxdim2 = buildarea_maxdim2  # respect the units: mm
-
         self.temperaturecontrollers = TemperatureControllers(**kwargs["temperature_controllers"])
-        self.software = Software(**kwargs["software"])
-        self.firmware = Firmware(**kwargs["firmware"])
 
 
 class Settings(object):
@@ -230,9 +194,11 @@ class Settings(object):
     """
 
     def __init__(self, material=None, nozzle=None, machine=None,
-                 track_width=None, track_width_raft =None, track_height=None, track_height_raft=None,
+                 track_width=None, track_width_raft =None,
+                 track_height=None, track_height_raft=None,
                  temperature_extruder_raft=None, temperature_extruder=None,
-                 speed_travel=None, speed_printing=None, speed_printing_raft=None, extrusion_multiplier=None,
+                 speed_travel=None, speed_printing=None, speed_printing_raft=None,
+                 extrusion_multiplier=None,
                  retraction_distance=None, retraction_restart_distance=None, retraction_speed=None, coasting_distance=None,
                  bridging_extrusion_multiplier=None, bridging_part_cooling=None, bridging_speed_printing=None,
                  raft_density=None,
@@ -291,7 +257,8 @@ class Parameter(object):
 
 
 class TestInfo(object):
-    def __init__(self, name: str, test_number: str, number_of_layers: int, number_of_test_structures: int, raft: bool, parameter_one: Parameter, parameter_two: Parameter, number_of_substructures: int, other_parameters: list, parameter_three: Parameter=None):
+    def __init__(self, name: str, test_number: str, number_of_layers: int, number_of_test_structures: int, raft: bool,
+                 parameter_one: Parameter, parameter_two: Parameter, number_of_substructures: int, other_parameters: list, parameter_three: Parameter=None):
         self.name = name
         self.test_number = test_number
         self.number_of_layers = number_of_layers
@@ -368,7 +335,6 @@ def get_minmax_track_height_raft_coef(size_id: float, number_of_test_structures=
 def get_minmax_track_width_raft_coef(size_id: float, number_of_test_structures=None):
     coef_w_max_raft = 1.4
     coef_w_min_raft = 1.0
-
     if size_id >= 1.0:
         coef_w_min_raft = 1.0
         coef_w_max_raft = 2.0
@@ -381,7 +347,6 @@ def get_minmax_track_width_raft_coef(size_id: float, number_of_test_structures=N
 def get_minmax_temperature(temperature_extruder_raft: float, temperature_max: float, number_of_test_structures: int):
     temperature_extruder_min = temperature_extruder_raft
     temperature_extruder_max = min(temperature_max, 1.070 * (temperature_extruder_raft + 273.15) - 273.15)
-
     temperature_all = np.linspace(temperature_extruder_min,
                                   temperature_extruder_max, number_of_test_structures).tolist()
 

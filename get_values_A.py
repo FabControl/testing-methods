@@ -6,14 +6,19 @@ import numpy as np
 
 
 class get_values_A(object):
-    def __init__(self, machine: Machine, material: Material, fixed_parameter_values: TestInfo, path: str, offset: list=None):
-        """
-        :param machine:
-        :param material:
-        :param fixed_parameter_values:
-        :param path:
-        :param offset:
-        """
+    """
+    machine
+    material
+    fixed_parameter_values
+    path
+    offset
+    """
+    def __init__(self,
+                 machine: Machine,
+                 material: Material,
+                 fixed_parameter_values: TestInfo,
+                 path: str,
+                 offset: list=None):
 
         self.offset_x = offset[0] if offset else 0
         self.offset_y = offset[1] if offset else 0
@@ -25,14 +30,6 @@ class get_values_A(object):
         if self.part_cooling:
             self.part_cooling_setpoint = machine.settings.part_cooling_setpoint
             self.part_cooling_gcode_command = machine.temperaturecontrollers.extruder.part_cooling_gcode_command
-
-        self.ventilator_entry = machine.temperaturecontrollers.chamber.ventilator_entry
-        if self.ventilator_entry:
-            self.ventilator_entry_setpoint = machine.settings.ventilator_entry_setpoint
-
-        self.ventilator_exit = machine.temperaturecontrollers.chamber.ventilator_exit
-        if self.ventilator_exit:
-            self.ventilator_exit_setpoint = machine.settings.ventilator_exit_setpoint
 
         self.chamber_heatable = machine.temperaturecontrollers.chamber.chamber_heatable
         if self.chamber_heatable:
@@ -307,7 +304,7 @@ class get_values_A(object):
                        outfile=path,
                        layer_height=self.coef_h_raft * machine.temperaturecontrollers.extruder.nozzle.size_id,
                        extrusion_width=self.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id,
-                       aerotech_include=False, footer=footer, header=header, extrude=True,
+                       aerotech_include=False, header=header, extrude=True,
                        extrusion_multiplier=self.extrusion_multiplier_raft)
 
     def get_values_parameter_one(self):
@@ -318,7 +315,7 @@ class get_values_A(object):
 
 
 def addtitle(test_info: TestInfo, material: Material, machine: Machine):
-    title = str("; --- " + test_info.name + " 2D test for {0} from {1} (batch: {2}) 3D printed using {3} {4} (SN: {5}) and {6} mm {7} nozzle ---".format(material.name, material.manufacturer, material.id, machine.manufacturer, machine.model, machine.sn, machine.temperaturecontrollers.extruder.nozzle.size_id, machine.temperaturecontrollers.extruder.nozzle.type))
+    title = str("; --- " + test_info.name + " 2D test for {0} 3D printed using {1}) and a {2}-mm nozzle ---".format(material.name, machine.sn, machine.temperaturecontrollers.extruder.nozzle.size_id))
     return title
 
 

@@ -11,7 +11,6 @@ import time
 
 from docopt import docopt
 
-from CheckCompatibility import check_compatibility
 from Globals import machine, material, persistence # TODO Why machine is inactive?
 from TestStructureGeometriesA import *
 from generate_label import generate_label
@@ -21,9 +20,8 @@ from initialize_test import initialize_test
 quiet = True
 verbose = False
 
-
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='FabControl Feedstock Testing Suite')
+    arguments = docopt(__doc__, version='FabControl Feedstock Testing Suite, v2.0')
 
     verbose = arguments["-v"]
     quiet = arguments["-q"]
@@ -31,16 +29,19 @@ if __name__ == '__main__':
 
 start = time.time()
 
-# Check compatibility
-check_compatibility(machine, material)
-
 if quiet:
     values = initialize_test(machine, material, persistence)
-    update_persistence(persistence, values)
+
+    from gcoder import *
+    from paths import *
+
+    gcode_path = str(gcode_folder + separator() + session_id + "_" + values.test_number + ".gcode")
+    update_persistence(persistence, values, GCode(open(gcode_path, "rU")))
 
 import os
 os.system("python generate_suggested_values.py "+session_id)
 os.system("python generate_report.py "+session_id)
+
 generate_label(persistence)
 
 end = time.time()
