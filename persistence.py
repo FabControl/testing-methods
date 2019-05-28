@@ -42,7 +42,7 @@ class Persistence(object):
             # Append settings to the machine object
             self.machine.settings = Settings(nozzle=self.machine.temperaturecontrollers.extruder.nozzle,
                                              material=self.material,
-                                             machine=self.machine, **persistence["settings"])
+                                             machine=self.machine, **self.dict["settings"])
 
             self.id = self.dict["session"]["uid"]
             self.test_info = get_test_info(self.dict)
