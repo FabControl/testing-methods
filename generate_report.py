@@ -96,14 +96,7 @@ main_info_entry = "Tests performed by: " + import_json_dict["session"]["user_id"
 main_info.append(main_info_entry)
 main_info_entry = "Target: " + str(import_json_dict["session"]["target"]).replace("_", " ")
 main_info.append(main_info_entry)
-
 main_info_entry = "Material: " + material_manufacturer + import_json_dict["material"]["name"] + material_id
-main_info.append(main_info_entry)
-if import_json_dict["material"]["drying"]["dried"]:
-    main_info_entry = "Material dried prior to printing"
-else:
-    main_info_entry = "Material not dried prior to printing"
-
 main_info.append(main_info_entry)
 
 if machine_sn.strip():

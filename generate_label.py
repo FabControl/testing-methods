@@ -56,7 +56,6 @@ def generate_label(import_json_dict):
         except KeyError:
             nozzle_type = str()
 
-
         n = 0
         draw.text((0, n * font_size), "Session ID: {0}, User ID: {1}".format(import_json_dict["session"]["uid"],
                                                                              import_json_dict["session"]["user_id"]), (0, 0, 0), font=font_bold)
@@ -65,11 +64,6 @@ def generate_label(import_json_dict):
         n += 1
         draw.text((0, n * font_size), "Feedstock material: {0}, {1} mm".format(material_name,
                                                                                import_json_dict["material"]["size_od"]), (0, 0, 0), font=font)
-        n += 1
-        if import_json_dict["material"]["drying"]["dried"]:
-            draw.text((0, n * font_size), "Feedstock material dried prior to printing", (0, 0, 0), font=font)
-        else:
-            draw.text((0, n * font_size), "Feedstock material not dried prior to printing", (0, 0, 0), font=font)
         n += 1
         draw.text((0, n*font_size), "3D printer: {0}".format(machine_model), (0, 0, 0), font=font)
         n += 1
@@ -87,11 +81,11 @@ def generate_label(import_json_dict):
         draw.text((0, n*font_size), "Target: {0}".format(import_json_dict["session"]["target"].replace("_", " ")), (0, 0, 0), font=font)
         n += 2
 
-        horizontal_offset = 210*scale
+        horizontal_offset = 130*scale
         square_size = 35*scale
 
         for ind, parameter_value in enumerate(import_json_dict["session"]["previous_tests"][-1]["tested_parameter_one_values"][::-1]):
-            draw.text((5.25*ind*font_size_small+80, 1*n*font_size), str(import_json_dict["session"]["previous_tests"][-1]["parameter_one_precision"]+ " "+ import_json_dict["session"]["previous_tests"][-1]["parameter_one_units"]).format(parameter_value), (0, 0, 0), font=font_small)
+            draw.text((5.25*ind*font_size_small+225, 1*n*font_size), str(import_json_dict["session"]["previous_tests"][-1]["parameter_one_precision"]+ " "+ import_json_dict["session"]["previous_tests"][-1]["parameter_one_units"]).format(parameter_value), (0, 0, 0), font=font_small)
         n += 1
 
         if import_json_dict["session"]["previous_tests"][-1]["test_name"] == "printing speed":

@@ -44,11 +44,9 @@ class Material(object):
 
     def __init__(self,
                  name: str,
-                 size_od: float=None,
-                 temperature_characteristic=None, *args, **kwargs):
+                 size_od: float=None, *args, **kwargs):
         self.name = name
         self.size_od = size_od
-        self.drying = None
 
 
 class Chamber(object):
@@ -85,16 +83,12 @@ class Printbed(object):
     """
     def __init__(self,
                  printbed_heatable: bool,
-                 temperature_printbed_setpoint: int,
-                 tool: str ="",
-                 gcode_command: str = "M119 S$temp",
-                 gcode_command_immediate: str = "M114 Stemp",
+                 gcode_command: str = "M190 S$temp",
+                 gcode_command_immediate: str = "M140 Stemp",
                  *args, **kwargs):
 
         self.printbed_heatable = printbed_heatable
         if printbed_heatable:
-            self.temperature_printbed_setpoint = temperature_printbed_setpoint
-            self.tool = tool
             self.gcode_command = gcode_command  # G-code command used to control the temperature of the print bed, e.g. Mddd S$temp ($tool)
             self.gcode_command_immediate = gcode_command_immediate  # G-code command used to control the temperature of the print bed, e.g. Mddd S$temp ($tool)
 

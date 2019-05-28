@@ -48,20 +48,15 @@ class Gplus(G):
                                  return_string: bool=None):
         """Set the printbed temperature in degC"""
         if immediate:
-            gcode_command = printbed.gcode_command_immediate + " $tool; set the print bed temperature and apply immediately"
+            gcode_command = printbed.gcode_command_immediate + "; set the print bed temperature and apply immediately"
         else:
-            gcode_command = printbed.gcode_command + " $tool; set the print bed temperature and wait till the temperature has been reached"
+            gcode_command = printbed.gcode_command + "; set the print bed temperature and wait till the temperature has been reached"
 
-        if printbed.tool:
-            t = Template(gcode_command)
-            G.write(self, t.substitute(temp=temperature, tool= printbed.tool))
-            if return_string:
-                return t.substitute(temp=temperature, tool= printbed.tool)
-        else:
-            t = Template(gcode_command.replace(" $tool",""))
-            G.write(self, t.substitute(temp=temperature))
-            if return_string:
-                return t.substitute(temp=temperature)
+        t = Template(gcode_command)
+        G.write(self, t.substitute(temp=temperature))
+        if return_string:
+            return t.substitute(temp=temperature)
+
 
     def set_chamber_temperature(self,
                                 temperature: int,

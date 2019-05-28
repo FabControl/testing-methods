@@ -26,9 +26,8 @@ except:
         "temperature_controllers": {
             "extruder": {
                 "tool": "",
-                "gcode_command": "M109 S$temp $tool",
                 "temperature_max": 350,
-                "part_cooling": True,
+                "part_cooling": true,
                 "nozzle": {
                     "size_id": 0.8
                 }
@@ -37,21 +36,14 @@ except:
                 "tool": "",
                 "gcode_command": "M141 S$temp",
                 "temperature_max": 80,
-                "chamber_heatable": False
+                "chamber_heatable": false
             },
             "printbed": {
-                "tool": "",
-                "gcode_command": "M190 S$temp",
-                "gcode_command_immediate": "M140 S$temp",
-                "printbed_heatable": true,
-                "temperature_printbed_setpoint": 30
+                "printbed_heatable": true
             }
         }
     },
     "material": {
-        "drying": {
-            "dried": true
-        },
         "size_od": 1.75,
         "name": "material name"
     },
@@ -104,7 +96,6 @@ test_info = get_test_info(persistence)
 comment = get_comment(test_info)
 
 material = Material(**persistence["material"])
-material.drying = DryingProcess(**persistence["material"]["drying"])
 machine = Machine(**persistence["machine"])
 machine.settings = Settings(nozzle=machine.temperaturecontrollers.extruder.nozzle,
                             material=material,
