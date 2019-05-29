@@ -27,19 +27,18 @@ except:
             "extruder": {
                 "tool": "",
                 "temperature_max": 350,
-                "part_cooling": true,
+                "part_cooling": True,
                 "nozzle": {
                     "size_id": 0.8
                 }
             },
             "chamber": {
-                "tool": "",
-                "gcode_command": "M141 S$temp",
                 "temperature_max": 80,
-                "chamber_heatable": false
+                "chamber_heatable": False
             },
             "printbed": {
-                "printbed_heatable": true
+                "printbed_heatable": True,
+                "temperature_max": 80
             }
         }
     },

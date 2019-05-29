@@ -65,8 +65,8 @@ class Chamber(object):
     """
     def __init__(self,
                  chamber_heatable: bool,
-                 tool: str,
-                 gcode_command: str,
+                 tool: str=None,
+                 gcode_command: str="M141 S$temp",
                  gcode_command_immediate: str=None,
                  temperature_max: float=None, *args, **kwargs):
         self.chamber_heatable = chamber_heatable
@@ -85,10 +85,11 @@ class Printbed(object):
                  printbed_heatable: bool,
                  gcode_command: str = "M190 S$temp",
                  gcode_command_immediate: str = "M140 Stemp",
-                 *args, **kwargs):
+                 temperature_max: float = None, *args, **kwargs):
 
         self.printbed_heatable = printbed_heatable
         if printbed_heatable:
+            self.temperature_max = temperature_max
             self.gcode_command = gcode_command  # G-code command used to control the temperature of the print bed, e.g. Mddd S$temp ($tool)
             self.gcode_command_immediate = gcode_command_immediate  # G-code command used to control the temperature of the print bed, e.g. Mddd S$temp ($tool)
 
