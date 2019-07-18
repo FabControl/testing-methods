@@ -128,7 +128,7 @@ if not cast:
         persistence = json.load(file)
     persistence_flat = dict(persistence["settings"], **persistence["machine"]["temperature_controllers"]["extruder"]["nozzle"])
     persistence_flat["material_name"] = persistence["material"]["name"]
-    persistence_flat["density_rt"] = persistence["material"]["density_rt"]
+    # persistence_flat["density_rt"] = persistence["material"]["density_rt"]
     slicer = str(persistence["session"]["slicer"]).lower()
     params.populate(persistence_flat, auto=True)
     params.populate(target_overrides[persistence["session"]["target"]])

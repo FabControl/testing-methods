@@ -842,7 +842,7 @@
       },
       "modifier": null,
       "name": "printbed temperature",
-      "parameter": "temperature_printbed",
+      "parameter": "temperature_printbed_setpoint",
       "params": {
         "py/id": 4
       },
