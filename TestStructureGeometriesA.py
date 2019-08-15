@@ -159,12 +159,22 @@ def flat_test_parameter_one_vs_parameter_two(values: get_values_A):
         values.g.write(values.comment_all_values_of_constant_parameters)
         values.g.write(values.comment_current_values_of_variable_parameter[current_test_structure])
 
+        step = values.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id / (machine.settings.raft_density/100)  # step size
+        step_number = values.test_structure_size / step
+
+        if current_test_structure == 0:
+            if int(step_number)%2:
+                values.g.travel(x=+values.test_structure_size,
+                                lift=1)
+
+        values.g.travel(x=-values.test_structure_width[current_test_structure] - values.test_structure_separation,
+                        lift=1)
+
         if values.test_name == "extrusion temperature vs printing speed":
-            values.g.travel(x=-values.test_structure_width[current_test_structure] - values.test_structure_separation,
-                            y=+values.step_y if current_test_structure != 0 else 0,
+            values.g.travel(y=+values.step_y if current_test_structure != 0 else 0,
                             lift=1)
             values.g.travel(x=0,
-                            y=+values.test_structure_size / 7,
+                            y=+values.test_structure_size / 8,
                             retraction_speed=values.retraction_speed, retraction_distance=values.retraction_distance[current_test_structure])
 
             values.g.abs_move(z=+values.abs_z[current_test_structure])
@@ -175,12 +185,11 @@ def flat_test_parameter_one_vs_parameter_two(values: get_values_A):
                      "; extrude " + "{:.3f}".format(4 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + " mm of material" #TODO tool
             values.g.write(output)
             values.g.move(x=0,
-                          y=-values.test_structure_size / 7,
+                          y=-values.test_structure_size / 8,
                           extrude=True, extrusion_multiplier=0)
 
         else:
-            values.g.travel(x=-values.test_structure_width[current_test_structure] - values.test_structure_separation,
-                            y=0 if (current_test_structure == 0 and values.raft) else +values.step_y,
+            values.g.travel(y=0 if (current_test_structure == 0 and values.raft) else +values.step_y,
                             lift=1)
 
             values.g.abs_move(z=+values.abs_z[current_test_structure])
@@ -200,7 +209,7 @@ def flat_test_parameter_one_vs_parameter_two(values: get_values_A):
             for current_layer in range(values.number_of_layers): # layers
                 for current_line in range(values.number_of_lines):
                     values.g.move(x=0,
-                                  y=(-1) ** (current_line+1) * values.step_y / values.number_of_substructures,
+                                  y=(-1) ** (current_line + 1) * values.step_y / values.number_of_substructures,
                                   z=0,
                                   extrude=True, extrusion_multiplier=values.extrusion_multiplier[current_test_structure],
                                   coef_h=values.coef_h[current_test_structure], coef_w=values.coef_w[current_test_structure])
@@ -211,7 +220,7 @@ def flat_test_parameter_one_vs_parameter_two(values: get_values_A):
 
                     if current_line == values.number_of_lines - 1:
                         values.g.move(x=0,
-                                      y=(-1) ** (current_line+2) * values.step_y / values.number_of_substructures,
+                                      y=(-1) ** (current_line + 2) * values.step_y / values.number_of_substructures,
                                       z=0,
                                       extrude=True, extrusion_multiplier=values.extrusion_multiplier[current_test_structure],
                                       coef_h=values.coef_h[current_test_structure], coef_w=values.coef_w[current_test_structure])
@@ -222,7 +231,7 @@ def flat_test_parameter_one_vs_parameter_two(values: get_values_A):
                                         y=0,
                                         lift=1)
                     else:
-                        values.g.travel(x=0,
+                        values.g.travel(x=(-1) ** (current_layer + 2) * values.number_of_lines * values.step_x[current_test_structure], #TODO
                                         y=0,
                                         lift=1)
                 else:

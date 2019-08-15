@@ -60,7 +60,7 @@ def get_test_info(persistence):
                                  Parameter("track height", "mm", "{:.3f}", value=persistence["settings"]["track_height"]),
                                  Parameter("track width", "mm", "{:.3f}", value=persistence["settings"]["track_width"])])
 
-        parameter_values_for_comments = TestInfo("extrusion temperature vs printing speed", "03", number_of_layers=2, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
+        parameter_values_for_comments = TestInfo("extrusion temperature vs printing speed", "03", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
                                                  parameter_one=Parameter("extrusion temperature", "degC", "{:.0f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(persistence["settings"]["temperature_extruder_raft"], persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures)),
                                                  parameter_two=Parameter("printing speed","mm/s","{:.1f}",
@@ -76,7 +76,7 @@ def get_test_info(persistence):
                                  Parameter("extrusion temperature", "degC", "{:.0f}", value=persistence["settings"]["temperature_extruder"]),
                                  Parameter("track width", "mm", "{:.3f}", value=persistence["settings"]["track_width"])])
 
-        parameter_values_for_comments = TestInfo("track height vs printing speed", "04", number_of_layers=2, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
+        parameter_values_for_comments = TestInfo("track height vs printing speed", "04", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
                                                  parameter_one=Parameter("track height","mm", "{:.3f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else [nozzle_size_id*_ for _ in get_minmax_track_height_coef(nozzle_size_id, number_of_test_structures)]),
                                                  parameter_two=Parameter("printing speed", "mm/s", "{:.1f}",
@@ -93,7 +93,7 @@ def get_test_info(persistence):
                                  Parameter("track height", "mm", "{:.3f}", value=persistence["settings"]["track_height"]),
                                  Parameter("printing speed", "mm/s", "{:.1f}", value=persistence["settings"]["speed_printing"])])
 
-        parameter_values_for_comments = TestInfo("track width", "05", number_of_layers=2, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=True,
+        parameter_values_for_comments = TestInfo("track width", "05", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=True,
                                                  parameter_one=Parameter("track width", "mm", "{:.3f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else [nozzle_size_id * _ for _ in get_minmax_track_width_coef(nozzle_size_id, number_of_test_structures)]),
                                                  parameter_two=Parameter("printing speed", "mm/s", "{:.1f}",
@@ -109,7 +109,7 @@ def get_test_info(persistence):
                                  Parameter("track height", "mm", "{:.3f}", value=persistence["settings"]["track_height"]),
                                  Parameter("track width", "mm", "{:.3f}", value=persistence["settings"]["track_width"])])
 
-        parameter_values_for_comments = TestInfo("extrusion multiplier vs printing speed", "06", number_of_layers=2, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=True,
+        parameter_values_for_comments = TestInfo("extrusion multiplier vs printing speed", "06", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=True,
                                                  parameter_one=Parameter("extrusion multiplier", "-", "{:.3f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.80, 1.4, number_of_test_structures).tolist()),
                                                  parameter_two=Parameter("printing speed","mm/s","{:.1f}",
@@ -126,7 +126,7 @@ def get_test_info(persistence):
                                  Parameter("track height", "mm", "{:.3f}", value=persistence["settings"]["track_height"]),
                                  Parameter("track width", "mm", "{:.3f}", value=persistence["settings"]["track_width"])])
 
-        parameter_values_for_comments = TestInfo("printing speed", "07", number_of_layers=2, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=True,
+        parameter_values_for_comments = TestInfo("printing speed", "07", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=True,
                                                  parameter_one=Parameter("printing speed", "mm/s", "{:.1f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.80*persistence["settings"]["speed_printing"], 1.75*persistence["settings"]["speed_printing"],number_of_test_structures).tolist()),
                                                  parameter_two=Parameter(None, None, None, value=[]),

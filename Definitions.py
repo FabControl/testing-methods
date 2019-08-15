@@ -84,7 +84,7 @@ class Printbed(object):
     def __init__(self,
                  printbed_heatable: bool,
                  gcode_command: str = "M190 S$temp",
-                 gcode_command_immediate: str = "M140 Stemp",
+                 gcode_command_immediate: str = "M140 S$temp",
                  temperature_max: float = None, *args, **kwargs):
 
         self.printbed_heatable = printbed_heatable
@@ -353,11 +353,11 @@ def get_test_structure_size(machine):
     if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.29:
         test_structure_size = 60
         if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.39:
-            test_structure_size = 70
+            test_structure_size = 80
             if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.59:
-                test_structure_size = 80
+                test_structure_size = 120
                 if machine.temperaturecontrollers.extruder.nozzle.size_id > 0.99:
-                    test_structure_size = 90
+                    test_structure_size = 140
 
     return test_structure_size
 
