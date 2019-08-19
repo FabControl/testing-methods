@@ -2,6 +2,7 @@ from mecode import G
 from Definitions import *
 from paths import gcode_folder
 from CLI_helpers import exception_handler
+from string import Template
 import io
 
 track_list = []
@@ -13,7 +14,6 @@ class Gplus(G):
 
         self.filament_diameter = material.size_od
         self.nozzle_diameter = machine.temperaturecontrollers.extruder.nozzle.size_id
-        self.nozzle_od = machine.temperaturecontrollers.extruder.nozzle.size_od
         self.extrusion_multiplier = machine.settings.extrusion_multiplier
         self.track_height = machine.settings.track_height
         self.track_width = machine.settings.track_width
@@ -28,82 +28,133 @@ class Gplus(G):
         with open(self.header) as hd:
             [self._gcode.append(statement) for statement in hd.readlines()]
 
-
-    def set_extruder_temperature(self, temperature: int, extruder: Extruder, immediate: bool=None):
+    def set_extruder_temperature(self,
+                                 temperature: int,
+                                 extruder: Extruder,
+                                 immediate: bool=None,
+                                 return_string: bool=None):
         """Set the liquefier temperature in degC"""
         if immediate:
             if extruder.gcode_command_immediate != "":
-                self.write(extruder.gcode_command_immediate.format(temperature, extruder.tool) + "; set the extruder temperature")
+                t = Template(extruder.gcode_command_immediate + "; set the extruder temperature and apply immediately")
         else:
-            self.write(extruder.gcode_command.format(temperature, extruder.tool) + "; set the extruder temperature and wait")
+            t = Template(extruder.gcode_command  + "; set the extruder temperature and wait till it has been reached")
+        self.write(t.substitute(temp=temperature, tool=extruder.tool))
+        if return_string:
+            return t.substitute(temp=temperature, tool=extruder.tool)
 
-    def set_printbed_temperature(self, temperature: float, printbed: Printbed, immediate: bool=None):
+    def set_printbed_temperature(self,
+                                 temperature: int,
+                                 printbed: Printbed,
+                                 immediate: bool=None,
+                                 return_string: bool=None):
         """Set the printbed temperature in degC"""
         if immediate:
-            if printbed.gcode_command_immediate != "":
-                if printbed.tool:
-                    self.write(str(printbed.gcode_command_immediate+" {1}").format(temperature, printbed.tool) + "; set the print bed temperature")
-                else:
-                    self.write(printbed.gcode_command_immediate.format(temperature) + "; set the print bed temperature")
+            gcode_command = printbed.gcode_command_immediate + "; set the print bed temperature and apply immediately"
         else:
-            if printbed.tool:
-                self.write(str(printbed.gcode_command+" {1}").format(temperature, printbed.tool) + "; set the print bed temperature and wait")
-            else:
-                self.write(printbed.gcode_command.format(temperature) + "; set the print bed temperature and wait")
+            gcode_command = printbed.gcode_command + "; set the print bed temperature and wait till the temperature has been reached"
 
-    def set_chamber_temperature(self, temperature: int, chamber: Chamber):
-        """Set the printbed temperature in degC"""
-        self.write(chamber.gcode_command.format(temperature, chamber.tool) + "; set the chamber temperature")
+        t = Template(gcode_command)
+        self.write(t.substitute(temp=temperature))
+        if return_string:
+            return t.substitute(temp=temperature)
 
-    def set_part_cooling(self, cooling_power: float, extruder: Extruder):
+
+    def set_chamber_temperature(self,
+                                temperature: int,
+                                chamber: Chamber,
+                                immediate: bool=None,
+                                return_string: bool=None):
+        """Set the chamber temperature in degC"""
+        if immediate:
+            gcode_command = chamber.gcode_command_immediate + " $tool; set the chamber temperature and apply immediately"
+        else:
+            gcode_command = chamber.gcode_command + " $tool; set the chamber temperature and wait till the temperature has been reached"
+
+        if "T" in chamber.tool:
+            t = Template(gcode_command)
+            self.write(t.substitute(temp=temperature, tool=chamber.tool))
+            if return_string:
+                return t.substitute(temp=temperature, tool=chamber.tool)
+        else:
+            t = Template(gcode_command.replace(" $tool",""))
+            self.write(t.substitute(temp=temperature))
+            if return_string:
+                return t.substitute(temp=temperature)
+
+    def set_part_cooling(self,
+                         cooling_power: float,
+                         extruder: Extruder,
+                         return_string: bool=None):
         """Set the cooler power in percent"""
         if cooling_power >= 100:
             cooling_power = 100
         elif cooling_power <= 0:
             pass
         # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-        self.write(extruder.part_cooling_gcode_command.format(int(255 * (cooling_power / 100))) + "; set the cooler speed for part cooling")
+        t = Template(extruder.part_cooling_gcode_command + "; set the cooler speed for part cooling")
+        self.write(t.substitute(cool=int(255 * (cooling_power / 100))))
+        if return_string:
+            return t.substitute(cool=int(255 * (cooling_power / 100)))
 
-    def set_ventilator_exit(self, cooling_power: float, chamber: Chamber):
+    def set_ventilator_exit(self,
+                            cooling_power: float,
+                            chamber: Chamber):
         """Set the cooler power in percent"""
         if cooling_power >= 100:
             cooling_power = 100
         elif cooling_power < 0:
             pass
         # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-        self.write(chamber.ventilator_exit_gcode_command.format(chamber.ventilator_exit_tool, int(255 * (cooling_power / 100))) + "; set the speed for exit ventilator")
+        t = Template(chamber.ventilator_exit_gcode_command + "; set the speed for exit ventilator")
+        self.write(t.substitute(tool=chamber.ventilator_exit_tool,cool=int(255 * (cooling_power / 100))))
 
-    def set_ventilator_entry(self, cooling_power: float, chamber: Chamber):
+    def set_ventilator_entry(self,
+                             cooling_power: float,
+                             chamber: Chamber):
         """Set the cooler power in percent"""
         if cooling_power >= 100:
             cooling_power = 100
         elif cooling_power < 0:
             pass
         # get a fraction of 255 (max intensity of the cooler)corresponding to the fan percentage
-        self.write(chamber.ventilator_entry_gcode_command.format(chamber.ventilator_entry_tool, int(255 * (cooling_power / 100)) + "; set the speed for entry ventilator"))
+        t = Template(chamber.ventilator_exit_gcode_command + "; set the speed for entry ventilator")
+        self.write(t.substitute(tool=chamber.ventilator_exit_tool,cool=int(255 * (cooling_power / 100))))
 
-    def dwell(self, time: int):
+    def dwell(self,
+              time: int):
         """ Pause code executions for the given amount of time """
         self.write("G4 P{0:.0f} ".format(time) + "; set the waiting time in ms")
 
     def home(self):
-        """ Move the tool head to the home position (as defined in firmware).
-        """
+        """ Move the tool head to the home position (as defined in firmware) """
         self.write("G28; move to the home position")
 
-    def retract(self, retraction_speed, retraction_distance, printing_speed):
+    def retract(self,
+                retraction_speed,
+                retraction_distance,
+                printing_speed):
         """ Retracts the filament """
         self.write("G1 F{:.0f}".format(retraction_speed*60) + " E{:.3f}".format(-retraction_distance) + "; retract the filament")
         self.write("G1 F{:.0f}".format(printing_speed*60))
 
-    def deretract(self, retraction_speed, retraction_distance, printing_speed, retraction_restart_distance=None):
+    def deretract(self,
+                  retraction_speed,
+                  retraction_distance,
+                  printing_speed,
+                  retraction_restart_distance=None):
         """ Deretracts the filament """
         if retraction_restart_distance is None:
             retraction_restart_distance = 0
         self.write("G1 F{:.0f}".format(retraction_speed*60) + " E{:.3f}".format(+retraction_distance+retraction_restart_distance) + "; deretract the filament")
         self.write("G1 F{:.0f}".format(printing_speed*60))
 
-    def move(self, x=None, y=None, z=None, rapid=False, extrude=None, extrusion_multiplier=None, coef_w=None, coef_h=None, **kwargs):
+    def move(self,
+             x=None, y=None, z=None,
+             rapid=False,
+             extrude=None,
+             extrusion_multiplier=None,
+             coef_w=None, coef_h=None, **kwargs):
         """ Move the tool head to the given position. This method operates in
         relative mode unless a manual call to `absolute` was given previously.
         If an absolute movement is desired, the `abs_move` method is
@@ -156,7 +207,10 @@ class Gplus(G):
         cmd = "G0 " if rapid else "G1 "
         self.write(cmd + args)
 
-    def abs_move(self, x=None, y=None, z=None, rapid=False, extrude=None, extrusion_multiplier=None, **kwargs):
+    def abs_move(self,
+                 x=None, y=None, z=None,
+                 rapid=False,
+                 extrude=None, extrusion_multiplier=None, **kwargs):
         """ Same as `move` method, but positions are interpreted as absolute.
         """
         if self.form != "elliptic":
@@ -181,7 +235,11 @@ class Gplus(G):
         else:
             self.move(x=x_offset, y=y_offset, z=z, rapid=rapid, extrude=extrude, extrusion_multiplier=extrusion_multiplier, **kwargs)
 
-    def travel(self, x=None, y=None, z=None, speed=None, lift=0.2, retraction_speed=60, retraction_distance=3,  **kwargs):
+    def travel(self,
+               x=None, y=None, z=None,
+               speed=None,
+               lift=0.2,
+               retraction_speed=60, retraction_distance=3,  **kwargs):
         """
         Travel move method
         :param x:
@@ -203,7 +261,11 @@ class Gplus(G):
         self.write("G1 F" + str(retraction_speed * 60) + " E" + str(retraction_distance))
         self.feed(temp_speed)
 
-    def abs_travel(self, x=None, y=None, z=None, speed=None, lift=0.2, retraction_speed=60, retraction_distance=3, **kwargs):
+    def abs_travel(self,
+                   x=None, y=None, z=None,
+                   speed=None,
+                   lift=0.2,
+                   retraction_speed=60, retraction_distance=3, **kwargs):
         """
         Travel absolute move method
         :param x:
@@ -236,7 +298,7 @@ class Gplus(G):
         """
         self.write("G1 F{}".format(int(rate * 60)))
         self.speed = int(rate * 60)
-    
+
     def write(self, statement_in, resp_needed=False):
         self._gcode.append(statement_in)
 

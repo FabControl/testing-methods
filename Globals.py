@@ -19,107 +19,51 @@ except:
     exception_handler("Falling back to hardcoded JSON")
     persistence = {
     "machine": {
-        "sn": 12345,
-        "model": "--",
-        "manufacturer": "MP",
+        "model": "model name",
         "buildarea_maxdim1": 200,
         "buildarea_maxdim2": 200,
-        "max_dimension_z": 215,
         "form": "elliptic",
         "temperature_controllers": {
             "extruder": {
                 "tool": "",
-                "gcode_command": "M109 S{0} {1}",
-                "gcode_command_immediate": "M104 S{0} {1}",
-                "temperature_max": 300,
-                "temperature_min": 30,
+                "temperature_max": 350,
                 "part_cooling": True,
-                "part_cooling_gcode_command": "M106 S{0}",
                 "nozzle": {
-                    "type": "brass",
-                    "size_id": 0.8,
-                    "size_od": 1.04,
-                    "size_capillary_length": 5,
-                    "size_angle": 60,
-                    "size_extruder_id": 1.95
+                    "size_id": 0.8
                 }
             },
             "chamber": {
-                "tool": "",
-                "gcode_command": "M141 S{0}",
-                "temperature_min": 30,
                 "temperature_max": 80,
-                "chamber_heatable": False,
-                "temperature_chamber_setpoint": 80,
-                "ventilator_exit": False,
-                "ventilator_exit_tool": "P1",
-                "ventilator_exit_gcode_command": "M106 {0} S{1}",
-                "ventilator_entry": False,
-                "ventilator_entry_tool": "P2",
-                "ventilator_entry_gcode_command": "M106 {0} S{1}"
+                "chamber_heatable": False
             },
             "printbed": {
-                "tool": "",
-                "gcode_command": "M190 S{0}",
-                "gcode_command_immediate": "M140 S{0}",
-                "temperature_min": 20,
-                "temperature_max": 115,
                 "printbed_heatable": True,
-                "temperature_printbed_setpoint": 30,
-                "material": "?",
-                "coating": "None"
+                "temperature_max": 80
             }
-        },
-        "software": {
-            "version": "version"
-        },
-        "firmware": {
-            "version": "2.0",
-            "fw_type": "fw_type"
         }
     },
     "material": {
-        "id": "80",
-        "drying": {
-            "dried": False,
-            "drying_time": 0,
-            "feeding_airflow": 0,
-            "drying_airflow": 0,
-            "feeding_temperature": 0,
-            "drying_temperature": 0
-        },
         "size_od": 1.75,
-        "material_group": "non-filled",
-        "density_rt": 1.13,
-        "mvr": 2.3,
-        "load_mfr": 2.16,
-        "temperature_mfr": 200,
-        "temperature_glass": 255,
-        "name": "PA6 with Exolit",
-        "manufacturer": "Clariant"
+        "name": "material name"
     },
     "session": {
-        "uid": 210,
+        "uid": 211,
         "target": "mechanical_strength",
-        "test_number": "11",
-        "min_max_parameter_one": [
-            0,
-            5
-        ],
+        "test_number": "03",
+        "min_max_parameter_one": [],
         "min_max_parameter_two": [
-            100,
-            120
+            40,
+            100
         ],
         "min_max_parameter_three": [],
         "test_type": "A",
-        "user_id": "Georgijs Bakradze",
+        "user_id": "user name",
         "offset": [
             0,
             0
         ],
         "slicer": "prusa slic3r",
-        "previous_tests": [],
-        "number_of_test_structures": 7
+        "previous_tests": []
     },
     "settings": {
         "speed_travel": 140,
@@ -142,18 +86,17 @@ except:
         "coasting_distance": 0,
         "critical_overhang_angle": 53.0,
         "temperature_printbed_setpoint": 90,
-        "temperature_chamber_setpoint": 0,
+        "temperature_chamber_setpoint": 80,
         "part_cooling_setpoint": 0
     }
 }
 
-#session_idn = str(persistence["session"]["uid"])
 test_info = get_test_info(persistence)
 comment = get_comment(test_info)
 
 material = Material(**persistence["material"])
-material.drying = DryingProcess(**persistence["material"]["drying"])
 machine = Machine(**persistence["machine"])
-machine.settings = Settings(nozzle=machine.temperaturecontrollers.extruder.nozzle, material=material, machine=machine, **persistence["settings"])
-
-
+machine.settings = Settings(nozzle=machine.temperaturecontrollers.extruder.nozzle,
+                            material=material,
+                            machine=machine,
+                            **persistence["settings"])

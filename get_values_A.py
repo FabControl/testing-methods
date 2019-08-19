@@ -140,9 +140,9 @@ class get_values_A(object):
 
         elif self.test_number == "03":
             # EXTRUSION TEMPERATURE test parameters
-            self.temperature_extruder = np.linspace(fixed_parameter_values.parameter_one.values[0],
-                                                    fixed_parameter_values.parameter_one.values[-1],
-                                                    self.number_of_test_structures).tolist()
+            self.temperature_extruder = np.rint(np.linspace(fixed_parameter_values.parameter_one.values[0],
+                                                            fixed_parameter_values.parameter_one.values[-1],
+                                                            self.number_of_test_structures).tolist())
 
             self.parameter_one.values = self.temperature_extruder
             self.speed_printing = self.parameter_two.values
