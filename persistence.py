@@ -40,6 +40,7 @@ class Persistence(object):
 
         # Loaded Json is a valid persistence dictionary.
         if not request_empty:
+            print("Received a valid persistence json. Processing...")
             self.session = self.dict["session"]
 
             self.machine = Machine(**self.dict["machine"])
@@ -52,6 +53,9 @@ class Persistence(object):
             self.id = self.dict["session"]["uid"]
             self.test_info = get_test_info(self.dict)
             self.test_comment = get_comment(self.test_info)
+
+        else:
+            print("Did not receive a valid persistence json. Returning a blank template!")
 
     def fill_values(self):
         pass

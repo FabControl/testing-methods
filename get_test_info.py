@@ -12,10 +12,15 @@ def get_test_info(persistence):
     if persistence["machine"]["temperature_controllers"]["chamber"]["chamber_heatable"]:
         other_parameters.append(Parameter("chamber temperature", "degC", "{:.0f}", value=persistence["settings"]["temperature_chamber_setpoint"] if "temperature_chamber_setpoint" in persistence["settings"] else None))
     if persistence["machine"]["temperature_controllers"]["printbed"]["printbed_heatable"]:
-        other_parameters.append(Parameter("printbed temperature", "degC", "{:.0f}", value=persistence["settings"]["temperature_printbed_setpoint"] if "temperature_printbed_setpoint" in persistence["settings"] else None))
-        other_parameters.append(Parameter("printbed coating", "", "{}", value=persistence["machine"]["temperature_controllers"]["printbed"]["coating"]))
-    if persistence["machine"]["temperature_controllers"]["chamber"]["ventilator_exit"]:
-        other_parameters.append(Parameter("exit ventilation power", "%", "{:.0f}", value=persistence["settings"]["ventilator_exit_setpoint"] if "ventilator_exit_setpoint" in persistence["settings"] else None))
+        other_parameters.append(Parameter("print bed temperature", "degC", "{:.0f}", value=persistence["settings"]["temperature_printbed_setpoint"] if "temperature_printbed_setpoint" in persistence["settings"] else None))
+        #other_parameters.append(Parameter("print bed coating", "", "{}", value=persistence["machine"]["temperature_controllers"]["printbed"]["coating"]))
+    try:
+        if persistence["machine"]["temperature_controllers"]["chamber"]["ventilator_exit"]:
+            other_parameters.append(Parameter("exit ventilation power", "%", "{:.0f}", value=persistence["settings"]["ventilator_exit_setpoint"] if "ventilator_exit_setpoint" in persistence["settings"] else None))
+    except:
+        pass
+
+
     if persistence["machine"]["temperature_controllers"]["extruder"]["part_cooling"]:
         other_parameters.append(Parameter("part cooling", "%", "{:.0f}", value=persistence["settings"]["part_cooling_setpoint"]))
 
@@ -109,7 +114,7 @@ def get_test_info(persistence):
                                                  parameter_one=Parameter("extrusion multiplier", "-", "{:.3f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.80, 1.4, number_of_test_structures).tolist()),
                                                  parameter_two=Parameter("printing speed","mm/s","{:.1f}",
-                                                                         value=[persistence["session"]["speed_printing"]]),
+                                                                         value=[persistence["settings"]["speed_printing"]]),
                                                  other_parameters=other_parameters)
 
     elif persistence["session"]["test_number"] == "07":
@@ -139,7 +144,7 @@ def get_test_info(persistence):
                                  Parameter("printing speed", "mm/s", "{:.1f}", value=persistence["settings"]["speed_printing"])])
 
         parameter_values_for_comments = TestInfo("extrusion temperature vs retraction distance", "08", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
-                                                 parameter_one=Parameter("extrusion temperature", "degC", "{:.1f}",
+                                                 parameter_one=Parameter("extrusion temperature", "degC", "{:.0f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(persistence["settings"]["temperature_extruder"]-5, persistence["settings"]["temperature_extruder"]+5, number_of_test_structures).tolist()),
                                                  parameter_two=Parameter("retraction distance", "mm", "{:.3f}",
                                                                          value=np.linspace(persistence["session"]["min_max_parameter_two"][0], persistence["session"]["min_max_parameter_two"][-1], number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [] else np.linspace(0.0, 4.0, number_of_substructures).tolist()),
