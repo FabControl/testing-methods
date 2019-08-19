@@ -80,4 +80,4 @@ def not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="ec2-54-93-100-66.eu-central-1.compute.amazonaws.com")
