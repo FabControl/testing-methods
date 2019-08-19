@@ -10,13 +10,16 @@ app = Flask(__name__)
 
 
 def json_coupler(persistence, content):
-    return {"persistence": persistence, "content": b64encode(content)}
+    if content is not None:
+        return {"persistence": persistence, "content": b64encode(content)}
+    else:
+        return {"persistence": persistence, "content": None}
 
 
 @app.route('/', methods=['POST'])
 def initialize():
     if not request.json:
-        return jsonify(Persistence(None).dict)
+        return jsonify(json_coupler(Persistence(None).dict, None))
     else:
         persistence = Persistence(request.json)
         session = OptimizerSession(persistence)
