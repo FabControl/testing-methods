@@ -15,8 +15,13 @@ class Persistence(object):
             with open('resources/blank_persistence.json') as json_file:  # TODO Move blank_persistence path to paths.py
                 self.dict = json.load(json_file)
         elif type(persistence) == str:
-            with open(persistence) as json_file:
-                self.dict = json.load(json_file)
+            try:
+                # Check whether the input is a json in form of a string
+                self.dict = json.loads(persistence)
+            except json.JSONDecodeError:
+                # It isn't.
+                request_empty = True
+
         else:
             self.dict = persistence
         try:
