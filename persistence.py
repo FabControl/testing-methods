@@ -1,6 +1,7 @@
 import json
 from Definitions import Material, Machine, Settings
 from get_test_info import get_test_info, get_comment
+from paths import blank_persistance
 from fill_values import fill_values as fv
 
 
@@ -12,7 +13,7 @@ class Persistence(object):
         if persistence is None:
             # No JSON loaded. Assume it's a new session, return a blank json.
             request_empty = True
-            with open('resources/blank_persistence.json') as json_file:  # TODO Move blank_persistence path to paths.py
+            with open(blank_persistance) as json_file:
                 self.dict = json.load(json_file)
         elif type(persistence) == str:
             try:
