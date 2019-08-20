@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 def json_coupler(persistence, content):
     if content is not None:
-        return {"persistence": persistence, "content": b64encode(content)}
+        return {"persistence": persistence, "content": b64encode(content.encode()).decode("utf-8")}
     else:
         return {"persistence": persistence, "content": None}
 
@@ -24,7 +24,7 @@ def initialize():
         persistence = Persistence(request.json)
         session = OptimizerSession(persistence)
         persistence.fill_values()
-        return jsonify(json_coupler(persistence.dict, str(session.g.gcode).encode()))
+        return jsonify(json_coupler(persistence.dict, str(session.g.gcode)))
 
 
 @app.route('/test_json', methods=['POST'])
