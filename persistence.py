@@ -73,9 +73,6 @@ class Persistence(object):
         self.test_info = get_test_info(self.dict)
         self.test_comment = get_comment(self.test_info)
 
-        else:
-            print("Did not receive a valid persistence json. Returning a blank template!")
-
     def fill_values(self):
         pass
     #     fv(self)  TODO Fix fill_values.py
