@@ -50,18 +50,28 @@ class Persistence(object):
         # Loaded Json is a valid persistence dictionary.
         if not request_empty:
             print("Received a valid persistence json. Processing...")
-            self.session = self.dict["session"]
+            self.populate()
 
-            self.machine = Machine(**self.dict["machine"])
-            self.material = Material(**self.dict["material"])
-            # Append settings to the machine object
-            self.machine.settings = Settings(nozzle=self.machine.temperaturecontrollers.extruder.nozzle,
-                                             material=self.material,
-                                             machine=self.machine, **self.dict["settings"])
+        else:
+            print("Did not receive a valid persistence json. Returning a blank template!")
 
-            self.id = self.dict["session"]["uid"]
-            self.test_info = get_test_info(self.dict)
-            self.test_comment = get_comment(self.test_info)
+    def populate(self):
+        """
+        Assign the json dictionary items to appropriate object attributes
+        :return:
+        """
+        self.session = self.dict["session"]
+
+        self.machine = Machine(**self.dict["machine"])
+        self.material = Material(**self.dict["material"])
+        # Append settings to the machine object
+        self.machine.settings = Settings(nozzle=self.machine.temperaturecontrollers.extruder.nozzle,
+                                         material=self.material,
+                                         machine=self.machine, **self.dict["settings"])
+
+        self.id = self.dict["session"]["uid"]
+        self.test_info = get_test_info(self.dict)
+        self.test_comment = get_comment(self.test_info)
 
         else:
             print("Did not receive a valid persistence json. Returning a blank template!")
@@ -69,3 +79,4 @@ class Persistence(object):
     def fill_values(self):
         pass
     #     fv(self)  TODO Fix fill_values.py
+        self.populate()
