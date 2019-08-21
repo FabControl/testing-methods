@@ -22,8 +22,8 @@ def initialize():
         return jsonify(json_coupler(Persistence(None).dict, None))
     else:
         persistence = Persistence(request.json)
-        session = OptimizerSession(persistence)
         persistence.fill_values()
+        session = OptimizerSession(persistence)
         return jsonify(json_coupler(persistence.dict, str(session.g.gcode)))
 
 
