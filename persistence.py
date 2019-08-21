@@ -7,6 +7,14 @@ from fill_values import fill_values as fv
 
 class Persistence(object):
     def __init__(self, persistence: str or dict or None):
+        self.session = None
+
+        self.machine = None
+        self.material = None
+        self.id = None
+        self.test_info = None
+        self.test_comment = None
+
         # Load the persistence json
         # Assume request contains a persistence json
         request_empty = False
