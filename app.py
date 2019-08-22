@@ -7,22 +7,22 @@ from base64 import b64encode
 app = Flask(__name__)
 
 
-def json_coupler(persistence, content):
+def json_coupler(persistence, test_info, content):
     if content is not None:
-        return {"persistence": persistence, "content": b64encode(content.encode()).decode("utf-8")}
+        return {"persistence": persistence, "test_info": test_info, "content": b64encode(content.encode()).decode("utf-8")}
     else:
-        return {"persistence": persistence, "content": None}
+        return {"persistence": persistence, "test_info": test_info, "content": None}
 
 
 @app.route('/', methods=['POST'])
 def initialize():
     if not request.json:
-        return jsonify(json_coupler(Persistence(None).dict, None))
+        return jsonify(json_coupler(Persistence(None).dict, Persistence(None).test_info.dict(), None))
     else:
         persistence = Persistence(request.json)
         persistence.fill_values()
         session = OptimizerSession(persistence)
-        return jsonify(json_coupler(persistence.dict, str(session.g.gcode)))
+        return jsonify(json_coupler(persistence.dict, persistence.test_info.dict(), str(session.g.gcode)))
 
 
 @app.route('/test_info', methods=['POST'])
