@@ -25,10 +25,11 @@ def initialize():
         return jsonify(json_coupler(persistence.dict, str(session.g.gcode)))
 
 
-@app.route('/test_json', methods=['POST'])
-def test_json():
+@app.route('/test_info', methods=['POST'])
+def get_test_info():
+    assert request.json["session"] is not None
     persistence = Persistence(request.json)
-    return jsonify(persistence.dict)
+    return jsonify(persistence.test_info.dict())
 
 
 @app.route('/routine', methods=['GET', 'POST'])
