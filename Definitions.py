@@ -250,6 +250,14 @@ class Parameter(object):
             self.min_default = default_value[0]
             self.max_default = default_value[1]
 
+    def dict(self):
+        return {
+            "name": self.name,
+            "units": self.units,
+            "precision": self.precision,
+            "values": self.values
+        }
+
 
 class TestInfo(object):
     def __init__(self, name: str, test_number: str, number_of_layers: int, number_of_test_structures: int, raft: bool,
@@ -264,6 +272,20 @@ class TestInfo(object):
         self.parameter_two = parameter_two
         self.parameter_three = parameter_three
         self.other_parameters = other_parameters
+
+    def dict(self):
+        return {
+            "name": self.name,
+            "test_number": self.test_number,
+            "number_of_layers": self.number_of_layers,
+            "number_of_test_structures": self.number_of_test_structures,
+            "number_of_substructures": self.number_of_substructures,
+            "raft": self.raft,
+            "parameter_one": self.parameter_one.dict(),
+            "parameter_two": self.parameter_two.dict(),
+            "parameter_three": self.parameter_three.dict() if self.parameter_three is not None else None,
+            "other_parameters": [param.dict() for param in self.other_parameters],
+        }
 
 
 def get_minmax_track_width_coef(size_id: float, number_of_test_structures: int):
