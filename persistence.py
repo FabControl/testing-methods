@@ -1,7 +1,8 @@
 import json
 from Definitions import Material, Machine, Settings
 from get_test_info import get_test_info, get_comment
-from paths import blank_persistance
+from paths import blank_persistance, blank_test_info
+from update_persistence import update_persistence
 from fill_values import fill_values as fv
 
 
@@ -74,6 +75,13 @@ class Persistence(object):
         self.test_comment = get_comment(self.test_info)
 
     def fill_values(self):
-        pass
-    #     fv(self)  TODO Fix fill_values.py
+        fv(self)
         self.populate()
+
+    @property
+    def blank_test_info(self):
+        with open(blank_test_info) as json_file:
+            return json.load(json_file)
+
+    def update(self, values):
+        self.dict = update_persistence(self.dict, values)

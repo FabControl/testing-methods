@@ -157,13 +157,15 @@ class Machine(object):
     """
 
     def __init__(self,
-                 sn: str=None,
-                 form: str="",
-                 buildarea_maxdim1: float=None,
-                 buildarea_maxdim2: float=None,
+                 sn: str = None,
+                 model: str = None,
+                 form: str = "",
+                 buildarea_maxdim1: float = None,
+                 buildarea_maxdim2: float = None,
                  *args, **kwargs):
 
         self.sn = sn
+        self.model = model
         self.form = form
         self.buildarea_maxdim1 = buildarea_maxdim1  # respect the units: mm
         self.buildarea_maxdim2 = buildarea_maxdim2  # respect the units: mm
@@ -239,8 +241,9 @@ class Settings(object):
 
 
 class Parameter(object):
-    def __init__(self, name: str=None, units: str=None, precision: str=None, value: float or list=None, default_value: list=None):
+    def __init__(self, name: str=None, programmatic_name: str=None, units: str=None, precision: str=None, value: float or list=None, default_value: list=None):
         self.name = name
+        self.programmatic_name = programmatic_name
         self.units = units
         self.precision = precision
         self.values = value
@@ -253,6 +256,7 @@ class Parameter(object):
     def dict(self):
         return {
             "name": self.name,
+            "programmatic_name": self.programmatic_name,
             "units": self.units,
             "precision": self.precision,
             "values": self.values

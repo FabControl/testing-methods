@@ -28,7 +28,6 @@ def fill_values(persistence):
             value_parameter_three = int(sys.argv[4])
             dummy["selected_parameter_three_value"] = value_parameter_three
 
-
     if dummy["test_number"] == "01":
         if dummy["executed"]:
             persistence["settings"]["track_height_raft"] = dummy["selected_parameter_one_value"]

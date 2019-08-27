@@ -1,0 +1,66 @@
+{
+  "name": "first-layer track height vs first-layer printing speed",
+  "number_of_layers": 1,
+  "number_of_substructures": 4,
+  "number_of_test_structures": 7,
+  "other_parameters": [
+    {
+      "name": "print bed temperature",
+      "precision": null,
+      "programmatic_name": "temperature_printbed_setpoint",
+      "units": "degC",
+      "values": 30
+    },
+    {
+      "name": "part cooling",
+      "precision": null,
+      "programmatic_name": "part_cooling_setpoint",
+      "units": "%",
+      "values": 100
+    },
+    {
+      "name": "first-layer extrusion temperature",
+      "precision": null,
+      "programmatic_name": "temperature_extruder_raft",
+      "units": "degC",
+      "values": 275
+    },
+    {
+      "name": "first-layer track width",
+      "precision": null,
+      "programmatic_name": "track_width_raft",
+      "units": "mm",
+      "values": 0.8
+    }
+  ],
+  "parameter_one": {
+    "name": "first-layer track height",
+    "precision": "{:.3f}",
+    "programmatic_name": "track_height_raft",
+    "units": "mm",
+    "values": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ]
+  },
+  "parameter_three": null,
+  "parameter_two": {
+    "name": "first-layer printing speed",
+    "precision": "{:.1f}",
+    "programmatic_name": "speed_printing_raft",
+    "units": "mm/s",
+    "values": [
+      60.0,
+      70.0,
+      80.0,
+      90.0
+    ]
+  },
+  "raft": false,
+  "test_number": "01"
+}

@@ -17,11 +17,11 @@ def json_coupler(persistence, test_info, content):
 @app.route('/', methods=['POST'])
 def initialize():
     if not request.json:
-        return jsonify(json_coupler(Persistence(None).dict, Persistence(None).test_info.dict(), None))
+        return jsonify(json_coupler(Persistence(None).dict, Persistence(None).blank_test_info, None))
     else:
         persistence = Persistence(request.json)
-        persistence.fill_values()
         session = OptimizerSession(persistence)
+        persistence.update(session.values)
         return jsonify(json_coupler(persistence.dict, persistence.test_info.dict(), str(session.g.gcode)))
 
 
@@ -57,4 +57,4 @@ def not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host="ec2-54-93-100-66.eu-central-1.compute.amazonaws.com")
+    app.run(debug=True)

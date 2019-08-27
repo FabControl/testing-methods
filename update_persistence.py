@@ -25,9 +25,7 @@ def update_persistence(persistence, values):
                     "parameter_two_units": None if values.test_info.parameter_two.name is None else values.test_info.parameter_two.units,
                     "parameter_one_precision": values.test_info.parameter_one.precision,
                     "parameter_two_precision": None if values.test_info.parameter_two.name is None else values.test_info.parameter_two.precision,
-                    "extruded_filament_mm": extruded_filament(save_session_file_as(session_id, "gcode")),
-                    "gcode_path": save_session_file_as(session_id, "gcode"),
-                    "label_path": save_session_file_as(session_id, "png"),
+                    "extruded_filament_mm": None,  # extruded_filament(save_session_file_as(session_id, "gcode")),
                     "comments": 0,
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -40,7 +38,4 @@ def update_persistence(persistence, values):
     previous_tests.append(current_test)
     persistence["session"]["previous_tests"] = previous_tests
     persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2 * persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
-
-    with open(save_session_file_as(session_id, "json"), mode="w") as file:
-        output = json.dumps(persistence, indent=4, sort_keys=False)
-        file.write(output)
+    return persistence

@@ -308,7 +308,7 @@ class get_values_A(object):
 
 
 def addtitle(test_info: TestInfo, material: Material, machine: Machine):
-    title = str("; --- " + test_info.name + " 2D test for {0} 3D printed using {1}) and a {2}-mm nozzle ---".format(material.name, machine.sn, machine.temperaturecontrollers.extruder.nozzle.size_id))
+    title = str("; --- " + test_info.name + " 2D test for {0} 3D printed using {1}) and a {2}-mm nozzle ---".format(material.name, machine.model, machine.temperaturecontrollers.extruder.nozzle.size_id))
     return title
 
 
