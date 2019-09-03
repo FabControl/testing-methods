@@ -38,6 +38,7 @@ def get_routine():
         "01": {"name": "first-layer track height vs first-layer printing speed", "priority": "primary"},
         "02": {"name": "first-layer track width", "priority": "secondary"},
         "03": {"name": "extrusion temperature vs printing speed", "priority": "primary"},
+        "04": {"name": "track height vs printing speed", "priority": "secondary"},
         "05": {"name": "track width", "priority": "secondary"},
         "06": {"name": "extrusion multiplier vs printing speed", "priority": "secondary"},
         "07": {"name": "printing speed", "priority": "primary"},
