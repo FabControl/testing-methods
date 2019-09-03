@@ -37,5 +37,8 @@ def update_persistence(persistence, values):
 
     previous_tests.append(current_test)
     persistence["session"]["previous_tests"] = previous_tests
-    persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2 * persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
+
+    # Calculate critical overhang angle if current test is not 01 or 02
+    if persistence["session"]["test_number"] not in ["01", "02"]:
+        persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2 * persistence["settings"]["track_height"] / persistence["settings"]["track_width"])), 0)
     return persistence
