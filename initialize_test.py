@@ -11,12 +11,7 @@ class OptimizerSession(object):
         self.values = get_values_A(persistence, persistence.test_info,
                                    path=save_session_file_as(persistence.dict, extension="gcode", session_id=str(persistence.id)),
                                    offset=persistence.dict["session"]["offset"] if persistence.dict["session"]["offset"] else [0, 0])
-
         self.test_structure = TS(persistence)
-        self.values = get_values_A(persistence, persistence.test_info,
-                              path=save_session_file_as(persistence.dict, extension="gcode", session_id=str(persistence.id)),
-                              offset=persistence.dict["session"]["offset"] if persistence.dict["session"]["offset"] else [0,0])
-
         if persistence.dict["session"]["test_number"] in ["08", "09", "10", "11"]:
             self.test_structure.retraction_distance(self.values)
         elif persistence.dict["session"]["test_number"] == "12":
