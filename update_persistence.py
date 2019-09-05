@@ -13,6 +13,7 @@ def update_persistence(persistence, values):
     current_test = {"test_name": values.test_name,
                     "test_number": values.test_number,
                     "executed": True,
+                    "verified": False,
                     "tested_parameter_one_values": values.get_values_parameter_one(),
                     "tested_parameter_two_values": None if values.test_info.parameter_two.name is None else values.get_values_parameter_two(),
                     "tested_volumetric_flow-rate_values": values.volumetric_flow_rate,
