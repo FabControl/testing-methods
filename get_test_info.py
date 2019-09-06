@@ -5,6 +5,42 @@ number_of_substructures=4
 number_of_test_structures=7
 
 
+def parameter_reorder_and_activate(parameters: list, actives: list = None, inactives: list = None):
+    """
+    A helper function for parameter lists used below to cycle through them and either activate or deactivate some of
+    them and then reorder them so that the inactive ones would be in the bottom.
+    :param parameters:
+    :param actives:
+    :param inactives:
+    :return:
+    """
+    inactives_list = []
+    actives_list = []
+    if inactives is not None and actives is None:
+        # Cycle through inactives
+        for parameter in parameters:
+            if parameter.programmatic_name in inactives:
+                parameter.active = False
+                inactives_list.append(parameter)
+            else:
+                parameter.active = True
+                actives_list.append(parameter)
+    elif actives is not None and inactives is None:
+        # Cycle through actives
+        for parameter in parameters:
+            if parameter.programmatic_name in actives:
+                parameter.active = True
+                actives_list.append(parameter)
+            else:
+                parameter.active = False
+                inactives_list.append(parameter)
+    else:
+        raise ValueError("Either actives or inactives must be None")
+    output_list = actives_list + inactives_list
+    return output_list
+
+
+
 def get_test_info(persistence):
     nozzle_size_id = persistence["machine"]["temperature_controllers"]["extruder"]["nozzle"]["size_id"]
 
@@ -33,6 +69,7 @@ def get_test_info(persistence):
         values_parameter_one = []
 
     if persistence["session"]["test_number"] == "01":
+        other_parameters = parameter_reorder_and_activate(other_parameters, inactives=["part_cooling_setpoint"])
         parameter_values_for_comments = TestInfo("first-layer track height vs first-layer printing speed", "01", number_of_layers=1, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=False,
                                                  parameter_one=Parameter("first-layer track height","track_height_raft", "mm", "{:.3f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else [nozzle_size_id*_ for _ in get_minmax_track_height_raft_coef(nozzle_size_id, number_of_test_structures)]),
@@ -60,6 +97,8 @@ def get_test_info(persistence):
                                  Parameter("extrusion multiplier", "extrusion_multiplier", "-", value=persistence["settings"]["extrusion_multiplier"]),
                                  Parameter("track height", "track_height", "mm", value=persistence["settings"]["track_height"]),
                                  Parameter("track width", "track_width", "mm", value=persistence["settings"]["track_width"])])
+        other_parameters = parameter_reorder_and_activate(other_parameters, actives=["part_cooling_setpoint",
+                                                                                     "track_height"])
         parameter_values_for_comments = TestInfo("extrusion temperature vs printing speed", "03", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
                                                  parameter_one=Parameter("extrusion temperature", "temperature_extruder", "degC", "{:.0f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(persistence["settings"]["temperature_extruder_raft"], persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures)),

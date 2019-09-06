@@ -241,12 +241,13 @@ class Settings(object):
 
 
 class Parameter(object):
-    def __init__(self, name: str=None, programmatic_name: str=None, units: str=None, precision: str=None, value: float or list=None, default_value: list=None):
+    def __init__(self, name: str=None, programmatic_name: str=None, units: str=None, precision: str=None, value: float or list=None, active: bool=False, default_value: list=None):
         self.name = name
         self.programmatic_name = programmatic_name
         self.units = units
         self.precision = precision
         self.values = value
+        self.active = active
 
         if default_value is not None:
             self.default_value = default_value
@@ -259,7 +260,8 @@ class Parameter(object):
             "programmatic_name": self.programmatic_name,
             "units": self.units,
             "precision": self.precision,
-            "values": self.values
+            "values": self.values,
+            "active": self.active
         }
 
 
