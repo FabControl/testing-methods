@@ -241,7 +241,7 @@ class Settings(object):
 
 
 class Parameter(object):
-    def __init__(self, name: str=None, programmatic_name: str=None, units: str=None, precision: str=None, value: float or list=None, active: bool=False, default_value: list=None):
+    def __init__(self, name: str=None, programmatic_name: str=None, units: str=None, precision: str=None, value: float or list=None, active: bool=True, default_value: list=None):
         self.name = name
         self.programmatic_name = programmatic_name
         self.units = units
