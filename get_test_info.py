@@ -81,6 +81,7 @@ def get_test_info(persistence):
         other_parameters.pop()
         other_parameters.extend([Parameter("first-layer track height", "track_height_raft", "mm", value=persistence["settings"]["track_height_raft"]),
                                  Parameter("first-layer printing speed", "speed_printing_raft", "mm/s", value=persistence["settings"]["speed_printing_raft"])])
+        other_parameters = parameter_reorder_and_activate(other_parameters, inactives=["part_cooling_setpoint"])
 
         parameter_values_for_comments = TestInfo("first-layer track width", "02", number_of_layers=1, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=False,
                                                  parameter_one=Parameter("first-layer track width", "track_width_raft", "mm", "{:.3f}",
