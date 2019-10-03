@@ -22,6 +22,7 @@ def update_persistence(persistence, values):
                     "selected_volumetric_flow-rate_value": np.mean(values.volumetric_flow_rate) if values.test_info.test_number in ("08", "10", "11") else 0,
                     "parameter_one_name": values.test_info.parameter_one.name,
                     "parameter_two_name": values.test_info.parameter_two.name,
+                    "parameter_three_name": values.test_info.parameter_three.name if values.test_info.parameter_three is not None else None,
                     "parameter_one_units": values.test_info.parameter_one.units,
                     "parameter_two_units": None if values.test_info.parameter_two.name is None else values.test_info.parameter_two.units,
                     "parameter_one_precision": values.test_info.parameter_one.precision,
