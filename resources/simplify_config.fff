@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <profile name="Default Config" version="2017-09-28 18:47:49" app="S3D-Software 4.0.0">
-  <baseProfile>Mass Portal Pharaoh</baseProfile>
+  <baseProfile>3DOptimizer</baseProfile>
   <printMaterial>PLA</printMaterial>
   <printQuality>Fast</printQuality>
   <printExtruders></printExtruders>
