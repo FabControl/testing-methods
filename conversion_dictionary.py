@@ -159,6 +159,7 @@ class Params(object):
         self.supported_slicers = ["prusa", "simplify3d", "cura"]
         self.parameters = []
         self.load(dictionary_path)
+        self.debug = False
 
     def get(self, keyword: str, mode: str = "parameter"):
         """
@@ -168,6 +169,8 @@ class Params(object):
         :return: Param object matching a keyword
         """
         for x in self.parameters:
+            if self.debug:
+                x.debug = True
             if mode == "name":
                 if keyword in x.name:
                     return x
@@ -278,6 +281,7 @@ class Params(object):
 
         # Enforce correct parent/children hierarchy upon loading
         for param in self.parameters:
+            param.debug = False
             param.params = self
             param_slicers = []
             for supported_slicer in self.supported_slicers:
@@ -378,14 +382,19 @@ class Param(object):
         self.params = params
         self._value = None
         self._manual = False  # If True, modifier will no longer be used
+        self.debug = False
 
     def _parameter_modifier(self):
         if self._value is None:
             if hasattr(self, "modifier") and self.modifier is not None:
                 x = self._value
                 if hasattr(self, "parent") and self.parent is not None:
-                    y = self.params.get(self.parent).value
-                print("Evaluating the following modifier: {} for {}".format(self.modifier, self.parameter))
+                    try:
+                        y = self.params.get(self.parent).value
+                    except AttributeError:
+                        raise AttributeError("{} can't fetch its parent {}".format(self.parameter, self.parent))
+                if self.debug:
+                    print("Evaluating the following modifier: {} for {}".format(self.modifier, self.parameter))
                 return numeral_eval(eval(self.modifier))
             elif hasattr(self, "_value") and self._value is not None:
                 return self._value
