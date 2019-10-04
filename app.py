@@ -50,6 +50,24 @@ def get_routine():
     }
     return jsonify(routine)
 
+from conversion_dictionary import Slicer, Param, Params
+
+
+@app.route('/config/<slicer>', methods=['POST'])
+def serve_config(slicer):
+    assert request.json is not None
+    from generate_configuration import Converter
+    converter = Converter(request.json)
+    content = None
+    config_format = None
+    if "simplify" in slicer:
+        content = converter.to_simplify()
+        config_format = "fff"
+    elif "slic3r_pe" in slicer:
+        content = converter.to_prusa().encode()
+        config_format = "ini"
+    return jsonify({"format": config_format, "content": b64encode(content)})
+
 
 @app.errorhandler(404)
 def not_found(error):
