@@ -64,7 +64,7 @@ def serve_config(slicer):
     elif "slic3r_pe" in slicer:
         content = converter.to_prusa().encode()
         config_format = "ini"
-    return jsonify({"format": config_format, "content": b64encode(content)})
+    return jsonify({"format": config_format, "content": b64encode(content).decode()})
 
 
 @app.errorhandler(404)
