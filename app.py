@@ -67,6 +67,15 @@ def serve_config(slicer):
     return jsonify({"format": config_format, "content": b64encode(content).decode()})
 
 
+@app.route('/report/', methods=['POST'])
+def serve_report():
+    assert request.json is not None
+    from generate_report import generate_report
+    content = generate_report(request.json)
+    config_format = "pdf"
+    return jsonify({"format": config_format, "content": b64encode(content).decode()})
+
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
