@@ -276,8 +276,12 @@ class Params(object):
         with open(filename, mode="r") as file:
             loaded = jsonpickle.loads(file.read())
             file.close()
-        self.parameters = loaded[0]
-        self.supported_slicers = loaded[1]
+        self.parameters = loaded
+        self.supported_slicers = [
+          "prusa",
+          "simplify3d",
+          "cura"
+        ]
 
         # Enforce correct parent/children hierarchy upon loading
         for param in self.parameters:

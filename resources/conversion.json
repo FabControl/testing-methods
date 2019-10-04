@@ -1,3483 +1,3478 @@
 [
-  [
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 2
-        },
-        "units": null
-      },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "coasting distance",
-      "parameter": "coasting_distance",
-      "params": {
-        "py/object": "__main__.Params",
-        "parameters": {
-          "py/id": 1
-        },
-        "supported_slicers": [
-          "prusa",
-          "simplify3d",
-          "cura"
-        ]
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 2
-        },
-        "units": null
-      },
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "coastingDistance",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 2
-        },
-        "units": "mm"
+      "root": {
+        "py/id": 2
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": null,
+    "name": "coasting distance",
+    "parameter": "coasting_distance",
+    "params": {
+      "py/object": "__main__.Params",
+      "parameters": {
+        "py/id": 1
+      },
+      "supported_slicers": [
+        "prusa",
+        "simplify3d",
+        "cura"
+      ]
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 2
+      },
+      "units": null
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "coastingDistance",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 2
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "int(x*100)",
-        "name": null,
-        "parameter": "material_flow",
-        "parent_parameter": null,
-        "reverse_modifier": "x/100",
-        "root": {
-          "py/id": 8
-        },
-        "units": null
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "int(x*100)",
+      "name": null,
+      "parameter": "material_flow",
+      "parent_parameter": null,
+      "reverse_modifier": "x/100",
+      "root": {
+        "py/id": 8
       },
+      "units": null
+    },
+    "modifier": null,
+    "name": "extrusion multiplier",
+    "parameter": "extrusion_multiplier",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "extrusion multiplier",
+      "name": null,
       "parameter": "extrusion_multiplier",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "extrusion_multiplier",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 8
-        },
-        "units": null
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "extrusionMultiplier",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 8
-        },
-        "units": null
+      "root": {
+        "py/id": 8
       },
-      "test": "extrusion multiplier test",
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "skin_overlap",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 12
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "overlap",
-      "parameter": "overlap",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "infill_overlap",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 12
-        },
-        "units": "percentage"
-      },
+      "name": null,
+      "parameter": "extrusionMultiplier",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "outlineOverlappercent",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 12
-        },
-        "units": "percentage"
+      "root": {
+        "py/id": 8
       },
-      "test": null,
-      "units": "percentage"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "cool_fan_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 16
-        },
-        "units": null
-      },
-      "modifier": null,
-      "name": "ventilator part cooling",
-      "parameter": "part_cooling_setpoint",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "1 if x != 0 else 0",
-        "name": null,
-        "parameter": "fan_always_on",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 16
-        },
-        "units": "percentage"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "fanSpeed",
-        "parent_parameter": null,
-        "reverse_modifier": "100 if x != 0 else 0",
-        "root": {
-          "py/id": 16
-        },
-        "units": "percentage"
-      },
-      "test": null,
-      "units": "percentage"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "layer_height",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 20
-        },
-        "units": null
-      },
-      "modifier": null,
-      "name": "track height",
-      "parameter": "track_height",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "layer_height",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 20
-        },
-        "units": "mm"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "layerHeight",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 20
-        },
-        "units": "mm"
-      },
-      "test": "track height test",
-      "units": "mm"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "layer_height_0",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 24
-        },
-        "units": null
-      },
-      "modifier": null,
-      "name": "first layer height",
-      "parameter": "track_height_raft",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "first_layer_height",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 24
-        },
-        "units": "mm"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "int(x/y*100)",
-        "name": null,
-        "parameter": "firstLayerHeightPercentage",
-        "parent_parameter": "track_height",
-        "reverse_modifier": "y*x/100",
-        "root": {
-          "py/id": 24
-        },
-        "units": "percentage"
-      },
-      "test": "first layer height test",
-      "units": "mm"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "line_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 28
-        },
-        "units": null
-      },
-      "modifier": null,
-      "name": "track width",
-      "parameter": "track_width",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "extrusion_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 28
-        },
-        "units": "mm"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 28
-        },
-        "units": "mm"
-      },
-      "test": "track width test",
-      "units": "mm"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "wall_line_width_0",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 32
-        },
-        "units": null
-      },
-      "modifier": null,
-      "name": "first layer track width",
-      "parameter": "track_width_raft",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "first_layer_extrusion_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 32
-        },
-        "units": "mm"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "int(x/y*100)",
-        "name": null,
-        "parameter": "firstLayerWidthPercentage",
-        "parent_parameter": "track_width",
-        "reverse_modifier": "round(y*x/100)",
-        "root": {
-          "py/id": 32
-        },
-        "units": "percentage"
-      },
-      "test": null,
-      "units": "mm"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 36
-        },
-        "units": null
-      },
-      "modifier": null,
-      "name": "perimeter",
-      "parameter": "perimeter",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "perimeters",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 36
-        },
-        "units": null
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "perimeterOutlines",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 36
-        },
-        "units": null
-      },
-      "test": null,
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retraction_amount",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 40
-        },
-        "units": null
-      },
+    "test": "extrusion multiplier test",
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "retraction distance",
-      "parameter": "retraction_distance",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retract_length",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 40
-        },
-        "units": "mm"
-      },
+      "name": null,
+      "parameter": "skin_overlap",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retractionDistance",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 40
-        },
-        "units": "mm"
+      "root": {
+        "py/id": 12
       },
-      "test": "retraction distance test",
+      "units": null
+    },
+    "modifier": null,
+    "name": "overlap",
+    "parameter": "overlap",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "infill_overlap",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 12
+      },
+      "units": "percentage"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "outlineOverlappercent",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 12
+      },
+      "units": "percentage"
+    },
+    "test": null,
+    "units": "percentage"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "cool_fan_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 16
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "ventilator part cooling",
+    "parameter": "part_cooling_setpoint",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "1 if x != 0 else 0",
+      "name": null,
+      "parameter": "fan_always_on",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 16
+      },
+      "units": "percentage"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "fanSpeed",
+      "parent_parameter": null,
+      "reverse_modifier": "100 if x != 0 else 0",
+      "root": {
+        "py/id": 16
+      },
+      "units": "percentage"
+    },
+    "test": null,
+    "units": "percentage"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "layer_height",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 20
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "track height",
+    "parameter": "track_height",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "layer_height",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 20
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retraction_extra_prime_amount",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 44
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "retraction restart distance",
-      "parameter": "retraction_restart_distance",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retract_restart_extra",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 44
-        },
-        "units": "mm"
-      },
+      "name": null,
+      "parameter": "layerHeight",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "extraRestartDistance",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 44
-        },
-        "units": "mm"
+      "root": {
+        "py/id": 20
       },
-      "test": null,
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "machine_nozzle_size",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 48
-        },
-        "units": null
-      },
+    "test": "track height test",
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "nozzle inner diameter size",
-      "parameter": "size_id",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "nozzle_diameter",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 48
-        },
-        "units": "mm"
-      },
+      "name": null,
+      "parameter": "layer_height_0",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "diameter",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 48
-        },
-        "units": "mm"
+      "root": {
+        "py/id": 24
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": null,
+    "name": "first layer height",
+    "parameter": "track_height_raft",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "first_layer_height",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 24
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "speed_print",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 52
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "int(x/y*100)",
+      "name": null,
+      "parameter": "firstLayerHeightPercentage",
+      "parent_parameter": "track_height",
+      "reverse_modifier": "y*x/100",
+      "root": {
+        "py/id": 24
       },
+      "units": "percentage"
+    },
+    "test": "first layer height test",
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "printing speed",
-      "parameter": "speed_printing",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "perimeter_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 52
-        },
-        "units": "mm/s"
-      },
+      "name": null,
+      "parameter": "line_width",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "x*60",
-        "name": null,
-        "parameter": "defaultSpeed",
-        "parent_parameter": null,
-        "reverse_modifier": "x/60",
-        "root": {
-          "py/id": 52
-        },
-        "units": "mm/min"
+      "root": {
+        "py/id": 28
       },
-      "test": "printing speed test",
+      "units": null
+    },
+    "modifier": null,
+    "name": "track width",
+    "parameter": "track_width",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "extrusion_width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 28
+      },
+      "units": "mm"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 28
+      },
+      "units": "mm"
+    },
+    "test": "track width test",
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "wall_line_width_0",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 32
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "first layer track width",
+    "parameter": "track_width_raft",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "first_layer_extrusion_width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 32
+      },
+      "units": "mm"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "int(x/y*100)",
+      "name": null,
+      "parameter": "firstLayerWidthPercentage",
+      "parent_parameter": "track_width",
+      "reverse_modifier": "round(y*x/100)",
+      "root": {
+        "py/id": 32
+      },
+      "units": "percentage"
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 36
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "perimeter",
+    "parameter": "perimeter",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "perimeters",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 36
+      },
+      "units": null
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "perimeterOutlines",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 36
+      },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retraction_amount",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 40
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "retraction distance",
+    "parameter": "retraction_distance",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retract_length",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 40
+      },
+      "units": "mm"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retractionDistance",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 40
+      },
+      "units": "mm"
+    },
+    "test": "retraction distance test",
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retraction_extra_prime_amount",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 44
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "retraction restart distance",
+    "parameter": "retraction_restart_distance",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retract_restart_extra",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 44
+      },
+      "units": "mm"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "extraRestartDistance",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 44
+      },
+      "units": "mm"
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "machine_nozzle_size",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 48
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "nozzle inner diameter size",
+    "parameter": "size_id",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "nozzle_diameter",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 48
+      },
+      "units": "mm"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "diameter",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 48
+      },
+      "units": "mm"
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "speed_print",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 52
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "printing speed",
+    "parameter": "speed_printing",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "perimeter_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 52
+      },
       "units": "mm/s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "speed_print_layer_0",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 56
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "x*60",
+      "name": null,
+      "parameter": "defaultSpeed",
+      "parent_parameter": null,
+      "reverse_modifier": "x/60",
+      "root": {
+        "py/id": 52
       },
+      "units": "mm/min"
+    },
+    "test": "printing speed test",
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "first layer printing speed",
-      "parameter": "speed_printing_raft",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "first_layer_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 56
-        },
-        "units": "mm/s"
-      },
+      "name": null,
+      "parameter": "speed_print_layer_0",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "round(x/y, 2)",
-        "name": null,
-        "parameter": "firstLayerUnderspeed",
-        "parent_parameter": "speed_printing",
-        "reverse_modifier": "round(x*y, 2)",
-        "root": {
-          "py/id": 56
-        },
-        "units": "fraction"
+      "root": {
+        "py/id": 56
       },
-      "test": "first layer height test",
+      "units": null
+    },
+    "modifier": null,
+    "name": "first layer printing speed",
+    "parameter": "speed_printing_raft",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "first_layer_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 56
+      },
       "units": "mm/s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "material_print_temperature",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 60
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "round(x/y, 2)",
+      "name": null,
+      "parameter": "firstLayerUnderspeed",
+      "parent_parameter": "speed_printing",
+      "reverse_modifier": "round(x*y, 2)",
+      "root": {
+        "py/id": 56
       },
+      "units": "fraction"
+    },
+    "test": "first layer height test",
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "extrusion temperature",
-      "parameter": "temperature_extruder",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "temperature",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 60
-        },
-        "units": "degC"
-      },
+      "name": null,
+      "parameter": "material_print_temperature",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "Primary Extruder Temperature",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 60
-        },
-        "units": "degC"
+      "root": {
+        "py/id": 60
       },
-      "test": "extrusion temperature test",
-      "units": "degC"
+      "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "material_print_temperature_layer_0",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 64
-        },
-        "units": null
-      },
+    "modifier": null,
+    "name": "extrusion temperature",
+    "parameter": "temperature_extruder",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "first layer extrusion temperature",
-      "parameter": "temperature_extruder_raft",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "first_layer_temperature",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 64
-        },
-        "units": "degC"
-      },
+      "name": null,
+      "parameter": "temperature",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "Primary Extruder Temperature",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 64
-        },
-        "units": "degC"
+      "root": {
+        "py/id": 60
       },
-      "test": "first layer height test",
       "units": "degC"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "material_bed_temperature",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 68
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
-      "name": "printbed temperature",
-      "parameter": "temperature_printbed_setpoint",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bed_temperature",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 68
-        },
-        "units": "degC"
-      },
+      "name": null,
+      "parameter": "Primary Extruder Temperature",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "Heated Bed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 68
-        },
-        "units": "degC"
+      "root": {
+        "py/id": 60
       },
-      "test": null,
       "units": "degC"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "material_bed_temperature_layer_0",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 72
-        },
-        "units": null
-      },
-      "modifier": "y",
-      "name": "first layer printbed temperature",
-      "parameter": "temperature_printbed_raft",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "temperature_printbed_setpoint",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "first_layer_bed_temperature",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 72
-        },
-        "units": "degC"
-      },
+    "test": "extrusion temperature test",
+    "units": "degC"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "material_print_temperature_layer_0",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 72
-        },
-        "units": "degC"
+      "root": {
+        "py/id": 64
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": null,
+    "name": "first layer extrusion temperature",
+    "parameter": "temperature_extruder_raft",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "first_layer_temperature",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 64
+      },
       "units": "degC"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bottom_layers",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 76
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "Primary Extruder Temperature",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 64
       },
+      "units": "degC"
+    },
+    "test": "first layer height test",
+    "units": "degC"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "material_bed_temperature",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 68
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "printbed temperature",
+    "parameter": "temperature_printbed_setpoint",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "bed_temperature",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 68
+      },
+      "units": "degC"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "Heated Bed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 68
+      },
+      "units": "degC"
+    },
+    "test": null,
+    "units": "degC"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "material_bed_temperature_layer_0",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 72
+      },
+      "units": null
+    },
+    "modifier": "y",
+    "name": "first layer printbed temperature",
+    "parameter": "temperature_printbed_raft",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "temperature_printbed_setpoint",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "first_layer_bed_temperature",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 72
+      },
+      "units": "degC"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 72
+      },
+      "units": "degC"
+    },
+    "test": null,
+    "units": "degC"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "bottom_layers",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 76
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "bottom_solid_layers",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "bottom_solid_layers",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bottom_solid_layers",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 76
-        },
-        "units": null
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bottomSolidLayers",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 76
-        },
-        "units": null
+      "root": {
+        "py/id": 76
       },
-      "test": null,
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "brim_line_count",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 80
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "brim_outlines",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "x*y",
-        "name": null,
-        "parameter": "brim_width",
-        "parent_parameter": "size_id",
-        "reverse_modifier": "x/y",
-        "root": {
-          "py/id": 80
-        },
-        "units": "mm"
-      },
+      "parameter": "bottomSolidLayers",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bottomSolidLayers",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 80
-        },
-        "units": null
+      "root": {
+        "py/id": 76
       },
-      "test": null,
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "wall_line_width_x",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 84
-        },
-        "units": null
-      },
-      "modifier": "y",
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "external_perimeter_extrusion_width",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "track_width",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "external_perimeter_extrusion_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 84
-        },
-        "units": "mm"
-      },
+      "parameter": "brim_line_count",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 84
-        },
-        "units": null
+      "root": {
+        "py/id": 80
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "brim_outlines",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "x*y",
+      "name": null,
+      "parameter": "brim_width",
+      "parent_parameter": "size_id",
+      "reverse_modifier": "x/y",
+      "root": {
+        "py/id": 80
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 88
-        },
-        "units": null
-      },
-      "modifier": "y*0.9",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "speed_external_perimeter",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "speed_printing",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "external_perimeter_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 88
-        },
-        "units": "mm/s"
-      },
+      "parameter": "bottomSolidLayers",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 88
-        },
-        "units": null
+      "root": {
+        "py/id": 80
       },
-      "test": null,
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "wall_line_width_x",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 84
+      },
+      "units": null
+    },
+    "modifier": "y",
+    "name": null,
+    "parameter": "external_perimeter_extrusion_width",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "track_width",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "external_perimeter_extrusion_width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 84
+      },
+      "units": "mm"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 84
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 88
+      },
+      "units": null
+    },
+    "modifier": "y*0.9",
+    "name": null,
+    "parameter": "speed_external_perimeter",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "speed_printing",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "external_perimeter_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 88
+      },
       "units": "mm/s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "outer_inset_first",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 92
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 88
       },
+      "units": null
+    },
+    "test": null,
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "outer_inset_first",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 92
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "external_perimeters_first",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "external_perimeters_first",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "external_perimeters_first",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 92
-        },
-        "units": null
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "x*(-1)",
-        "name": null,
-        "parameter": "printPerimetersInsideOut",
-        "parent_parameter": null,
-        "reverse_modifier": "x*(-1)",
-        "root": {
-          "py/id": 92
-        },
-        "units": null
+      "root": {
+        "py/id": 92
       },
-      "test": null,
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "cool_min_layer_time",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 96
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "x*(-1)",
+      "name": null,
+      "parameter": "printPerimetersInsideOut",
+      "parent_parameter": null,
+      "reverse_modifier": "x*(-1)",
+      "root": {
+        "py/id": 92
       },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "cooling_below_layer_time",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "fan_below_layer_time",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 96
-        },
-        "units": "s"
-      },
+      "parameter": "cool_min_layer_time",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "minSpeedLayerTime",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 96
-        },
-        "units": "s"
+      "root": {
+        "py/id": 96
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "cooling_below_layer_time",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "fan_below_layer_time",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 96
+      },
       "units": "s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 100
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "max_volumetric_speed",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "filament_max_volumetric_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 100
-        },
-        "units": "mm^3/s"
-      },
+      "parameter": "minSpeedLayerTime",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 100
-        },
-        "units": null
+      "root": {
+        "py/id": 96
       },
-      "test": null,
-      "units": "mm^3/s"
+      "units": "s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "infill_sparse_density",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 104
-        },
-        "units": null
-      },
+    "test": null,
+    "units": "s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "infill_density",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "fill_density",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 104
-        },
-        "units": "percentage"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "infillPercentage",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 104
-        },
-        "units": "percentage"
+      "root": {
+        "py/id": 100
       },
-      "test": null,
-      "units": "percentage"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "'lines' if x == 'rectilinear' else x",
-        "name": null,
-        "parameter": "infill_pattern",
-        "parent_parameter": null,
-        "reverse_modifier": "'rectilinear' if x == 'lines' else x",
-        "root": {
-          "py/id": 108
-        },
-        "units": null
-      },
-      "modifier": null,
-      "name": null,
-      "parameter": "infill_pattern",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "fill_pattern",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 108
-        },
-        "units": null
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "x.capitalize()",
-        "name": null,
-        "parameter": "internalInfillPattern",
-        "parent_parameter": null,
-        "reverse_modifier": "x.lower()",
-        "root": {
-          "py/id": 108
-        },
-        "units": null
-      },
-      "test": null,
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "infill_line_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 112
-        },
-        "units": null
-      },
-      "modifier": "y",
+    "modifier": null,
+    "name": null,
+    "parameter": "max_volumetric_speed",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "track_width_infill",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "track_width",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "infill_extrusion_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 112
-        },
-        "units": "mm"
-      },
+      "parameter": "filament_max_volumetric_speed",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "int(x/y*100)",
-        "name": null,
-        "parameter": "infillExtrusionWidthPercentage",
-        "parent_parameter": "track_width",
-        "reverse_modifier": "round(y/x)*100",
-        "root": {
-          "py/id": 112
-        },
-        "units": "percentage"
+      "root": {
+        "py/id": 100
       },
-      "test": null,
+      "units": "mm^3/s"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 100
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "mm^3/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "infill_sparse_density",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 104
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "infill_density",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "fill_density",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 104
+      },
+      "units": "percentage"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "infillPercentage",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 104
+      },
+      "units": "percentage"
+    },
+    "test": null,
+    "units": "percentage"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "'lines' if x == 'rectilinear' else x",
+      "name": null,
+      "parameter": "infill_pattern",
+      "parent_parameter": null,
+      "reverse_modifier": "'rectilinear' if x == 'lines' else x",
+      "root": {
+        "py/id": 108
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "infill_pattern",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "fill_pattern",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 108
+      },
+      "units": null
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "x.capitalize()",
+      "name": null,
+      "parameter": "internalInfillPattern",
+      "parent_parameter": null,
+      "reverse_modifier": "x.lower()",
+      "root": {
+        "py/id": 108
+      },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "infill_line_width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 112
+      },
+      "units": null
+    },
+    "modifier": "y",
+    "name": null,
+    "parameter": "track_width_infill",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "track_width",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "infill_extrusion_width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 112
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 116
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "int(x/y*100)",
+      "name": null,
+      "parameter": "infillExtrusionWidthPercentage",
+      "parent_parameter": "track_width",
+      "reverse_modifier": "round(y/x)*100",
+      "root": {
+        "py/id": 112
       },
+      "units": "percentage"
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 116
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "infill_first",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "infill_first",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "infill_first",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 116
-        },
-        "units": "bool"
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "-1*x",
-        "name": null,
-        "parameter": "printPerimetersInsideOut",
-        "parent_parameter": null,
-        "reverse_modifier": "-1*x",
-        "root": {
-          "py/id": 116
-        },
-        "units": "bool"
+      "root": {
+        "py/id": 116
       },
-      "test": null,
       "units": "bool"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "infill_overlap",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 120
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "-1*x",
+      "name": null,
+      "parameter": "printPerimetersInsideOut",
+      "parent_parameter": null,
+      "reverse_modifier": "-1*x",
+      "root": {
+        "py/id": 116
       },
+      "units": "bool"
+    },
+    "test": null,
+    "units": "bool"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "overlap_infill",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "infill_overlap",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 120
-        },
-        "units": "percentage"
-      },
+      "parameter": "infill_overlap",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 120
-        },
-        "units": null
+      "root": {
+        "py/id": 120
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "overlap_infill",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "infill_overlap",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 120
+      },
       "units": "percentage"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "speed_infill",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 124
-        },
-        "units": null
-      },
-      "modifier": "y*0.9",
-      "name": null,
-      "parameter": "speed_printing_infill",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "speed_printing",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "infill_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 124
-        },
-        "units": "mm/s"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 124
-        },
-        "units": "mm/min"
-      },
-      "test": null,
-      "units": "mm/s"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 128
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "flow_rate_max",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "max_volumetric_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 128
-        },
-        "units": "mm^3/s"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 128
-        },
-        "units": null
+      "root": {
+        "py/id": 120
       },
-      "test": null,
+      "units": null
+    },
+    "test": null,
+    "units": "percentage"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "speed_infill",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 124
+      },
+      "units": null
+    },
+    "modifier": "y*0.9",
+    "name": null,
+    "parameter": "speed_printing_infill",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "speed_printing",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "infill_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 124
+      },
+      "units": "mm/s"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 124
+      },
+      "units": "mm/min"
+    },
+    "test": null,
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 128
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "flow_rate_max",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "max_volumetric_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 128
+      },
       "units": "mm^3/s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 132
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "retract_only_when_crossing_perimeters",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "only_retract_when_crossing_perimeters",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 132
-        },
-        "units": "bool"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 132
-        },
-        "units": null
+      "root": {
+        "py/id": 128
       },
-      "test": null,
+      "units": null
+    },
+    "test": null,
+    "units": "mm^3/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 132
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "retract_only_when_crossing_perimeters",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "only_retract_when_crossing_perimeters",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 132
+      },
       "units": "bool"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "infill_support_angle",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 136
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "critical_overhang_angle",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "overhangs",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 136
-        },
-        "units": "deg"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "maxOverhangAngle",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 136
-        },
-        "units": "deg"
+      "root": {
+        "py/id": 132
       },
-      "test": null,
+      "units": null
+    },
+    "test": null,
+    "units": "bool"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "infill_support_angle",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 136
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "critical_overhang_angle",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "overhangs",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 136
+      },
       "units": "deg"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "wall_line_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 140
-        },
-        "units": null
-      },
-      "modifier": "x",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "track_width_perimeter",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "track_width",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "perimeter_extrusion_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 140
-        },
-        "units": "mm"
-      },
+      "parameter": "maxOverhangAngle",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 140
-        },
-        "units": null
+      "root": {
+        "py/id": 136
       },
-      "test": null,
+      "units": "deg"
+    },
+    "test": null,
+    "units": "deg"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "wall_line_width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 140
+      },
+      "units": null
+    },
+    "modifier": "x",
+    "name": null,
+    "parameter": "track_width_perimeter",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "track_width",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "perimeter_extrusion_width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 140
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 144
-        },
-        "units": null
-      },
-      "modifier": "y*0.95",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "speed_printing_perimeter",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "speed_printing",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "perimeter_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 144
-        },
-        "units": "mm/s"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "round(x/y)",
-        "name": null,
-        "parameter": "outlineUnderspeed",
-        "parent_parameter": "speed_printing",
-        "reverse_modifier": "x*y",
-        "root": {
-          "py/id": 144
-        },
-        "units": "fraction"
+      "root": {
+        "py/id": 140
       },
-      "test": null,
+      "units": null
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 144
+      },
+      "units": null
+    },
+    "modifier": "y*0.95",
+    "name": null,
+    "parameter": "speed_printing_perimeter",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "speed_printing",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "perimeter_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 144
+      },
       "units": "mm/s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 148
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "round(x/y)",
+      "name": null,
+      "parameter": "outlineUnderspeed",
+      "parent_parameter": "speed_printing",
+      "reverse_modifier": "x*y",
+      "root": {
+        "py/id": 144
       },
+      "units": "fraction"
+    },
+    "test": null,
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 148
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "retract_before_travel",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "retract_before_travel",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retract_before_travel",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 148
-        },
-        "units": "bool"
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retractionMinTravel",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 148
-        },
-        "units": "mm"
+      "root": {
+        "py/id": 148
       },
-      "test": null,
       "units": "bool"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 152
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retractionMinTravel",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 148
       },
+      "units": "mm"
+    },
+    "test": null,
+    "units": "bool"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 152
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "retract_before_wipe",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "retract_before_wipe",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retract_before_wipe",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 152
-        },
-        "units": "bool"
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 152
-        },
-        "units": null
+      "root": {
+        "py/id": 152
       },
-      "test": null,
       "units": "bool"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 156
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 152
       },
+      "units": null
+    },
+    "test": null,
+    "units": "bool"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 156
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "retract_layer_change",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "retract_layer_change",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retract_layer_change",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 156
-        },
-        "units": "bool"
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retractBetweenLayers",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 156
-        },
-        "units": "bool"
+      "root": {
+        "py/id": 156
       },
-      "test": null,
       "units": "bool"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retraction_hop",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 160
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retractBetweenLayers",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 156
       },
+      "units": "bool"
+    },
+    "test": null,
+    "units": "bool"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retraction_hop",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 160
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "retract_lift",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "retract_lift",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retract_lift",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 160
-        },
-        "units": "mm"
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "retractionZLift",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 160
-        },
-        "units": "mm"
+      "root": {
+        "py/id": 160
       },
-      "test": null,
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "z_seam_type",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 164
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "retractionZLift",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 160
       },
+      "units": "mm"
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "z_seam_type",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 164
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "seam_position",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "seam_position",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "seam_position",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 164
-        },
-        "units": null
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "1 if self.root.parameter.lower() == 'random' else 2",
-        "name": null,
-        "parameter": "startPointOption",
-        "parent_parameter": null,
-        "reverse_modifier": "'Aligned' if x == 2 else 'Random'",
-        "root": {
-          "py/id": 164
-        },
-        "units": null
+      "root": {
+        "py/id": 164
       },
-      "test": null,
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 168
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "1 if self.root.parameter.lower() == 'random' else 2",
+      "name": null,
+      "parameter": "startPointOption",
+      "parent_parameter": null,
+      "reverse_modifier": "'Aligned' if x == 2 else 'Random'",
+      "root": {
+        "py/id": 164
       },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "brim_offset",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "skirt_distance",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 168
-        },
-        "units": "mm"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "skirtOffset",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 168
-        },
-        "units": "mm"
+      "root": {
+        "py/id": 168
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "brim_offset",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "skirt_distance",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 168
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 172
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "brim_layers",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "skirt_height",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 172
-        },
-        "units": null
-      },
+      "parameter": "skirtOffset",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "skirtLayers",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 172
-        },
-        "units": null
+      "root": {
+        "py/id": 168
       },
-      "test": null,
+      "units": "mm"
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 172
+      },
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 176
-        },
-        "units": null
-      },
+    "modifier": null,
+    "name": null,
+    "parameter": "brim_layers",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "speed_printing_slowdown_below_time",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "slowdown_below_layer_time",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 176
-        },
-        "units": "s"
-      },
+      "parameter": "skirt_height",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "minSpeedLayerTime",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 176
-        },
-        "units": "s"
+      "root": {
+        "py/id": 172
       },
-      "test": null,
+      "units": null
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "skirtLayers",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 172
+      },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 176
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "speed_printing_slowdown_below_time",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "slowdown_below_layer_time",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 176
+      },
       "units": "s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 180
-        },
-        "units": null
-      },
-      "modifier": "y*0.33",
-      "name": null,
-      "parameter": "speed_printing_small_perimeters",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "speed_printing",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "small_perimeter_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 180
-        },
-        "units": "mm/s"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 180
-        },
-        "units": null
-      },
-      "test": null,
-      "units": "mm/s"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 184
-        },
-        "units": null
-      },
-      "modifier": "x",
-      "name": null,
-      "parameter": "track_width_solid_infill",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "track_width",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "solid_infill_extrusion_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 184
-        },
-        "units": "mm"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 184
-        },
-        "units": null
-      },
-      "test": null,
-      "units": "mm"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 188
-        },
-        "units": null
-      },
-      "modifier": "y*0.9",
-      "name": null,
-      "parameter": "speed_printing_solid_infill",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "speed_printing",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "solid_infill_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 188
-        },
-        "units": "mm/s"
-      },
-      "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "round(x/y)",
-        "name": null,
-        "parameter": "solidInfillUnderspeed",
-        "parent_parameter": "speed_printing",
-        "reverse_modifier": "x*y",
-        "root": {
-          "py/id": 188
-        },
-        "units": "fraction"
-      },
-      "test": null,
-      "units": "mm/s"
-    },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 192
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "spiral_mode",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "spiral_vase",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 192
-        },
-        "units": "bool"
-      },
+      "parameter": "minSpeedLayerTime",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "spiralVaseMode",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 192
-        },
-        "units": "bool"
+      "root": {
+        "py/id": 176
       },
-      "test": null,
+      "units": "s"
+    },
+    "test": null,
+    "units": "s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 180
+      },
+      "units": null
+    },
+    "modifier": "y*0.33",
+    "name": null,
+    "parameter": "speed_printing_small_perimeters",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "speed_printing",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "small_perimeter_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 180
+      },
+      "units": "mm/s"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 180
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 184
+      },
+      "units": null
+    },
+    "modifier": "x",
+    "name": null,
+    "parameter": "track_width_solid_infill",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "track_width",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "solid_infill_extrusion_width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 184
+      },
+      "units": "mm"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 184
+      },
+      "units": null
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 188
+      },
+      "units": null
+    },
+    "modifier": "y*0.9",
+    "name": null,
+    "parameter": "speed_printing_solid_infill",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "speed_printing",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "solid_infill_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 188
+      },
+      "units": "mm/s"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "round(x/y)",
+      "name": null,
+      "parameter": "solidInfillUnderspeed",
+      "parent_parameter": "speed_printing",
+      "reverse_modifier": "x*y",
+      "root": {
+        "py/id": 188
+      },
+      "units": "fraction"
+    },
+    "test": null,
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 192
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "spiral_mode",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "spiral_vase",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 192
+      },
       "units": "bool"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 196
-        },
-        "units": null
-      },
-      "modifier": "x",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "track_width_support",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "track_width",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "support_material_extrusion_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 196
-        },
-        "units": "mm"
-      },
+      "parameter": "spiralVaseMode",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 196
-        },
-        "units": null
+      "root": {
+        "py/id": 192
       },
-      "test": null,
+      "units": "bool"
+    },
+    "test": null,
+    "units": "bool"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 196
+      },
+      "units": null
+    },
+    "modifier": "x",
+    "name": null,
+    "parameter": "track_width_support",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "track_width",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "support_material_extrusion_width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 196
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "speed_support",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 200
-        },
-        "units": null
-      },
-      "modifier": "y*0.5",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "speed_printing_support",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "speed_printing",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "support_material_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 200
-        },
-        "units": "mm/s"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "round(x/y)",
-        "name": null,
-        "parameter": "supportUnderspeed",
-        "parent_parameter": "speed_printing",
-        "reverse_modifier": "x*y",
-        "root": {
-          "py/id": 200
-        },
-        "units": "fraction"
+      "root": {
+        "py/id": 196
       },
-      "test": null,
+      "units": null
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "speed_support",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 200
+      },
+      "units": null
+    },
+    "modifier": "y*0.5",
+    "name": null,
+    "parameter": "speed_printing_support",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "speed_printing",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "support_material_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 200
+      },
       "units": "mm/s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "roofing_line_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 204
-        },
-        "units": null
-      },
-      "modifier": "y*1.05",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "round(x/y)",
       "name": null,
-      "parameter": "track_width_top_solid",
-      "params": {
-        "py/id": 4
+      "parameter": "supportUnderspeed",
+      "parent_parameter": "speed_printing",
+      "reverse_modifier": "x*y",
+      "root": {
+        "py/id": 200
       },
-      "parent": "track_width",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "top_infill_extrusion_width",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 204
-        },
-        "units": "mm"
-      },
+      "units": "fraction"
+    },
+    "test": null,
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "roofing_line_width",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 204
-        },
-        "units": null
+      "root": {
+        "py/id": 204
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": "y*1.05",
+    "name": null,
+    "parameter": "track_width_top_solid",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "track_width",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "top_infill_extrusion_width",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 204
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 208
-        },
-        "units": null
-      },
-      "modifier": "y*0.9",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "speed_printing_top_solid",
-      "params": {
-        "py/id": 4
-      },
-      "parent": "speed_printing",
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "top_solid_infill_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 208
-        },
-        "units": "mm/s"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 208
-        },
-        "units": null
+      "root": {
+        "py/id": 204
       },
-      "test": null,
+      "units": null
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 208
+      },
+      "units": null
+    },
+    "modifier": "y*0.9",
+    "name": null,
+    "parameter": "speed_printing_top_solid",
+    "params": {
+      "py/id": 4
+    },
+    "parent": "speed_printing",
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "top_solid_infill_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 208
+      },
       "units": "mm/s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "top_layers",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 212
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 208
       },
+      "units": null
+    },
+    "test": null,
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "top_layers",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 212
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "top_solid_layers",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "top_solid_layers",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "top_solid_layers",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 212
-        },
-        "units": null
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "topSolidLayers",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 212
-        },
-        "units": null
+      "root": {
+        "py/id": 212
       },
-      "test": null,
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "speed_travel",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 216
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "topSolidLayers",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 212
       },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "speed_travel",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "travel_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 216
-        },
-        "units": "mm/s"
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "x*60",
-        "name": null,
-        "parameter": "rapidXYspeed",
-        "parent_parameter": null,
-        "reverse_modifier": "x/60",
-        "root": {
-          "py/id": 216
-        },
-        "units": "mm/min"
+      "root": {
+        "py/id": 216
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "speed_travel",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "travel_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 216
+      },
       "units": "mm/s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 220
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "x*60",
+      "name": null,
+      "parameter": "rapidXYspeed",
+      "parent_parameter": null,
+      "reverse_modifier": "x/60",
+      "root": {
+        "py/id": 216
       },
+      "units": "mm/min"
+    },
+    "test": null,
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 220
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "wipe",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "wipe",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "wipe",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 220
-        },
-        "units": "bool"
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "useWipe",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 220
-        },
-        "units": "bool"
+      "root": {
+        "py/id": 220
       },
-      "test": null,
       "units": "bool"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 224
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "part_cooling_disable_first_layers",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "disable_fan_first_layers",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 224
-        },
-        "units": null
-      },
+      "parameter": "useWipe",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "setpoint",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 224
-        },
-        "units": null
+      "root": {
+        "py/id": 220
       },
-      "test": null,
+      "units": "bool"
+    },
+    "test": null,
+    "units": "bool"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 224
+      },
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 228
-        },
-        "units": null
-      },
+    "modifier": null,
+    "name": null,
+    "parameter": "part_cooling_disable_first_layers",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "density_rt",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "filament_density",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 228
-        },
-        "units": "g/cm^3"
-      },
+      "parameter": "disable_fan_first_layers",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "filamentDensities",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 228
-        },
-        "units": "g/cm^3"
+      "root": {
+        "py/id": 224
       },
-      "test": null,
+      "units": null
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "setpoint",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 224
+      },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 228
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "density_rt",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "filament_density",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 228
+      },
       "units": "g/cm^3"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 232
-        },
-        "units": null
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "filamentDensities",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 228
       },
+      "units": "g/cm^3"
+    },
+    "test": null,
+    "units": "g/cm^3"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 232
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "filament_diameter",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
       "parameter": "filament_diameter",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "filament_diameter",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 232
-        },
-        "units": "mm"
-      },
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "filamentDiameters",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 232
-        },
-        "units": "mm"
+      "root": {
+        "py/id": 232
       },
-      "test": null,
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 236
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "firmware_type",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "gcode_flavor",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 236
-        },
-        "units": null
-      },
+      "parameter": "filamentDiameters",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 236
-        },
-        "units": null
+      "root": {
+        "py/id": 232
       },
-      "test": null,
+      "units": "mm"
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 236
+      },
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 240
-        },
-        "units": null
-      },
-      "modifier": "max(self.params.get('track_height').value, self.params.get('track_height_raft').value)",
+    "modifier": null,
+    "name": null,
+    "parameter": "firmware_type",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "track_height_max",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "max_layer_height",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 240
-        },
-        "units": "mm"
-      },
+      "parameter": "gcode_flavor",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 240
-        },
-        "units": null
+      "root": {
+        "py/id": 236
       },
-      "test": null,
+      "units": null
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 236
+      },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 240
+      },
+      "units": null
+    },
+    "modifier": "max(self.params.get('track_height').value, self.params.get('track_height_raft').value)",
+    "name": null,
+    "parameter": "track_height_max",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "max_layer_height",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 240
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 244
-        },
-        "units": null
-      },
-      "modifier": "min(self.params.get('track_height').value, self.params.get('track_height_raft').value)",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "track_height_min",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "min_layer_height",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 244
-        },
-        "units": "mm"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 244
-        },
-        "units": null
+      "root": {
+        "py/id": 240
       },
-      "test": null,
+      "units": null
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 244
+      },
+      "units": null
+    },
+    "modifier": "min(self.params.get('track_height').value, self.params.get('track_height_raft').value)",
+    "name": null,
+    "parameter": "track_height_min",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "min_layer_height",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 244
+      },
       "units": "mm"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 248
-        },
-        "units": null
-      },
-      "modifier": "min(self.params.get('speed_printing_small_perimeters').value, self.params.get('speed_printing_raft').value)",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "speed_printing_min",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "min_print_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 248
-        },
-        "units": "mm/s"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 248
-        },
-        "units": null
+      "root": {
+        "py/id": 244
       },
-      "test": null,
+      "units": null
+    },
+    "test": null,
+    "units": "mm"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 248
+      },
+      "units": null
+    },
+    "modifier": "min(self.params.get('speed_printing_small_perimeters').value, self.params.get('speed_printing_raft').value)",
+    "name": null,
+    "parameter": "speed_printing_min",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "min_print_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 248
+      },
       "units": "mm/s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 252
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "material_name",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "filament_type",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 252
-        },
-        "units": null
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "printMaterial",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 252
-        },
-        "units": null
+      "root": {
+        "py/id": 248
       },
-      "test": null,
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 256
-        },
-        "units": null
-      },
-      "modifier": "max(self.params.get('speed_printing').value, self.params.get('speed_printing_raft').value)",
+    "test": null,
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
       "name": null,
-      "parameter": "speed_printing_max",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "max_print_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 256
-        },
-        "units": "mm/s"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 256
-        },
-        "units": null
+      "root": {
+        "py/id": 252
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "material_name",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "filament_type",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 252
+      },
+      "units": null
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "printMaterial",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 252
+      },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 256
+      },
+      "units": null
+    },
+    "modifier": "max(self.params.get('speed_printing').value, self.params.get('speed_printing_raft').value)",
+    "name": null,
+    "parameter": "speed_printing_max",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "max_print_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 256
+      },
       "units": "mm/s"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": true,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "'lines' if x == 'rectilinear' else x",
-        "name": null,
-        "parameter": "top_bottom_pattern",
-        "parent_parameter": null,
-        "reverse_modifier": "'rectilinear' if x == 'lines' else x",
-        "root": {
-          "py/id": 260
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "solid_infill_pattern",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "str(x).lower()",
-        "name": "External fill pattern",
-        "parameter": "external_fill_pattern",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 260
-        },
-        "units": null
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "str(x).capitalize()",
-        "name": "External infill pattern",
-        "parameter": "externalInfillPattern",
-        "parent_parameter": null,
-        "reverse_modifier": "str(x).lower()",
-        "root": {
-          "py/id": 260
-        },
-        "units": null
+      "root": {
+        "py/id": 256
       },
-      "test": null,
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 264
-        },
-        "units": null
+    "test": null,
+    "units": "mm/s"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": true,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "'lines' if x == 'rectilinear' else x",
+      "name": null,
+      "parameter": "top_bottom_pattern",
+      "parent_parameter": null,
+      "reverse_modifier": "'rectilinear' if x == 'lines' else x",
+      "root": {
+        "py/id": 260
       },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "solid_infill_pattern",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "str(x).lower()",
+      "name": "External fill pattern",
+      "parameter": "external_fill_pattern",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 260
+      },
+      "units": null
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "str(x).capitalize()",
+      "name": "External infill pattern",
+      "parameter": "externalInfillPattern",
+      "parent_parameter": null,
+      "reverse_modifier": "str(x).lower()",
+      "root": {
+        "py/id": 260
+      },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "bridging_part_cooling",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bridge_fan_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 264
-        },
-        "units": "percentage"
-      },
+      "parameter": null,
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bridgingFanSpeed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 264
-        },
-        "units": "percentage"
+      "root": {
+        "py/id": 264
       },
-      "test": null,
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "bridging_part_cooling",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "bridge_fan_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 264
+      },
       "units": "percentage"
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 268
-        },
-        "units": null
-      },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "bridging_extrusion_multiplier",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bridge_flow_ratio",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 268
-        },
-        "units": null
-      },
+      "parameter": "bridgingFanSpeed",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bridgingExtrusionMultiplier",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 268
-        },
-        "units": null
+      "root": {
+        "py/id": 264
       },
-      "test": null,
+      "units": "percentage"
+    },
+    "test": null,
+    "units": "percentage"
+  },
+  {
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 268
+      },
       "units": null
     },
-    {
-      "py/object": "conversion_dictionary.Param",
-      "_manual": false,
-      "_value": null,
-      "cura": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": null,
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 272
-        },
-        "units": null
-      },
+    "modifier": null,
+    "name": null,
+    "parameter": "bridging_extrusion_multiplier",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
       "modifier": null,
       "name": null,
-      "parameter": "bridging_speed_printing",
-      "params": {
-        "py/id": 4
-      },
-      "parent": null,
-      "prusa": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": null,
-        "name": null,
-        "parameter": "bridge_speed",
-        "parent_parameter": null,
-        "reverse_modifier": null,
-        "root": {
-          "py/id": 272
-        },
-        "units": "mm/s"
-      },
+      "parameter": "bridge_flow_ratio",
+      "parent_parameter": null,
       "reverse_modifier": null,
-      "simplify3d": {
-        "py/object": "conversion_dictionary.Slicer",
-        "modifier": "round(x/y)",
-        "name": null,
-        "parameter": "bridgingSpeedMultiplier",
-        "parent_parameter": "speed_printing",
-        "reverse_modifier": "x*y",
-        "root": {
-          "py/id": 272
-        },
-        "units": null
+      "root": {
+        "py/id": 268
       },
-      "test": "",
-      "units": "mm/s"
-    }
-  ],
+      "units": null
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "bridgingExtrusionMultiplier",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 268
+      },
+      "units": null
+    },
+    "test": null,
+    "units": null
+  },
   {
-    "py/id": 5
+    "py/object": "conversion_dictionary.Param",
+    "_manual": false,
+    "_value": null,
+    "cura": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 272
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "bridging_speed_printing",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": null,
+      "name": null,
+      "parameter": "bridge_speed",
+      "parent_parameter": null,
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 272
+      },
+      "units": "mm/s"
+    },
+    "reverse_modifier": null,
+    "simplify3d": {
+      "py/object": "conversion_dictionary.Slicer",
+      "modifier": "round(x/y)",
+      "name": null,
+      "parameter": "bridgingSpeedMultiplier",
+      "parent_parameter": "speed_printing",
+      "reverse_modifier": "x*y",
+      "root": {
+        "py/id": 272
+      },
+      "units": null
+    },
+    "test": "",
+    "units": "mm/s"
   }
 ]

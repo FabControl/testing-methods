@@ -3,7 +3,6 @@ from flask import Flask, jsonify, make_response, abort, request, send_file
 from persistence import Persistence
 from initialize_test import OptimizerSession
 from base64 import b64encode
-from conversion_dictionary import Slicer, Param, Params
 
 app = Flask(__name__)
 

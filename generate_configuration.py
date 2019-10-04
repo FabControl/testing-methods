@@ -3,10 +3,10 @@ import datetime
 import json
 import re
 from collections import OrderedDict
-from conversion_dictionary import Slicer, Param, Params
 from paths import *
 from persistence import Persistence
 from io import BytesIO
+from conversion_dictionary import Params
 
 
 class Converter(Persistence):
