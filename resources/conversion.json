@@ -179,7 +179,7 @@
       },
       "modifier": null,
       "name": "ventilator part cooling",
-      "parameter": "ventilator_part_cooling",
+      "parameter": "part_cooling_setpoint",
       "params": {
         "py/id": 4
       },
@@ -897,7 +897,7 @@
       "params": {
         "py/id": 4
       },
-      "parent": "temperature_printbed",
+      "parent": "temperature_printbed_setpoint",
       "prusa": {
         "py/object": "conversion_dictionary.Slicer",
         "modifier": null,
@@ -3443,7 +3443,7 @@
       },
       "modifier": null,
       "name": null,
-      "parameter": "speed_printing_bridge",
+      "parameter": "bridging_speed_printing",
       "params": {
         "py/id": 4
       },
