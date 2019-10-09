@@ -241,7 +241,7 @@ class Settings(object):
 
 
 class Parameter(object):
-    def __init__(self, name: str=None, programmatic_name: str=None, units: str=None, precision: str=None, value: float or list=None, active: bool=True, min_max: list=None, default_value: list=None):
+    def __init__(self, name: str=None, programmatic_name: str=None, units: str=None, precision: str=None, value: float or list=None, active: bool=True, min_max: list=None, default_value: list=None, hint_active: str=None):
         self.name = name
         self.programmatic_name = programmatic_name
         self.units = units
@@ -249,6 +249,7 @@ class Parameter(object):
         self.values = value
         self.active = active
         self.min_max = min_max
+        self.hint_active = hint_active
 
         if default_value is not None:
             self.default_value = default_value
@@ -263,13 +264,15 @@ class Parameter(object):
             "precision": self.precision,
             "values": self.values,
             "active": self.active,
-            "min_max": self.min_max
+            "min_max": self.min_max,
+            "hint_active": self.hint_active
         }
 
 
 class TestInfo(object):
-    def __init__(self, name: str, test_number: str, number_of_layers: int, number_of_test_structures: int, raft: bool,
-                 parameter_one: Parameter, parameter_two: Parameter, number_of_substructures: int, other_parameters: list, parameter_three: Parameter=None):
+    def __init__(self, name: str, test_number: str, number_of_layers: int, number_of_test_structures: int, raft: bool, parameter_one: Parameter, parameter_two: Parameter, number_of_substructures: int, other_parameters: list,
+                 hint_init: str, hint_valid: str="Inspect the printed test structure. Select one combination of parameters which results in the best test structure.",
+                 parameter_three: Parameter=None):
         self.name = name
         self.test_number = test_number
         self.number_of_layers = number_of_layers
@@ -280,6 +283,8 @@ class TestInfo(object):
         self.parameter_two = parameter_two
         self.parameter_three = parameter_three
         self.other_parameters = other_parameters
+        self.hint_init = hint_init
+        self.hint_valid = hint_valid
 
     def dict(self):
         return {
@@ -293,6 +298,8 @@ class TestInfo(object):
             "parameter_two": self.parameter_two.dict(),
             "parameter_three": self.parameter_three.dict() if self.parameter_three is not None else None,
             "other_parameters": [param.dict() for param in self.other_parameters],
+            "hint_init": self.hint_init,
+            "hint_valid": self.hint_valid,
         }
 
 
