@@ -1,6 +1,6 @@
 import os
 
-cwd = "/var/www/fc-testing-methods/"
+cwd = os.getcwd()+"/"
 if os.name == "nt":
     blender_path = "C:\Program Files\Blender Foundation\Blender\\blender.exe"
     slic3r_path = "C:\Program Files\Prusa3D\Slic3rPE\\slic3r-console.exe"
