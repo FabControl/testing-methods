@@ -329,7 +329,7 @@ def get_comment(parameter_values_for_comments: TestInfo):
             if parameter.values is not None:
                 if parameter.values != []:
                     comment_to_add = str(
-                        "; --- {}: {} {}".format(parameter.name, parameter.precision, parameter.units)).format(parameter.values)
+                        "; --- {}: {} {}".format(parameter.name, parameter.values, parameter.units))  # TODO Reintroduce rounding with precision
             else:
                 comment_to_add = str("; --- {} was not tested".format(parameter.name))
             if order_number == len(parameter_values_for_comments.other_parameters) - 1:
