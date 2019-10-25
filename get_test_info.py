@@ -44,7 +44,10 @@ def get_speed(min_max):
     if min_max == [] or min_max is None:
         return [0, 0]
     else:
-        return [min_max[0], min_max[1]]
+        if len(min_max) == 1:
+            return [min_max[0], min_max[0]]
+        else:
+            return [min_max[0], min_max[1]]
 
 
 
