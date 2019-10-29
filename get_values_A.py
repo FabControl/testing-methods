@@ -152,7 +152,7 @@ class get_values_A(object):
                                       fixed_parameter_values.parameter_one.values[-1]/machine.temperaturecontrollers.extruder.nozzle.size_id,
                                       self.number_of_test_structures).tolist()
 
-            self.abs_z = [(x + self.coef_h_raft) * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
+            self.abs_z = [(x + np.mean(self.coef_h_raft)) * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
 
             self.parameter_one.values = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
 
