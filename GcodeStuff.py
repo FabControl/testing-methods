@@ -166,7 +166,6 @@ class Gplus(G):
             self.coef_w = coef_w
         elif coef_w is None:
             self.coef_w = self.track_width / self.nozzle_diameter
-
         if coef_h is not None:
             self.coef_h = coef_h
         elif coef_h is None:

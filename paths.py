@@ -29,6 +29,8 @@ if os.name == "nt":
     conversion_json = cwd + "\\resources\\conversion_w_cura.json"
     relational_dict_json = cwd + "\\resources\\relational_dict.json"
     target_overrides_json = cwd + "\\resources\\target_overrides.json"
+    blank_persistance = cwd + "\\resources\\blank_persistence.json"
+    blank_test_info = cwd + "\\resources\\blank_test_info.json"
 
 else:
     blender_path = "blender"

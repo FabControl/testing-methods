@@ -51,10 +51,8 @@ class get_values_A(object):
         self.raft = fixed_parameter_values.raft
 
         # Printing parameters
-        if machine.settings.track_height_raft is not None:
-            self.coef_h_raft = machine.settings.track_height_raft/machine.temperaturecontrollers.extruder.nozzle.size_id
-        if machine.settings.track_width_raft is not None:
-            self.coef_w_raft = machine.settings.track_width_raft/machine.temperaturecontrollers.extruder.nozzle.size_id
+        self.coef_h_raft = [x * machine.settings.track_height_raft/machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
+        self.coef_w_raft = [x * machine.settings.track_width_raft/machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
 
         self.test_structure_size = get_test_structure_size(machine)
 
@@ -65,9 +63,9 @@ class get_values_A(object):
         self.coef_w = [x * machine.settings.track_width/machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
 
         if self.raft is False:
-            self.abs_z = [x * self.coef_h_raft * machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
+            self.abs_z = [x * sum(self.coef_h_raft)/len(self.coef_h_raft) * machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
         else:
-            self.abs_z = [(x + self.coef_h_raft) * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
+            self.abs_z = [(x + sum(self.coef_h_raft)/len(self.coef_h_raft)) * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
 
         self.extrusion_multiplier = [x * machine.settings.extrusion_multiplier for x in [1] * self.number_of_test_structures]
         self.extrusion_multiplier_raft = machine.settings.extrusion_multiplier_raft
@@ -83,7 +81,7 @@ class get_values_A(object):
         self.extrusion_multiplier_bridging = [x * 1.0 for x in [1] * self.number_of_test_structures]
 
         self.step_x = [x* np.mean(self.coef_w) * machine.temperaturecontrollers.extruder.nozzle.size_id for x in [1] * self.number_of_test_structures]
-        self.step_y = self.test_structure_size - self.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id / 2
+        self.step_y = self.test_structure_size - np.mean(self.coef_w_raft) * machine.temperaturecontrollers.extruder.nozzle.size_id / 2
 
         self.track_height = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
         self.track_width = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_w]
@@ -98,6 +96,8 @@ class get_values_A(object):
                                       fixed_parameter_values.parameter_one.values[-1]/machine.temperaturecontrollers.extruder.nozzle.size_id,
                                       self.number_of_test_structures).tolist()
 
+            self.coef_h_raft = self.coef_h
+
             self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
             self.temperature_extruder = self.temperature_extruder_raft
 
@@ -105,7 +105,7 @@ class get_values_A(object):
             self.track_height_raft = self.parameter_one.values
             self.abs_z = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
 
-            self.track_width = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in [self.coef_w_raft] * self.number_of_test_structures]
+            self.track_width = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_w_raft]
             self.track_width_raft = self.track_width
 
             self.step_x = self.track_width
@@ -119,13 +119,19 @@ class get_values_A(object):
                                       fixed_parameter_values.parameter_one.values[-1]/machine.temperaturecontrollers.extruder.nozzle.size_id,
                                       self.number_of_test_structures).tolist()
 
+            self.coef_w_raft = self.coef_w
+            self.coef_h = self.coef_h_raft
+
             self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
             self.temperature_extruder = self.temperature_extruder_raft
 
-            self.track_height = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in [self.coef_h_raft] * self.number_of_test_structures]
+            self.track_height = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h_raft]
+            self.track_height_raft = self.track_height
             self.abs_z = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
 
             self.track_width = self.parameter_one.values
+            self.track_width_raft = self.track_width
+
             self.step_x = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_w]
 
             self.speed_printing = self.parameter_two.values
@@ -295,8 +301,8 @@ class get_values_A(object):
         self.comment_current_values_of_variable_parameter = addcomment3(self.test_info)
 
         self.g = Gplus(material, machine,
-                       layer_height=self.coef_h_raft * machine.temperaturecontrollers.extruder.nozzle.size_id,
-                       extrusion_width=self.coef_w_raft * machine.temperaturecontrollers.extruder.nozzle.size_id,
+                       layer_height=sum(self.coef_h_raft)/len(self.coef_h_raft) * machine.temperaturecontrollers.extruder.nozzle.size_id,
+                       extrusion_width=sum(self.coef_w_raft)/len(self.coef_w_raft) * machine.temperaturecontrollers.extruder.nozzle.size_id,
                        aerotech_include=False, header=header, extrude=True,
                        extrusion_multiplier=self.extrusion_multiplier_raft)
 
