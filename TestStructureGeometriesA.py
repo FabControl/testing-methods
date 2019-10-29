@@ -18,7 +18,7 @@ class TestStructure(object):
         gv.g.feed(self.machine.settings.speed_travel) # respect the units: mm/min
         gv.g.abs_move(x=-wipe_length + gv.offset_x,
                       y=-6 * gv.test_structure_size / 10 + gv.offset_y,
-                      z=+2 * gv.coef_h_raft * gv.extruder.nozzle.size_id,
+                      z=+2 * np.mean(gv.coef_h_raft) * gv.extruder.nozzle.size_id,
                       extrude=False, extrusion_multiplier=0)
 
         if self.machine.temperaturecontrollers.chamber.chamber_heatable:
@@ -45,11 +45,11 @@ class TestStructure(object):
         if isinstance(gv, get_values_A):
             gv.g.move(x=+2 * wipe_length,
                       y=0,
-                      z=-2 * gv.coef_h_raft * self.machine.temperaturecontrollers.extruder.nozzle.size_id,
-                      extrude=True, extrusion_multiplier=2.25, coef_h=gv.coef_h_raft, coef_w=gv.coef_w_raft)
+                      z=-2 * np.mean(gv.coef_h_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id,
+                      extrude=True, extrusion_multiplier=2.25, coef_h=np.mean(gv.coef_h_raft), coef_w=np.mean(gv.coef_w_raft))
             gv.g.move(x=0,
                       y=+gv.test_structure_size / 10,
-                      z=+gv.coef_h_raft * self.machine.temperaturecontrollers.extruder.nozzle.size_id,
+                      z=+np.mean(gv.coef_h_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id,
                       extrude=False, extrusion_multiplier=0)
             gv.g.move(x=-wipe_length_initial / 6 + (1 - length_multiplier) * wipe_length_initial,
                       y=0,
@@ -69,16 +69,16 @@ class TestStructure(object):
         values.g.write("; --- print the outer perimeter ---")
         values.g.feed(self.machine.settings.speed_printing_raft / 3)
         for dummy in range(2):
-            for _ in range(100):
+            for _ in range(20):
                 values.g.move(x=0,
-                              y=(-1) ** dummy * values.test_structure_size / 100,
+                              y=(-1) ** dummy * values.test_structure_size / 20,
                               z=0,
-                              extrude=True, extrusion_multiplier=1.5, coef_h=values.coef_h_raft, coef_w=values.coef_w_raft)
-            for _ in range(100):
-                values.g.move(x=(-1) ** (dummy + 1) * values.test_structure_size / 100,
+                              extrude=True, extrusion_multiplier=1.5, coef_h=np.mean(values.coef_h_raft), coef_w=np.mean(values.coef_w_raft))
+            for _ in range(20):
+                values.g.move(x=(-1) ** (dummy + 1) * values.test_structure_size / 20,
                               y=0,
                               z=0,
-                              extrude=True, extrusion_multiplier=1.5, coef_h=values.coef_h_raft, coef_w=values.coef_w_raft)
+                              extrude=True, extrusion_multiplier=1.5, coef_h=np.mean(values.coef_h_raft), coef_w=np.mean(values.coef_w_raft))
 
         return
 
@@ -91,10 +91,10 @@ class TestStructure(object):
         values.g.write("; --- print the infill with the density of {0} % ---".format(self.machine.settings.raft_density))
         values.g.feed(values.speed_printing_raft)
         raft_density = self.machine.settings.raft_density/100
-        step = values.coef_w_raft * self.machine.temperaturecontrollers.extruder.nozzle.size_id / raft_density  # step size
+        step = np.mean(values.coef_w_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id / raft_density  # step size
         step_number = values.test_structure_size / step
 
-        values.g.move(x=-values.coef_w_raft * self.machine.temperaturecontrollers.extruder.nozzle.size_id / 2,
+        values.g.move(x=-np.mean(values.coef_w_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id / 2,
                       y=0,
                       z=0,
                       extrude=False, extrusion_multiplier=0)
@@ -104,11 +104,11 @@ class TestStructure(object):
                           y=+step,
                           z=0,
                           extrude=False, extrusion_multiplier=0)
-            for _ in range(100):
-                values.g.move(x=(-1) ** (dummy + 1) * (values.test_structure_size - values.coef_w_raft * self.machine.temperaturecontrollers.extruder.nozzle.size_id) / 100,
+            for _ in range(20):
+                values.g.move(x=(-1) ** (dummy + 1) * (values.test_structure_size - np.mean(values.coef_w_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id) / 20,
                               y=0,
                               z=0,
-                              extrude=True, extrusion_multiplier=values.extrusion_multiplier_raft, coef_h=values.coef_h_raft, coef_w=values.coef_w_raft)
+                              extrude=True, extrusion_multiplier=values.extrusion_multiplier_raft, coef_h=np.mean(values.coef_h_raft), coef_w=np.mean(values.coef_w_raft))
 
         values.g.write("; --- finish to print the raft ---")
 
@@ -120,35 +120,12 @@ class TestStructure(object):
 
         values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder, immediate=True)
         values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder)
-        values.g.dwell(20000)  # to unload the nozzle
+        values.g.dwell(15000)  # to unload the nozzle
 
         if values.part_cooling:
             values.g.set_part_cooling(values.part_cooling_setpoint, values.extruder)
 
         return
-
-
-    # def print_raft_new(values: get_values_A):
-    #     values.g.home()
-    #     values.g.feed(2 * self.machine.settings.speed_printing)  # respect the units: mm/min
-    #
-    #     if hasattr(values, "temperature_printbed"):
-    #         values.g.set_printbed_temperature(values.temperature_printbed)
-    #
-    #     values.g.abs_move(x=0,
-    #                   y=0,
-    #                   z=values.coef_h_raft * self.machine.nozzle.size_id,
-    #                   extrude=False, extrusion_multiplier=0)
-    #     values.g.write("; --- start to clean the nozzle ---")
-    #     values.g.set_extruder_temperature(values.temperature_extruder_raft)
-    #     values.g.dwell(5000)
-    #     values.g.write("G1 F1000 E5; extrude 5 mm of material")
-    #     values.g.dwell(5000)
-    #     values.g.feed(self.machine.settings.speed_printing_raft)  # print the raft
-    #     sf.infill(sf.raft_structure(values.test_structure_size/2, structure="square"), outlines=2, g=values.g, coef_w_raft=values.coef_w_raft, coef_h_raft=values.coef_h_raft)
-    #     values.g.write("; --- finish to print the raft ---")
-    #
-    #     return
 
 
     # GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER vs. PRINTING SPEED
@@ -179,7 +156,7 @@ class TestStructure(object):
                 values.g.set_extruder_temperature(values.temperature_extruder[current_test_structure], values.extruder)
                 values.g.dwell(30000)
                 output = "G1 F500 E" + "{:.3f}".format(4 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + \
-                         "; extrude " + "{:.3f}".format(4 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + " mm of material" #TODO tool
+                         "; extrude " + "{:.3f}".format(4 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + " mm of material"
                 values.g.write(output)
                 values.g.move(x=0,
                               y=-values.test_structure_size / 7,
@@ -189,14 +166,10 @@ class TestStructure(object):
                 values.g.travel(x=-values.test_structure_width[current_test_structure] - values.test_structure_separation,
                                 y=0 if (current_test_structure == 0 and values.raft) else +values.step_y,
                                 lift=1)
-
                 values.g.abs_move(z=+values.abs_z[current_test_structure])
 
             for current_substructure in range(values.number_of_substructures):
-                if values.test_info.parameter_two.values == []:
-                    current_printing_speed = values.speed_printing[current_test_structure]
-                else:
-                    current_printing_speed = values.parameter_two.values[current_substructure]
+                current_printing_speed = values.speed_printing[current_test_structure] if values.test_info.parameter_two.values == [] else values.parameter_two.values[current_substructure]
 
                 values.g.write("; --- testing the following printing speed value: {:.3f} mm/s".format(current_printing_speed))
                 values.g.feed(current_printing_speed)
@@ -224,12 +197,7 @@ class TestStructure(object):
                                           coef_h=values.coef_h[current_test_structure], coef_w=values.coef_w[current_test_structure])
 
                     if current_layer == values.number_of_layers - 1:
-                        if values.number_of_layers == 1:
-                            values.g.travel(x=+values.test_structure_width[current_test_structure + 1],
-                                            y=0,
-                                            lift=1)
-                        else:
-                            values.g.travel(x=0,
+                            values.g.travel(x=+values.test_structure_width[current_test_structure + 1] if values.number_of_layers % 2 != 0 else 0,
                                             y=0,
                                             lift=1)
                     else:
@@ -487,10 +455,7 @@ class TestStructure(object):
 
                 for current_layer in range(0, values.number_of_layers):  # layers
                     for current_line in range(values.number_of_lines):
-                        if values.test_number in ("11"):
-                            current_retraction_speed = values.retraction_speed[current_substructure]
-                        else:
-                            current_retraction_speed = values.retraction_speed[current_line]
+                        current_retraction_speed = values.retraction_speed[current_substructure] if values.test_number in ("11") else values.retraction_speed[current_line]
 
                         step_x = values.step_x[current_test_structure]
 
@@ -526,13 +491,11 @@ class TestStructure(object):
                             values.g.travel(x=-values.test_structure_separation,
                                             y=+(values.number_of_substructures - 1) * values.step_y / values.number_of_substructures,
                                             lift=1)
-                            values.g.abs_move(z=+values.abs_z[current_test_structure],
-                                              extrude=False, extrusion_multiplier=0)
                         else:
                             values.g.travel(x=+step_x * values.number_of_lines,
                                             y=-values.step_y / values.number_of_substructures,
                                             lift=1)
-                            values.g.abs_move(z=+values.abs_z[current_test_structure],
+                        values.g.abs_move(z=+values.abs_z[current_test_structure],
                                               extrude=False, extrusion_multiplier=0)
                     else:
                         values.g.travel(x=+step_x * values.number_of_lines,
