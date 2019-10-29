@@ -67,7 +67,7 @@ def get_test_info(persistence):
 
     if persistence["machine"]["temperature_controllers"]["extruder"]["part_cooling"]:
         other_parameters.append(Parameter("part cooling", "part_cooling_setpoint", "%", "{:.0f}", value=persistence["settings"]["part_cooling_setpoint"], min_max=[0,100],
-                                          hint_active="Set part cooling. Generally, active part cooling is needed when printing using high deposition rates and when printing fine details (i.e. when your <b>Target</b> is either <b>Short printing time</b> or <b>Aesthetics</b>, respectively). "))
+                                          hint_active="Set part cooling. Generally, active part cooling is needed when printing using high deposition rates and when printing fine details (i.e. when your Target is either <b>Short printing time</b> or <b>Aesthetics</b>). "))
 
     other_parameters.extend([Parameter("first-layer extrusion temperature", "temperature_extruder_raft", "degC", "{:.0f}", value=persistence["settings"]["temperature_extruder_raft"], min_max=[30, persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"]]),
                              Parameter("first-layer track width", "track_width_raft", "mm", "{:.2f}", value=persistence["settings"]["track_width_raft"], min_max=[0.5*nozzle_size_id, 2*nozzle_size_id], hint_active="For this test this value is set equal to the nozzle inner diameter, but, if needed, it can be tested in a separate test.")])
@@ -86,8 +86,8 @@ def get_test_info(persistence):
                                                                          value=np.linspace(*get_speed(persistence["session"]["min_max_parameter_two"]),number_of_substructures).tolist(), min_max=[1, persistence["settings"]["speed_travel"]],
                                                                          hint_active="Typically, the values in the range of 5-15 mm/s are adequate for printing flexible materials; for harder materials, you can go up to 10-30 mm/s."),
                                                  other_parameters=other_parameters,
-                                                 hint_init="In this test two parameters will be determined: <b>First-layer track height</b> and <b>First-layer printing speed</b>. If you want you can change the limiting values.",
-                                                 hint_valid="Inspect the printed test structure. Select one combination of parameters which results in the best test structure. If the track does not adhere to the build platform, increase the <b>First-layer extrusion temperature</b> and run the test once again. If this does not help, try either to decrease the <b>First-layer printing speed</b> or to increase the <b>Printbed temperature</b> and/or try to apply different coating/spray on the build platform. If you cannot find acceptable combination of two parameters, run the test again with different <b>First-layer-extrusion-temperature</b> value and/or using different <b>Printing-speed</b> range.")
+                                                 hint_init="In this test two parameters will be determined:<b><b>First-layer track height</b> and <b>First-layer printing speed</b>. If you want you can change the limiting values.",
+                                                 hint_valid="Inspect the printed test structure.<b>Select one combination of parameters which results in the best test structure. If the track does not adhere to the build platform, increase the <b>First-layer extrusion temperature</b> and run the test once again. If this does not help, try either to decrease the <b>First-layer printing speed</b> or to increase the <b>Printbed temperature</b> and/or try to apply different coating/spray on the build platform. If you cannot find acceptable combination of two parameters, run the test again with different <b>First-layer-extrusion-temperature</b> value and/or using different <b>Printing-speed</b> range.")
 
     elif persistence["session"]["test_number"] == "02":
         other_parameters.pop()
@@ -101,8 +101,8 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter("first-layer printing speed", "speed_printing_raft", "mm/s", "{:.0f}",
                                                                          value=[persistence["settings"]["speed_printing_raft"]], min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="This is an optional test in which one parameter will be determined: <b>First-layer track width</b>. Run it only if you see the voids in between the tracks in the previous test. By skipping this test, the <b>First-layer-track-width</b> value will be set to the <b>Nozzle inner diameter</b>.",
-                                                 hint_valid="Inspect the printed test structure. Select one first-layer track width value which results in the best test structure.")
+                                                 hint_init="This is an optional test in which one parameter will be determined:<b> <b>First-layer track width</b>. Run it only if you see the voids in between the tracks in the previous test. By skipping this test, the <b>First-layer-track-width</b> value will be set to the <b>Nozzle inner diameter</b>.",
+                                                 hint_valid="Inspect the printed test structure.<b>Select one first-layer track width value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "03":
         other_parameters.pop()
@@ -122,7 +122,8 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter("printing speed", "speed_printing", "mm/s","{:.0f}",
                                                                          value=np.linspace(*get_speed(persistence["session"]["min_max_parameter_two"]),number_of_substructures).tolist(), min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="In this test two parameters will be determined: <b>Extrusion temperature</b> and <b>Printing speed</b>.")
+                                                 hint_init="In this test two parameters will be determined:<b><b>Extrusion temperature</b> and <b>Printing speed</b>.",
+                                                 hint_valid="Inspect the printed test structure.<b>Select one combination of parameters which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "04":
         other_parameters.pop()
@@ -139,8 +140,8 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter("printing speed", "speed_printing", "mm/s", "{:.0f}",
                                                                          value=np.linspace(*get_speed(persistence["session"]["min_max_parameter_two"]),number_of_substructures).tolist(), min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="In this test one parameter will be determined: <b>Track height</b>.",
-                                                 hint_valid="Inspect the printed test structure. Select one first-layer track width value which results in the best test structure.")
+                                                 hint_init="In this test one parameter will be determined:<b><b>Track height</b>.",
+                                                 hint_valid="Inspect the printed test structure.<b>Select one track height value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "05":
         other_parameters.pop()
@@ -158,8 +159,8 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter("printing speed", "speed_printing", "mm/s", "{:.0f}",
                                                                          value=[persistence["settings"]["speed_printing"]], min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="In this test one parameter will be determined: <b>Track width</b>.",
-                                                 hint_valid="Inspect the printed test structure. Select one first-layer track width value which results in the best test structure.")
+                                                 hint_init="In this test one parameter will be determined:<b><b>Track width</b>.",
+                                                 hint_valid="Inspect the printed test structure.<b>Select one track width value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "06":
         other_parameters.pop()
@@ -176,8 +177,8 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter("printing speed", "speed_printing", "mm/s","{:.0f}",
                                                                          value=[persistence["settings"]["speed_printing"]], min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="In this test one parameter will be determined: <b>Extrusion multiplier</b>.",
-                                                 hint_valid="Inspect the printed test structure. Select one first-layer track width value which results in the best test structure.")
+                                                 hint_init="In this test one parameter will be determined:<b><b>Extrusion multiplier</b>.",
+                                                 hint_valid="Inspect the printed test structure.<b>Select one extrusion multiplier value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "07":
         other_parameters.pop()
@@ -194,8 +195,8 @@ def get_test_info(persistence):
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.80*persistence["settings"]["speed_printing"], 1.75*persistence["settings"]["speed_printing"],number_of_test_structures).tolist(), min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  parameter_two=Parameter(None, None, None, value=[]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="In this test one parameter will be determined: <b>Printing speed</b>.",
-                                                 hint_valid="Inspect the printed test structure. Select one first-layer track width value which results in the best test structure.")
+                                                 hint_init="In this test one parameter will be determined:<b><b>Printing speed</b>.",
+                                                 hint_valid="Inspect the printed test structure.<b>Select one printing speed value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "08":
         other_parameters.pop()
@@ -215,8 +216,8 @@ def get_test_info(persistence):
                                                  parameter_three=Parameter("retraction speed", "retraction_speed", "mm/s", "{:.0f}",
                                                                          value=persistence["session"]["min_max_parameter_three"] if persistence["session"]["min_max_parameter_three"] != [] else [60, 120], min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="In this test three parameters will be determined: <b>Extrusion temperature</b>, <b>Retraction distance</b>, and <b>Retraction speed</b>.",
-                                                 hint_valid="Inspect the printed test structure. Select one combination of parameters which results in the best test structure. Use slider to select retraction speed.")
+                                                 hint_init="In this test three parameters will be determined:<b><b>Extrusion temperature</b>, <b>Retraction distance</b>, and <b>Retraction speed</b>.",
+                                                 hint_valid="Inspect the printed test structure.<b>Select one combination of parameters which results in the best test structure. Use slider to select retraction speed.")
 
     elif persistence["session"]["test_number"] == "09":
         other_parameters.pop()
@@ -235,7 +236,8 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter("printing speed", "speed_printing", "mm/s", "{:.0f}",
                                                                          value=np.linspace(persistence["session"]["min_max_parameter_two"][0], persistence["session"]["min_max_parameter_two"][-1], number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [] else np.linspace(0.80*persistence["settings"]["speed_printing"], 1.75*persistence["settings"]["speed_printing"], number_of_substructures).tolist(), min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="In this test two parameters will be determined: <b>Retraction distance</b> and <b>Printing speed</b>.")
+                                                 hint_init="In this test two parameters will be determined:<b><b>Retraction distance</b> and <b>Printing speed</b>.",
+                                                 hint_valid="Inspect the printed test structure.<b>Select one combination of parameters which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "10":
         other_parameters.pop()
@@ -254,8 +256,8 @@ def get_test_info(persistence):
                                                                          value=np.linspace(persistence["session"]["min_max_parameter_one"][0], persistence["session"]["min_max_parameter_one"][-1], number_of_test_structures).tolist() if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.0, 4.0, number_of_test_structures).tolist(), min_max=[0, 20]),
                                                  parameter_two=Parameter(None, None, None),
                                                  other_parameters=other_parameters,
-                                                 hint_init = "In this test one parameter will be determined: <b>Retraction distance</b>.",
-                                                 hint_valid="Inspect the printed test structure. Select one first-layer track width value which results in the best test structure.")
+                                                 hint_init = "In this test one parameter will be determined:<b><b>Retraction distance</b>.",
+                                                 hint_valid="Inspect the printed test structure.<b>Select one retraction distance value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "11":
         other_parameters.pop()
@@ -274,7 +276,8 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter("retraction speed", "retraction_speed", "mm/s", "{:.0f}",
                                                                          value=np.linspace(persistence["session"]["min_max_parameter_two"][0], persistence["session"]["min_max_parameter_two"][-1], number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [] else np.linspace(0.75*persistence["settings"]["retraction_speed"], 1.25*persistence["settings"]["retraction_speed"], number_of_substructures).tolist(), min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="In this test two parameters will be determined: <b>Retraction distance</b> and <b>Retraction speed</b>.")
+                                                 hint_init="In this test two parameters will be determined:<b><b>Retraction distance</b> and <b>Retraction speed</b>.",
+                                                 hint_valid = "Inspect the printed test structure.<b>Select one combination of parameters which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "12": #TODO
         other_parameters.pop()
@@ -315,7 +318,8 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter("bridging printing speed", "bridging_speed_printing","mm/s", "{:.0f}",
                                                                          value=np.linspace(persistence["session"]["min_max_parameter_two"][0], persistence["session"]["min_max_parameter_two"][-1], number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [] else np.linspace(0.75*persistence["settings"]["speed_printing"], 1.5*persistence["settings"]["speed_printing"], number_of_substructures).tolist(), min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="In this test two parameters will be determined: <b>Bridging extrusion multiplier</b> and <b>Bridging printing speed</b>.")
+                                                 hint_init="In this test two parameters will be determined:<b><b>Bridging extrusion multiplier</b> and <b>Bridging printing speed</b>.",
+                                                 hint_valid = "Inspect the printed test structure.<b>Select one combination of parameters which results in the best test structure.")
 
     return parameter_values_for_comments
 
