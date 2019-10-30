@@ -28,7 +28,7 @@ def generate_report(import_json_dict: dict):
     dict_of_other_parameters = dict()
 
     for other_parameter in list_of_other_parameters:
-        dict_of_other_parameters[other_parameter.name] = ("{0} ".format(other_parameter.values)+other_parameter.units)
+        dict_of_other_parameters[other_parameter.name] = ("{0} ".format(other_parameter.precision)+other_parameter.units).format(other_parameter.values)
 
     try:
         material_manufacturer = str(import_json_dict["material"]["manufacturer"]).strip() + " "
@@ -143,7 +143,7 @@ def generate_report(import_json_dict: dict):
     list_of_estimated_printing_time = []
     for dummy in import_json_dict["session"]["previous_tests"]:
         if dummy["executed"]:
-            consumed_filament = 123  # TODO consumed_filament + round(float(dummy["extruded_filament_mm"]), 3)
+            consumed_filament = consumed_filament + round(float(dummy["extruded_filament_mm"] or 0), 3)
             list_of_estimated_printing_time.append("00:15:00")  # TODO append(dummy["estimated_printing_time"])
 
     total_estimated_printing_time = timedelta()
@@ -291,4 +291,3 @@ def generate_report(import_json_dict: dict):
 
     doc.build(elements)
     return f.getvalue()
-

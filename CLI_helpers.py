@@ -33,15 +33,12 @@ def clear():
     system('cls' if name == 'nt' else 'clear')
 
 
-def extruded_filament(path):
+def extruded_filament(gcode: str):
     """
     Takes a path to a gcode and returns a sum of all E values.
-    :param path:
+    :param gcode:
     :return:
     """
-    with open(path) as gcode:
-        gcode = gcode.read()
-
     extrusion_values = re.findall(r'(?<=E)[0-9.-]+(?=\s)', gcode)
 
     total_extrusion = 0

@@ -27,7 +27,7 @@ def update_persistence(persistence, values):
                     "parameter_two_units": None if values.test_info.parameter_two.name is None else values.test_info.parameter_two.units,
                     "parameter_one_precision": values.test_info.parameter_one.precision,
                     "parameter_two_precision": None if values.test_info.parameter_two.name is None else values.test_info.parameter_two.precision,
-                    "extruded_filament_mm": None,  # extruded_filament(save_session_file_as(session_id, "gcode")),
+                    "extruded_filament_mm": extruded_filament(values.g.gcode),
                     "tested_parameters": [values.test_info.parameter_one.dict(), values.test_info.parameter_two.dict()],
                     "comments": 0,
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
