@@ -28,7 +28,7 @@ def generate_report(import_json_dict: dict):
     dict_of_other_parameters = dict()
 
     for other_parameter in list_of_other_parameters:
-        dict_of_other_parameters[other_parameter.name] = ("{0} ".format(other_parameter.values)+other_parameter.units)
+        dict_of_other_parameters[other_parameter.name] = ("{0} ".format(other_parameter.precision)+other_parameter.units).format(other_parameter.values)
 
     try:
         material_manufacturer = str(import_json_dict["material"]["manufacturer"]).strip() + " "
@@ -291,4 +291,3 @@ def generate_report(import_json_dict: dict):
 
     doc.build(elements)
     return f.getvalue()
-
