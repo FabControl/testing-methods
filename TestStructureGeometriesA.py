@@ -513,7 +513,7 @@ class TestStructure(object):
     def generate_footer(values: get_values_A):
         custom_footer = ";--- start footer ---\n; end of the test routine\n"
         if values.chamber_heatable:
-            custom_footer = custom_footer + values.g.set_printbed_temperature(0, values.chamber, immediate=True, return_string=True)+"\n"
+            custom_footer = custom_footer + values.g.set_chamber_temperature(0, values.chamber, immediate=False, return_string=True)+"\n"
         if values.printbed_heatable:
             custom_footer = custom_footer + values.g.set_printbed_temperature(0, values.printbed, immediate=True, return_string=True) + "\n"
         custom_footer = custom_footer + values.g.set_extruder_temperature(0, values.extruder, immediate=True, return_string=True) + "\n"
