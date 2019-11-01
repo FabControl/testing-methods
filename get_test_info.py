@@ -83,11 +83,11 @@ def get_test_info(persistence):
                                                  parameter_one=Parameter("first-layer track height","track_height_raft", "mm", "{:.2f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else [nozzle_size_id*_ for _ in get_minmax_track_height_raft_coef(nozzle_size_id, number_of_test_structures)], min_max=[0.1*nozzle_size_id, nozzle_size_id]),
                                                  parameter_two=Parameter("first-layer printing speed", "speed_printing_raft", "mm/s", "{:.0f}",
-                                                                         value=np.linspace(*get_speed(persistence["session"]["min_max_parameter_two"]),number_of_substructures).tolist(), min_max=[1, persistence["settings"]["speed_travel"]],
+                                                                         value=np.linspace(*get_speed(persistence["session"]["min_max_parameter_two"]),number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [] else [10, 30], min_max=[1, persistence["settings"]["speed_travel"]],
                                                                          hint_active="Typically, the values in the range of 5-15 mm/s are adequate for printing flexible materials; for harder materials, you can go up to 10-30 mm/s."),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test two parameters will be determined:<br><b>First-layer track height</b> and <b>First-layer printing speed</b>. If you want you can change the limiting values.",
-                                                 hint_valid="Inspect the printed test structure.Select one combination of parameters which results in the best test structure. If the track does not adhere to the build platform, increase the <b>First-layer extrusion temperature</b> and run the test once again. If this does not help, try either to decrease the <b>First-layer printing speed</b> or to increase the <b>Printbed temperature</b> and/or try to apply different coating/spray on the build platform. If you cannot find acceptable combination of two parameters, run the test again with different <b>First-layer-extrusion-temperature</b> value and/or using different <b>Printing-speed</b> range.")
+                                                 hint_valid="Inspect the printed test structure. Select one combination of parameters which results in the best test structure.<br>If the print does not adhere to the build platform, increase the <b>First-layer extrusion temperature</b> and re-run the test.<br>If this does not help, try either to increase the <b>Printbed temperature</b> and/or try to apply different coating/spray on the build platform.<br>If you cannot find acceptable combination of two parameters, re-run the test with different <b>First-layer-extrusion-temperature</b> value and/or using different <b>Printing-speed</b> range.")
 
     elif persistence["session"]["test_number"] == "02":
         other_parameters.pop()
@@ -101,17 +101,27 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter("first-layer printing speed", "speed_printing_raft", "mm/s", "{:.0f}",
                                                                          value=[persistence["settings"]["speed_printing_raft"]], min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
-                                                 hint_init="This is an optional test in which one parameter will be determined:<br><b>First-layer track width</b>. Run it only if you see the voids in between the tracks in the previous test. By skipping this test, the <b>First-layer-track-width</b> value will be set to the <b>Nozzle inner diameter</b>.",
+                                                 hint_init="This is an optional test in which one parameter will be determined:<br><b>First-layer track width</b>.<br>Run it only if you see the voids in between the tracks in the previous test. By skipping this test, the <b>First-layer-track-width</b> value will be set to the <b>Nozzle inner diameter</b>.",
                                                  hint_valid="Inspect the printed test structure.<br>Select one first-layer track width value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "03":
+        if persistence["session"]["target"] == "aesthetics":
+            hint_active = "Set the desired track height. For your target it should be in the range 0.05-0.10 mm."
+            track_height = 0.1
+        elif persistence["session"]["target"] == "mechanical_strength":
+            hint_active = "Set the desired track height. For your target it should be in the range 0.20-0.25 mm."
+            track_height = 0.2
+        else:
+            hint_active = "Set the desired track height. For your target it should be in the range 0.10-0.35 mm."
+            track_height = 0.25
+
         other_parameters.pop()
         other_parameters.extend([Parameter("first-layer track height", "track_height_raft", "mm", "{:.2f}", value=persistence["settings"]["track_height_raft"], min_max=[0.1*nozzle_size_id, nozzle_size_id]),
                                  Parameter("first-layer track width", "track_width_raft", "mm", "{:.2f}", value=persistence["settings"]["track_width_raft"], min_max=[0.5*nozzle_size_id, 2*nozzle_size_id]),
                                  Parameter("first-layer printing speed", "speed_printing_raft", "mm/s", "{:.0f}", value=persistence["settings"]["speed_printing_raft"], min_max=[1, persistence["settings"]["speed_travel"]]),
                                  Parameter("extrusion multiplier", "extrusion_multiplier", "-", "{:.3f}", value=persistence["settings"]["extrusion_multiplier"], min_max=[0.01, 2]),
-                                 Parameter("track height", "track_height", "mm", "{:.2f}", value=persistence["settings"]["track_height"], min_max=[0.1*nozzle_size_id, nozzle_size_id],
-                                           hint_active="Set the desired track height. It depends on your <b>Target</b>: for <b>Aesthetics</b> use 0.05-0.10 mm, for <b>Mechanical strength</b>: 0.20-0.25 mm, for <b>Short printing time</b>: 0.10-0.35 mm."),
+                                 Parameter("track height", "track_height", "mm", "{:.2f}", value=persistence["settings"]["track_height"] if persistence["settings"]["track_height"] !=0 else track_height, min_max=[0.1*nozzle_size_id, nozzle_size_id],
+                                           hint_active=hint_active),
                                  Parameter("track width", "track_width", "mm", "{:.2f}", value=persistence["settings"]["track_width"], min_max=[0.5*nozzle_size_id, 2*nozzle_size_id],
                                            hint_active="For this test this value is set equal to the nozzle inner diameter, but, if needed, it can be tested in a separate test.")])
         other_parameters = parameter_reorder_and_activate(other_parameters, actives=["part_cooling_setpoint",
@@ -217,7 +227,7 @@ def get_test_info(persistence):
                                                                          value=persistence["session"]["min_max_parameter_three"] if persistence["session"]["min_max_parameter_three"] != [] else [60, 120], min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test three parameters will be determined:<br><b>Extrusion temperature</b>, <b>Retraction distance</b>, and <b>Retraction speed</b>.",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one combination of parameters which results in the best test structure. Use slider to select retraction speed.")
+                                                 hint_valid="Inspect the printed test structure.<br>Select one combination of parameters which results in the best test structure. Use slider to select the retraction speed.")
 
     elif persistence["session"]["test_number"] == "09":
         other_parameters.pop()
@@ -309,7 +319,7 @@ def get_test_info(persistence):
                                  Parameter("extrusion multiplier", "extrusion_multiplier", "-", "{:.3f}", value=persistence["settings"]["extrusion_multiplier"], min_max=[0.01, 2]),
                                  Parameter("retraction distance", "retraction_distance", "mm", "{:.3f}", value=persistence["settings"]["retraction_distance"], min_max=[0, 30]),
                                  Parameter("retraction speed", "retraction_speed", "mm/s", "{:.0f}", value=persistence["settings"]["retraction_speed"], min_max=[1, 200]),
-                                 Parameter("bridging part cooling", "bridging_part_cooling", "%", "{:.0f}", value=persistence["settings"]["bridging_part_cooling"], min_max=[0, 100],
+                                 Parameter("bridging part cooling", "bridging_part_cooling", "%", "{:.0f}", value=persistence["settings"]["bridging_part_cooling"] if persistence["settings"]["bridging_part_cooling"] != [] else 100, min_max=[0, 100],
                                            hint_active="Set bridging part cooling.")])
 
         parameter_values_for_comments = TestInfo("bridging extrusion multiplier vs bridging printing speed", "13", number_of_layers=8, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
