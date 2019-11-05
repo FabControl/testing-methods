@@ -158,3 +158,16 @@ class NotFoundRoute(CreateAppHelperClass):
         self.assert404(resp)
         self.assertEqual(resp.json, dict(error='Not found'))
 
+class RoutineRoute(CreateAppHelperClass):
+    def test_get_routine(self):
+        resp = self.client.get('/routine')
+        self.assert200(resp)
+        self.assertEqual(sorted(resp.json.keys()),
+                # For some reason test number 12 is missing
+                list('{0:02}'.format(x) for x in range(1, 14) if x != 12))
+
+        # all routine subitems should be dict, containing only name and priority keys
+        self.assertTrue(all(sorted(x.keys()) == ['name', 'priority'] for x in resp.json.values()))
+
+        # Priority can only be primary or secondary
+        self.assertTrue(all(x['priority'] in ['primary', 'secondary'] for x in resp.json.values()))
