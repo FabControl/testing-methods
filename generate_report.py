@@ -157,9 +157,9 @@ def generate_report(import_json_dict: dict):
     main_info_entry = "Total estimated printing time: " + str(total_estimated_printing_time)
     main_info.append(main_info_entry)
 
-    from reportlab.lib.enums import TA_RIGHT
-
     styles = getSampleStyleSheet()
+    styles = styles["BodyText"]
+    styles.wordWrap = "CJK"
     style_text = ParagraphStyle(name="Normal",
                                 fontName="Helvetica",
                                 fontSize=font_small)
