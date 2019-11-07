@@ -239,6 +239,8 @@ def generate_report(import_json_dict: dict):
             new_line.append(single_test["parameter_one_precision"].format(dummy))
         new_line.append(single_test["parameter_one_precision"].format(single_test["selected_parameter_one_value"]))
         table_data_3.append(new_line)
+        if single_test["comments"]:
+            new_line.append(single_test["comments"])
 
         if single_test["tested_parameter_two_values"] is not None:
             row_number += 1
