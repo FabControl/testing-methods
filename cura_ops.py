@@ -1,5 +1,10 @@
 from CLI_helpers import separator
 from paths import cwd
+import patoolib
+import tempfile as tf
+import re
+import os
+import io
 
 
 def numeral_eval(value):
@@ -23,10 +28,6 @@ def decode_cura(path: str):
     :param path:
     :return:
     """
-    import patoolib
-    import tempfile as tf
-    import re
-    import os
 
     def format_check(path: str, extension: str = "curaprofile", override: str = "zip"):
         """
@@ -66,12 +67,11 @@ def decode_cura(path: str):
     return output
 
 
-def encode_cura(parameters: list, name: str, outpath: str):
+def encode_cura(parameters: list, name: str):
     """
     Takes a single list of [parameter, value, container index] lists and packs them as a .curaprofile file.
     :param parameters:
     :param name:
-    :param outpath:
     :return:
     """
     import patoolib
@@ -105,7 +105,7 @@ def encode_cura(parameters: list, name: str, outpath: str):
         return output
 
     tempdir = tf.TemporaryDirectory()
-
+    outpath = tempdir.name + separator() + 'temp.zip'
     # Get the base template for a container, containing Meta and General data
     with open(cwd + "/resources/cura_configuration_template/custom_extruder_") as file:
         empty_cura_container = file.read()
@@ -116,4 +116,7 @@ def encode_cura(parameters: list, name: str, outpath: str):
         zip_archive.writestr("custom_extruder_{}_{}".format(container, name) if container != 0 else "custom_{}".format(name),
                              meta + "\n".join([" = ".join([str(b) for b in a][0:2]) for a in get_container_params(container)]))
     zip_archive.close()
-    os.rename(outpath, outpath.rstrip(".zip") + ".curaprofile")
+    curaprofile_path = outpath.rstrip(".zip") + ".curaprofile"
+    os.rename(outpath, curaprofile_path)
+    with open(curaprofile_path, 'rb') as file:
+        return file.read()

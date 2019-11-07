@@ -64,6 +64,9 @@ def serve_config(slicer):
     elif "slic3r_pe" in slicer:
         content = converter.to_prusa().encode()
         config_format = "ini"
+    elif "cura" in slicer:
+        content = converter.to_cura()
+        config_format = "curaprofile"
     return jsonify({"format": config_format, "content": b64encode(content).decode()})
 
 

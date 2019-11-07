@@ -153,18 +153,16 @@ class Converter(Persistence):
         tree.write(f, xml_declaration=True, encoding="utf-8")
         return f.getvalue()
 
-    # def to_cura(self):
-    #     from cura_ops import decode_cura, encode_cura
-    #     cura_params = []
-    #
-    #     for param in self.params.parameters:
-    #         if param.cura.parameter is not None:
-    #             if param.cura.value is not None:
-    #                 cura_params.append([param.cura.parameter, param.cura.value, 0])
-    #
-    #     encode_cura(cura_params, str(session_id), config_folder + separator() + str(session_id))
-    #     print("{} succesfully written".format(config_folder + separator() + str(session_id) + ".curaprofile"))
+    def to_cura(self):
+        from cura_ops import decode_cura, encode_cura
+        cura_params = []
 
+        for param in self.params.parameters:
+            if param.cura.parameter is not None:
+                if param.cura.value is not None:
+                    cura_params.append([param.cura.parameter, param.cura.value, 0])
+
+        return encode_cura(cura_params, 'somename')
 
     # def to_raw(self):
     #     output_dictionary = {"raw": {},
@@ -183,7 +181,7 @@ class Converter(Persistence):
     #         json.dump(output_dictionary, file)
 
 if __name__ == "__main__":
-    with open("36.json") as file:
+    with open("debug.json") as file:
         import json
         per = json.load(file)
     c = Converter(per)
