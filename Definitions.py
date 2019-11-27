@@ -314,7 +314,7 @@ def get_minmax_track_width_coef(size_id: float, number_of_test_structures: int):
         coef_w_min = 1.00
         coef_w_max = 1.30
     if size_id >= 1.0:
-        coef_w_min = 0.90
+        coef_w_min = 1.00
         coef_w_max = 1.40
 
     coef_w= np.linspace(coef_w_min, coef_w_max, number_of_test_structures).tolist()

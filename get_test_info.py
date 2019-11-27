@@ -81,7 +81,8 @@ def get_test_info(persistence):
         other_parameters = parameter_reorder_and_activate(other_parameters, inactives=["part_cooling_setpoint"])
         parameter_values_for_comments = TestInfo("first-layer track height vs first-layer printing speed", "01", number_of_layers=1, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=False,
                                                  parameter_one=Parameter("first-layer track height","track_height_raft", "mm", "{:.2f}",
-                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else [nozzle_size_id*_ for _ in get_minmax_track_height_raft_coef(nozzle_size_id, number_of_test_structures)], min_max=[0.1*nozzle_size_id, nozzle_size_id]),
+                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else [nozzle_size_id*_ for _ in get_minmax_track_height_raft_coef(nozzle_size_id, number_of_test_structures)], min_max=[0.1*nozzle_size_id, nozzle_size_id],
+                                                                         hint_active="These seven values of the <b>First-layer track height</b> will be tested at four different <b>First-layer printing speed</b> (see below)"),
                                                  parameter_two=Parameter("first-layer printing speed", "speed_printing_raft", "mm/s", "{:.0f}",
                                                                          value=np.linspace(*get_speed(persistence["session"]["min_max_parameter_two"]),number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [0, 0] else np.linspace(*get_speed([10, 30]), number_of_substructures).tolist(), min_max=[1, persistence["settings"]["speed_travel"]],
                                                                          hint_active="Typically, the values in the range of 5-15 mm/s are adequate for printing flexible materials; for harder materials, you can go up to 10-30 mm/s."),
@@ -97,7 +98,8 @@ def get_test_info(persistence):
 
         parameter_values_for_comments = TestInfo("first-layer track width", "02", number_of_layers=1, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=False,
                                                  parameter_one=Parameter("first-layer track width", "track_width_raft", "mm", "{:.2f}",
-                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else [nozzle_size_id*_ for _ in get_minmax_track_width_raft_coef(nozzle_size_id, number_of_test_structures)], min_max=[0.5*nozzle_size_id, 2*nozzle_size_id]),
+                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else [nozzle_size_id*_ for _ in get_minmax_track_width_raft_coef(nozzle_size_id, number_of_test_structures)], min_max=[0.5*nozzle_size_id, 2*nozzle_size_id],
+                                                                         hint_active=""),
                                                  parameter_two=Parameter("first-layer printing speed", "speed_printing_raft", "mm/s", "{:.0f}",
                                                                          value=[persistence["settings"]["speed_printing_raft"]], min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
@@ -130,7 +132,7 @@ def get_test_info(persistence):
                                                  parameter_one=Parameter("extrusion temperature", "temperature_extruder", "degC", "{:.0f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(persistence["settings"]["temperature_extruder_raft"], persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures), min_max=[30, persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"]]),
                                                  parameter_two=Parameter("printing speed", "speed_printing", "mm/s","{:.0f}",
-                                                                         value=np.linspace(*get_speed(persistence["session"]["min_max_parameter_two"]),number_of_substructures).tolist(), min_max=[1, persistence["settings"]["speed_travel"]]),
+                                                                         value=np.linspace(*get_speed(persistence["session"]["min_max_parameter_two"]),number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [0, 0] else np.linspace(*get_speed([20, 60]), number_of_substructures).tolist(),  min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test two parameters will be determined:<br><b>Extrusion temperature</b> and <b>Printing speed</b>.",
                                                  hint_valid="Inspect the printed test structure.<br>Select one combination of parameters which results in the best test structure.")
