@@ -7,6 +7,7 @@ from paths import *
 from persistence import Persistence
 from io import BytesIO
 from conversion_dictionary import Params
+import math
 
 
 class Converter(Persistence):
@@ -103,11 +104,61 @@ class Converter(Persistence):
         """
         Writes a Prusa Slic3r config
         """
+        def generate_coordinates(form: str, **kwargs) -> str:
+            """
+            Generates build plate size coordinates to comply with Prusa Slicer
+            Takes buildarea_maxdim1, buildarea_maxdim2 as numerals, origin as tuple of numerals
+            :param form: Either 'elliptic' or 'cartesian'
+            :return: A prusa format polygon coordinates as a str.
+            """
+            class Point:
+                # Kernel for storing a point in 2D plane, where {x} is coords on X axis and {y} on Y
+                kernel = "{x}x{y}"
+
+                def __init__(self, x, y):
+                    self.x = x
+                    self.y = y
+
+                def raster(self):
+                    return self.kernel.format(x=self.x, y=self.y)
+
+            points = []
+            buildarea_maxdim1 = kwargs['buildarea_maxdim1']
+            buildarea_maxdim2 = kwargs['buildarea_maxdim2']
+            radius = buildarea_maxdim1
+            if 'origin' in kwargs:
+                origin = kwargs['origin']
+            else:
+                origin = (0, 0)
+            if form == "cartesian":
+                # Generate a square polygon
+                for point in [(origin[0], origin[1]),
+                              (buildarea_maxdim1, origin[1]),
+                              (buildarea_maxdim1, buildarea_maxdim2),
+                              (origin[0], buildarea_maxdim2)]:
+                    points.append(Point(*point).raster())
+            elif form == "elliptic":
+                pi = math.pi
+                n = 64
+                circle_coordinates = [(round(math.cos(2 * pi / n * x) * radius, 2),
+                                       round(math.sin(2 * pi / n * x) * radius, 2)) for x in range(0, n + 1)]
+                for point in circle_coordinates:
+                    points.append(Point(*point).raster())
+            return ",".join(points)
+
+        # Prusa slicer takes a polygon (in a proprietary format) to define the build volume shape
+        # The buildarea polygon is created here
+        buildarea_polygon = generate_coordinates(self.dict["machine"]["form"],
+                                                 buildarea_maxdim1=self.dict["machine"]["buildarea_maxdim1"],
+                                                 buildarea_maxdim2=self.dict["machine"]["buildarea_maxdim2"])
+
+        # Configuration assembly
         configuration = self.read_ini(self.default_ini)
         for item in configuration:
             param = self.params.get(item, mode="prusa")
             if param is not None:
                 configuration[item]["value"] = param.prusa.value
+        configuration["bed_shape"]["value"] = buildarea_polygon
         return self.assemble_ini(configuration)
 
     def to_simplify(self):
@@ -179,6 +230,7 @@ class Converter(Persistence):
     #             output_dictionary["prusa"][parameter.prusa.parameter] = parameter.prusa.value
     #     with open(raw_config_folder + separator() + session_id + ".json", mode="w") as file:
     #         json.dump(output_dictionary, file)
+
 
 if __name__ == "__main__":
     with open("debug.json") as file:
