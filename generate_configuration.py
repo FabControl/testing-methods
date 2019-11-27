@@ -87,10 +87,24 @@ class Converter(Persistence):
         """
         Persistence pre-load block
         """
+        temp_dict = {}
+
+        def adder(my_dict, existing_dict):
+            for k, v in my_dict.items():
+                if not isinstance(v, dict):
+                    existing_dict[k] = v
+                else:
+                    adder(v, existing_dict)
+            return existing_dict
+
         self.load_defaults()
         persistence = self.dict
-        persistence_flat = dict(persistence["settings"], **persistence["machine"]["temperature_controllers"]["extruder"]["nozzle"])
+        persistence_flat = dict(persistence["settings"], **adder(persistence["machine"], temp_dict))
         persistence_flat["material_name"] = persistence["material"]["name"]
+        persistence_flat["buildarea_maxdim3"] = persistence_flat["buildarea_maxdim1"]  # TODO Temporary. Do not leave hardcoded
+        if persistence_flat["form"] == "elliptic":
+            persistence_flat["offset_x"] = persistence_flat["offset_y"] = persistence_flat["buildarea_maxdim1"]/2
+
         self.params.populate(persistence_flat, auto=True)
         # Apply target overrides
         with open(self.target_overrides_path) as overrides:
