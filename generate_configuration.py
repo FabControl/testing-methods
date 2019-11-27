@@ -183,7 +183,9 @@ class Converter(Persistence):
 
         tree = ET.parse(simplify_config_fff)
         root = tree.getroot()
-        root.attrib["name"] = str(self.id)
+        root.attrib["name"] = "{material} for {machine} {nozzle}mm".format(material=self.material.name,
+                                                                         machine=self.machine.model,
+                                                                         nozzle=self.machine.temperaturecontrollers.extruder.nozzle.size_id)
         root.attrib["version"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         for param in self.params.parameters:
