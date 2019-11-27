@@ -13,6 +13,7 @@ from docopt import docopt
 from paths import *
 
 gc.enable()  # Enable garbage collection
+debug = False
 
 """
 Utility Methods
@@ -162,7 +163,6 @@ class Params(object):
         self.supported_slicers = ["prusa", "simplify3d", "cura"]
         self.parameters = []
         self.load(dictionary_path)
-        self.debug = False
 
     def get(self, keyword: str, mode: str = "parameter"):
         """
@@ -172,7 +172,7 @@ class Params(object):
         :return: Param object matching a keyword
         """
         for x in self.parameters:
-            if self.debug:
+            if debug:
                 x.debug = True
             if mode == "name":
                 if keyword in x.name:
@@ -288,7 +288,6 @@ class Params(object):
 
         # Enforce correct parent/children hierarchy upon loading
         for param in self.parameters:
-            param.debug = False
             param.params = self
             param_slicers = []
             for supported_slicer in self.supported_slicers:
@@ -389,7 +388,6 @@ class Param(object):
         self.params = params
         self._value = None
         self._manual = False  # If True, modifier will no longer be used
-        self.debug = False
 
     def _parameter_modifier(self):
         if self._value is None:
@@ -400,7 +398,7 @@ class Param(object):
                         y = self.params.get(self.parent).value
                     except AttributeError:
                         raise AttributeError("{} can't fetch its parent {}".format(self.parameter, self.parent))
-                if self.debug:
+                if debug:
                     print("Evaluating the following modifier: {} for {}".format(self.modifier, self.parameter))
                 return numeral_eval(eval(self.modifier))
             elif hasattr(self, "_value") and self._value is not None:
@@ -465,6 +463,9 @@ if __name__ == "__main__":
         conversion_dictionary.py
         conversion_dictionary.py add-slicer <slicer>
         conversion_dictionary.py parameter (add <parameter> | modify <parameter> [<slicer>])
+        
+        When debugging, need to make sure that Params is not loaded as a list of Params object and supported_slicers
+        Need to make sure that all py/object references point to convesion_dictionary.<Object>, and not __main__.<Object>
     """
 
     arguments = docopt(__doc__, version="Conversion dictionary tool 0.3")
