@@ -118,9 +118,10 @@ class TestStructure(object):
                           z=0,
                           extrude=False, extrusion_multiplier=0)
 
-        values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder, immediate=True)
-        values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder)
-        values.g.dwell(15000)  # to unload the nozzle
+        if values.test_number not in ["01", "02", "03"]:
+            values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder, immediate=True)
+            values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder)
+            values.g.dwell(15000)  # to unload the nozzle
 
         if values.part_cooling:
             values.g.set_part_cooling(values.part_cooling_setpoint, values.extruder)
