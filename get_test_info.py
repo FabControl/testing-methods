@@ -194,8 +194,6 @@ def get_test_info(persistence):
                                            min_max=[0.1 * nozzle_size_id, nozzle_size_id],
                                            hint_active=hint_active + ". This value will determine the resolution and surface quality of your print"),
                                  track_width])
-
-        other_parameters = parameter_reorder_and_activate(other_parameters)
         parameter_values_for_comments = TestInfo("extrusion temperature vs printing speed", "03", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
                                                  parameter_one=Parameter("extrusion temperature", "temperature_extruder", "degC", "{:.0f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(persistence["settings"]["temperature_extruder_raft"], persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures), min_max=[30, persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"]],
