@@ -162,7 +162,7 @@ class Machine(object):
                  form: str = "",
                  buildarea_maxdim1: float = None,
                  buildarea_maxdim2: float = None,
-                 *args, **kwargs):
+                 extruder_type: str = "bowden", *args, **kwargs):
 
         self.sn = sn
         self.model = model
@@ -170,6 +170,7 @@ class Machine(object):
         self.buildarea_maxdim1 = buildarea_maxdim1  # respect the units: mm
         self.buildarea_maxdim2 = buildarea_maxdim2  # respect the units: mm
         self.temperaturecontrollers = TemperatureControllers(**kwargs["temperature_controllers"])
+        self.extruder_type = extruder_type
 
 
 class Settings(object):
