@@ -137,7 +137,7 @@ def get_test_info(persistence):
     if persistence["machine"]["temperature_controllers"]["printbed"]["printbed_heatable"]:
         temperature_printbed_setpoint = Parameter("print bed temperature", "temperature_printbed_setpoint", "degC", "{:.0f}",
                                                   value=persistence["settings"]["temperature_printbed_setpoint"] if "temperature_printbed_setpoint" in persistence["settings"] else None,
-                                                  min_max=[30, persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"]],
+                                                  min_max=[30, persistence["machine"]["temperature_controllers"]["printbed"]["temperature_max"]],
                                                   hint_active=hint_active_generic)
 
         other_parameters.append(temperature_printbed_setpoint)
