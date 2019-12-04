@@ -213,7 +213,7 @@ def get_test_info(persistence):
                                  speed_printing_raft,
                                  extrusion_multiplier,
                                  Parameter("track height", "track_height", "mm", "{:.2f}",
-                                           value=persistence["settings"]["track_height"],
+                                           value=persistence["settings"]["track_height"] or track_height,
                                            min_max=[0.1 * nozzle_size_id, nozzle_size_id],
                                            hint_active=hint_active + ". This value will determine the resolution and surface quality of your print"),
                                  track_width])
