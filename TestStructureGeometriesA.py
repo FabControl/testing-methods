@@ -92,14 +92,14 @@ class TestStructure(object):
         values.g.feed(values.speed_printing_raft)
         raft_density = self.machine.settings.raft_density/100
         step = np.mean(values.coef_w_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id / raft_density  # step size
-        step_number = values.test_structure_size / step
+        step_number = int(values.test_structure_size / step) if (int(values.test_structure_size / step) % 2) == 0 else int(values.test_structure_size / step) + 1
 
         values.g.move(x=-np.mean(values.coef_w_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id / 2,
                       y=0,
                       z=0,
                       extrude=False, extrusion_multiplier=0)
 
-        for dummy in range(0, int(step_number)):
+        for dummy in range(0, step_number):
             values.g.move(x=0,
                           y=+step,
                           z=0,

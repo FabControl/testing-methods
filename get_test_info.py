@@ -382,7 +382,7 @@ def get_test_info(persistence):
                                                                          hint_active="These seven values will be tested. You can change the limiting values"),
                                                  parameter_two=Parameter(None, None, None),
                                                  other_parameters=other_parameters,
-                                                 hint_init = "In this test one parameter will be determined: <b>Retraction distance</b>.",
+                                                 hint_init="In this test one parameter will be determined: <b>Retraction distance</b>.",
                                                  hint_valid="Inspect the printed test structure.<br>Select one retraction distance value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "11":
