@@ -73,7 +73,11 @@ class get_values_A(object):
         self.temperature_extruder = [x * machine.settings.temperature_extruder for x in [1] * self.number_of_test_structures]
         self.temperature_extruder_raft = machine.settings.temperature_extruder_raft
 
-        self.retraction_speed = machine.settings.retraction_speed
+        if machine.extruder_type == "bowden":
+            self.retraction_speed = machine.settings.retraction_speed if machine.settings.retraction_speed != 0 else 100
+        else:
+            self.retraction_speed = machine.settings.retraction_speed if machine.settings.retraction_speed != 0 else 30
+
         self.retraction_distance = [x * machine.settings.retraction_distance for x in [1] * self.number_of_test_structures]
         self.retraction_restart_distance = [x * machine.settings.retraction_restart_distance for x in [1] * self.number_of_test_structures]
         self.coasting_distance = [x * machine.settings.coasting_distance for x in [1] * self.number_of_test_structures]

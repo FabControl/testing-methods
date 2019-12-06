@@ -144,7 +144,7 @@ def generate_report(import_json_dict: dict):
     for dummy in import_json_dict["session"]["previous_tests"]:
         if dummy["executed"]:
             consumed_filament = consumed_filament + round(float(dummy["extruded_filament_mm"] or 0), 3)
-            list_of_estimated_printing_time.append("00:15:00")  # TODO append(dummy["estimated_printing_time"])
+            #list_of_estimated_printing_time.append(dummy["estimated_printing_time_s"]) TODO
 
     total_estimated_printing_time = timedelta()
     for estimated_time in list_of_estimated_printing_time:

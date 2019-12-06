@@ -205,7 +205,7 @@ class Settings(object):
 
         self.speed_travel = speed_travel
 
-        self.material = Material(None, None, None, None, None) # TODO why 1.75
+        self.material = Material(None, None, None, None, None)
         self.nozzle = nozzle
 
         self.track_width = track_width

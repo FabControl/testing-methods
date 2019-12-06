@@ -147,10 +147,12 @@ class TestStructure(object):
             if values.test_name == "extrusion temperature vs printing speed":
                 values.g.travel(x=-values.test_structure_width[current_test_structure] - values.test_structure_separation,
                                 y=+values.step_y if current_test_structure != 0 else 0,
-                                lift=1)
+                                lift=1,
+                                retraction_speed=np.mean(values.retraction_speed))
                 values.g.travel(x=0,
                                 y=+values.test_structure_size / 7,
-                                retraction_speed=values.retraction_speed, retraction_distance=values.retraction_distance[current_test_structure])
+                                retraction_speed=np.mean(values.retraction_speed),
+                                retraction_distance=values.retraction_distance[current_test_structure])
 
                 values.g.abs_move(z=+values.abs_z[current_test_structure])
 
@@ -166,7 +168,8 @@ class TestStructure(object):
             else:
                 values.g.travel(x=-values.test_structure_width[current_test_structure] - values.test_structure_separation,
                                 y=0 if (current_test_structure == 0 and values.raft) else +values.step_y,
-                                lift=1)
+                                lift=1,
+                                retraction_speed=np.mean(values.retraction_speed))
                 values.g.abs_move(z=+values.abs_z[current_test_structure])
 
             for current_substructure in range(values.number_of_substructures):
@@ -200,7 +203,8 @@ class TestStructure(object):
                     if current_layer == values.number_of_layers - 1:
                             values.g.travel(x=+values.test_structure_width[current_test_structure + 1] if values.number_of_layers % 2 != 0 else 0,
                                             y=0,
-                                            lift=1)
+                                            lift=1,
+                                            retraction_speed=np.mean(values.retraction_speed))
                     else:
                         values.g.abs_move(z=values.abs_z[current_test_structure] + (current_layer + 1) * values.track_height[current_test_structure],
                                           extrude=False, extrusion_multiplier=0)
@@ -235,7 +239,8 @@ class TestStructure(object):
 
             values.g.travel(x=-values.test_structure_width[current_test_structure] - values.test_structure_separation,
                             y=0 if (current_test_structure == 0 and values.raft) else +values.step_y,
-                            lift=1)
+                            lift=1,
+                            retraction_speed=np.mean(values.retraction_speed))
 
             values.g.abs_move(z=+values.abs_z[current_test_structure])
             step_x = values.step_x[current_test_structure]
@@ -308,7 +313,8 @@ class TestStructure(object):
         step_y = (values.test_structure_size - (values.number_of_substructures + 1) * number_of_perimeters * np.mean(values.track_width) / np.sin(np.deg2rad(angle))) // values.number_of_substructures
 
         values.g.travel(x=0,
-                        y=-step_y - number_of_perimeters * np.mean(values.track_width) / np.sin(np.deg2rad(angle)), lift=1)
+                        y=-step_y - number_of_perimeters * np.mean(values.track_width) / np.sin(np.deg2rad(angle)),
+                        lift=1, retraction_speed=np.mean(values.retraction_speed))
 
         # Building support structures
         for current_layer in range(values.number_of_layers):
@@ -337,14 +343,14 @@ class TestStructure(object):
                                     y=-step_y - 2 * number_of_perimeters * np.mean(values.track_width) / np.sin(np.deg2rad(angle)),
                                     z=0,
                                     lift=1,
-                                    retraction_speed=values.retraction_speed,
+                                    retraction_speed=np.mean(values.retraction_speed),
                                     retraction_distance=np.mean(values.retraction_distance))
 
             values.g.travel(x=0,
                             y=+(values.number_of_substructures - 1) * step_y + (values.number_of_substructures - 1) * number_of_perimeters * np.mean(values.track_width) / np.sin(np.deg2rad(angle)),
                             z=0,
                             lift=1,
-                            retraction_speed=values.retraction_speed,
+                            retraction_speed=np.mean(values.retraction_speed),
                             retraction_distance=np.mean(values.retraction_distance))
 
         values.g.write("; --- finish to print the support structure ---")
@@ -386,7 +392,7 @@ class TestStructure(object):
                             y=-2 * step_y - number_of_perimeters * np.mean(values.track_width) / np.sin(np.deg2rad(angle)),
                             z=0,
                             lift=1,
-                            retraction_speed=values.retraction_speed,
+                            retraction_speed=np.mean(values.retraction_speed),
                             retraction_distance=np.mean(values.retraction_distance))
 
         values.g.write("; --- finish to print the test structure ---")
@@ -409,7 +415,8 @@ class TestStructure(object):
         values.g.write("; --- start to print the test structure ---")
         values.g.travel(x=-values.test_structure_width[0] - values.test_structure_separation,
                         y=0,
-                        lift=1)
+                        lift=1,
+                        retraction_speed=np.mean(values.retraction_speed))
 
         values.g.abs_move(z=+values.abs_z[0])
 
@@ -491,16 +498,19 @@ class TestStructure(object):
                         if current_substructure == values.number_of_substructures - 1:
                             values.g.travel(x=-values.test_structure_separation,
                                             y=+(values.number_of_substructures - 1) * values.step_y / values.number_of_substructures,
-                                            lift=1)
+                                            lift=1,
+                                            retraction_speed=np.mean(values.retraction_speed))
                         else:
                             values.g.travel(x=+step_x * values.number_of_lines,
                                             y=-values.step_y / values.number_of_substructures,
-                                            lift=1)
+                                            lift=1,
+                                            retraction_speed=np.mean(values.retraction_speed))
                         values.g.abs_move(z=+values.abs_z[current_test_structure],
-                                              extrude=False, extrusion_multiplier=0)
+                                          extrude=False, extrusion_multiplier=0)
                     else:
                         values.g.travel(x=+step_x * values.number_of_lines,
-                                        lift=1)
+                                        lift=1,
+                                        retraction_speed=np.mean(values.retraction_speed))
                         values.g.move(z=+values.track_height[current_test_structure],
                                       extrude=False, extrusion_multiplier=0)
 
