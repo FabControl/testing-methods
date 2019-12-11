@@ -276,6 +276,7 @@ def get_test_info(persistence):
         other_parameters.extend([track_height_raft,
                                  track_width_raft,
                                  speed_printing_raft,
+                                 speed_printing,
                                  temperature_extruder,
                                  track_height,
                                  track_width])
