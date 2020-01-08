@@ -3780,5 +3780,56 @@
     },
     "test": null,
     "units": null
+  },
+  {
+    "_manual": true,
+    "_value": 60,
+    "cura": {
+      "modifier": null,
+      "name": null,
+      "parameter": "retraction_speed",
+      "parent_parameter": null,
+      "py/object": "__main__.Slicer",
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 300
+      },
+      "units": "mm/s"
+    },
+    "modifier": null,
+    "name": null,
+    "parameter": "retraction_speed",
+    "params": {
+      "py/id": 4
+    },
+    "parent": null,
+    "prusa": {
+      "modifier": null,
+      "name": null,
+      "parameter": "retract_speed",
+      "parent_parameter": null,
+      "py/object": "__main__.Slicer",
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 300
+      },
+      "units": "mm/s"
+    },
+    "py/object": "__main__.Param",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "modifier": "x*60",
+      "name": null,
+      "parameter": "retractionSpeed",
+      "parent_parameter": null,
+      "py/object": "__main__.Slicer",
+      "reverse_modifier": "x/60",
+      "root": {
+        "py/id": 300
+      },
+      "units": "mm/min"
+    },
+    "test": null,
+    "units": null
   }
 ]
