@@ -5,7 +5,7 @@ definition = fdmprinter
 
 [metadata]
 setting_version = 4
-quality_type = fast
+quality_type = normal
 position = 0
 type = quality_changes
 
