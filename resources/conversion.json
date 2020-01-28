@@ -3789,7 +3789,7 @@
       "name": null,
       "parameter": "retraction_speed",
       "parent_parameter": null,
-      "py/object": "__main__.Slicer",
+      "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
       "root": {
         "py/id": 300
@@ -3808,21 +3808,21 @@
       "name": null,
       "parameter": "retract_speed",
       "parent_parameter": null,
-      "py/object": "__main__.Slicer",
+      "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
       "root": {
         "py/id": 300
       },
       "units": "mm/s"
     },
-    "py/object": "__main__.Param",
+    "py/object": "conversion_dictionary.Param",
     "reverse_modifier": null,
     "simplify3d": {
       "modifier": "x*60",
       "name": null,
       "parameter": "retractionSpeed",
       "parent_parameter": null,
-      "py/object": "__main__.Slicer",
+      "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": "x/60",
       "root": {
         "py/id": 300
