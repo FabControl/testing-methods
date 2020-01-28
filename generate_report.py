@@ -281,7 +281,7 @@ def generate_report(import_json_dict: dict):
         row_number += 1
 
     table_data_3 = [[Paragraph(cell, style_text) for cell in row] for row in table_data_3]
-    table3 = Table(table_data_3, colwidths_2, rowHeights=0.2*inch)
+    table3 = Table(table_data_3, colwidths_2)
     style = TableStyle(table_3_style)
     table3.setStyle(style)
     elements.append(table3)
