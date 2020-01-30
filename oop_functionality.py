@@ -6,8 +6,6 @@ from Globals import machine
 
 path = "gcode.gcode"
 tests = {}
-header = r'header'
-footer = r'footer'
 
 
 class Prism(object):

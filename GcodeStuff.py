@@ -24,10 +24,10 @@ class Gplus(G):
         self.coef_w = machine.settings.track_width / machine.temperaturecontrollers.extruder.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
         self.retraction_speed = machine.settings.retraction_speed
+        self._machine = machine
         self._gcode = []
         super(Gplus, self).__init__(*args, **kwargs)
-        with open(self.header) as hd:
-            [self._gcode.append(statement) for statement in hd.readlines()]
+        self._gcode.append(machine.gcode_header)
 
     def set_extruder_temperature(self,
                                  temperature: int,
@@ -315,9 +315,7 @@ class Gplus(G):
             waits to return until all buffered lines have been acknowledged.
 
         """
-        if self.footer is not None:
-            with open(self.footer) as fd:
-                [self._gcode.append(statement) for statement in fd.readlines()]
+        self.write(self._machine.gcode_footer)
 
         # self.buffer.write("\n".join(self._gcode))
 

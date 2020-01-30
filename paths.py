@@ -18,8 +18,6 @@ if os.name == "nt":
 
     logo_path = cwd + "\\resources\\logos\\FabControl_Optimizer_Left_bw.png"
 
-    header = cwd + "\\resources\\header"
-    footer = cwd + "\\resources\\footer"
     config_ini = cwd + "\\resources\\config.ini"
     cura_configuration_template = cwd + "\\resources\\cura_configuration_template"
     cura_deserialized = cura_configuration_template + "\\deserialized"
@@ -47,8 +45,6 @@ else:
 
     logo_path = cwd + "resources/logos/FabControl_Optimizer_Left_bw.png"
 
-    header = cwd + "resources/header"
-    footer = cwd + "resources/footer"
     config_ini = cwd + "resources/config.ini"
     cura_configuration_template = cwd + "resources/cura_configuration_template"
     cura_deserialized = cura_configuration_template + "deserialized"

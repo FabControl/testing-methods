@@ -7,7 +7,7 @@ import numpy as np
 class TestSetupB(object):
     def __init__(self, machine: Machine, material: Material, test_name: str, path: str, min_max_argument: list = None, min_max_speed_printing: list = None, raft: bool = True):
         """
-        
+
         :param machine:
         :param material:
         :param test_name:
@@ -85,7 +85,7 @@ class TestSetupB(object):
                        outfile=path,
                        layer_height=self.coef_h_raft * machine.nozzle.size_id,
                        extrusion_width=self.coef_w_raft * machine.nozzle.size_id,
-                       aerotech_include=False, footer=footer, header=header, extrude=True,
+                       aerotech_include=False, extrude=True,
                        extrusion_multiplier=machine.settings.extrusion_multiplier_raft)
 
 

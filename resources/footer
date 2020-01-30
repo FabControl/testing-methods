@@ -1,8 +1,0 @@
-;--- start footer ---
-; end of the test routine
-M190 S20; set the print bed temperature
-M109 S0 T0; set the extruder temperature
-M106 S0; set the part cooling
-G28; move to the home position
-M84; disable motors
-;--- end footer ---

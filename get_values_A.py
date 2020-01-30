@@ -307,7 +307,7 @@ class get_values_A(object):
         self.g = Gplus(material, machine,
                        layer_height=sum(self.coef_h_raft)/len(self.coef_h_raft) * machine.temperaturecontrollers.extruder.nozzle.size_id,
                        extrusion_width=sum(self.coef_w_raft)/len(self.coef_w_raft) * machine.temperaturecontrollers.extruder.nozzle.size_id,
-                       aerotech_include=False, header=header, extrude=True,
+                       aerotech_include=False, extrude=True,
                        extrusion_multiplier=self.extrusion_multiplier_raft)
 
     def get_values_parameter_one(self):

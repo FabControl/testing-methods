@@ -3,7 +3,6 @@ import json
 import jsonpickle
 import math
 import numpy as np
-from paths import header
 
 class DryingProcess(object):
     """
@@ -162,6 +161,8 @@ class Machine(object):
                  form: str = "",
                  buildarea_maxdim1: float = None,
                  buildarea_maxdim2: float = None,
+                 gcode_header: str = "",
+                 gcode_footer: str = "",
                  extruder_type: str = "bowden", *args, **kwargs):
 
         self.sn = sn
@@ -171,6 +172,8 @@ class Machine(object):
         self.buildarea_maxdim2 = buildarea_maxdim2  # respect the units: mm
         self.temperaturecontrollers = TemperatureControllers(**kwargs["temperature_controllers"])
         self.extruder_type = extruder_type
+        self.gcode_header = gcode_header
+        self.gcode_footer = gcode_footer
 
 
 class Settings(object):

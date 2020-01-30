@@ -1,7 +1,6 @@
 from Definitions import *
 from get_values_A import get_values_A
 from GetValuesB import TestSetupB
-from paths import footer
 
 
 class TestStructure(object):
