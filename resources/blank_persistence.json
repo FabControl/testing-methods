@@ -7,6 +7,8 @@
         "buildarea_maxdim2": null,
         "max_dimension_z": null,
         "form": null,
+        "gcode_header": "",
+        "gcode_footer": "",
         "temperature_controllers": {
             "extruder": {
                 "tool": "",
