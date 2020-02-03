@@ -5,12 +5,7 @@ from app import app
 # subclass this instead of TestCase
 class CreateAppHelperClass(TestCase):
     def create_app(self):
-        app.config['TESTING'] = True
-        return app
-
-
-class InitializeRoute(CreateAppHelperClass):
-    blank_persistance = {
+        self.blank_persistance = {
                 "machine": {
                     "buildarea_maxdim1": None,
                     "buildarea_maxdim2": None,
@@ -135,6 +130,11 @@ class InitializeRoute(CreateAppHelperClass):
                         }
                 }
 
+        app.config['TESTING'] = True
+        return app
+
+
+class InitializeRoute(CreateAppHelperClass):
 
     def assertCoupledCorrectly(self, resp):
         expectedKeys = ["persistence", "test_info", "content"]
