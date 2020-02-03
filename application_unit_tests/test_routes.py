@@ -1,5 +1,7 @@
 from flask_testing import TestCase
 from app import app
+import json
+from base64 import b64decode
 
 
 # subclass this instead of TestCase
@@ -18,6 +20,8 @@ class CreateAppHelperClass(TestCase):
                     "max_dimension_z": None,
                     "model": None,
                     "sn": None,
+                    "gcode_header": "",
+                    "gcode_footer": "",
                     "software": {
                         "version": "version"
                         },
@@ -171,3 +175,30 @@ class RoutineRoute(CreateAppHelperClass):
 
         # Priority can only be primary or secondary
         self.assertTrue(all(x['priority'] in ['primary', 'secondary'] for x in resp.json.values()))
+
+class GcodeRoute(CreateAppHelperClass):
+    def test_gcode_header_footer(self):
+        header = "Test header included"
+        footer = "Footer test passed"
+        self.blank_persistance["machine"]["gcode_header"] = header
+        self.blank_persistance["machine"]["gcode_footer"] = footer
+        self.blank_persistance["machine"]["extruder_type"] = "bowden"
+        self.blank_persistance["machine"]["buildarea_maxdim1"] = 200
+        self.blank_persistance["machine"]["buildarea_maxdim2"] = 200
+        self.blank_persistance["settings"]["track_height_raft"] = 0
+        self.blank_persistance["settings"]["track_width_raft"] = 0.2
+        self.blank_persistance["settings"]["track_height"] = 0.1
+        self.blank_persistance["settings"]["track_width"] = 0.2
+        self.blank_persistance["settings"]["temperature_extruder"] = 40
+        self.blank_persistance["settings"]["temperature_extruder_raft"] = 40
+        self.blank_persistance["machine"]["temperature_controllers"]["extruder"]["nozzle"]["size_id"] = 0.2
+        resp = self.client.post('/',
+                                data=json.dumps(self.blank_persistance),
+                                content_type='application/json')
+
+        self.assert200(resp)
+
+        g_lines = b64decode(resp.json["content"]).decode().split('\n')
+        # For some unknown reason, G91 is included before header
+        self.assertEqual(header, g_lines[1])
+        self.assertEqual(footer, g_lines[-1])
