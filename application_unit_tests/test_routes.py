@@ -2,6 +2,7 @@ from flask_testing import TestCase
 from app import app
 import json
 from base64 import b64decode
+from .persistences import PersistencesIterator
 
 
 # subclass this instead of TestCase
@@ -202,3 +203,15 @@ class GcodeRoute(CreateAppHelperClass):
         # For some unknown reason, G91 is included before header
         self.assertEqual(header, g_lines[1])
         self.assertEqual(footer, g_lines[-1])
+
+    def test_G1_F0(self):
+        for test_name, p in PersistencesIterator():
+            resp = self.client.post('/',
+                                    data=json.dumps(p),
+                                    content_type='application/json')
+            self.assert200(resp)
+
+            g_lines = b64decode(resp.json["content"]).decode().split('\n')
+            # For some unknown reason, G91 is included before header
+            self.assertFalse('G1 F0' in g_lines, msg=test_name)
+
