@@ -200,6 +200,7 @@ class GcodeRoute(CreateAppHelperClass):
 
     def test_G1_F0(self):
         for test_name, p in PersistencesIterator():
+            print(test_name)
             resp = self.client.post('/',
                                     data=json.dumps(p),
                                     content_type='application/json')
