@@ -24734,6 +24734,7 @@ PERSISTENCE_MIGRATIONS_SPEED = [
 
 def _execute_on_path(parent, path, do_delete:bool=True, val=None):
     p = parent
+    path = path.copy()
     k = path.pop()
     for i in path:
         parent = parent[i]

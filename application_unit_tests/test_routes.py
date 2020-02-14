@@ -209,7 +209,7 @@ class GcodeRoute(CreateAppHelperClass):
             resp = self.client.post('/',
                                     data=json.dumps(p),
                                     content_type='application/json')
-            self.assert200(resp)
+            self.assert200(resp, message=test_name)
 
             g_lines = b64decode(resp.json["content"]).decode().split('\n')
             # For some unknown reason, G91 is included before header
