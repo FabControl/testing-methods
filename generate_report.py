@@ -237,7 +237,10 @@ def generate_report(import_json_dict: dict):
         new_line = [str(test_sequence_number), single_test["test_name"], single_test["parameter_one_name"], single_test["parameter_one_units"]]
         for dummy in single_test["tested_parameter_one_values"]:
             new_line.append(single_test["parameter_one_precision"].format(dummy))
-        new_line.append(single_test["parameter_one_precision"].format(single_test["selected_parameter_one_value"]))
+        if single_test["validated"]:
+            new_line.append(single_test["parameter_one_precision"].format(single_test["selected_parameter_one_value"]))
+        else:
+            new_line.append("-")
         table_data_3.append(new_line)
         if single_test["comments"]:
             new_line.append(single_test["comments"])
@@ -251,7 +254,10 @@ def generate_report(import_json_dict: dict):
             spaces_to_skip = len(single_test["tested_parameter_one_values"])-len(single_test["tested_parameter_two_values"])
             for _ in range(spaces_to_skip):
                 new_line.append("-")
-            new_line.append(single_test["parameter_two_precision"].format(single_test["selected_parameter_two_value"]))
+            if single_test["validated"]:
+                new_line.append(single_test["parameter_two_precision"].format(single_test["selected_parameter_two_value"]))
+            else:
+                new_line.append("-")
             new_line.append("-")
             table_data_3.append(new_line)
 
@@ -269,7 +275,10 @@ def generate_report(import_json_dict: dict):
             spaces_to_skip = len(single_test["tested_parameter_one_values"])-len(single_test["tested_parameter_three_values"])
             for _ in range(spaces_to_skip):
                 new_line.append("-")
-            new_line.append(single_test["parameter_three_precision"].format(single_test["selected_parameter_three_value"]))
+            if single_test["validated"]:
+                new_line.append(single_test["parameter_three_precision"].format(single_test["selected_parameter_three_value"]))
+            else:
+                new_line.append("-")
             new_line.append("-")
 
             table_data_3.append(new_line)
