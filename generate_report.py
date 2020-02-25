@@ -145,8 +145,7 @@ def generate_report(import_json_dict: dict):
     verified_estimated_printing_time = timedelta()
     for dummy in import_json_dict["session"]["previous_tests"]:
         filament = round(float(dummy["extruded_filament_mm"] or 0), 3)
-        #(h, m, s) = dummy["estimated_printing_time_s"].split(':')
-        (h, m, s) = (0, 0, 0)
+        (h, m, s) = dummy.get("estimated_printing_time_s", "0:0:0").split(':')
         d = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
         consumed_filament += filament
         total_estimated_printing_time += d
