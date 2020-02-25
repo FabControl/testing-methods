@@ -140,22 +140,33 @@ def generate_report(import_json_dict: dict):
     unique_test_numbers_last_occurrence = [all_test_numbers[i] for i in indexes_of_last_occurrence]
 
     consumed_filament = 0
-    list_of_estimated_printing_time = []
-    for dummy in import_json_dict["session"]["previous_tests"]:
-        if dummy["executed"]:
-            consumed_filament = consumed_filament + round(float(dummy["extruded_filament_mm"] or 0), 3)
-            #list_of_estimated_printing_time.append(dummy["estimated_printing_time_s"]) TODO
-
+    verified_filament = 0
     total_estimated_printing_time = timedelta()
-    for estimated_time in list_of_estimated_printing_time:
-        (h, m, s) = estimated_time.split(':')
+    verified_estimated_printing_time = timedelta()
+    for dummy in import_json_dict["session"]["previous_tests"]:
+        filament = round(float(dummy["extruded_filament_mm"] or 0), 3)
+        #(h, m, s) = dummy["estimated_printing_time_s"].split(':')
+        (h, m, s) = (0, 0, 0)
         d = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+        consumed_filament += filament
         total_estimated_printing_time += d
+        if dummy["validated"]:
+            verified_filament += filament
+            verified_estimated_printing_time += d
 
-    main_info_entry = "Consumed filament: " + "{:.1f}".format(consumed_filament/1000) + " m"
-    main_info.append(main_info_entry)
-    main_info_entry = "Total estimated printing time: " + str(total_estimated_printing_time)
-    main_info.append(main_info_entry)
+    if consumed_filament == verified_filament:
+        main_info_entry = "{0:.1f} m".format(consumed_filament/1000)
+    else:
+        main_info_entry = "{0:.1f}-{1:.1f} m".format(verified_filament/1000,
+                                                    consumed_filament/1000)
+    main_info.append("Consumed filament: " + main_info_entry)
+
+    if total_estimated_printing_time == verified_estimated_printing_time:
+        main_info_entry = "{0}".format(total_estimated_printing_time)
+    else:
+        main_info_entry = "{0}-{1}".format(verified_estimated_printing_time,
+                                           total_estimated_printing_time)
+    main_info.append("Total estimated printing time: " + main_info_entry)
 
     styles = getSampleStyleSheet()
     styles = styles["BodyText"]
