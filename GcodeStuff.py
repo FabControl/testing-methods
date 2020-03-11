@@ -129,7 +129,7 @@ class Gplus(G):
 
     def home(self):
         """ Move the tool head to the home position (as defined in firmware) """
-        self.write("G28; move to the home position")
+        self.write(f"{self._machine.home_command}; move to the home position")
 
     def retract(self,
                 retraction_speed,
