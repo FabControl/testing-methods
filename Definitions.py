@@ -174,7 +174,7 @@ class Machine(object):
         self.extruder_type = extruder_type
         self.gcode_header = gcode_header
         self.gcode_footer = gcode_footer
-        self.home_command = "G28" if "prusa" not in self.model.strip() else "G28 W"
+        self.home_command = "G28" if "prusa" not in self.model.lower() else "G28 W"
 
 
 class Settings(object):
