@@ -137,7 +137,8 @@ class TestStructure(object):
         self.print_raft(values) if values.raft else self.raft_perimeter(values) # print the raft to support the test structure
 
         values.g.write("; --- start to print the test structure ---")
-        values.g.feed(self.machine.settings.speed_printing)
+        if self.machine.settings.speed_printing > 0:
+            values.g.feed(self.machine.settings.speed_printing)
 
         for current_test_structure in range(values.number_of_test_structures):
             values.g.write(values.comment_all_values_of_constant_parameters)

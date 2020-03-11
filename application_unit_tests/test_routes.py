@@ -2,11 +2,19 @@ from flask_testing import TestCase
 from app import app
 import json
 from base64 import b64decode
+from .persistences import PersistencesIterator
 
 
 # subclass this instead of TestCase
 class CreateAppHelperClass(TestCase):
     def create_app(self):
+        app.config['TESTING'] = True
+        return app
+
+
+class InitializeRoute(CreateAppHelperClass):
+    def __init__(self, *a, **k):
+        super().__init__(*a, **k)
         self.blank_persistance = {
                 "machine": {
                     "buildarea_maxdim1": None,
@@ -134,11 +142,6 @@ class CreateAppHelperClass(TestCase):
                         }
                 }
 
-        app.config['TESTING'] = True
-        return app
-
-
-class InitializeRoute(CreateAppHelperClass):
 
     def assertCoupledCorrectly(self, resp):
         expectedKeys = ["persistence", "test_info", "content"]
@@ -180,25 +183,30 @@ class GcodeRoute(CreateAppHelperClass):
     def test_gcode_header_footer(self):
         header = "Test header included"
         footer = "Footer test passed"
-        self.blank_persistance["machine"]["gcode_header"] = header
-        self.blank_persistance["machine"]["gcode_footer"] = footer
-        self.blank_persistance["machine"]["extruder_type"] = "bowden"
-        self.blank_persistance["machine"]["buildarea_maxdim1"] = 200
-        self.blank_persistance["machine"]["buildarea_maxdim2"] = 200
-        self.blank_persistance["settings"]["track_height_raft"] = 0
-        self.blank_persistance["settings"]["track_width_raft"] = 0.2
-        self.blank_persistance["settings"]["track_height"] = 0.1
-        self.blank_persistance["settings"]["track_width"] = 0.2
-        self.blank_persistance["settings"]["temperature_extruder"] = 40
-        self.blank_persistance["settings"]["temperature_extruder_raft"] = 40
-        self.blank_persistance["machine"]["temperature_controllers"]["extruder"]["nozzle"]["size_id"] = 0.2
-        resp = self.client.post('/',
-                                data=json.dumps(self.blank_persistance),
-                                content_type='application/json')
+        for test_name, p in PersistencesIterator():
+            p["machine"]["gcode_header"] = header
+            p["machine"]["gcode_footer"] = footer
+            print(test_name)
+            resp = self.client.post('/',
+                                    data=json.dumps(p),
+                                    content_type='application/json')
 
-        self.assert200(resp)
+            self.assert200(resp, message=test_name)
 
-        g_lines = b64decode(resp.json["content"]).decode().split('\n')
-        # For some unknown reason, G91 is included before header
-        self.assertEqual(header, g_lines[1])
-        self.assertEqual(footer, g_lines[-1])
+            g_lines = b64decode(resp.json["content"]).decode().split('\n')
+            # For some unknown reason, G91 is included before header
+            self.assertEqual(header, g_lines[1], test_name)
+            self.assertEqual(footer, g_lines[-1], test_name)
+
+    def test_G1_F0(self):
+        for test_name, p in PersistencesIterator():
+            print(test_name)
+            resp = self.client.post('/',
+                                    data=json.dumps(p),
+                                    content_type='application/json')
+            self.assert200(resp, message=test_name)
+
+            g_lines = b64decode(resp.json["content"]).decode().split('\n')
+            # For some unknown reason, G91 is included before header
+            self.assertFalse('G1 F0' in g_lines, msg=test_name)
+

@@ -2,7 +2,7 @@ from get_test_info import get_test_info
 from Definitions import *
 import re
 from datetime import datetime
-from CLI_helpers import extruded_filament
+from CLI_helpers import extruded_filament, printing_time
 
 
 def update_persistence(persistence, values):
@@ -28,6 +28,7 @@ def update_persistence(persistence, values):
                     "parameter_one_precision": values.test_info.parameter_one.precision,
                     "parameter_two_precision": None if values.test_info.parameter_two.name is None else values.test_info.parameter_two.precision,
                     "extruded_filament_mm": extruded_filament(values.g.gcode),
+                    "estimated_printing_time_s": printing_time(values.g.gcode),
                     "tested_parameters": [values.test_info.parameter_one.dict(), values.test_info.parameter_two.dict()],
                     "comments": 0,
                     "datetime_info": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}

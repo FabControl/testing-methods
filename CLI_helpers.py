@@ -6,6 +6,7 @@ import subprocess
 import warnings
 import traceback
 import sys
+from datetime import timedelta
 
 
 def evaluate(input):
@@ -49,6 +50,118 @@ def extruded_filament(gcode: str):
             total_extrusion = total_extrusion + literal_eval(value)
 
     return round(total_extrusion)
+
+
+def printing_time(gcode: str):
+    """
+    Takes a gcode as string and returns estimated print time.
+    :param gcode:
+    :return:
+    """
+    dwell_matcher = re.compile(r'(P(?P<milliseconds>\d+)|S(?P<seconds>\d+))')
+    moves_matcher = re.compile(r'(?:G(?:0|1|92)'
+                               r' X(?P<X>(?:[-+]?[0-9]+\.?[0-9]*))|'
+                               r' Y(?P<Y>(?:[-+]?[0-9]+\.?[0-9]*))|'
+                               r' Z(?P<Z>(?:[-+]?[0-9]+\.?[0-9]*))|'
+                               r' E(?P<E>(?:[-+]?[0-9]+\.?[0-9]*))|'
+                               r' F(?:(?P<F>[0-9]+)\.?[0-9]*)'
+                               r'){1,5}', re.IGNORECASE)
+    relative_extrusion = False
+    relative_moves = False
+    estimated_time = timedelta()
+    # should be a sane value to start with
+    feedrate = 10 # mm/sec
+    x = y = z = e = 0
+
+    for line in (x.split(';')[0].strip() for x in gcode.split('\n')):
+        if len(line) < 3:
+            continue
+
+        if line == 'G28':
+            x = y = z = 0
+            # educated guess
+            estimated_time += timedelta(seconds=3)
+        elif line == 'G90':
+            relative_moves = False
+        elif line == 'G91':
+            relative_moves = True
+        elif line == 'M82':
+            relative_extrusion = False
+        elif line == 'M83':
+            relative_extrusion = True
+
+        elif line.startswith('G4 '):
+            dwell = dwell_matcher.search(line)
+            if dwell:
+                ms, s = dwell.group('milliseconds', 'seconds')
+                if ms is not None:
+                    period = int(ms) / 1000
+                elif s is not None:
+                    period = int(s)
+                estimated_time += timedelta(seconds=period)
+
+        elif line.startswith('G92 '):
+            X,Y,Z,E,F = moves_matcher.search(line).group('X','Y','Z','E','F')
+            if X is not None:
+                x = int(X)
+            if Y is not None:
+                y = int(Y)
+            if Z is not None:
+                z = int(Z)
+            if E is not None:
+                e = int(E)
+
+        elif line.startswith('G1 ') or line.startswith('G0 '):
+            X,Y,Z,E,F = moves_matcher.search(line).group('X','Y','Z','E','F')
+
+            if F is not None:
+                if X is not None or Y is not None or Z is not None:
+                    frate = (int(F)/60 + feedrate) / 2
+                else:
+                    frate = feedrate
+                feedrate = int(F)/60
+
+            dx = dy = dz = de = 0
+            if X is not None:
+                X = float(X)
+                if relative_moves:
+                    dx = X
+                    x += X
+                else:
+                    dx = X - x
+                    x = X
+            if Y is not None:
+                Y = float(Y)
+                if relative_moves:
+                    dy = Y
+                    y += Y
+                else:
+                    dy = Y - y
+                    y = Y
+            if Z is not None:
+                Z = float(Z)
+                if relative_moves:
+                    dz = Z
+                    z += Z
+                else:
+                    dz = Z - z
+                    z = Z
+            if E is not None:
+                E = float(E)
+                if relative_moves:
+                    de = E
+                    e += E
+                else:
+                    de = E - e
+                    e = E
+
+            dxyz = (dx**2 + dy**2 + dz**2)**(0.5)
+            if dxyz > 0.001:
+                estimated_time += timedelta(seconds=dxyz/frate)
+            else:
+                estimated_time += timedelta(seconds=de/frate)
+
+    return str(estimated_time).split('.')[0]
 
 
 def exclusive_write(path: str, output, limit=True):
