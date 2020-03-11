@@ -4,6 +4,7 @@ from paths import gcode_folder
 from CLI_helpers import exception_handler
 from string import Template
 import io
+import re
 
 track_list = []
 
@@ -59,7 +60,6 @@ class Gplus(G):
         self.write(t.substitute(temp=temperature))
         if return_string:
             return t.substitute(temp=temperature)
-
 
     def set_chamber_temperature(self,
                                 temperature: int,
@@ -136,8 +136,8 @@ class Gplus(G):
                 retraction_distance,
                 printing_speed):
         """ Retracts the filament """
-        self.write("G1 F{:.0f}".format(retraction_speed*60) + " E{:.3f}".format(-retraction_distance) + "; retract the filament")
-        self.write("G1 F{:.0f}".format(printing_speed*60))
+        self.write(f"G1 F{retraction_speed * 60} E{-retraction_distance}; retract the filament")
+        self.write(f"G1 F{printing_speed*60}")
 
     def deretract(self,
                   retraction_speed,
@@ -302,6 +302,8 @@ class Gplus(G):
         self.speed = int(rate * 60)
 
     def write(self, statement_in, resp_needed=False):
+        # Ensure that E0.00000 is never passed to gcode
+        statement_in = re.sub(r"E0\.0+", '', statement_in)
         self._gcode.append(statement_in)
 
     def teardown(self, wait=True):
