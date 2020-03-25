@@ -13,7 +13,6 @@ class Gplus(G):
     # Build on the G class from mecode. Gplus class redefines some of the commands, creates new commands
     def __init__(self, material: Material, machine: Machine, *args, **kwargs):
 
-        self.filament_diameter = material.size_od
         self.nozzle_diameter = machine.temperaturecontrollers.extruder.nozzle.size_id
         self.extrusion_multiplier = machine.settings.extrusion_multiplier
         self.track_height = machine.settings.track_height
@@ -29,6 +28,7 @@ class Gplus(G):
         self._gcode = []
         super(Gplus, self).__init__(*args, **kwargs)
         self._gcode.append(machine.gcode_header)
+        self.filament_diameter = material.size_od
 
     def set_extruder_temperature(self,
                                  temperature: int,
