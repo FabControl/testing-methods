@@ -26,8 +26,13 @@ class Gplus(G):
         self.retraction_speed = machine.settings.retraction_speed
         self._machine = machine
         self._gcode = []
+
         super(Gplus, self).__init__(*args, **kwargs)
-        self._gcode.append(machine.gcode_header)
+
+        self._gcode = [";----- start of user defined header -----",
+                    machine.gcode_header,
+                    ";----- end of user defined header -----"]
+
         self.filament_diameter = material.size_od
 
     def set_extruder_temperature(self,
@@ -317,6 +322,7 @@ class Gplus(G):
             waits to return until all buffered lines have been acknowledged.
 
         """
+        self.write(";----- start of user defined footer -----")
         self.write(self._machine.gcode_footer)
 
         # self.buffer.write("\n".join(self._gcode))

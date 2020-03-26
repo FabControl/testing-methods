@@ -14,6 +14,9 @@ class TestStructure(object):
         wipe_length_initial = 6 * gv.test_structure_size / 10
         wipe_length = wipe_length_initial * length_multiplier
         gv.g.home()
+        gv.g.write("G21; unit in mm")
+        gv.g.write("G92 E0; reset extruder")
+        gv.g.write("M83; set extruder to relative mode")
         gv.g.feed(self.machine.settings.speed_travel) # respect the units: mm/min
         gv.g.abs_move(x=-wipe_length + gv.offset_x,
                       y=-6 * gv.test_structure_size / 10 + gv.offset_y,
@@ -214,7 +217,7 @@ class TestStructure(object):
                                       extrude=False, extrusion_multiplier=0)
 
         values.g.write("; --- finish to print the test structure ---")
-        values.g.write(self.generate_footer(values))
+        self.write_footer(values)
         values.g.teardown()
 
         return
@@ -285,7 +288,7 @@ class TestStructure(object):
                     values.g.retract(values.retraction_speed, values.retraction_distance[current_test_structure], values.retraction_restart_distance[current_test_structure])
 
         values.g.write("; --- finish to print the test structure ---")
-        values.g.write(self.generate_footer(values))
+        self.write_footer(values)
         values.g.teardown()
 
         return
@@ -396,7 +399,7 @@ class TestStructure(object):
                             retraction_distance=np.mean(values.retraction_distance))
 
         values.g.write("; --- finish to print the test structure ---")
-        values.g.write(self.generate_footer(values))
+        self.write_footer(values)
         values.g.teardown()
 
         return
@@ -515,21 +518,22 @@ class TestStructure(object):
                                       extrude=False, extrusion_multiplier=0)
 
         values.g.write("; --- finish to print the test structure ---")
-        values.g.write(self.generate_footer(values))
+        self.write_footer(values)
         values.g.teardown()
 
         return
 
     @staticmethod
-    def generate_footer(values: get_values_A):
-        custom_footer = ";--- start footer ---\n; end of the test routine\n"
+    def write_footer(values: get_values_A):
+        values.g.write(";--- start footer ---\n; end of the test routine")
         if values.chamber_heatable:
-            custom_footer = custom_footer + values.g.set_chamber_temperature(0, values.chamber, immediate=False, return_string=True)+"\n"
+            values.g.set_chamber_temperature(0, values.chamber, immediate=False)
         if values.printbed_heatable:
-            custom_footer = custom_footer + values.g.set_printbed_temperature(0, values.printbed, immediate=True, return_string=True) + "\n"
-        custom_footer = custom_footer + values.g.set_extruder_temperature(0, values.extruder, immediate=True, return_string=True) + "\n"
+            values.g.set_printbed_temperature(0, values.printbed, immediate=True)
+        values.g.set_extruder_temperature(0, values.extruder, immediate=True)
         if values.part_cooling:
-            custom_footer = custom_footer + values.g.set_part_cooling(0, values.extruder, return_string=True) + "\n"
-        custom_footer = custom_footer + "G28; move to the home position\nM84; disable motors\n;--- end footer ---"
+            values.g.set_part_cooling(0, values.extruder)
+        values.g.home()
+        values.g.write("M84; disable motors")
+        values.g.write(";--- end footer ---")
 
-        return custom_footer
