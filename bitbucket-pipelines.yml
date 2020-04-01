@@ -23,5 +23,13 @@ definitions:
           - python deploy-aws.py release.zip '((?!(development|test)).+|(development|test).+|)$'
 pipelines:
   branches:
-    restful_api:
+    aws-live:
       - step: *test
+      - step: *compress
+      - step: 
+          <<: *deploy
+          script:
+            - pip install boto3
+              # update all deplyments, except test and develop
+              # regex is mached from beginning of string
+            - python deploy-aws.py release.zip '.*'
