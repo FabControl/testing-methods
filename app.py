@@ -52,7 +52,8 @@ def get_routine():
 
 
 @app.route('/config/<slicer>', methods=['POST'])
-def serve_config(slicer):
+@app.route('/config/<slicer>/<quality_type>', methods=['POST'])
+def serve_config(slicer, quality_type='normal'):
     assert request.json is not None
     from generate_configuration import Converter
     converter = Converter(request.json)
@@ -65,7 +66,7 @@ def serve_config(slicer):
         content = converter.to_prusa().encode()
         config_format = "ini"
     elif "cura" in slicer:
-        content = converter.to_cura()
+        content = converter.to_cura(quality_type)
         config_format = "curaprofile"
     return jsonify({"format": config_format, "content": b64encode(content).decode()})
 

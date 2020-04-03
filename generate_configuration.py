@@ -220,7 +220,7 @@ class Converter(Persistence):
         tree.write(f, xml_declaration=True, encoding="utf-8")
         return f.getvalue()
 
-    def to_cura(self):
+    def to_cura(self, quality_type: str):
         from cura_ops import decode_cura, encode_cura
         cura_params = []
 
@@ -229,7 +229,7 @@ class Converter(Persistence):
                 if param.cura.value is not None:
                     cura_params.append([param.cura.parameter, param.cura.value, 0])
 
-        return encode_cura(cura_params, 'somename')
+        return encode_cura(cura_params, 'somename', quality_type)
 
     # def to_raw(self):
     #     output_dictionary = {"raw": {},

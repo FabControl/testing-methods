@@ -67,7 +67,7 @@ def decode_cura(path: str):
     return output
 
 
-def encode_cura(parameters: list, name: str):
+def encode_cura(parameters: list, name: str, quality: str):
     """
     Takes a single list of [parameter, value, container index] lists and packs them as a .curaprofile file.
     :param parameters:
@@ -108,7 +108,9 @@ def encode_cura(parameters: list, name: str):
     outpath = tempdir.name + separator() + 'temp.zip'
     # Get the base template for a container, containing Meta and General data
     with open(cwd + "/resources/cura_configuration_template/custom_extruder_") as file:
-        empty_cura_container = file.read()
+        sample_lines = ['quality_type = ' + quality if 'quality_type ' in x else x for x in file.readlines()]
+
+    empty_cura_container = '\n'.join(sample_lines)
     # Write each of the new containers in a temporary directory
     zip_archive = zf.ZipFile(outpath, mode="a")
     for container in range(9):
