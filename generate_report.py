@@ -14,6 +14,8 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, inch, landscape
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image, Frame, PageBreak, PageTemplate
+from reportlab.pdfbase.ttfonts import TTFont, pdfmetrics
+from reportlab.pdfbase.pdfmetrics import registerFontFamily
 
 from CLI_helpers import *
 from Definitions import save_session_file_as
@@ -63,15 +65,18 @@ def generate_report(import_json_dict: dict):
                             topMargin=30,
                             bottomMargin=20)
 
+    pdfmetrics.registerFont(TTFont('FreeSans', 'resources/fonts/FreeSans-LrmZ.ttf'))
+    #pdfmetrics.registerFont(TTFont('FreeSansBold', 'resources/fonts/FreeSansBold-Xgdd.ttf'))
+    #registerFontFamily('FreeSans',normal='FreeSans',bold='FreeSansBold',italic='FreeSans',boldItalic='FreeSansBold')
     font_small = 7
 
     # Define two styles
     style_heading = ParagraphStyle(name="Bold",
-                                   fontName="Helvetica",
+                                   fontName="FreeSans",
                                    fontSize=3*font_small)
 
     style_text = ParagraphStyle(name="Normal",
-                                fontName="Helvetica",
+                                fontName="FreeSans",
                                 fontSize=font_small)
 
     # Create element list
@@ -171,7 +176,7 @@ def generate_report(import_json_dict: dict):
     styles = styles["BodyText"]
     styles.wordWrap = "CJK"
     style_text = ParagraphStyle(name="Normal",
-                                fontName="Helvetica",
+                                fontName="FreeSans",
                                 fontSize=font_small)
 
     # Splitting the not tested data into three rows, and putting them into table1
