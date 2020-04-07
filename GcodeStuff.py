@@ -46,9 +46,10 @@ class Gplus(G):
                 t = Template(extruder.gcode_command_immediate + "; set the extruder temperature and apply immediately")
         else:
             t = Template(extruder.gcode_command  + "; set the extruder temperature and wait till it has been reached")
-        self.write(t.substitute(temp=temperature, tool=extruder.tool))
+        result = t.substitute(temp=f'{temperature:.0f}', tool=extruder.tool)
+        self.write(result)
         if return_string:
-            return t.substitute(temp=temperature, tool=extruder.tool)
+            return result
 
     def set_printbed_temperature(self,
                                  temperature: int,
@@ -62,9 +63,10 @@ class Gplus(G):
             gcode_command = printbed.gcode_command + "; set the print bed temperature and wait till the temperature has been reached"
 
         t = Template(gcode_command)
-        self.write(t.substitute(temp=temperature))
+        result = t.substitute(temp=f'{temperature:.0f}')
+        self.write(result)
         if return_string:
-            return t.substitute(temp=temperature)
+            return result
 
     def set_chamber_temperature(self,
                                 temperature: int,

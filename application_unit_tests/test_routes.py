@@ -204,6 +204,10 @@ class GcodeRoute(CreateAppHelperClass):
         # check if regex works
         self.assertIsNotNone(invalid_F_matcher.search('G28\nG1 F20.0\nG1 X50'))
 
+        invalid_S_matcher = re.compile(' S[0-9]+\.[0-9]+')
+        # check if regex works
+        self.assertIsNotNone(invalid_S_matcher.search('G28\nM104 S120.0\nG1 X50'))
+
         for test_name, p in PersistencesIterator():
             print(test_name)
             resp = self.client.post('/',
@@ -212,8 +216,13 @@ class GcodeRoute(CreateAppHelperClass):
             self.assert200(resp, message=test_name)
 
             g_lines = b64decode(resp.json["content"]).decode()
-            # check if all F params are formatted as integers
-            self.assertIsNone(invalid_F_matcher.search(g_lines), msg=test_name)
-            # check if there are no commands with F0 param
-            self.assertFalse('G1 F0' in g_lines.split('\n'), msg=test_name)
+
+            with self.subTest(msg='F not formatted as integer', test_name=test_name):
+                self.assertIsNone(invalid_F_matcher.search(g_lines), msg=test_name)
+
+            with self.subTest(msg='S not formatted as integer', test_name=test_name):
+                self.assertIsNone(invalid_S_matcher.search(g_lines), msg=test_name)
+
+            with self.subTest(msg='F0 found in generated g-code', test_name=test_name):
+                self.assertFalse('G1 F0' in g_lines.split('\n'), msg=test_name)
 
