@@ -310,7 +310,7 @@ class Gplus(G):
 
     def write(self, statement_in, resp_needed=False):
         # Ensure that E0.00000 is never passed to gcode
-        statement_in = re.sub(r"E0\.0+([^0-9]|$)", r'\1', statement_in)
+        statement_in = re.sub(r"E-{0,1}0\.0+([^0-9]|$)", r'\1', statement_in)
         self._gcode.append(statement_in)
 
     def teardown(self, wait=True):
