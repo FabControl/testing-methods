@@ -46,9 +46,10 @@ class Gplus(G):
                 t = Template(extruder.gcode_command_immediate + "; set the extruder temperature and apply immediately")
         else:
             t = Template(extruder.gcode_command  + "; set the extruder temperature and wait till it has been reached")
-        self.write(t.substitute(temp=temperature, tool=extruder.tool))
+        result = t.substitute(temp=f'{temperature:.0f}', tool=extruder.tool)
+        self.write(result)
         if return_string:
-            return t.substitute(temp=temperature, tool=extruder.tool)
+            return result
 
     def set_printbed_temperature(self,
                                  temperature: int,
@@ -62,9 +63,10 @@ class Gplus(G):
             gcode_command = printbed.gcode_command + "; set the print bed temperature and wait till the temperature has been reached"
 
         t = Template(gcode_command)
-        self.write(t.substitute(temp=temperature))
+        result = t.substitute(temp=f'{temperature:.0f}')
+        self.write(result)
         if return_string:
-            return t.substitute(temp=temperature)
+            return result
 
     def set_chamber_temperature(self,
                                 temperature: int,
@@ -141,8 +143,8 @@ class Gplus(G):
                 retraction_distance,
                 printing_speed):
         """ Retracts the filament """
-        self.write(f"G1 F{retraction_speed * 60} E{-retraction_distance}; retract the filament")
-        self.write(f"G1 F{printing_speed*60}")
+        self.write(f"G1 F{retraction_speed * 60:.0f} E{-retraction_distance}; retract the filament")
+        self.write(f"G1 F{printing_speed*60:.0f}")
 
     def deretract(self,
                   retraction_speed,
@@ -260,11 +262,11 @@ class Gplus(G):
         self.retraction_speed = retraction_speed
         temp_speed = self.speed/60 if speed is None else speed
         self.feed(temp_speed*2)
-        self.write("G1 F" + str(self.retraction_speed * 60) + " E" + str(-retraction_distance))
+        self.write(f"G1 F{self.retraction_speed * 60:.0f} E {-retraction_distance:.3f}")
         self.move(z=lift)
         self.move(x, y, z, extrude=False, **kwargs)
         self.move(z=-lift)
-        self.write("G1 F" + str(self.retraction_speed * 60) + " E" + str(retraction_distance))
+        self.write(f"G1 F{self.retraction_speed * 60:.0f} E {retraction_distance:.3f}")
         self.feed(temp_speed)
 
     def abs_travel(self,
@@ -287,11 +289,11 @@ class Gplus(G):
         self.retraction_speed = retraction_speed
         temp_speed = self.speed / 60
         self.feed(temp_speed * 2 if speed is None else speed)
-        self.write("G1 F" + str(self.retraction_speed * 60) + " E" + str(-retraction_distance))
+        self.write(f"G1 F{self.retraction_speed * 60:.0f} E {-retraction_distance:.3f}")
         self.move(z=lift)
         self.abs_move(x, y, z+lift, extrude=False, **kwargs)
         self.move(z=-lift)
-        self.write("G1 F" + str(self.retraction_speed * 60) + " E" + str(retraction_distance))
+        self.write(f"G1 F{self.retraction_speed * 60:.0f} E {retraction_distance:.3f}")
         self.feed(temp_speed)
 
     def feed(self, rate):
@@ -308,7 +310,7 @@ class Gplus(G):
 
     def write(self, statement_in, resp_needed=False):
         # Ensure that E0.00000 is never passed to gcode
-        statement_in = re.sub(r"E0\.0+([^0-9]|$)", r'\1', statement_in)
+        statement_in = re.sub(r"E-{0,1}0\.0+([^0-9]|$)", r'\1', statement_in)
         self._gcode.append(statement_in)
 
     def teardown(self, wait=True):

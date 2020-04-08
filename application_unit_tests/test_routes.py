@@ -3,6 +3,7 @@ from app import app
 import json
 from base64 import b64decode
 from .persistences import PersistencesIterator
+import re
 
 
 # subclass this instead of TestCase
@@ -198,7 +199,15 @@ class GcodeRoute(CreateAppHelperClass):
             self.assertEqual(header, g_lines[1], test_name)
             self.assertEqual(footer, g_lines[-1], test_name)
 
-    def test_G1_F0(self):
+    def test_F_validity(self):
+        invalid_F_matcher = re.compile(' F[0-9]+\.[0-9]+')
+        # check if regex works
+        self.assertIsNotNone(invalid_F_matcher.search('G28\nG1 F20.0\nG1 X50'))
+
+        invalid_S_matcher = re.compile(' S[0-9]+\.[0-9]+')
+        # check if regex works
+        self.assertIsNotNone(invalid_S_matcher.search('G28\nM104 S120.0\nG1 X50'))
+
         for test_name, p in PersistencesIterator():
             print(test_name)
             resp = self.client.post('/',
@@ -206,7 +215,14 @@ class GcodeRoute(CreateAppHelperClass):
                                     content_type='application/json')
             self.assert200(resp, message=test_name)
 
-            g_lines = b64decode(resp.json["content"]).decode().split('\n')
-            # For some unknown reason, G91 is included before header
-            self.assertFalse('G1 F0' in g_lines, msg=test_name)
+            g_lines = b64decode(resp.json["content"]).decode()
+
+            with self.subTest(msg='F not formatted as integer', test_name=test_name):
+                self.assertIsNone(invalid_F_matcher.search(g_lines), msg=test_name)
+
+            with self.subTest(msg='S not formatted as integer', test_name=test_name):
+                self.assertIsNone(invalid_S_matcher.search(g_lines), msg=test_name)
+
+            with self.subTest(msg='F0 found in generated g-code', test_name=test_name):
+                self.assertFalse('G1 F0' in g_lines.split('\n'), msg=test_name)
 

@@ -8,6 +8,7 @@ class TestGplus(TestCase):
     _E0_TEST_GCODE = [
             ('G1 X0.0000 Y0.0000 E0.000','G1 X0.0000 Y0.0000 '),
             ('G1 X0.0000 Y0.0000 E0.000 F200','G1 X0.0000 Y0.0000  F200'),
+            ('G1 X0.0000 Y0.0000 E-0.000 F200','G1 X0.0000 Y0.0000  F200'),
             ('G1 X0.0000 Y0.0000 E0.000; some comment','G1 X0.0000 Y0.0000 ; some comment'),
             ('G1 X0.0000 Y0.0000 E0.000 ; comment after space','G1 X0.0000 Y0.0000  ; comment after space'),
             ('G92 E0','G92 E0'),
