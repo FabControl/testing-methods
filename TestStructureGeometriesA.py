@@ -533,7 +533,5 @@ class TestStructure(object):
         values.g.set_extruder_temperature(0, values.extruder, immediate=True)
         if values.part_cooling:
             values.g.set_part_cooling(0, values.extruder)
-        values.g.home()
-        values.g.write("M84; disable motors")
         values.g.write(";--- end footer ---")
 

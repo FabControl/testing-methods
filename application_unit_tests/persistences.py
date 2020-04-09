@@ -10,6 +10,7 @@ BASE_PERSISTENCE_STRENGTH = '''
     "extruder_type": "bowden",
     "gcode_header": "This is header",
     "gcode_footer": "This is footer",
+    "homing_sequence": "This is homing sequence",
     "temperature_controllers": {
       "extruder": {
         "tool": "T0",
@@ -8296,6 +8297,7 @@ BASE_PERSISTENCE_ASTETICS = '''
     "extruder_type": "bowden",
     "gcode_header": "THIS IS START HEADER",
     "gcode_footer": "THIS IS END FOOTER",
+    "homing_sequence": "This is homing sequence",
     "temperature_controllers": {
       "extruder": {
         "tool": "T0",
@@ -16522,6 +16524,7 @@ BASE_PERSISTENCE_SPEED = '''
     "extruder_type": "bowden",
     "gcode_header": "THIS IS START HEADER",
     "gcode_footer": "THIS IS END FOOTER",
+    "homing_sequence": "This is homing sequence",
     "temperature_controllers": {
       "extruder": {
         "tool": "T0",

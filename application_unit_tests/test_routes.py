@@ -199,7 +199,7 @@ class GcodeRoute(CreateAppHelperClass):
             self.assertEqual(header, g_lines[1], test_name)
             self.assertEqual(footer, g_lines[-1], test_name)
 
-    def test_F_validity(self):
+    def test_gcode_validity(self):
         invalid_F_matcher = re.compile(' F[0-9]+\.[0-9]+')
         # check if regex works
         self.assertIsNotNone(invalid_F_matcher.search('G28\nG1 F20.0\nG1 X50'))
@@ -226,3 +226,5 @@ class GcodeRoute(CreateAppHelperClass):
             with self.subTest(msg='F0 found in generated g-code', test_name=test_name):
                 self.assertFalse('G1 F0' in g_lines.split('\n'), msg=test_name)
 
+            with self.subTest(msg='Missing/multiple homings in generated g-code', test_name=test_name):
+                self.assertEqual(g_lines.count('This is homing sequence'), 1, msg=test_name)
