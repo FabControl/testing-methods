@@ -526,6 +526,7 @@ class TestStructure(object):
     @staticmethod
     def write_footer(values: get_values_A):
         values.g.write(";--- start footer ---\n; end of the test routine")
+        values.g.write("G91\nG0 Z5.0; Lift the nozzle to avoid hitting printed structure")
         if values.chamber_heatable:
             values.g.set_chamber_temperature(0, values.chamber, immediate=False)
         if values.printbed_heatable:
@@ -533,7 +534,5 @@ class TestStructure(object):
         values.g.set_extruder_temperature(0, values.extruder, immediate=True)
         if values.part_cooling:
             values.g.set_part_cooling(0, values.extruder)
-        values.g.home()
-        values.g.write("M84; disable motors")
         values.g.write(";--- end footer ---")
 

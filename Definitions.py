@@ -163,6 +163,7 @@ class Machine(object):
                  buildarea_maxdim2: float = None,
                  gcode_header: str = "",
                  gcode_footer: str = "",
+                 homing_sequence: str = "",
                  extruder_type: str = "bowden", *args, **kwargs):
 
         self.sn = sn
@@ -174,7 +175,7 @@ class Machine(object):
         self.extruder_type = extruder_type
         self.gcode_header = gcode_header
         self.gcode_footer = gcode_footer
-        self.home_command = "G28" if "prusa" not in self.model.lower() else "G28 W"
+        self.home_command = homing_sequence
 
 
 class Settings(object):
