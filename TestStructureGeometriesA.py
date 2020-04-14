@@ -13,6 +13,16 @@ class TestStructure(object):
     def wipe(self, gv: get_values_A or TestSetupB, length_multiplier=1):
         wipe_length_initial = 6 * gv.test_structure_size / 10
         wipe_length = wipe_length_initial * length_multiplier
+
+        if self.machine.temperaturecontrollers.chamber.chamber_heatable:
+            gv.g.set_chamber_temperature(gv.temperature_chamber_setpoint, gv.chamber)
+
+        if self.machine.temperaturecontrollers.printbed.printbed_heatable:
+            gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed, immediate=True)
+            gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
+
+        gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder, immediate=True)
+        gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder)
         gv.g.home()
         gv.g.write("G21; unit in mm")
         gv.g.write("G92 E0; reset extruder")
@@ -23,17 +33,8 @@ class TestStructure(object):
                       z=+2 * np.mean(gv.coef_h_raft) * gv.extruder.nozzle.size_id,
                       extrude=False, extrusion_multiplier=0)
 
-        if self.machine.temperaturecontrollers.chamber.chamber_heatable:
-            gv.g.set_chamber_temperature(gv.temperature_chamber_setpoint, gv.chamber)
-
-        if self.machine.temperaturecontrollers.printbed.printbed_heatable:
-            gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed, immediate=True)
-            gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
-
         gv.g.write("; --- start to clean the nozzle ---")
 
-        gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder, immediate=True)
-        gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder)
         gv.g.dwell(5000)
         if self.machine.temperaturecontrollers.extruder.nozzle.size_id <= 0.4:
             output = "G1 F1000 E2.5; extrude 2.5 mm of material"
