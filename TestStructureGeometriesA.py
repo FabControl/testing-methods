@@ -30,7 +30,7 @@ class TestStructure(object):
         gv.g.feed(self.machine.settings.speed_travel) # respect the units: mm/min
         gv.g.abs_move(x=-wipe_length + gv.offset_x,
                       y=-6 * gv.test_structure_size / 10 + gv.offset_y,
-                      z=+2 * np.mean(gv.coef_h_raft) * gv.extruder.nozzle.size_id,
+                      z=+2 * np.mean(gv.coef_h_raft) * gv.extruder.nozzle.size_id + 0.001,
                       extrude=False, extrusion_multiplier=0)
 
         gv.g.write("; --- start to clean the nozzle ---")
