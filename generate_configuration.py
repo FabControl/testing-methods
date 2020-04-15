@@ -170,7 +170,7 @@ class Converter(Persistence):
         configuration = self.read_ini(self.default_ini)
         for item in configuration:
             param = self.params.get(item, mode="prusa")
-            if param is not None:
+            if param is not None and param.prusa.value is not None:
                 configuration[item]["value"] = param.prusa.value
         configuration["bed_shape"]["value"] = buildarea_polygon
         return self.assemble_ini(configuration)
