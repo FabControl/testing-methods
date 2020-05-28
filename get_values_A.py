@@ -10,6 +10,7 @@ class get_values_A(object):
         """
         :param path:
         """
+        self.persistence = persistence
 
         machine = persistence.machine
         material = persistence.material
