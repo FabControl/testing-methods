@@ -28,9 +28,10 @@ class TestStructure(object):
         gv.g.write("G92 E0; reset extruder")
         gv.g.write("M83; set extruder to relative mode")
         gv.g.feed(self.machine.settings.speed_travel) # respect the units: mm/min
-        gv.g.abs_move(x=-wipe_length + gv.offset_x,
-                      y=-6 * gv.test_structure_size / 10 + gv.offset_y,
-                      z=+2 * np.mean(gv.coef_h_raft) * gv.extruder.nozzle.size_id + 0.001,
+        initial_position = {'x': -wipe_length + gv.offset_x,
+                            'y': -6 * gv.test_structure_size / 10 + gv.offset_y,
+                            'z': +2 * np.mean(gv.coef_h_raft) * gv.extruder.nozzle.size_id + 0.001}
+        gv.g.abs_move(**initial_position,
                       extrude=False, extrusion_multiplier=0)
 
         gv.g.write("; --- start to clean the nozzle ---")
@@ -46,14 +47,12 @@ class TestStructure(object):
         gv.g.feed(self.machine.settings.speed_printing_raft)  # print the raft
 
         if isinstance(gv, get_values_A):
-            gv.g.move(x=+2 * wipe_length,
-                      y=0,
-                      z=-2 * np.mean(gv.coef_h_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id,
-                      extrude=True, extrusion_multiplier=2.25, coef_h=np.mean(gv.coef_h_raft), coef_w=np.mean(gv.coef_w_raft))
-            gv.g.move(x=0,
-                      y=+gv.test_structure_size / 10,
-                      z=+np.mean(gv.coef_h_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id,
-                      extrude=False, extrusion_multiplier=0)
+            # The long movement along X axis to Z=0
+            gv.g.abs_move(x=initial_position['x']+2 * wipe_length,
+                          z=0.01, extrude=True, extrusion_multiplier=2.25, coef_h=np.mean(gv.coef_h_raft), coef_w=np.mean(gv.coef_w_raft))
+            # Short movement on Y axis to nominal Z coordinates
+            gv.g.abs_move(y=initial_position['y']+gv.test_structure_size / 10,
+                          z=gv.persistence.dict['settings']['track_height_raft'])
             gv.g.move(x=-wipe_length_initial / 6 + (1 - length_multiplier) * wipe_length_initial,
                       y=0,
                       z=0,
