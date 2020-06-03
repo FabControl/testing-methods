@@ -172,10 +172,10 @@ def get_test_info(persistence):
                                                                          hint_active="Set the range to 5-15 mm/s for printing flexible materials, or to 10-30 mm/s for printing harder materials"),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test two parameters will be optimized: <b>First-layer track height</b> and <b>First-layer printing speed</b>",
-                                                 hint_valid="Inspect the printed test structure.<small><br>Select one combination of parameters which results in the best test structure."
-                                                            "<br>If the print does not adhere to the build platform, increase the <b>First-layer extrusion temperature</b> and re-run the test."
-                                                            "<br>If this does not help, increase the <b>Printbed temperature</b> or apply different coating/spray on the build platform."
-                                                            "<br>If you cannot find acceptable combination of two parameters, re-run the test with different <b>First-layer-extrusion-temperature</b> value and/or using different <b>Printing-speed</b> range.</small>")
+                                                 hint_valid="Select one combination of parameters which results in the best test structure."
+                                                            "<ul><li>If the print does not adhere to the build platform, increase the <b>First-layer extrusion temperature</b> and re-run the test.</li>"
+                                                            "<li>If this does not help, increase the <b>Printbed temperature</b> or apply different coating/spray on the build platform.</li>"
+                                                            "<li>If you cannot find acceptable combination of two parameters, re-run the test with different <b>First-layer-extrusion-temperature</b> value and/or using different <b>Printing-speed</b> range.</li></ul>")
 
     elif persistence["session"]["test_number"] == "02":
         other_parameters.pop()
@@ -194,7 +194,7 @@ def get_test_info(persistence):
                                                  other_parameters=other_parameters,
                                                  hint_init="This is an optional test in which one parameter will be determined: <b>First-layer track width</b>."
                                                            "<br>Run it only if you see the voids in between the tracks in the previous test. By skipping this test, the <b>First-layer-track-width</b> value will be set to the <b>Nozzle inner diameter</b>",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one first-layer track width value which results in the best test structure")
+                                                 hint_valid="Select one first-layer track width value which results in the best test structure")
 
     elif persistence["session"]["test_number"] == "03":
         if persistence["session"]["target"] == "aesthetics":
@@ -228,7 +228,7 @@ def get_test_info(persistence):
                                                                          hint_active="Set the range to 20-50 mm/s for printing flexible materials, or to 30-70 mm/s for printing harder materials"),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test two parameters will be determined: <b>Extrusion temperature</b> and <b>Printing speed</b>.",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one combination of parameters which results in the best test structure.")
+                                                 hint_valid="Select one combination of parameters which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "04":
         other_parameters.pop()
@@ -248,7 +248,7 @@ def get_test_info(persistence):
                                                                          hint_active="Set the range to 20-50 mm/s for printing flexible materials, or to 30-70 mm/s for printing harder materials"),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test one parameter will be determined: <b>Track height</b>.",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one combination of parameters which results in the best test structure.")
+                                                 hint_valid="Select one combination of parameters which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "05":
         other_parameters.pop()
@@ -269,7 +269,7 @@ def get_test_info(persistence):
                                                                          hint_active="Set a value from the range 20-50 mm/s for printing flexible materials, or 30-70 mm/s for printing harder materials"),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test one parameter will be determined: <b>Track width</b>.",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one track width value which results in the best test structure.")
+                                                 hint_valid="Select one track width value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "06":
         other_parameters.pop()
@@ -293,7 +293,7 @@ def get_test_info(persistence):
                                                                          hint_active="Set a value from the range 20-50 mm/s for printing flexible materials, or 30-70 mm/s for printing harder materials"),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test one parameter will be determined: <b>Extrusion multiplier</b>.",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one extrusion multiplier value which results in the best test structure.")
+                                                 hint_valid="Select one extrusion multiplier value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "07":
         other_parameters.pop()
@@ -313,7 +313,7 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter(None, None, None, value=[]),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test one parameter will be determined: <b>Printing speed</b>.",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one printing speed value which results in the best test structure.")
+                                                 hint_valid="Select one printing speed value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "08":
         other_parameters.pop()
@@ -339,7 +339,7 @@ def get_test_info(persistence):
                                                                            min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test three parameters will be determined: <b>Extrusion temperature</b>, <b>Retraction distance</b>, and <b>Retraction speed</b>.",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one combination of parameters which results in the best test structure. Use slider to select the retraction speed.")
+                                                 hint_valid="Select one combination of parameters which results in the best test structure. Use slider to select the retraction speed.")
 
     elif persistence["session"]["test_number"] == "09":
         other_parameters.pop()
@@ -384,7 +384,7 @@ def get_test_info(persistence):
                                                  parameter_two=Parameter(None, None, None),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test one parameter will be determined: <b>Retraction distance</b>.",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one retraction distance value which results in the best test structure.")
+                                                 hint_valid="Select one retraction distance value which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "11":
         other_parameters.pop()
@@ -407,7 +407,7 @@ def get_test_info(persistence):
                                                                          min_max=[1, persistence["settings"]["speed_travel"]]),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test two parameters will be determined: <b>Retraction distance</b> and <b>Retraction speed</b>.",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one combination of parameters which results in the best test structure.")
+                                                 hint_valid="Select one combination of parameters which results in the best test structure.")
 
     elif persistence["session"]["test_number"] == "12": #TODO
         other_parameters.pop()
@@ -450,7 +450,7 @@ def get_test_info(persistence):
                                                                          hint_active="Set the range to 10-25 mm/s for printing flexible materials, or 15-35 mm/s for harder materials"),
                                                  other_parameters=other_parameters,
                                                  hint_init="In this test two parameters will be determined: <b>Bridging extrusion multiplier</b> and <b>Bridging printing speed</b>.",
-                                                 hint_valid="Inspect the printed test structure.<br>Select one combination of parameters which results in the best test structure.")
+                                                 hint_valid="Select one combination of parameters which results in the best test structure.")
 
     return parameter_values_for_comments
 
