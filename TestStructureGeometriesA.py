@@ -52,7 +52,7 @@ class TestStructure(object):
                           z=0.01, extrude=True, extrusion_multiplier=2.25, coef_h=np.mean(gv.coef_h_raft), coef_w=np.mean(gv.coef_w_raft))
             # Short movement on Y axis to nominal Z coordinates
             gv.g.abs_move(y=initial_position['y']+gv.test_structure_size / 10,
-                          z=gv.track_height_raft[0])
+                          z=gv.persistence.dict['settings']['track_height_raft'])
             gv.g.move(x=-wipe_length_initial / 6 + (1 - length_multiplier) * wipe_length_initial,
                       y=0,
                       z=0,
