@@ -35,18 +35,18 @@ def get_test_info():
 @app.route('/routine', methods=['GET', 'POST'])
 def get_routine():
     routine = {
-        "01": {"name": "first-layer track height vs first-layer printing speed", "priority": "primary"},
-        "02": {"name": "first-layer track width", "priority": "secondary"},
-        "03": {"name": "extrusion temperature vs printing speed", "priority": "primary"},
-        "04": {"name": "track height vs printing speed", "priority": "secondary"},
-        "05": {"name": "track width", "priority": "secondary"},
-        "06": {"name": "extrusion multiplier vs printing speed", "priority": "secondary"},
-        "07": {"name": "printing speed", "priority": "secondary"},
-        "08": {"name": "extrusion temperature vs retraction distance", "priority": "secondary"},
-        "09": {"name": "retraction distance vs printing speed", "priority": "secondary"},
-        "10": {"name": "retraction distance", "priority": "primary"},
-        "11": {"name": "retraction distance vs retraction speed", "priority": "secondary"},
-        "13": {"name": "bridging extrusion multiplier vs bridging printing speed", "priority": "primary"}
+        "01": {"name": "First-layer track height vs First-layer printing speed", "priority": "primary"},
+        "02": {"name": "First-layer track width", "priority": "secondary"},
+        "03": {"name": "Extrusion temperature vs Printing speed", "priority": "primary"},
+        "04": {"name": "Track height vs Printing speed", "priority": "secondary"},
+        "05": {"name": "Track width", "priority": "secondary"},
+        "06": {"name": "Extrusion multiplier vs Printing speed", "priority": "secondary"},
+        "07": {"name": "Printing speed", "priority": "secondary"},
+        "08": {"name": "Extrusion temperature vs Retraction distance", "priority": "secondary"},
+        "09": {"name": "Retraction distance vs Printing speed", "priority": "secondary"},
+        "10": {"name": "Retraction distance", "priority": "primary"},
+        "11": {"name": "Retraction distance vs Retraction speed", "priority": "secondary"},
+        "13": {"name": "Bridging extrusion multiplier vs Bridging printing speed", "priority": "primary"}
     }
     return jsonify(routine)
 
@@ -86,4 +86,4 @@ def not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)

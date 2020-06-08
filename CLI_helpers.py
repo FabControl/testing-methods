@@ -114,11 +114,10 @@ def printing_time(gcode: str):
         elif line.startswith('G1 ') or line.startswith('G0 '):
             X,Y,Z,E,F = moves_matcher.search(line).group('X','Y','Z','E','F')
 
+            frate = feedrate
             if F is not None:
                 if X is not None or Y is not None or Z is not None:
                     frate = (int(F)/60 + feedrate) / 2
-                else:
-                    frate = feedrate
                 feedrate = int(F)/60
 
             dx = dy = dz = de = 0
