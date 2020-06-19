@@ -7,7 +7,6 @@ from persistence import Persistence
 class OptimizerSession(object):
     def __init__(self, persistence: Persistence):
         self.values = None
-        self.ts = TS(persistence)
         self.values = get_values_A(persistence, persistence.test_info,
                                    path=save_session_file_as(persistence.dict, extension="gcode", session_id=str(persistence.id)),
                                    offset=persistence.dict["session"]["offset"] if persistence.dict["session"]["offset"] else [0, 0])
