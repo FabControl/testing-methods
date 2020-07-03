@@ -110,7 +110,7 @@ class TestStructure(object):
                 values.g.move(x=(-1) ** (dummy + 1) * (values.test_structure_size - np.mean(values.coef_w_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id) / 20,
                               y=0,
                               z=0,
-                              extrude=True, extrusion_multiplier=values.extrusion_multiplier_raft, coef_h=np.mean(values.coef_h_raft), coef_w=np.mean(values.coef_w_raft))
+                              extrude=True, extrusion_multiplier=self.persistence.dict['settings']['extrusion_multiplier'], coef_h=np.mean(values.coef_h_raft), coef_w=np.mean(values.coef_w_raft))
 
         values.g.write("; --- finish to print the raft ---")
 
