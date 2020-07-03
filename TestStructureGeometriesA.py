@@ -52,7 +52,7 @@ class TestStructure(object):
                           z=0.01, extrude=True, extrusion_multiplier=2.25, coef_h=np.mean(gv.coef_h_raft), coef_w=np.mean(gv.coef_w_raft))
             # Short movement on Y axis to nominal Z coordinates
             gv.g.abs_move(y=initial_position['y']+gv.test_structure_size / 10,
-                          z=gv.persistence.dict['settings']['track_height_raft'])
+                          z=self.persistence.dict['settings']['track_height_raft'])
             gv.g.move(x=-wipe_length_initial / 6 + (1 - length_multiplier) * wipe_length_initial,
                       y=0,
                       z=0,
@@ -93,7 +93,7 @@ class TestStructure(object):
         values.g.write("; --- print the infill with the density of {0} % ---".format(self.machine.settings.raft_density))
         values.g.feed(values.speed_printing_raft)
         raft_density = self.machine.settings.raft_density/100
-        step = np.mean(values.coef_w_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id / raft_density  # step size
+        step = self.persistence.dict['settings']['track_width_raft'] / raft_density  # step size
         step_number = int(values.test_structure_size / step) if (int(values.test_structure_size / step) % 2) == 0 else int(values.test_structure_size / step) + 1
 
         values.g.move(x=-np.mean(values.coef_w_raft) * self.machine.temperaturecontrollers.extruder.nozzle.size_id / 2,
