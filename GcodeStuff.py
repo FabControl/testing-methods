@@ -6,7 +6,6 @@ from string import Template
 import io
 import re
 
-track_list = []
 
 
 class Gplus(G):
@@ -209,7 +208,6 @@ class Gplus(G):
                 kwargs["E"] = 0 + current_extruder_position
 
         self._update_current_position(x=x, y=y, z=z, **kwargs)
-        track_list.append((self.current_position["x"], self.current_position["y"], self.current_position["z"]))
         args = self._format_args(x, y, z, **kwargs)
         cmd = "G0 " if rapid else "G1 "
         self.write(cmd + args)

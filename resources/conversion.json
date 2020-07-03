@@ -2716,7 +2716,7 @@
     "cura": {
       "modifier": null,
       "name": null,
-      "parameter": "speed_travel",
+      "parameter": null,
       "parent_parameter": null,
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
@@ -3481,7 +3481,7 @@
     "cura": {
       "modifier": null,
       "name": null,
-      "parameter": "machine_width",
+      "parameter": null,
       "parent_parameter": null,
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
@@ -3532,7 +3532,7 @@
     "cura": {
       "modifier": null,
       "name": null,
-      "parameter": "machine_depth",
+      "parameter": null,
       "parent_parameter": null,
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
@@ -3583,7 +3583,7 @@
     "cura": {
       "modifier": null,
       "name": null,
-      "parameter": "machine_height",
+      "parameter": null,
       "parent_parameter": null,
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
@@ -3632,12 +3632,12 @@
     "_manual": false,
     "_value": null,
     "cura": {
-      "modifier": "'rectangular' if x == 'cartesian' else 'elliptic'",
+      "modifier": null,
       "name": null,
-      "parameter": "machine_shape",
+      "parameter": null,
       "parent_parameter": null,
       "py/object": "conversion_dictionary.Slicer",
-      "reverse_modifier": "'cartesian' if x == 'rectangular' else 'elliptic'",
+      "reverse_modifier": null,
       "root": {
         "py/id": 288
       },
