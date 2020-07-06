@@ -236,8 +236,7 @@ class TestStructure(object):
         for current_test_structure in range(values.number_of_test_structures):
             values.g.write(values.comment_all_values_of_constant_parameters)
             values.g.write(values.comment_current_values_of_variable_parameter[current_test_structure])
-
-            current_printing_speed = values.speed_printing[current_test_structure]
+            current_printing_speed = values.speed_printing[0]
             values.g.feed(current_printing_speed)
 
             values.g.travel(x=-values.test_structure_width[current_test_structure] - values.test_structure_separation,
@@ -249,9 +248,10 @@ class TestStructure(object):
             step_x = values.step_x[current_test_structure]
 
             for current_substructure in range(values.number_of_substructures):
+                current_printing_speed = values.speed_printing[current_substructure]
                 values.g.write("; --- testing the following printing speed value: {:.1f} mm/s".format(current_printing_speed))
 
-                coasting_distance = np.linspace(0, values.coasting_distance, values.number_of_lines)
+                coasting_distance = values.coasting_distance
 
                 for current_line in range(values.number_of_lines):
                     values.g.move(x=0,
@@ -263,8 +263,7 @@ class TestStructure(object):
                                   z=0,
                                   extrude=False, extrusion_multiplier=0)
 
-                    values.g.retract(values.retraction_speed, values.retraction_distance[current_substructure])
-
+                    values.g.retract(values.retraction_speed, values.retraction_distance[current_substructure], current_printing_speed)
                     values.g.move(x=0,
                                   y=-values.step_y / (2 * values.number_of_substructures),
                                   z=0,
@@ -284,8 +283,7 @@ class TestStructure(object):
                                       y=0,
                                       z=0,
                                       extrude=False, extrusion_multiplier=0)
-
-                    values.g.retract(values.retraction_speed, values.retraction_distance[current_test_structure], values.retraction_restart_distance[current_test_structure])
+                    values.g.deretract(values.retraction_speed, values.retraction_distance[current_test_structure], current_printing_speed, values.retraction_restart_distance[current_test_structure])
 
         values.g.write("; --- finish to print the test structure ---")
         self.write_footer(values)

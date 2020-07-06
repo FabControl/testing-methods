@@ -46,6 +46,7 @@ def get_routine():
         "09": {"name": "Retraction distance vs Printing speed", "priority": "secondary"},
         "10": {"name": "Retraction distance", "priority": "primary"},
         "11": {"name": "Retraction distance vs Retraction speed", "priority": "secondary"},
+        "12": {"name": "Retraction restart distance vs Printing speed and Coasting distance", "priority": "secondary"},
         "13": {"name": "Bridging extrusion multiplier vs Bridging printing speed", "priority": "primary"}
     }
     return jsonify(routine)
