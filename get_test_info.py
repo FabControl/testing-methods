@@ -423,9 +423,14 @@ def get_test_info(persistence):
         parameter_values_for_comments = TestInfo("retraction-restart distance vs coasting distance", "12", number_of_layers=1, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
                                                  parameter_one=Parameter("retraction-restart distance", "retraction_restart_distance", "mm", "{:.3f}",
                                                                          value=np.linspace(persistence["session"]["min_max_parameter_one"][0], persistence["session"]["min_max_parameter_one"][-1], number_of_test_structures).tolist() if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.0, 1.0, number_of_test_structures).tolist(), min_max=[0, 5]),
-                                                 parameter_two=Parameter("coasting distance", "coasting_distance", "mm", "{:.3f}",
-                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0], persistence["session"]["min_max_parameter_two"][-1], number_of_test_structures).tolist() if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.0, 1.0, number_of_test_structures).tolist(), min_max=[0, 5]),
-                                                 other_parameters=other_parameters)
+                                                 parameter_two=Parameter("printing speed", "speed_printing", "mm/s", "{:.0f}",
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0], persistence["session"]["min_max_parameter_two"][-1], number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [] else np.linspace(0.80*persistence["settings"]["speed_printing"], 1.75*persistence["settings"]["speed_printing"], number_of_substructures).tolist(),
+                                                                         min_max=[1, persistence["settings"]["speed_travel"]]),
+                                                 parameter_three=Parameter("coasting distance", "coasting_distance", "mm", "{:.3f}",
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_three"][0], persistence["session"]["min_max_parameter_three"][-1], 2).tolist() if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.0, 1.0, 2).tolist(), min_max=[0, 5]),
+                                                 other_parameters=other_parameters,
+                                                 hint_init="This test is needed to find the best retraction restart distance and coasting settings.",
+                                                 hint_valid="")
 
     elif persistence["session"]["test_number"] == "13":
         other_parameters.pop()
