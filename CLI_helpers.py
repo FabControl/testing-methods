@@ -109,6 +109,8 @@ def printing_time(gcode: str):
             if Z is not None:
                 z = int(Z)
             if E is not None:
+                if E == '0.0':  # int('0.0') yields a ValueError
+                    E = 0
                 e = int(E)
 
         elif line.startswith('G1 ') or line.startswith('G0 '):
