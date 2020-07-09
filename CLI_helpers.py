@@ -103,15 +103,13 @@ def printing_time(gcode: str):
         elif line.startswith('G92 '):
             X,Y,Z,E,F = moves_matcher.search(line).group('X','Y','Z','E','F')
             if X is not None:
-                x = int(X)
+                x = float(X)
             if Y is not None:
-                y = int(Y)
+                y = float(Y)
             if Z is not None:
-                z = int(Z)
+                z = float(Z)
             if E is not None:
-                if E == '0.0':  # int('0.0') yields a ValueError
-                    E = 0
-                e = int(E)
+                e = float(E)
 
         elif line.startswith('G1 ') or line.startswith('G0 '):
             X,Y,Z,E,F = moves_matcher.search(line).group('X','Y','Z','E','F')
