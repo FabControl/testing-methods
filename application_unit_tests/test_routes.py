@@ -196,7 +196,7 @@ class GcodeRoute(CreateAppHelperClass):
 
             g_lines = b64decode(resp.json["content"]).decode().split('\n')
             # For some unknown reason, G91 is included before header
-            self.assertEqual(header, g_lines[1], test_name)
+            self.assertEqual(header, g_lines[0], test_name)
             self.assertEqual(footer, g_lines[-1], test_name)
 
     def test_gcode_validity(self):

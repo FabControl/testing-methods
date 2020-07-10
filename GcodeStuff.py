@@ -29,8 +29,7 @@ class Gplus(G):
 
         super(Gplus, self).__init__(*args, **kwargs)
 
-        self._gcode = [";----- start of user defined header -----",
-                    machine.gcode_header,
+        self._gcode = [machine.gcode_header,
                     ";----- end of user defined header -----"]
 
         self.filament_diameter = material.size_od
