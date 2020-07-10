@@ -52,10 +52,11 @@ def extruded_filament(gcode: str):
     return round(total_extrusion)
 
 
-def printing_time(gcode: str):
+def printing_time(gcode: str, as_datetime: bool = False):
     """
     Takes a gcode as string and returns estimated print time.
     :param gcode:
+    :param as_datetime:
     :return:
     """
     dwell_matcher = re.compile(r'(P(?P<milliseconds>\d+)|S(?P<seconds>\d+))')
@@ -103,13 +104,13 @@ def printing_time(gcode: str):
         elif line.startswith('G92 '):
             X,Y,Z,E,F = moves_matcher.search(line).group('X','Y','Z','E','F')
             if X is not None:
-                x = int(X)
+                x = float(X)
             if Y is not None:
-                y = int(Y)
+                y = float(Y)
             if Z is not None:
-                z = int(Z)
+                z = float(Z)
             if E is not None:
-                e = int(E)
+                e = float(E)
 
         elif line.startswith('G1 ') or line.startswith('G0 '):
             X,Y,Z,E,F = moves_matcher.search(line).group('X','Y','Z','E','F')
@@ -160,7 +161,7 @@ def printing_time(gcode: str):
             else:
                 estimated_time += timedelta(seconds=de/frate)
 
-    return str(estimated_time).split('.')[0]
+    return str(estimated_time).split('.')[0] if not as_datetime else estimated_time
 
 
 def exclusive_write(path: str, output, limit=True):
