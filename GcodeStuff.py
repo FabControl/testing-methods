@@ -23,6 +23,7 @@ class Gplus(G):
         self.coef_w = machine.settings.track_width / machine.temperaturecontrollers.extruder.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
         self.retraction_speed = machine.settings.retraction_speed
+        self.use_temperature_wait_cmd = 'flashforge' in machine.model.lower()
         self._machine = machine
         self._gcode = []
 
@@ -47,6 +48,9 @@ class Gplus(G):
             t = Template(extruder.gcode_command  + "; set the extruder temperature and wait till it has been reached")
         result = t.substitute(temp=f'{temperature:.0f}', tool=extruder.tool)
         self.write(result)
+        # FlashForge specific wait for temperature to be reached
+        if not immediate and self.use_temperature_wait_cmd:
+            self.write('M6 {}'.format(extruder.tool))
         if return_string:
             return result
 
@@ -64,6 +68,9 @@ class Gplus(G):
         t = Template(gcode_command)
         result = t.substitute(temp=f'{temperature:.0f}')
         self.write(result)
+        # FlashForge specific wait for temperature to be reached
+        if not immediate and self.use_temperature_wait_cmd:
+            self.write('M7')
         if return_string:
             return result
 
