@@ -7,7 +7,6 @@ import io
 import re
 
 
-
 class Gplus(G):
     # Build on the G class from mecode. Gplus class redefines some of the commands, creates new commands
     def __init__(self, material: Material, machine: Machine, *args, **kwargs):
@@ -330,7 +329,7 @@ class Gplus(G):
     @property
     def gcode(self):
         return "\n".join(self._gcode)
-    
+
     def gcode_post_process(self, persistence):
         """
         Substitutes variables following the convention of `$variable$`
@@ -340,8 +339,9 @@ class Gplus(G):
         temp_gcode = self.gcode
         exposed_variables = {'nozzle_size': persistence.machine.temperaturecontrollers.extruder.nozzle.size_id,
                              'temperature_printbed': persistence.dict['settings']['temperature_printbed_setpoint'],
-                             'buildvolume_x': persistence.machine.buildarea_maxdim1,
-                             'buildvolume_y': persistence.machine.buildarea_maxdim2,
+                             'extrusion_temperature_raft': persistence.dict['settings']['temperature_extruder_raft'],
+                             'size_x': persistence.machine.buildarea_maxdim1,
+                             'size_y': persistence.machine.buildarea_maxdim2,
                              '3dprinter_model': persistence.machine.model,
                              'print_time': printing_time(temp_gcode, as_datetime=True).seconds,
                              'extruded_filament': int(extruded_filament(temp_gcode)/10*(persistence.material.size_od*math.pi) ** 2)}  # Extruded filament in cm^3
