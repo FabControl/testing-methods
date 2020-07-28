@@ -62,7 +62,6 @@ class TestStructure(object):
 
         return
 
-
     # RAFT PERIMETER
     # prints the outer perimeter of the raft
     def raft_perimeter(self, values: get_values_A):
@@ -83,7 +82,6 @@ class TestStructure(object):
                               extrude=True, extrusion_multiplier=1.5, coef_h=np.mean(values.coef_h_raft), coef_w=np.mean(values.coef_w_raft))
 
         return
-
 
     # PRINTING RAFT
     # prints the filling of the raft
@@ -129,7 +127,6 @@ class TestStructure(object):
             values.g.set_part_cooling(values.part_cooling_setpoint, values.extruder)
 
         return
-
 
     # GENERIC TEST ROUTINE: SINGLE TESTING PARAMETER vs. PRINTING SPEED
     def flat_test_parameter_one_vs_parameter_two(self, values: get_values_A):
@@ -222,14 +219,13 @@ class TestStructure(object):
 
         return
 
-
     # RETRACTION RESTART DISTANCE and COASTING DISTANCE
     def retraction_restart_distance_vs_coasting_distance(self, values: get_values_A):
         values.g.write(values.title)
         values.g.write(values.comment_all_values_of_variable_parameters)
         self.wipe(values, length_multiplier=1 if self.machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)
-
-        self.print_raft(values) if values.raft else self.raft_perimeter(values) # print the raft to support the test structure
+        # print the raft to support the test structure
+        self.print_raft(values) if values.raft else self.raft_perimeter(values)
 
         values.g.write("; --- start to print the test structure ---")
 
@@ -290,7 +286,6 @@ class TestStructure(object):
         values.g.teardown()
 
         return
-
 
     # BRIDGING EXTRUSION MULTIPLIER vs. BRIDGING PRINTING SPEED
     def bridging_test(self, values: get_values_A):
@@ -402,7 +397,6 @@ class TestStructure(object):
 
         return
 
-
     # FIXED RETRACTION DISTANCE vs VARIABLE PRINTING SPEED
     # FIXED RETRACTION DISTANCE vs VARIABLE RETRACTION SPEED
     # VARIABLE RETRACTION DISTANCE at FIXED PRINTING SPEED and FIXED RETRACTION SPEED
@@ -411,8 +405,8 @@ class TestStructure(object):
     def retraction_distance(self, values: get_values_A):
         values.g.write(values.title)
         values.g.write(values.comment_all_values_of_variable_parameters)
-        self.wipe(values, length_multiplier=1 if self.machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85) # perform wipe of the nozzle
-        self.print_raft(values) # print the raft to support the test structure
+        self.wipe(values, length_multiplier=1 if self.machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)  # perform wipe of the nozzle
+        self.print_raft(values)  # print the raft to support the test structure
         values.g.write("; --- start to print the test structure ---")
         values.g.travel(x=-values.test_structure_width[0] - values.test_structure_separation,
                         y=0,
@@ -533,4 +527,3 @@ class TestStructure(object):
         if values.part_cooling:
             values.g.set_part_cooling(0, values.extruder)
         values.g.write(";--- end footer ---")
-
