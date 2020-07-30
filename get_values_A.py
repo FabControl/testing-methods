@@ -95,6 +95,12 @@ class get_values_A(object):
         self.bridging_part_cooling = machine.settings.bridging_part_cooling
         self.bridging_speed_printing = machine.settings.bridging_speed_printing
 
+        # Support parameters
+        self.support_spacing = 50
+        self.support_contact_distance = 0.2
+
+        self.offset_z = 0
+
         if self.test_number == "01":
             # FIRST LAYER HEIGHT test parameters
             self.coef_h = np.linspace(fixed_parameter_values.parameter_one.values[0]/machine.temperaturecontrollers.extruder.nozzle.size_id,
@@ -265,6 +271,22 @@ class get_values_A(object):
                                                    fixed_parameter_values.parameter_two.values[-1],
                                                    self.number_of_substructures).tolist()
 
+        elif self.test_number == "00":
+            self.coef_h = self.coef_h_raft
+
+            self.temperature_extruder_raft = [x * machine.settings.temperature_extruder_raft for x in [1] * self.number_of_test_structures]
+            self.temperature_extruder = self.temperature_extruder_raft
+
+            self.track_height = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h_raft]
+            machine.settings.track_height = self.track_height[0]
+            self.track_height_raft = self.track_height
+            self.abs_z = [x * machine.temperaturecontrollers.extruder.nozzle.size_id for x in self.coef_h]
+
+            # Z-Offset test parameters
+            self.offset_z = np.linspace(fixed_parameter_values.parameter_one.values[0],
+                                        fixed_parameter_values.parameter_one.values[-1],
+                                        self.number_of_test_structures).tolist()
+
         else:
             raise ValueError("{} is not a valid test.".format(fixed_parameter_values.name))
 
@@ -325,7 +347,7 @@ def addtitle(test_info: TestInfo, material: Material, machine: Machine):
 
 def addcomment1(test_info: TestInfo):
     comment1 = str("; --- testing the following " + test_info.parameter_one.name + " values: " + ", ".join((test_info.parameter_one.precision + " {}").format(*k) for k in zip(test_info.parameter_one.values, len(test_info.parameter_one.values)*[test_info.parameter_one.units])) + " ---")
-    if test_info.test_number not in ["02", "05", "07", "10"]:
+    if test_info.test_number not in ["02", "05", "07", "10", "00"]:
         comment2 = str("; --- and the following " + test_info.parameter_two.name + " values: " + ", ".join((test_info.parameter_two.precision + " {}").format(*k) for k in zip(test_info.parameter_two.values, len(test_info.parameter_two.values)*[test_info.parameter_two.units])) + " ---")
         if test_info.parameter_three:
             comment3 = str("; --- and the following " + test_info.parameter_three.name + " values: " + ", ".join((test_info.parameter_three.precision + " {}").format(*k) for k in zip(test_info.parameter_three.values, len(test_info.parameter_three.values)*[test_info.parameter_three.units])) + " ---")

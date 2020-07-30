@@ -37,12 +37,13 @@ def get_test_info():
 @app.route('/routine', methods=['GET', 'POST'])
 def get_routine():
     routine = {
+        "00": {"name": "Z-offset", "priority": "secondary"},
         "01": {"name": "First-layer track height vs First-layer printing speed", "priority": "primary"},
         "02": {"name": "First-layer track width", "priority": "secondary"},
         "03": {"name": "Extrusion temperature vs Printing speed", "priority": "primary"},
         "04": {"name": "Track height vs Printing speed", "priority": "secondary"},
         "05": {"name": "Track width", "priority": "secondary"},
-        "06": {"name": "Extrusion multiplier vs Printing speed", "priority": "secondary"},
+        "06": {"name": "Extrusion multiplier", "priority": "secondary"},
         "07": {"name": "Printing speed", "priority": "secondary"},
         "08": {"name": "Extrusion temperature vs Retraction distance", "priority": "secondary"},
         "09": {"name": "Retraction distance vs Printing speed", "priority": "secondary"},

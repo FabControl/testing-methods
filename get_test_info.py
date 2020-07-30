@@ -159,7 +159,21 @@ def get_test_info(persistence):
     else:
         values_parameter_one = []
 
-    if persistence["session"]["test_number"] == "01":
+    if persistence["session"]["test_number"] == "00":
+        other_parameters = parameter_reorder_and_activate(other_parameters, inactives=["part_cooling_setpoint"])
+        other_parameters.extend([track_height_raft,
+                                 track_width_raft,
+                                 speed_printing_raft])
+
+        parameter_values_for_comments = TestInfo("z-offset", "00", number_of_layers=2, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=False,
+                                                 parameter_one=Parameter("z-offset", "offset_z", "mm", "{:.3f}",
+                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0, 0.45, number_of_test_structures).tolist(), min_max=[0.0, 2]),
+                                                 parameter_two=Parameter(None, None, None),
+                                                 other_parameters=other_parameters,
+                                                 hint_init="This test is needed to find Z-offset value in case of non-level print bed or printbed coating.",
+                                                 hint_valid="")
+
+    elif persistence["session"]["test_number"] == "01":
         other_parameters = parameter_reorder_and_activate(other_parameters, inactives=["part_cooling_setpoint"])
         parameter_values_for_comments = TestInfo("first-layer track height vs first-layer printing speed", "01", number_of_layers=1, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=False,
                                                  parameter_one=Parameter("first-layer track height","track_height_raft", "mm", "{:.2f}",
