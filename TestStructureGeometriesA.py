@@ -133,8 +133,8 @@ class TestStructure(object):
         values.g.write(values.title)
         values.g.write(values.comment_all_values_of_variable_parameters)
         self.wipe(values, length_multiplier=1 if self.machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)
-
-        self.print_raft(values) if values.raft else self.raft_perimeter(values) # print the raft to support the test structure
+        # print the raft to support the test structure
+        self.print_raft(values) if values.raft else self.raft_perimeter(values)
 
         values.g.write("; --- start to print the test structure ---")
         if self.machine.settings.speed_printing > 0:
@@ -181,7 +181,7 @@ class TestStructure(object):
                 values.g.abs_move(z=values.abs_z[current_test_structure],
                                   extrude=False, extrusion_multiplier=0)
 
-                for current_layer in range(values.number_of_layers): # layers
+                for current_layer in range(values.number_of_layers):  # layers
                     for current_line in range(values.number_of_lines):
                         values.g.move(x=0,
                                       y=(-1) ** (current_line+1) * values.step_y / values.number_of_substructures,
@@ -512,6 +512,62 @@ class TestStructure(object):
         values.g.write("; --- finish to print the test structure ---")
         self.write_footer(values)
         values.g.teardown()
+
+        return
+
+    def z_offset(self, gv: get_values_A or TestSetupB):
+        wipe_length = 100
+        offset_z = gv.offset_z[::-1]
+        notch_depth = 10
+
+        if self.machine.temperaturecontrollers.printbed.printbed_heatable:
+            gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed, immediate=True)
+            gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
+
+        gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder, immediate=True)
+        gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder)
+        gv.g.home()
+        gv.g.write("G21; unit in mm")
+        gv.g.write("G92 E0; reset extruder")
+        gv.g.write("M83; set extruder to relative mode")
+        gv.g.feed(self.machine.settings.speed_travel)  # respect the units: mm/s
+        initial_position = {'x': wipe_length/2 + gv.offset_x,
+                            'y': gv.offset_y,
+                            'z': offset_z[0] + self.machine.settings.track_height_raft}
+        gv.g.abs_move(**initial_position,
+                      extrude=False, extrusion_multiplier=0)
+        gv.g.write(gv.title)
+        gv.g.write(gv.comment_all_values_of_variable_parameters)
+        gv.g.write("; --- starting z-offset test ---")
+
+        gv.g.dwell(5000)
+        if self.machine.temperaturecontrollers.extruder.nozzle.size_id <= 0.4:
+            output = "G1 F1000 E2.5; purge 2.5 mm of material"
+        else:
+            output = "G1 F1000 E5.0; purge 5.0 mm of material"
+
+        gv.g.write(output)
+        gv.g.dwell(5000)
+        gv.g.feed(self.machine.settings.speed_printing_raft/2)
+
+        if isinstance(gv, get_values_A):
+            gv.g.extrude = True
+            lateral_step = wipe_length / (gv.number_of_test_structures-1)
+            vertical_step = (max(gv.offset_z) - min(gv.offset_z)) / (gv.number_of_test_structures-1)
+            track_width = self.machine.settings.track_width
+
+            gv.g.write(f'; Starting to print a measuring notch at the initial height of {gv.offset_z[0]} mm.')
+            gv.g.move(y=notch_depth, extrude=True, extrusion_multiplier=1)
+            gv.g.move(x=-track_width)
+            gv.g.move(y=-notch_depth)
+            for offset in offset_z[:-1]:
+                # Offset change
+                gv.g.move(x=-lateral_step-track_width, z=-vertical_step)
+                gv.g.write(f'; Reached Z height of {offset} mm, printing a measuring notch.')
+                # Measuring notch
+                gv.g.move(y=notch_depth)
+                gv.g.move(x=-track_width)
+                gv.g.move(y=-notch_depth)
 
         return
 

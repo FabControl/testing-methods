@@ -17,6 +17,8 @@ class OptimizerSession(object):
             self.test_structure.retraction_restart_distance_vs_coasting_distance(self.values)
         elif persistence.dict["session"]["test_number"] == "13":
             self.test_structure.bridging_test(self.values)
+        elif persistence.dict["session"]["test_number"] == "00":
+            self.test_structure.z_offset(self.values)
         else:
             self.test_structure.flat_test_parameter_one_vs_parameter_two(self.values)
 
