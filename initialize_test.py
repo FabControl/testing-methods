@@ -18,7 +18,7 @@ class OptimizerSession(object):
         elif persistence.dict["session"]["test_number"] == "13":
             self.test_structure.bridging_test(self.values)
         elif persistence.dict["session"]["test_number"] == "00":
-            self.test_structure.z_offset(self.values)
+            self.test_structure.offset_z(self.values)
         else:
             self.test_structure.flat_test_parameter_one_vs_parameter_two(self.values)
 

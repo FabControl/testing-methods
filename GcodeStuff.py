@@ -22,6 +22,7 @@ class Gplus(G):
         self.coef_w = machine.settings.track_width / machine.temperaturecontrollers.extruder.nozzle.size_id
         self.speed_printing = machine.settings.speed_printing
         self.retraction_speed = machine.settings.retraction_speed
+        self.offset_z = machine.settings.offset_z
         self.use_temperature_wait_cmd = 'flashforge' in machine.model.lower()
         self._machine = machine
         self._gcode = []
@@ -220,9 +221,11 @@ class Gplus(G):
     def abs_move(self,
                  x=None, y=None, z=None,
                  rapid=False,
-                 extrude=None, extrusion_multiplier=None, **kwargs):
+                 extrude=None, extrusion_multiplier=None, use_offset_z=True, **kwargs):
         """ Same as `move` method, but positions are interpreted as absolute.
         """
+        if use_offset_z:
+            z = z + self.offset_z
         if self.form != "elliptic":
             offset_x = self.buildarea_maxdim1/2
             offset_y = self.buildarea_maxdim2/2
@@ -266,9 +269,9 @@ class Gplus(G):
         temp_speed = self.speed/60 if speed is None else speed
         self.feed(temp_speed*2)
         self.write(f"G1 F{self.retraction_speed * 60:.0f} E {-retraction_distance:.3f}")
-        self.move(z=lift)
-        self.move(x, y, z, extrude=False, **kwargs)
-        self.move(z=-lift)
+        self.move(z=lift, rapid=True)
+        self.move(x, y, z, extrude=False, rapid=True, **kwargs)
+        self.move(z=-lift, rapid=True)
         self.write(f"G1 F{self.retraction_speed * 60:.0f} E {retraction_distance:.3f}")
         self.feed(temp_speed)
 

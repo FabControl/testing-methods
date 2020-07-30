@@ -515,7 +515,7 @@ class TestStructure(object):
 
         return
 
-    def z_offset(self, gv: get_values_A or TestSetupB):
+    def offset_z(self, gv: get_values_A or TestSetupB):
         wipe_length = 100
         offset_z = gv.offset_z[::-1]
         notch_depth = 10

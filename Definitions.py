@@ -197,16 +197,18 @@ class Settings(object):
     """
 
     def __init__(self, material=None, nozzle=None, machine=None,
-                 track_width=None, track_width_raft =None,
+                 track_width=None, track_width_raft=None,
                  track_height=None, track_height_raft=None,
                  temperature_extruder_raft=None, temperature_extruder=None,
                  speed_travel=None, speed_printing=None, speed_printing_raft=None,
                  extrusion_multiplier=None,
-                 retraction_distance=None, retraction_restart_distance=None, retraction_speed=None, coasting_distance=None,
+                 retraction_distance=None, retraction_restart_distance=None, retraction_speed=None,
+                 coasting_distance=None,
                  bridging_extrusion_multiplier=None, bridging_part_cooling=None, bridging_speed_printing=None,
                  raft_density=None,
-                 temperature_chamber_setpoint:int=None, temperature_printbed_setpoint:int=None,
-                 part_cooling_setpoint:int=None, ventilator_entry_setpoint:int=None, ventilator_exit_setpoint:int=None, *args, **kwargs):
+                 temperature_chamber_setpoint: int = None, temperature_printbed_setpoint: int = None,
+                 part_cooling_setpoint: int = None, ventilator_entry_setpoint: int = None,
+                 ventilator_exit_setpoint: int = None, offset_z: float = None, *args, **kwargs):
 
         self.speed_travel = speed_travel
 
@@ -244,6 +246,8 @@ class Settings(object):
         self.part_cooling_setpoint = part_cooling_setpoint if part_cooling_setpoint else 0
         self.ventilator_entry_setpoint = ventilator_entry_setpoint if ventilator_entry_setpoint else 0
         self.ventilator_exit_setpoint = ventilator_exit_setpoint if ventilator_exit_setpoint else 0
+
+        self.offset_z = offset_z or 0
 
 
 class Parameter(object):
