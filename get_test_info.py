@@ -118,6 +118,10 @@ def get_test_info(persistence):
                                       value=persistence["settings"]["bridging_part_cooling"] if persistence["settings"]["bridging_part_cooling"] != [] else 100,
                                       min_max=[0, 100],
                                       hint_active=hint_active_generic)
+    offset_z = Parameter("z-offset", "offset_z", "mm", "{:.3f}",
+                         value=persistence["settings"]["offset_z"] if persistence["settings"]["offset_z"] else 0,
+                         min_max=[0, 2],
+                         hint_active=hint_active_generic)
 
     other_parameters = []
 
@@ -152,7 +156,8 @@ def get_test_info(persistence):
         other_parameters.append(part_cooling_setpoint)
 
     other_parameters.extend([temperature_extruder_raft,
-                             track_width_raft])
+                             track_width_raft,
+                             offset_z])
 
     if persistence["session"]["min_max_parameter_one"] != []:
         values_parameter_one = np.linspace(persistence["session"]["min_max_parameter_one"][0], persistence["session"]["min_max_parameter_one"][-1],number_of_test_structures).tolist()
@@ -160,6 +165,7 @@ def get_test_info(persistence):
         values_parameter_one = []
 
     if persistence["session"]["test_number"] == "00":
+        other_parameters.pop()
         other_parameters = parameter_reorder_and_activate(other_parameters, inactives=["part_cooling_setpoint"])
         other_parameters.extend([track_height_raft,
                                  track_width_raft,
