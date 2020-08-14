@@ -139,6 +139,9 @@ class TestStructure(object):
 
         self.print_raft(values) if values.raft else self.raft_perimeter(values) # print the raft to support the test structure
 
+        if self.persistence.dict['session']['test_number'] == '14':
+            values.g.toolchange(1)
+
         values.g.write("; --- start to print the test structure ---")
         if self.machine.settings.speed_printing > 0:
             values.g.feed(self.machine.settings.speed_printing)

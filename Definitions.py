@@ -206,7 +206,8 @@ class Settings(object):
                  bridging_extrusion_multiplier=None, bridging_part_cooling=None, bridging_speed_printing=None,
                  raft_density=None,
                  temperature_chamber_setpoint:int=None, temperature_printbed_setpoint:int=None,
-                 part_cooling_setpoint:int=None, ventilator_entry_setpoint:int=None, ventilator_exit_setpoint:int=None, *args, **kwargs):
+                 part_cooling_setpoint:int=None, ventilator_entry_setpoint:int=None, ventilator_exit_setpoint:int=None,
+                 toolchange_command:str='T$tool_index$', *args, **kwargs):
 
         self.speed_travel = speed_travel
 
@@ -244,6 +245,8 @@ class Settings(object):
         self.part_cooling_setpoint = part_cooling_setpoint if part_cooling_setpoint else 0
         self.ventilator_entry_setpoint = ventilator_entry_setpoint if ventilator_entry_setpoint else 0
         self.ventilator_exit_setpoint = ventilator_exit_setpoint if ventilator_exit_setpoint else 0
+
+        self.toolchange_command = toolchange_command if toolchange_command else 'T$tool_index$'
 
 
 class Parameter(object):

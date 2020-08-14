@@ -456,6 +456,31 @@ def get_test_info(persistence):
                                                  other_parameters=other_parameters,
                                                  hint_init="This test is needed to find the best bridging settings.",
                                                  hint_valid="")
+        
+    elif persistence["session"]["test_number"] == "14":
+        other_parameters.pop()
+        other_parameters.extend([track_height_raft,
+                                 track_width_raft,
+                                 speed_printing_raft,
+                                 extrusion_multiplier,
+                                 Parameter("track height", "track_height", "mm", "{:.2f}",
+                                           value=persistence["settings"]["track_height"] or track_height,
+                                           min_max=[0.1 * nozzle_size_id, nozzle_size_id],
+                                           hint_active="This value will determine the resolution and surface quality of your print"),
+                                 track_width])
+        parameter_values_for_comments = TestInfo("soluble support adhesion", "14", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
+                                                 parameter_one=Parameter("extrusion temperature", "temperature_extruder", "degC", "{:.0f}",
+                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(persistence["settings"]["temperature_extruder_raft"], persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures),
+                                                                         min_max=[30, persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"]],
+                                                                         hint_active="These seven values will be tested at four different <b>Printing speeds</b> (see below). You can change the limiting values"),
+                                                 parameter_two=Parameter("printing speed", "speed_printing", "mm/s","{:.0f}",
+                                                                         value=np.linspace(*get_speed(persistence["session"]["min_max_parameter_two"]),number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [0, 0] else np.linspace(*get_speed(speed_printing_default), number_of_substructures).tolist(),
+                                                                         min_max=[1, persistence["settings"]["speed_travel"]],
+                                                                         hint_active="Set the range to 20-50 mm/s for printing flexible materials, or to 30-70 mm/s for printing harder materials"),
+                                                 other_parameters=other_parameters,
+                                                 hint_init="This test helps you find settings at which soluble material will adhere to base material.",
+                                                 hint_valid="")
+
 
     return parameter_values_for_comments
 

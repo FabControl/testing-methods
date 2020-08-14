@@ -142,6 +142,9 @@ class Gplus(G):
         """ Move the tool head to the home position (as defined in firmware) """
         self.write(self._machine.home_command)
 
+    def toolchange(self, tool_index):
+        self.write(self._machine.toolchange_command.replace('$tool_index$', str(tool_index)))
+
     def retract(self,
                 retraction_speed,
                 retraction_distance,
