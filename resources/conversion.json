@@ -491,7 +491,7 @@
     "prusa": {
       "modifier": null,
       "name": null,
-      "parameter": "retract_length",
+      "parameter": "filament_retract_length",
       "parent_parameter": null,
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
@@ -542,7 +542,7 @@
     "prusa": {
       "modifier": null,
       "name": null,
-      "parameter": "retract_restart_extra",
+      "parameter": "filament_retract_restart_extra",
       "parent_parameter": null,
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
@@ -2021,7 +2021,7 @@
     "prusa": {
       "modifier": null,
       "name": null,
-      "parameter": "retract_lift",
+      "parameter": "filament_retract_lift",
       "parent_parameter": null,
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
@@ -3806,7 +3806,7 @@
     "prusa": {
       "modifier": null,
       "name": null,
-      "parameter": "retract_speed",
+      "parameter": "filament_retract_speed",
       "parent_parameter": null,
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
