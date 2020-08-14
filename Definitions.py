@@ -164,7 +164,9 @@ class Machine(object):
                  gcode_header: str = "",
                  gcode_footer: str = "",
                  homing_sequence: str = "",
-                 extruder_type: str = "bowden", *args, **kwargs):
+                 extruder_type: str = "bowden",
+                 toolchange_command: str = "T$tool_index$",
+                 *args, **kwargs):
 
         self.sn = sn
         self.model = model
@@ -176,6 +178,7 @@ class Machine(object):
         self.gcode_header = gcode_header
         self.gcode_footer = gcode_footer
         self.home_command = homing_sequence
+        self.toolchange_command = toolchange_command if toolchange_command else "T$tool_index$"
 
 
 class Settings(object):
