@@ -144,7 +144,7 @@ class Gplus(G):
         self.write(self._machine.home_command)
 
     def toolchange(self, tool_index):
-        self.write(self._machine.toolchange_command.replace('$tool_index$', str(tool_index)))
+        self.write(self._machine.toolchange_command.replace('$tool_index$', str(tool_index)) + ' ; Toolchange')
 
     def retract(self,
                 retraction_speed,
