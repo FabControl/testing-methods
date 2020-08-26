@@ -96,7 +96,7 @@ class get_values_A(object):
         self.bridging_speed_printing = machine.settings.bridging_speed_printing
 
         # Support parameters
-        self.support_spacing = 50
+        self.support_pattern_spacing = 2.5
         self.support_contact_distance = 0.2
 
         self.offset_z = 0
@@ -288,7 +288,7 @@ class get_values_A(object):
                                         self.number_of_test_structures).tolist()
 
         elif self.test_number == "14":
-            # EXTRUSION TEMPERATURE test parameters
+            # SOLUBLE MATERIAL test parameters
             self.temperature_extruder = np.rint(np.linspace(fixed_parameter_values.parameter_one.values[0],
                                                             fixed_parameter_values.parameter_one.values[-1],
                                                             self.number_of_test_structures).tolist()).tolist()
@@ -296,6 +296,14 @@ class get_values_A(object):
             self.parameter_one.values = self.temperature_extruder
             self.speed_printing = self.parameter_two.values
 
+        elif self.test_number == "15":
+            # DETACHABLE SUPPORT test parameters
+            self.support_pattern_spacing = np.linspace(fixed_parameter_values.parameter_one.values[0],
+                                                           fixed_parameter_values.parameter_one.values[-1],
+                                                           self.number_of_test_structures).tolist()
+            self.support_contact_distance = np.linspace(fixed_parameter_values.parameter_two.values[0],
+                                              fixed_parameter_values.parameter_two.values[-1],
+                                              self.number_of_substructures).tolist()
         else:
             raise ValueError("{} is not a valid test.".format(fixed_parameter_values.name))
 

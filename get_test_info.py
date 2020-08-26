@@ -488,8 +488,7 @@ def get_test_info(persistence):
                                  temperature_extruder,
                                  extrusion_multiplier,
                                  retraction_distance,
-                                 retraction_speed,
-                                 bridging_part_cooling])
+                                 retraction_speed])
         parameter_values_for_comments = TestInfo("soluble support adhesion", "14", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
                                                  parameter_one=Parameter("extrusion temperature", "temperature_extruder", "degC", "{:.0f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(persistence["settings"]["temperature_extruder_raft"], persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures),
@@ -514,20 +513,21 @@ def get_test_info(persistence):
                                  temperature_extruder,
                                  extrusion_multiplier,
                                  retraction_distance,
-                                 retraction_speed,
-                                 bridging_part_cooling])
-        parameter_values_for_comments = TestInfo("reverse soluble support adhesion", "15", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
-                                                 parameter_one=Parameter("extrusion temperature", "temperature_extruder", "degC", "{:.0f}",
-                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(persistence["settings"]["temperature_extruder_raft"], persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures),
-                                                                         min_max=[30, persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"]],
-                                                                         hint_active="These seven values will be tested at four different <b>Printing speeds</b> (see below). You can change the limiting values"),
-                                                 parameter_two=Parameter("printing speed", "speed_printing", "mm/s","{:.0f}",
-                                                                         value=np.linspace(*get_speed(persistence["session"]["min_max_parameter_two"]),number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [0, 0] else np.linspace(*get_speed(speed_printing_default), number_of_substructures).tolist(),
-                                                                         min_max=[1, persistence["settings"]["speed_travel"]],
-                                                                         hint_active="Set the range to 20-50 mm/s for printing flexible materials, or to 30-70 mm/s for printing harder materials"),
+                                 retraction_speed])
+        parameter_values_for_comments = TestInfo("support pattern spacing vs support contact distance", "15", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
+                                                 parameter_one=Parameter("support pattern spacing", "support_pattern_spacing", "mm", "{:.2f}",
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_one"][0], persistence["session"]["min_max_parameter_one"][-1], number_of_test_structures).tolist() if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0, 5, number_of_test_structures).tolist(),
+                                                                         min_max=[0, 10],
+                                                                         hint_active="These seven support spacing distances will be tested against four different support contact distances"),
+                                                 parameter_two=Parameter("support contact distance", "support_contact_distance", "mm", "{:.3f}",
+                                                                         value=np.linspace(persistence["session"]["min_max_parameter_two"][0], persistence["session"]["min_max_parameter_two"][-1], number_of_substructures).tolist() if persistence["session"]["min_max_parameter_two"] != [] else np.linspace(0, 0.3, number_of_substructures).tolist(),
+                                                                         min_max=[0, 1],
+                                                                         hint_active="0 mm is generally best for soluble materials. PrusaSlicer recommends 0.2 mm for detachable supports."),
                                                  other_parameters=other_parameters,
-                                                 hint_init="This test helps you find settings at which soluble material will adhere to base material.",
+                                                 hint_init="This test helps you find settings at which break-away support will perform the best.",
                                                  hint_valid="")
+        if parameter_values_for_comments.parameter_two.values > parameter_values_for_comments.parameter_two.min_max:
+            parameter_values_for_comments.parameter_two.values = np.linspace(0, 0.3, number_of_substructures).tolist()
 
 
     return parameter_values_for_comments
@@ -538,11 +538,8 @@ def get_comment(parameter_values_for_comments: TestInfo):
     for parameter, order_number in zip(parameter_values_for_comments.other_parameters, range(len(parameter_values_for_comments.other_parameters))):
         if hasattr(parameter, "values"):
             if parameter.values is not None:
-                if parameter.values != []:
-                    try:
-                        comment_to_add = str("; --- {}: {} {}".format(parameter.name, parameter.precision, parameter.units)).format(parameter.values)
-                    except TypeError:
-                        import pdb; pdb.set_trace()
+                if parameter.values:
+                    comment_to_add = str("; --- {}: {} {}".format(parameter.name, parameter.precision, parameter.units)).format(parameter.values)
             else:
                 comment_to_add = str("; --- {} was not tested".format(parameter.name))
             if order_number == len(parameter_values_for_comments.other_parameters) - 1:

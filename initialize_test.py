@@ -19,6 +19,8 @@ class OptimizerSession(object):
             self.test_structure.bridging_test(self.values)
         elif persistence.dict["session"]["test_number"] == "00":
             self.test_structure.offset_z(self.values)
+        elif persistence.dict["session"]["test_number"] == "15":
+            self.test_structure.detachable_support(self.values)
         else:
             self.test_structure.flat_test_parameter_one_vs_parameter_two(self.values)
 

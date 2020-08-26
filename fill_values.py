@@ -74,6 +74,12 @@ def fill_values(persistence):
             persistence["settings"]["bridging_extrusion_multiplier"] = dummy["selected_parameter_one_value"]
             persistence["settings"]["bridging_speed_printing"] = dummy["selected_parameter_two_value"]
             persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_two][ind_parameter_one]
+    elif dummy["test_number"] == "15":
+        if dummy["executed"]:
+            persistence["settings"]["support_pattern_spacing"] = dummy["selected_parameter_one_value"]
+            persistence["settings"]["support_contact_distance"] = dummy["selected_parameter_two_value"]
+            persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_two][ind_parameter_one]
+
 
     persistence["session"]["previous_tests"][-1]["estimated_printing_time_s"] = round(persistence["session"]["previous_tests"][-1]["extruded_filament_mm"]*np.pi*(persistence["material"]["size_od"]/2)**2/persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"],1)
     persistence["settings"]["critical_overhang_angle"] = round(np.rad2deg(np.arctan(2*persistence["settings"]["track_height"]/persistence["settings"]["track_width"])),0)
