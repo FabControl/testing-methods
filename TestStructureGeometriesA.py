@@ -19,7 +19,8 @@ class TestStructure(object):
 
         if self.machine.temperaturecontrollers.printbed.printbed_heatable:
             gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed, immediate=True)
-            gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
+            if gv.temperature_printbed_setpoint >= 30:
+                gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
 
         gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder, immediate=True)
         gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder)
@@ -525,7 +526,8 @@ class TestStructure(object):
 
         if self.machine.temperaturecontrollers.printbed.printbed_heatable:
             gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed, immediate=True)
-            gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
+            if gv.temperature_printbed_setpoint >= 30:
+                gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
 
         gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder, immediate=True)
         gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder)
