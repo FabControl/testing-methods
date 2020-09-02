@@ -197,7 +197,8 @@ BASE_PERSISTENCE_STRENGTH = '''
     "critical_overhang_angle": 0,
     "temperature_printbed_setpoint": 30,
     "temperature_chamber_setpoint": 0,
-    "part_cooling_setpoint": 0
+    "part_cooling_setpoint": 0,
+    "offset_z": 0
   }
 }
 '''
@@ -8484,7 +8485,8 @@ BASE_PERSISTENCE_ASTETICS = '''
     "critical_overhang_angle": 0,
     "temperature_printbed_setpoint": 30,
     "temperature_chamber_setpoint": 30,
-    "part_cooling_setpoint": 0
+    "part_cooling_setpoint": 0,
+    "offset_z": 0
   }
 }
 '''
@@ -16711,7 +16713,8 @@ BASE_PERSISTENCE_SPEED = '''
     "critical_overhang_angle": 0,
     "temperature_printbed_setpoint": 30,
     "temperature_chamber_setpoint": 30,
-    "part_cooling_setpoint": 0
+    "part_cooling_setpoint": 0,
+    "offset_z": 0
   }
 }
 '''
