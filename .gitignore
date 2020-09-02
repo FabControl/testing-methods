@@ -1,2 +1,8 @@
-.idea/
+/.idea/
 .idea
+/venv/
+/debug.gcode
+/debug.json
+/manual_run.py
+/report.pdf
+
