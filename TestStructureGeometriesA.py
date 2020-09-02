@@ -19,7 +19,8 @@ class TestStructure(object):
 
         if self.machine.temperaturecontrollers.printbed.printbed_heatable:
             gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed, immediate=True)
-            gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
+            if gv.temperature_printbed_setpoint >= 30:
+                gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
 
         gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder, immediate=True)
         gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder)
@@ -65,8 +66,6 @@ class TestStructure(object):
     # RAFT PERIMETER
     # prints the outer perimeter of the raft
     def raft_perimeter(self, values: get_values_A):
-        values.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, self.machine.temperaturecontrollers.extruder, immediate=True)
-        values.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, self.machine.temperaturecontrollers.extruder)
         values.g.write("; --- print the outer perimeter ---")
         values.g.feed(self.machine.settings.speed_printing_raft / 3)
         for dummy in range(2):
@@ -119,9 +118,11 @@ class TestStructure(object):
                           extrude=False, extrusion_multiplier=0)
 
         if values.test_number not in ["01", "02", "03"]:
+            values.g.write('G1 Z10.000000 ; Raising the nozzle to avoid build plate damage')
             values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder, immediate=True)
             values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder)
             values.g.dwell(15000)  # to unload the nozzle
+            values.g.write('G1 Z-10.000000')
 
         if values.part_cooling:
             values.g.set_part_cooling(values.part_cooling_setpoint, values.extruder)
@@ -157,10 +158,12 @@ class TestStructure(object):
                                 retraction_speed=np.mean(values.retraction_speed),
                                 retraction_distance=values.retraction_distance[current_test_structure])
 
-                values.g.abs_move(z=+values.abs_z[current_test_structure])
-
+                values.g.absolute()
+                values.g.abs_move(z=+values.abs_z[current_test_structure]+2)
                 values.g.set_extruder_temperature(values.temperature_extruder[current_test_structure], values.extruder)
                 values.g.dwell(30000)
+                values.g.abs_move(z=+values.abs_z[current_test_structure])
+                values.g.relative()
                 output = "G1 F500 E" + "{:.3f}".format(4 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + \
                          "; extrude " + "{:.3f}".format(4 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + " mm of material"
                 values.g.write(output)
@@ -441,9 +444,11 @@ class TestStructure(object):
                                         retraction_speed=values.retraction_speed[0],
                                         retraction_distance=np.mean(values.retraction_distance))
 
+                        values.g.write('G1 Z10.000000 ; Raising the nozzle to avoid build plate damage')
                         values.g.set_extruder_temperature(values.temperature_extruder[current_test_structure], values.extruder)
 
                         values.g.dwell(30000)
+                        values.g.write('G1 Z-10.000000')
                         output = "G1 F500 E" + "{:.3f}".format(1.5 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + \
                                  "; extrude " + "{:.3f}".format(1.5 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + " mm of material"
                         values.g.write(output)
@@ -525,7 +530,8 @@ class TestStructure(object):
 
         if self.machine.temperaturecontrollers.printbed.printbed_heatable:
             gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed, immediate=True)
-            gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
+            if gv.temperature_printbed_setpoint >= 30:
+                gv.g.set_printbed_temperature(gv.temperature_printbed_setpoint, gv.printbed)
 
         gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder, immediate=True)
         gv.g.set_extruder_temperature(self.machine.settings.temperature_extruder_raft, gv.extruder)
@@ -571,6 +577,10 @@ class TestStructure(object):
                 gv.g.move(y=notch_depth)
                 gv.g.move(x=-track_width)
                 gv.g.move(y=-notch_depth)
+            gv.g.move(z=10, extrude=False)
+            gv.g.write("; --- finish to print the test structure ---")
+            self.write_footer(gv)
+            gv.g.teardown()
 
         return
 
