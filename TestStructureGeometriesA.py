@@ -577,6 +577,10 @@ class TestStructure(object):
                 gv.g.move(y=notch_depth)
                 gv.g.move(x=-track_width)
                 gv.g.move(y=-notch_depth)
+            gv.g.move(z=10, extrude=False)
+            gv.g.write("; --- finish to print the test structure ---")
+            self.write_footer(gv)
+            gv.g.teardown()
 
         return
 
