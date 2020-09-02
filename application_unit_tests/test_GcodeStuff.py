@@ -28,7 +28,8 @@ class TestGplus(TestCase):
                             speed_printing=50,
                             retraction_speed=50,
                             track_height=0.1,
-                            track_width=0.2))()
+                            track_width=0.2,
+                            offset_z=0))()
 
 
     def test_E0(self):
