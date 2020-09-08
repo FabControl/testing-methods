@@ -268,7 +268,7 @@ class Gplus(G):
         :param kwargs:
         :return:
         """
-        self.retraction_speed = retraction_speed
+        self.retraction_speed = self._machine.settings.retraction_speed if retraction_speed is None else retraction_speed
         temp_speed = self.speed/60 if speed is None else speed
         self.feed(temp_speed*2)
         self.write(f"G1 F{self.retraction_speed * 60:.0f} E {-retraction_distance:.3f}")
