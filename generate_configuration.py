@@ -8,6 +8,7 @@ from persistence import Persistence
 from io import BytesIO
 from conversion_dictionary import Params
 import math
+import numpy as np
 
 
 class Converter(Persistence):
@@ -207,10 +208,20 @@ class Converter(Persistence):
                                 element = controller.find("setpoint")
                             element.attrib["temperature"] = str(param.simplify3d.value)
                     continue
-                if param.parameter == "ventilator_part_cooling":
+                if param.parameter == "part_cooling_setpoint":
                     element = root.find("fanSpeed").findall("setpoint")[-1]
                     element.attrib["speed"] = str(param.simplify3d.value)
                     continue
+                if param.parameter == 'buildarea_maxdim1':
+                    if self.machine.form == 'elliptic':
+                        if element.text is not None:
+                            element.text = str(int(np.sin(np.deg2rad(45)) * self.machine.buildarea_maxdim1))
+                        continue
+                elif param.parameter == 'buildarea_maxdim2':
+                    if self.machine.form == 'elliptic':
+                        if element.text is not None:
+                            element.text = str(int(np.cos(np.deg2rad(45)) * self.machine.buildarea_maxdim1))
+                        continue
                 if element is not None:
                     if element.text is not None:
                         element.text = str(self.numeral_eval(param.simplify3d.value))
