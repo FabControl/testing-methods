@@ -537,7 +537,7 @@ def get_comment(parameter_values_for_comments: TestInfo):
     for parameter, order_number in zip(parameter_values_for_comments.other_parameters, range(len(parameter_values_for_comments.other_parameters))):
         if hasattr(parameter, "values"):
             if parameter.values is not None:
-                if parameter.values:
+                if parameter.values != []:
                     comment_to_add = str("; --- {}: {} {}".format(parameter.name, parameter.precision, parameter.units)).format(parameter.values)
             else:
                 comment_to_add = str("; --- {} was not tested".format(parameter.name))
