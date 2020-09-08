@@ -488,8 +488,7 @@ def get_test_info(persistence):
                                  temperature_extruder,
                                  extrusion_multiplier,
                                  retraction_distance,
-                                 retraction_speed,
-                                 bridging_part_cooling])
+                                 retraction_speed])
         parameter_values_for_comments = TestInfo("soluble support adhesion", "14", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
                                                  parameter_one=Parameter("extrusion temperature", "temperature_extruder", "degC", "{:.0f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(persistence["settings"]["temperature_extruder_raft"], persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures),
