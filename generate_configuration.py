@@ -207,7 +207,7 @@ class Converter(Persistence):
                                 element = controller.find("setpoint")
                             element.attrib["temperature"] = str(param.simplify3d.value)
                     continue
-                if param.parameter == "ventilator_part_cooling":
+                if param.parameter == "part_cooling_setpoint":
                     element = root.find("fanSpeed").findall("setpoint")[-1]
                     element.attrib["speed"] = str(param.simplify3d.value)
                     continue
