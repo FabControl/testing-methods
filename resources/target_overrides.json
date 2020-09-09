@@ -13,8 +13,6 @@
   "mechanical_strength": {
     "perimeter": 4,
     "bottom_solid_layers": 8,
-    "top_solid_layers": 8,
-    "infill_pattern": "concentric",
-    "solid_infill_pattern": "concentric"
+    "top_solid_layers": 8
   }
 }
