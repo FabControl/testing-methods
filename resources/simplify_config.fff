@@ -87,7 +87,7 @@
   <maxOverhangAngle>45</maxOverhangAngle>
   <supportAngles>45</supportAngles>
   <temperatureController name="Primary Extruder Temperature">
-    <temperatureNumber>1</temperatureNumber>
+    <temperatureNumber>0</temperatureNumber>
     <isHeatedBed>0</isHeatedBed>
     <relayBetweenLayers>0</relayBetweenLayers>
     <relayBetweenLoops>0</relayBetweenLoops>
@@ -96,7 +96,7 @@
     <setpoint layer="2" temperature="220"/>
   </temperatureController>
   <temperatureController name="Heated Bed">
-    <temperatureNumber>0</temperatureNumber>
+    <temperatureNumber>1</temperatureNumber>
     <isHeatedBed>1</isHeatedBed>
     <relayBetweenLayers>0</relayBetweenLayers>
     <relayBetweenLoops>0</relayBetweenLoops>
