@@ -212,16 +212,23 @@ class Converter(Persistence):
                     element = root.find("fanSpeed").findall("setpoint")[-1]
                     element.attrib["speed"] = str(param.simplify3d.value)
                     continue
-                if param.parameter == 'buildarea_maxdim1':
-                    if self.machine.form == 'elliptic':
-                        if element.text is not None:
-                            element.text = str(int(np.sin(np.deg2rad(45)) * self.machine.buildarea_maxdim1))
-                        continue
-                elif param.parameter == 'buildarea_maxdim2':
-                    if self.machine.form == 'elliptic':
-                        if element.text is not None:
-                            element.text = str(int(np.cos(np.deg2rad(45)) * self.machine.buildarea_maxdim1))
-                        continue
+                if self.machine.form == 'elliptic':
+                    if param.parameter == 'buildarea_maxdim1':
+                            if element.text is not None:
+                                element.text = str(int(np.sin(np.deg2rad(45)) * self.machine.buildarea_maxdim1))
+                            continue
+                    elif param.parameter == 'buildarea_maxdim2':
+                            if element.text is not None:
+                                element.text = str(int(np.cos(np.deg2rad(45)) * self.machine.buildarea_maxdim1))
+                            continue
+                    elif param.parameter == 'offset_x':
+                            if element.text is not None:
+                                element.text = str((int(np.sin(np.deg2rad(45)) * self.machine.buildarea_maxdim1))/2)
+                            continue
+                    elif param.parameter == 'offset_y':
+                            if element.text is not None:
+                                element.text = str((int(np.cos(np.deg2rad(45)) * self.machine.buildarea_maxdim1))/2)
+                            continue
                 if element is not None:
                     if element.text is not None:
                         element.text = str(self.numeral_eval(param.simplify3d.value))
