@@ -66,7 +66,15 @@ class Converter(Persistence):
         for key, values in dictionary.items():
             value = values["value"]
             percentage = values["percentage"]
-            line_start = "{0} = {1}".format(key, str(value) if value is not None else "")
+
+            if type(value) == str:
+                if '\n' in value:
+                    value = value.replace("\r\n", "\\n")
+                    line_start = '{0} = {1}'.format(key, str(value) if value is not None else "")
+                else:
+                    line_start = '{0} = {1}'.format(key, str(value) if value is not None else "")
+            else:
+                line_start = "{0} = {1}".format(key, str(value) if value is not None else "")
             line_end = "%\n" if percentage else "\n"
             outstring += line_start + line_end
 
