@@ -326,7 +326,7 @@ def get_test_info(persistence):
         parameter_values_for_comments = TestInfo("printing speed", "07", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=1, raft=True,
                                                  parameter_one=Parameter("printing speed", "speed_printing", "mm/s", "{:.0f}",
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0.80*persistence["settings"]["speed_printing"], 1.75*persistence["settings"]["speed_printing"],number_of_test_structures).tolist(),
-                                                                         min_max=[1, persistence["settings"]["speed_travel"]],
+                                                                         min_max=[1, persistence["settings"]["speed_travel"] + 100],
                                                                          hint_active="These seven values will be tested while all other processing parameters are constant. You can change the limiting values"),
                                                  parameter_two=Parameter(None, None, None, value=[]),
                                                  other_parameters=other_parameters,
@@ -469,7 +469,7 @@ def get_test_info(persistence):
                                                                          value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(1.0, 2.0, number_of_test_structures).tolist(), min_max=[0.01, 2],
                                                                          hint_active="These seven values will be tested at four different <b>Bridging printing speeds</b> (see below). You can change the limiting values"),
                                                  parameter_two=Parameter("bridging printing speed", "bridging_speed_printing","mm/s", "{:.0f}",
-                                                                         value=np.linspace(0.25*persistence["settings"]["speed_printing"], 0.75*persistence["settings"]["speed_printing"], number_of_substructures).tolist(), min_max=[1, 2*persistence["settings"]["speed_travel"]],
+                                                                         value=persistence["session"]["min_max_parameter_two"] if persistence["session"]["min_max_parameter_two"] != [] else np.linspace(0.25*persistence["settings"]["speed_printing"], 0.75*persistence["settings"]["speed_printing"], number_of_substructures).tolist(), min_max=[1, 2*persistence["settings"]["speed_travel"]],
                                                                          hint_active="Set the range to 10-25 mm/s for printing flexible materials, or 15-35 mm/s for harder materials"),
                                                  other_parameters=other_parameters,
                                                  hint_init="This test is needed to find the best bridging settings.",
@@ -536,7 +536,7 @@ def get_comment(parameter_values_for_comments: TestInfo):
     for parameter, order_number in zip(parameter_values_for_comments.other_parameters, range(len(parameter_values_for_comments.other_parameters))):
         if hasattr(parameter, "values"):
             if parameter.values is not None:
-                if parameter.values:
+                if parameter.values != []:
                     comment_to_add = str("; --- {}: {} {}".format(parameter.name, parameter.precision, parameter.units)).format(parameter.values)
             else:
                 comment_to_add = str("; --- {} was not tested".format(parameter.name))

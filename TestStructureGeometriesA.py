@@ -29,10 +29,10 @@ class TestStructure(object):
         gv.g.write("G92 E0; reset extruder")
         gv.g.write("M83; set extruder to relative mode")
         gv.g.feed(self.machine.settings.speed_travel) # respect the units: mm/min
-        initial_position = {'x': -wipe_length + gv.offset_x,
+        self.initial_position = {'x': -wipe_length + gv.offset_x,
                             'y': -6 * gv.test_structure_size / 10 + gv.offset_y,
                             'z': +2 * np.mean(gv.coef_h_raft) * gv.extruder.nozzle.size_id + 0.001}
-        gv.g.abs_move(**initial_position,
+        gv.g.abs_move(**self.initial_position,
                       extrude=False, extrusion_multiplier=0)
 
         gv.g.write("; --- start to clean the nozzle ---")
@@ -49,10 +49,10 @@ class TestStructure(object):
 
         if isinstance(gv, get_values_A):
             # The long movement along X axis to Z=0
-            gv.g.abs_move(x=initial_position['x']+2 * wipe_length,
+            gv.g.abs_move(x=self.initial_position['x']+2 * wipe_length,
                           z=0.01, extrude=True, extrusion_multiplier=2.25, coef_h=np.mean(gv.coef_h_raft), coef_w=np.mean(gv.coef_w_raft))
             # Short movement on Y axis to nominal Z coordinates
-            gv.g.abs_move(y=initial_position['y']+gv.test_structure_size / 10,
+            gv.g.abs_move(y=self.initial_position['y']+gv.test_structure_size / 10,
                           z=self.persistence.dict['settings']['track_height_raft'])
             gv.g.move(x=-wipe_length_initial / 6 + (1 - length_multiplier) * wipe_length_initial,
                       y=0,
@@ -118,11 +118,11 @@ class TestStructure(object):
                           extrude=False, extrusion_multiplier=0)
 
         if values.test_number not in ["01", "02", "03"]:
-            values.g.write('G1 Z10.000000 ; Raising the nozzle to avoid build plate damage')
+            values.g.abs_move(z=self.initial_position['z'] + 3, extrude=False)
             values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder, immediate=True)
             values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder)
             values.g.dwell(15000)  # to unload the nozzle
-            values.g.write('G1 Z-10.000000')
+            values.g.abs_move(z=self.initial_position['z'], extrude=False)
 
         if values.part_cooling:
             values.g.set_part_cooling(values.part_cooling_setpoint, values.extruder)
@@ -443,12 +443,11 @@ class TestStructure(object):
                                         z=+values.abs_z[current_test_structure],
                                         retraction_speed=values.retraction_speed[0],
                                         retraction_distance=np.mean(values.retraction_distance))
-
-                        values.g.write('G1 Z10.000000 ; Raising the nozzle to avoid build plate damage')
+                        values.g.abs_move(z=values.abs_z[current_test_structure]+3, extrude=False)
                         values.g.set_extruder_temperature(values.temperature_extruder[current_test_structure], values.extruder)
 
                         values.g.dwell(30000)
-                        values.g.write('G1 Z-10.000000')
+                        values.g.abs_move(z=values.abs_z[current_test_structure], extrude=False)
                         output = "G1 F500 E" + "{:.3f}".format(1.5 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + \
                                  "; extrude " + "{:.3f}".format(1.5 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + " mm of material"
                         values.g.write(output)

@@ -8,6 +8,7 @@ from persistence import Persistence
 from io import BytesIO
 from conversion_dictionary import Params
 import math
+import numpy as np
 
 
 class Converter(Persistence):
@@ -65,7 +66,15 @@ class Converter(Persistence):
         for key, values in dictionary.items():
             value = values["value"]
             percentage = values["percentage"]
-            line_start = "{0} = {1}".format(key, str(value) if value is not None else "")
+
+            if type(value) == str:
+                if '\n' in value:
+                    value = value.replace("\r\n", "\\n")
+                    line_start = '{0} = {1}'.format(key, str(value) if value is not None else "")
+                else:
+                    line_start = '{0} = {1}'.format(key, str(value) if value is not None else "")
+            else:
+                line_start = "{0} = {1}".format(key, str(value) if value is not None else "")
             line_end = "%\n" if percentage else "\n"
             outstring += line_start + line_end
 
@@ -207,10 +216,27 @@ class Converter(Persistence):
                                 element = controller.find("setpoint")
                             element.attrib["temperature"] = str(param.simplify3d.value)
                     continue
-                if param.parameter == "ventilator_part_cooling":
+                if param.parameter == "part_cooling_setpoint":
                     element = root.find("fanSpeed").findall("setpoint")[-1]
                     element.attrib["speed"] = str(param.simplify3d.value)
                     continue
+                if self.machine.form == 'elliptic':
+                    if param.parameter == 'buildarea_maxdim1':
+                            if element.text is not None:
+                                element.text = str(int(np.sin(np.deg2rad(45)) * self.machine.buildarea_maxdim1))
+                            continue
+                    elif param.parameter == 'buildarea_maxdim2':
+                            if element.text is not None:
+                                element.text = str(int(np.cos(np.deg2rad(45)) * self.machine.buildarea_maxdim1))
+                            continue
+                    elif param.parameter == 'offset_x':
+                            if element.text is not None:
+                                element.text = str((int(np.sin(np.deg2rad(45)) * self.machine.buildarea_maxdim1))/2)
+                            continue
+                    elif param.parameter == 'offset_y':
+                            if element.text is not None:
+                                element.text = str((int(np.cos(np.deg2rad(45)) * self.machine.buildarea_maxdim1))/2)
+                            continue
                 if element is not None:
                     if element.text is not None:
                         element.text = str(self.numeral_eval(param.simplify3d.value))
@@ -225,6 +251,22 @@ class Converter(Persistence):
         cura_params = []
 
         for param in self.params.parameters:
+            # Set all various Cura bridging parameters
+            # "Dumbs down" the existing Cura bridging
+            if param.parameter == 'bridging_part_cooling':
+                cura_params.append(['bridge_settings_enabled', 'True', 0])
+                cura_params.append(['bridge_fan_speed', param.value, 0])
+                cura_params.append(['bridge_fan_speed_2', param.value, 0])
+                cura_params.append(['bridge_fan_speed_3', param.value, 0])
+            elif param.parameter == 'bridging_extrusion_multiplier':
+                cura_params.append(['bridge_skin_material_flow', param.value * 100, 0])
+                cura_params.append(['bridge_skin_material_flow_2', param.value * 100, 0])
+                cura_params.append(['bridge_skin_material_flow_3', param.value * 100, 0])
+                cura_params.append(['bridge_wall_material_flow', param.value * 100, 0])
+            elif param.parameter == 'bridging_speed_printing':
+                cura_params.append(['bridge_wall_speed', param.value, 0])
+                cura_params.append(['bridge_skin_speed_2', param.value, 0])
+                cura_params.append(['bridge_skin_speed_3', param.value, 0])
             if param.cura.parameter is not None:
                 if param.cura.value is not None:
                     cura_params.append([param.cura.parameter, param.cura.value, 0])
