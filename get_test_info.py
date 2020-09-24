@@ -67,8 +67,13 @@ def get_test_info(persistence):
 
     nozzle_size_id = persistence["machine"]["temperature_controllers"]["extruder"]["nozzle"]["size_id"]
 
+    # should work well with old sessions, that does not contain 'min_extrusion_temperature' key
+    material_avg_temp = persistence['material'].get('min_extrusion_temperature')
+    if material_avg_temp is not None:
+        material_avg_temp = (material_avg_temp + persistence['material'].get('max_extrusion_temperature')) / 2
+    raft_temp = persistence["settings"]["temperature_extruder_raft"]
     temperature_extruder_raft = Parameter("first-layer extrusion temperature", "temperature_extruder_raft", "degC", "{:.0f}",
-                                          value=persistence["settings"]["temperature_extruder_raft"],
+                                          value=material_avg_temp if material_avg_temp is not None and (raft_temp is None or raft_temp < 30) else raft_temp,
                                           min_max=[30, persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"]],
                                           hint_active=hint_active_generic)
     track_height_raft = Parameter("first-layer track height", "track_height_raft", "mm", "{:.2f}",
@@ -97,8 +102,10 @@ def get_test_info(persistence):
                                min_max=[1, persistence["settings"]["speed_travel"]+100],
                                hint_active=hint_active_testable,
                                hint_inactive=hint_inactive_testable)
+
+    extruder_temp = persistence["settings"]["temperature_extruder"]
     temperature_extruder = Parameter("extrusion temperature", "temperature_extruder", "degC", "{:.0f}",
-                                     value=persistence["settings"]["temperature_extruder"],
+                                     value=material_avg_temp if material_avg_temp is not None and (extruder_temp is None or extruder_temp < 30) else extruder_temp,
                                      min_max=[30, persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"]],
                                      hint_active=hint_active_testable)
     extrusion_multiplier = Parameter("extrusion multiplier", "extrusion_multiplier", "-", "{:.3f}",
@@ -239,7 +246,7 @@ def get_test_info(persistence):
                                  track_width])
         parameter_values_for_comments = TestInfo("extrusion temperature vs printing speed", "03", number_of_layers=3, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=True,
                                                  parameter_one=Parameter("extrusion temperature", "temperature_extruder", "degC", "{:.0f}",
-                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(persistence["settings"]["temperature_extruder_raft"], persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures),
+                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else get_minmax_temperature(material_avg_temp if material_avg_temp is not None and (raft_temp is None or raft_temp < 30) else raft_temp, persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"], number_of_test_structures),
                                                                          min_max=[30, persistence["machine"]["temperature_controllers"]["extruder"]["temperature_max"]],
                                                                          hint_active="These seven values will be tested at four different <b>Printing speeds</b> (see below). You can change the limiting values"),
                                                  parameter_two=Parameter("printing speed", "speed_printing", "mm/s","{:.0f}",
