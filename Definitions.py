@@ -282,6 +282,9 @@ class Parameter(object):
             "hint_active": self.hint_active
         }
 
+    def __repr__(self):
+        return f'{self.programmatic_name}: {self.values}, ({self.precision})'
+
 
 class TestInfo(object):
     def __init__(self, name: str, test_number: str, number_of_layers: int, number_of_test_structures: int, raft: bool, parameter_one: Parameter, parameter_two: Parameter, number_of_substructures: int, other_parameters: list,
