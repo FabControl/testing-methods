@@ -10,4 +10,4 @@ position = 0
 type = quality_changes
 
 [values]
-
+coasting_enable = True

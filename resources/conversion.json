@@ -3,9 +3,9 @@
     "_manual": false,
     "_value": null,
     "cura": {
-      "modifier": null,
+      "modifier": "x * self.root.params.get('track_width').value * self.root.params.get('track_height').value",
       "name": null,
-      "parameter": null,
+      "parameter": "coasting_volume",
       "parent_parameter": null,
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
