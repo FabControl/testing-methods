@@ -102,15 +102,17 @@ def printing_time(gcode: str, as_datetime: bool = False):
                 estimated_time += timedelta(seconds=period)
 
         elif line.startswith('G92 '):
-            X,Y,Z,E,F = moves_matcher.search(line).group('X','Y','Z','E','F')
-            if X is not None:
-                x = float(X)
-            if Y is not None:
-                y = float(Y)
-            if Z is not None:
-                z = float(Z)
-            if E is not None:
-                e = float(E)
+            moves = moves_matcher.search(line)
+            if moves:
+                X,Y,Z,E,F = moves.group('X','Y','Z','E','F')
+                if X is not None:
+                    x = float(X)
+                if Y is not None:
+                    y = float(Y)
+                if Z is not None:
+                    z = float(Z)
+                if E is not None:
+                    e = float(E)
 
         elif line.startswith('G1 ') or line.startswith('G0 '):
             X,Y,Z,E,F = moves_matcher.search(line).group('X','Y','Z','E','F')
