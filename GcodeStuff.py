@@ -33,6 +33,10 @@ class Gplus(G):
                     ";----- end of user defined header -----"]
 
         self.filament_diameter = material.size_od
+        self._last_layer_z = 0
+        self._current_layer = -1
+        self._layercount_line_number = len(self._gcode)
+        self._gcode.append(';LAYER_COUNT:{}')
 
     def set_extruder_temperature(self,
                                  temperature: int,
@@ -187,7 +191,7 @@ class Gplus(G):
         elif coef_h is None:
             self.coef_h = self.track_height / self.nozzle_diameter
 
-        if self.extrude is True and "E" not in kwargs.keys():
+        if self.extrude is True:
             if self.is_relative is not True:
                 x_move = self.current_position["x"] if x is None else x
                 y_move = self.current_position["y"] if y is None else y
@@ -200,15 +204,22 @@ class Gplus(G):
                 current_extruder_position = 0
 
             line_length = math.sqrt(x_distance ** 2 + y_distance ** 2)
+            if line_length > 0.001:
+                layer_z = z if z is not None else self.current_position['z']
+                if layer_z > self._last_layer_z:
+                    self._last_layer_z = layer_z
+                    self._current_layer += 1
+                    self.write(f';LAYER:{self._current_layer}\nM117 INDICATOR-Layer{self._current_layer}')
 
-            if self.coef_h < self.coef_w / (2 - math.pi / 2):
-                filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * ((self.coef_w - self.coef_h) * self.coef_h + (math.pi / 4) * (
-                    self.coef_h) ** 2) * line_length * self.extrusion_multiplier
-            else:
-                exception_handler("path height of {:.3f} mm is too thin".format(self.coef_h * self.nozzle_diameter))
-                filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * (self.coef_w * self.coef_h) * line_length * self.extrusion_multiplier
+            if "E" not in kwargs.keys():
+                if self.coef_h < self.coef_w / (2 - math.pi / 2):
+                    filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * ((self.coef_w - self.coef_h) * self.coef_h + (math.pi / 4) * (
+                        self.coef_h) ** 2) * line_length * self.extrusion_multiplier
+                else:
+                    exception_handler("path height of {:.3f} mm is too thin".format(self.coef_h * self.nozzle_diameter))
+                    filament_length = (4 / math.pi) * (self.nozzle_diameter / self.filament_diameter) ** 2 * (self.coef_w * self.coef_h) * line_length * self.extrusion_multiplier
 
-            kwargs["E"] = filament_length + current_extruder_position
+                kwargs["E"] = filament_length + current_extruder_position
         elif self.extrude is False:
             if self.is_relative is not True:
                 kwargs["E"] = 0
@@ -335,6 +346,7 @@ class Gplus(G):
         """
         self.write(";----- start of user defined footer -----")
         self.write(self._machine.gcode_footer)
+        self._gcode[self._layercount_line_number] = self._gcode[self._layercount_line_number].format(self._current_layer + 1)
 
         # self.buffer.write("\n".join(self._gcode))
 
