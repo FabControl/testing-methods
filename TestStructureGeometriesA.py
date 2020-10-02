@@ -454,7 +454,6 @@ class TestStructure(object):
 
                         values.g.move(x=0,
                                       y=-values.test_structure_size / 7,
-                                      z=-values.abs_z[current_test_structure],
                                       extrude=True, extrusion_multiplier=0)
 
                     output = str("; --- testing the {0} of {1} {2} ---".format(values.parameter_two.name, values.parameter_two.precision, values.parameter_two.units))
