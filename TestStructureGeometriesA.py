@@ -583,35 +583,6 @@ class TestStructure(object):
 
         return
 
-    def detachable_support(self, values: get_values_A or TestSetupB):
-        values.g.write(values.title)
-        values.g.write(values.comment_all_values_of_variable_parameters)
-        values.g.write(values.comment_all_values_of_constant_parameters)
-
-        self.wipe(values, length_multiplier=1 if self.machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)
-
-        if values.raft:
-            self.print_raft(values)  # print the raft to support the test structure
-
-        values.g.write("; --- start to print the support structure ---")
-        values.g.feed(self.machine.settings.speed_printing)
-
-        for current_test_structure in range(values.number_of_test_structures):
-            values.g.write(values.comment_all_values_of_constant_parameters)
-            values.g.write(values.comment_current_values_of_variable_parameter[current_test_structure])
-
-        values.g.travel(x=-values.test_structure_width[current_test_structure] - values.test_structure_separation,
-                        y=0 if (current_test_structure == 0 and values.raft) else +values.step_y,
-                        lift=1,
-                        retraction_speed=np.mean(values.retraction_speed))
-        values.g.abs_move(z=+values.abs_z[current_test_structure])
-
-        # Content
-
-        values.g.write("; --- finish to print the test structure ---")
-        self.write_footer(values)
-        values.g.teardown()
-
     def detachable_support(self, v: get_values_A or TestSetupB):
         def direction(num: int):
             """
