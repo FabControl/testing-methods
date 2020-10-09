@@ -591,9 +591,8 @@ class TestStructure(object):
             :param num:
             :return:
             """
-            if num == 0:
-                return -1
-            elif num % 2 == 0:
+            # this works correctly, even if num == 0
+            if num % 2 == 0:
                 return -1
             else:
                 return 1
@@ -630,7 +629,7 @@ class TestStructure(object):
             # Return to init X, Y advance on Z
             if layer == 0:
                 # Step into position to start the first column of test tiles
-                g.travel(x=-gap)
+                g.travel(x=-gap, y=-2 * v.track_width[0])
             else:
                 g.travel(x=(width + gap)*(num_x-1), y=size-gap/2, z=v.track_height[0])
             for x in range(num_x):
@@ -680,29 +679,25 @@ class TestStructure(object):
                             g.travel(y=-(gap/2))
 
                     else:  # Print breakaway structure
-                        g.move(z=v.support_contact_distance[y])
+                        # No idea, at what height previous structure was printed
+                        g.abs_move(z=v.support_contact_distance[y] + (layer + 2) * v.track_height[0])
                         # Meander direction
                         g.extrude = True
                         if direction(layer) == 1:
-                            print('dir1')
                             # Meander on X direction
                             for line in range(num_lines_x):
-                                g.move(y=(tile_length - track_width)*direction(line))
+                                g.move(y=tile_length*direction(line))
                                 if not line == num_lines_x:
                                     g.move(x=-track_width)
-                            if y != num_y - 1:
-                                g.travel(y=-(tile_length + gap / 2), x=width)
-                            else:
-                                g.travel(y=-tile_length, x=width)
+                            g.travel(y=-tile_length - (gap / 2 if y < num_y - 1 else 0), x=width)
 
                         else:
-                            print('dir2')
                             # Meander on Y direction
                             for line in range(num_lines_y):
                                 g.move(x=width*direction(line))
                                 if not line == num_lines_y:
                                     g.move(y=-track_width)
-                            g.travel(y=-tile_length, x=width)
+                            g.travel(y=-(v.track_width[x] + (gap if y < num_y - 1 else 0)) / 2)
 
         g.write("; --- finish to print the test structure ---")
         self.write_footer(v)
