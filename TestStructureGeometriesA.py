@@ -655,23 +655,18 @@ class TestStructure(object):
                         line_count = int(tile_length / advance)
                         # Calculate how much excess length is left over after spacing out lines
                         excess_length = tile_length - line_count * advance
-                        assert line_count * advance + excess_length == tile_length
                         for line in range(line_count):
                             # direction(line) will alter direction by returning -1 or 1 multiplier.
                             g.move(width * direction(line), extrude=True)
                             g.move(y=-advance, extrude=True)
-                        # Check whether or not excess length allows for another extrusion
-                        allow_last_extrusion = False
-                        if excess_length >= track_width / 2:
-                            allow_last_extrusion = True
-                        # Add the 'tail' to reach the full structure length for continuity
-                        # Extrude only if there's another X extrusion planned
-                        g.move(y=-excess_length, extrude=allow_last_extrusion)
-                        if direction(line_count) == 1:  # Are we on the left side of the tile?
-                            # Move back to the initial side to keep all tiles in a column
-                            g.move(width * direction(line_count), extrude=allow_last_extrusion)
-                        else:
-                            g.move(width * direction(line_count), extrude=allow_last_extrusion)
+
+                        # move to end of tile
+                        g.move(y=-excess_length, extrude=True)
+                        # Extrude anyways, to complete tile
+                        g.move(width * direction(line_count), extrude=True)
+
+                        if direction(line_count) < 0:  # Are we on the right side of the tile?
+                            # move back to left and keep all tiles aligned
                             g.move(-(width * direction(line_count)), extrude=False)
 
                         # Calculate how large the gap should be between the substructures
@@ -683,21 +678,29 @@ class TestStructure(object):
                         g.abs_move(z=v.support_contact_distance[y] + (layer + 2) * v.track_height[0])
                         # Meander direction
                         g.extrude = True
-                        if direction(layer) == 1:
+                        if direction(layer) > 0:
                             # Meander on X direction
                             for line in range(num_lines_x):
                                 g.move(y=tile_length*direction(line))
-                                if not line == num_lines_x:
-                                    g.move(x=-track_width)
-                            g.travel(y=-tile_length - (gap / 2 if y < num_y - 1 else 0), x=width)
+                                g.move(x=-track_width)
+
+                            g.travel(y=-tile_length *(line % 2) - (gap / 2.0 if y < num_y - 1 else 0), x=width)
 
                         else:
                             # Meander on Y direction
                             for line in range(num_lines_y):
                                 g.move(x=width*direction(line))
-                                if not line == num_lines_y:
-                                    g.move(y=-track_width)
-                            g.travel(y=-(v.track_width[x] + (gap if y < num_y - 1 else 0)) / 2)
+                                g.move(y=-track_width)
+
+                            # move to the end of tile
+                            g.move(y=-(tile_length - num_lines_y * track_width))
+                            # we should have enough space for one more pass
+                            line += 1
+                            g.move(x=width*direction(line))
+
+                            # pass to right side of tiles, if we are on the left
+                            g.travel(x=width if direction(line) < 0 else 0,
+                                    y=-(gap / 2 if y < num_y - 1 else 0))
 
         g.write("; --- finish to print the test structure ---")
         self.write_footer(v)
