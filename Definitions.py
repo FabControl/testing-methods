@@ -211,7 +211,11 @@ class Settings(object):
                  raft_density=None,
                  temperature_chamber_setpoint: int = None, temperature_printbed_setpoint: int = None,
                  part_cooling_setpoint: int = None, ventilator_entry_setpoint: int = None,
-                 ventilator_exit_setpoint: int = None, offset_z: float = None, *args, **kwargs):
+                 ventilator_exit_setpoint: int = None,
+                 offset_z: float = None,
+                 support_pattern_spacing: float = None,
+                 support_contact_distance: float = None,
+                 *args, **kwargs):
 
         self.speed_travel = speed_travel
 
@@ -251,6 +255,9 @@ class Settings(object):
         self.ventilator_exit_setpoint = ventilator_exit_setpoint if ventilator_exit_setpoint else 0
 
         self.offset_z = offset_z or 0
+
+        self.support_pattern_spacing = support_pattern_spacing or 0
+        self.support_contact_distance = support_contact_distance or 0
 
 
 class Parameter(object):

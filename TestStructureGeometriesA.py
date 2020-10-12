@@ -582,6 +582,129 @@ class TestStructure(object):
 
         return
 
+    def detachable_support(self, v: get_values_A or TestSetupB):
+        def direction(num: int):
+            """
+            Checks in which direction should a line be printed, depending on line index.
+            Returns either 1 or -1.
+            :param num:
+            :return:
+            """
+            # this works correctly, even if num == 0
+            if num % 2 == 0:
+                return -1
+            else:
+                return 1
+
+        #  Convenience variables
+        g = v.g
+        size = v.test_structure_size
+        width = np.mean(v.test_structure_width)
+        gap = v.test_structure_separation
+        num_x = v.number_of_test_structures
+        num_y = v.number_of_substructures
+        track_width = v.track_width[0]
+        tile_length = (size / num_y - gap / 2)  # Tile size on Y minus the gap between structures
+
+        #  Fallback variables
+        num_lines_y = 0
+        lines_y_excess = 0
+        num_lines_x = 0
+        lines_x_excess = 0
+
+        g.write(v.title)
+        g.write(v.comment_all_values_of_variable_parameters)
+        g.write(v.comment_all_values_of_constant_parameters)
+
+        self.wipe(v, length_multiplier=1 if self.machine.temperaturecontrollers.extruder.nozzle.size_id < 0.59 else 0.85)
+
+        if v.raft:
+            self.print_raft(v)  # print the raft to support the test structure
+
+        g.write("; --- start to print the support structure ---")
+        g.feed(self.machine.settings.speed_printing)
+        for layer in range(v.number_of_layers + 3):
+            # LAYER SCOPE
+            # Return to init X, Y advance on Z
+            if layer == 0:
+                # Step into position to start the first column of test tiles
+                g.travel(x=-gap, y=-2 * v.track_width[0])
+            else:
+                g.travel(x=(width + gap)*(num_x-1), y=size-gap/2, z=v.track_height[0])
+            for x in range(num_x):
+                # COLUMN SCOPE
+                # Return to init Y, advance on -X
+                if x != 0:
+                    g.travel(x=-(width + gap), y=size-gap/2)
+                track_width = v.track_width[x]
+
+                # calculate length of horizontal and vertical lines
+                num_lines_y = int(tile_length / track_width)
+                lines_y_excess = tile_length % track_width
+                num_lines_x = int(width / track_width)
+                lines_x_excess = width % track_width
+
+                spacing = v.support_pattern_spacing[x]
+                advance = spacing + track_width
+                for y in range(num_y):
+                    # TILE SCOPE
+                    # Check whether to print support or breakaway structure
+                    if layer < v.number_of_layers:
+                        # Advance on -Y
+                        line_count = int(tile_length / advance)
+                        # Calculate how much excess length is left over after spacing out lines
+                        excess_length = tile_length - line_count * advance
+                        for line in range(line_count):
+                            # direction(line) will alter direction by returning -1 or 1 multiplier.
+                            g.move(width * direction(line), extrude=True)
+                            g.move(y=-advance, extrude=True)
+
+                        # move to end of tile
+                        g.move(y=-excess_length, extrude=True)
+                        # Extrude anyways, to complete tile
+                        g.move(width * direction(line_count), extrude=True)
+
+                        if direction(line_count) < 0:  # Are we on the right side of the tile?
+                            # move back to left and keep all tiles aligned
+                            g.move(-(width * direction(line_count)), extrude=False)
+
+                        # Calculate how large the gap should be between the substructures
+                        if y < num_y-1:  # Making sure that no gap is made after the last tile
+                            g.travel(y=-(gap/2))
+
+                    else:  # Print breakaway structure
+                        # No idea, at what height previous structure was printed
+                        g.abs_move(z=v.support_contact_distance[y] + (layer + 2) * v.track_height[0])
+                        # Meander direction
+                        g.extrude = True
+                        if direction(layer) > 0:
+                            # Meander on X direction
+                            for line in range(num_lines_x):
+                                g.move(y=tile_length*direction(line))
+                                g.move(x=-track_width)
+
+                            g.travel(y=-tile_length *(line % 2) - (gap / 2.0 if y < num_y - 1 else 0), x=width)
+
+                        else:
+                            # Meander on Y direction
+                            for line in range(num_lines_y):
+                                g.move(x=width*direction(line))
+                                g.move(y=-track_width)
+
+                            # move to the end of tile
+                            g.move(y=-(tile_length - num_lines_y * track_width))
+                            # we should have enough space for one more pass
+                            line += 1
+                            g.move(x=width*direction(line))
+
+                            # pass to right side of tiles, if we are on the left
+                            g.travel(x=width if direction(line) < 0 else 0,
+                                    y=-(gap / 2 if y < num_y - 1 else 0))
+
+        g.write("; --- finish to print the test structure ---")
+        self.write_footer(v)
+        g.teardown()
+
     @staticmethod
     def write_footer(values: get_values_A):
         values.g.write(";--- start footer ---\n; end of the test routine")
