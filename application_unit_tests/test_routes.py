@@ -171,8 +171,7 @@ class RoutineRoute(CreateAppHelperClass):
         resp = self.client.get('/routine')
         self.assert200(resp)
         self.assertEqual(sorted(resp.json.keys()),
-                # For some reason test number 12 is missing
-                list('{0:02}'.format(x) for x in range(0, 15)))
+                list('{0:02}'.format(x) for x in range(0, 16)))
 
         # all routine subitems should be dict, containing only name and priority keys
         self.assertTrue(all(sorted(x.keys()) == ['name', 'priority'] for x in resp.json.values()))
