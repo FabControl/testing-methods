@@ -305,7 +305,7 @@ class get_values_A(object):
 
             self.support_contact_distance = np.linspace(fixed_parameter_values.parameter_two.values[0],
                                                             fixed_parameter_values.parameter_two.values[-1],
-                                                            self.number_of_test_structures).tolist()
+                                                            self.number_of_substructures).tolist()
             self.parameter_two.values = self.support_contact_distance
 
         else:
