@@ -120,8 +120,7 @@ class TestStructure(object):
         if values.test_number not in ["01", "02", "03"]:
             values.g.abs_move(z=self.initial_position['z'] + 3, extrude=False)
             values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder, immediate=True)
-            values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder)
-            values.g.dwell(15000)  # to unload the nozzle
+            values.g.set_extruder_temperature(self.machine.settings.temperature_extruder, values.extruder, dwell=15000, use_safe_spot=True)
             values.g.abs_move(z=self.initial_position['z'], extrude=False)
 
         if values.part_cooling:
@@ -160,13 +159,12 @@ class TestStructure(object):
 
                 values.g.absolute()
                 values.g.abs_move(z=+values.abs_z[current_test_structure]+2)
-                values.g.set_extruder_temperature(values.temperature_extruder[current_test_structure], values.extruder)
-                values.g.dwell(30000)
+                values.g.set_extruder_temperature(values.temperature_extruder[current_test_structure],
+                                                  values.extruder,
+                                                  dwell=30000,
+                                                  use_safe_spot=True,
+                                                  prime_after_heating=4 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0])
                 values.g.abs_move(z=+values.abs_z[current_test_structure])
-                values.g.relative()
-                output = "G1 F500 E" + "{:.3f}".format(4 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + \
-                         "; extrude " + "{:.3f}".format(4 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + " mm of material"
-                values.g.write(output)
                 values.g.move(x=0,
                               y=-values.test_structure_size / 7,
                               extrude=True, extrusion_multiplier=0)
@@ -421,6 +419,7 @@ class TestStructure(object):
 
         values.g.abs_move(z=+values.abs_z[0])
 
+        current_temperature = -1
         for current_test_structure in range(values.number_of_test_structures):
             output = str("; --- testing the {0} of {1} {2} ---".format(values.parameter_one.name, values.parameter_one.precision, values.parameter_one.units))
             output = str(output.format(values.parameter_one.values[current_test_structure]))
@@ -428,7 +427,6 @@ class TestStructure(object):
             values.g.write(values.comment_all_values_of_constant_parameters)
 
             for current_substructure in range(values.number_of_substructures): # TODO comments
-                current_temperature_extruder = values.temperature_extruder[current_test_structure]
 
                 if values.test_number in ("09", "10", "11"):
                     current_speed_printing = values.speed_printing[current_substructure]
@@ -436,31 +434,28 @@ class TestStructure(object):
                 elif values.test_number == "08":
                     current_speed_printing = np.mean(values.speed_printing)
                     current_retraction_distance = values.retraction_distance[current_substructure]
-
-                    if current_substructure == 0:
-                        values.g.travel(x=0,
-                                        y=+values.test_structure_size / 7,
-                                        z=+values.abs_z[current_test_structure],
-                                        retraction_speed=values.retraction_speed[0],
-                                        retraction_distance=np.mean(values.retraction_distance))
-                        values.g.abs_move(z=values.abs_z[current_test_structure]+3, extrude=False)
-                        values.g.set_extruder_temperature(values.temperature_extruder[current_test_structure], values.extruder)
-
-                        values.g.dwell(30000)
-                        values.g.abs_move(z=values.abs_z[current_test_structure], extrude=False)
-                        output = "G1 F500 E" + "{:.3f}".format(1.5 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + \
-                                 "; extrude " + "{:.3f}".format(1.5 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0]) + " mm of material"
-                        values.g.write(output)
-
-                        values.g.move(x=0,
-                                      y=-values.test_structure_size / 7,
-                                      extrude=True, extrusion_multiplier=0)
-
                     output = str("; --- testing the {0} of {1} {2} ---".format(values.parameter_two.name, values.parameter_two.precision, values.parameter_two.units))
                     output = str(output.format(values.parameter_two.values[current_substructure]))
                     values.g.write(output)
 
-                values.g.set_extruder_temperature(current_temperature_extruder, values.extruder)
+                if current_substructure == 0 and current_temperature != values.temperature_extruder[current_test_structure]:
+                    values.g.travel(x=0,
+                                    y=+values.test_structure_size / 7,
+                                    z=+values.abs_z[current_test_structure],
+                                    retraction_speed=values.retraction_speed[0],
+                                    retraction_distance=np.mean(values.retraction_distance))
+                    values.g.abs_move(z=values.abs_z[current_test_structure]+3, extrude=False)
+                    values.g.set_extruder_temperature(values.temperature_extruder[current_test_structure],
+                                                      values.extruder,
+                                                      dwell=30000,
+                                                      use_safe_spot=True,
+                                                      prime_after_heating=1.5 * values.temperature_extruder[current_test_structure] / values.temperature_extruder[0])
+
+                    values.g.abs_move(z=values.abs_z[current_test_structure], extrude=False)
+                    values.g.move(x=0,
+                                  y=-values.test_structure_size / 7,
+                                  extrude=True, extrusion_multiplier=0)
+                    current_temperature = values.temperature_extruder[current_test_structure]
 
                 for current_layer in range(0, values.number_of_layers):  # layers
                     for current_line in range(values.number_of_lines):

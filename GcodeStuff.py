@@ -42,7 +42,15 @@ class Gplus(G):
                                  temperature: int,
                                  extruder: Extruder,
                                  immediate: bool=None,
-                                 return_string: bool=None):
+                                 return_string: bool=None,
+                                 dwell: int or None=None,
+                                 use_safe_spot: bool=False,
+                                 prime_after_heating: float or None=None):
+        if use_safe_spot:
+            # all moves in relative coordinates only
+            self.relative()
+            self.move(y=10, extrude=False)
+            self.move(x=10, extrude=False)
         """Set the liquefier temperature in degC"""
         if immediate:
             if extruder.gcode_command_immediate != "":
@@ -54,6 +62,13 @@ class Gplus(G):
         # FlashForge specific wait for temperature to be reached
         if not immediate and self.use_temperature_wait_cmd:
             self.write('M6 {}'.format(extruder.tool))
+        if dwell is not None:
+            self.dwell(dwell)
+        if prime_after_heating is not None:
+            self.write(f"G1 F500 E{prime_after_heating:.3f}; extrude {prime_after_heating:.3f} mm of material")
+        if use_safe_spot:
+            self.move(x=-10, extrude=False)
+            self.move(y=-10, extrude=False)
         if return_string:
             return result
 
