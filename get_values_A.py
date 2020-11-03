@@ -288,15 +288,6 @@ class get_values_A(object):
                                         self.number_of_test_structures).tolist()
 
         elif self.test_number == "14":
-            # SOLUBLE MATERIAL test parameters
-            self.temperature_extruder = np.rint(np.linspace(fixed_parameter_values.parameter_one.values[0],
-                                                            fixed_parameter_values.parameter_one.values[-1],
-                                                            self.number_of_test_structures).tolist()).tolist()
-
-            self.parameter_one.values = self.temperature_extruder
-            self.speed_printing = self.parameter_two.values
-
-        elif self.test_number == "15":
             # SUPPORT SPACING vs SUPPORT CONTACT DISTANCE test parameters
             self.support_pattern_spacing = np.linspace(fixed_parameter_values.parameter_one.values[0],
                                                        fixed_parameter_values.parameter_one.values[-1],
@@ -307,6 +298,15 @@ class get_values_A(object):
                                                             fixed_parameter_values.parameter_two.values[-1],
                                                             self.number_of_substructures).tolist()
             self.parameter_two.values = self.support_contact_distance
+
+        elif self.test_number == "15":
+            # SOLUBLE MATERIAL test parameters
+            self.temperature_extruder = np.rint(np.linspace(fixed_parameter_values.parameter_one.values[0],
+                                                            fixed_parameter_values.parameter_one.values[-1],
+                                                            self.number_of_test_structures).tolist()).tolist()
+
+            self.parameter_one.values = self.temperature_extruder
+            self.speed_printing = self.parameter_two.values
 
         else:
             raise ValueError("{} is not a valid test.".format(fixed_parameter_values.name))

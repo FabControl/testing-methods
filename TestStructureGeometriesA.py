@@ -618,7 +618,7 @@ class TestStructure(object):
 
         g.write("; --- start to print the support structure ---")
         g.feed(self.machine.settings.speed_printing)
-        for layer in range(v.number_of_layers + 7):
+        for layer in range(v.number_of_layers + 14):
             # LAYER SCOPE
             # Return to init X, Y advance on Z
             if layer == 0:
@@ -677,6 +677,11 @@ class TestStructure(object):
                             for line in range(num_lines_x):
                                 g.move(y=tile_length*direction(line))
                                 g.move(x=-track_width)
+                            # move to the corner of tile
+                            g.move(x=-(width - num_lines_x * track_width))
+                            # we should have enough space for one more pass
+                            line += 1
+                            g.move(y=tile_length*direction(line))
 
                             g.travel(y=-tile_length *(line % 2) - (gap / 2.0 if y < num_y - 1 else 0), x=width)
 

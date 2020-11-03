@@ -51,8 +51,8 @@ def get_routine():
         "11": {"name": "Retraction distance vs Retraction speed", "priority": "secondary"},
         "12": {"name": "Retraction restart distance vs Printing speed and Coasting distance", "priority": "secondary"},
         "13": {"name": "Bridging extrusion multiplier vs Bridging printing speed", "priority": "primary"},
-        "14": {"name": "Soluble support adhesion (beta)", "priority": "secondary"},
-        "15": {"name": "Support pattern spacing vs support contact distance (beta)", "priority": "secondary"}
+        "14": {"name": "Support pattern spacing vs support contact distance (beta)", "priority": "secondary"},
+        "15": {"name": "Soluble support adhesion (beta)", "priority": "secondary"}
     }
     return jsonify(routine)
 
