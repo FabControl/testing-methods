@@ -618,7 +618,7 @@ class TestStructure(object):
 
         g.write("; --- start to print the support structure ---")
         g.feed(self.machine.settings.speed_printing)
-        for layer in range(v.number_of_layers + 7):
+        for layer in range(v.number_of_layers + 14):
             # LAYER SCOPE
             # Return to init X, Y advance on Z
             if layer == 0:
