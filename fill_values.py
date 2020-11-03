@@ -74,7 +74,7 @@ def fill_values(persistence):
             persistence["settings"]["bridging_extrusion_multiplier"] = dummy["selected_parameter_one_value"]
             persistence["settings"]["bridging_speed_printing"] = dummy["selected_parameter_two_value"]
             persistence["session"]["previous_tests"][-1]["selected_volumetric_flow-rate_value"] = persistence["session"]["previous_tests"][-1]["tested_volumetric_flow-rate_values"][ind_parameter_two][ind_parameter_one]
-    elif dummy["test_number"] == "15":
+    elif dummy["test_number"] == "14":
         if dummy["executed"]:
             persistence["settings"]["support_pattern_spacing"] = dummy["selected_parameter_one_value"]
             persistence["settings"]["support_contact_distance"] = dummy["selected_parameter_two_value"]
