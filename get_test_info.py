@@ -531,8 +531,6 @@ def get_test_info(persistence):
                                                  other_parameters=other_parameters,
                                                  hint_init="This test helps you find settings at which break-away support will perform the best.",
                                                  hint_valid="")
-        if parameter_values_for_comments.parameter_two.values > parameter_values_for_comments.parameter_two.min_max:
-            parameter_values_for_comments.parameter_two.values = np.linspace(0, 0.3, number_of_substructures).tolist()
 
 
     return parameter_values_for_comments
