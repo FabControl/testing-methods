@@ -1,6 +1,108 @@
 [
   {
     "_manual": false,
+    "_value": 2,
+    "cura": {
+      "modifier": "x",
+      "name": null,
+      "parameter": "support_line_distance",
+      "parent_parameter": null,
+      "py/object": "conversion_dictionary.Slicer",
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 2
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "support pattern spacing",
+    "parameter": "support_pattern_spacing",
+    "params": {
+      "py/id": 2
+    },
+    "parent": null,
+    "prusa": {
+      "modifier": null,
+      "name": null,
+      "parameter": "support_material_interface_spacing",
+      "parent_parameter": null,
+      "py/object": "conversion_dictionary.Slicer",
+      "reverse_modifier": null,
+      "root": {
+        "py/id":2
+      },
+      "units": "mm"
+    },
+    "py/object": "conversion_dictionary.Param",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "py/object": "conversion_dictionary.Slicer",
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 2
+      },
+      "units": "mm"
+    },
+    "test": "first layer height test",
+    "units": "mm"
+  },
+  {
+    "_manual": false,
+    "_value": 2,
+    "cura": {
+      "modifier": "x",
+      "name": null,
+      "parameter": "support_top_distance",
+      "parent_parameter": null,
+      "py/object": "conversion_dictionary.Slicer",
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 2
+      },
+      "units": null
+    },
+    "modifier": null,
+    "name": "support contact distance",
+    "parameter": "support_contact_distance",
+    "params": {
+      "py/id": 2
+    },
+    "parent": null,
+    "prusa": {
+      "modifier": null,
+      "name": null,
+      "parameter": "support_material_contact_distance",
+      "parent_parameter": null,
+      "py/object": "conversion_dictionary.Slicer",
+      "reverse_modifier": null,
+      "root": {
+        "py/id":2
+      },
+      "units": "mm"
+    },
+    "py/object": "conversion_dictionary.Param",
+    "reverse_modifier": null,
+    "simplify3d": {
+      "modifier": null,
+      "name": null,
+      "parameter": null,
+      "parent_parameter": null,
+      "py/object": "conversion_dictionary.Slicer",
+      "reverse_modifier": null,
+      "root": {
+        "py/id": 2
+      },
+      "units": "mm"
+    },
+    "test": "first layer height test",
+    "units": "mm"
+  },
+  {
+    "_manual": false,
     "_value": null,
     "cura": {
       "modifier": "x * self.root.params.get('track_width').value * self.root.params.get('track_height').value",
