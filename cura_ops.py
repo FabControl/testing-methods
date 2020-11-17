@@ -5,6 +5,8 @@ import tempfile as tf
 import re
 import os
 import io
+import zipfile as zf
+from configparser import ConfigParser
 
 
 def numeral_eval(value):
@@ -74,10 +76,6 @@ def encode_cura(parameters: list, name: str, quality: str):
     :param name:
     :return:
     """
-    import patoolib
-    import tempfile as tf
-    import os
-    import zipfile as zf
 
     def position_counter(input_string: str, position: int):
         """
@@ -122,3 +120,39 @@ def encode_cura(parameters: list, name: str, quality: str):
     os.rename(outpath, curaprofile_path)
     with open(curaprofile_path, 'rb') as file:
         return file.read()
+
+def update_cura_3(parameters: list, config_file):
+    """
+    Updates existing curaprofile file with provided parameters.
+    """
+    archive = zf.ZipFile(config_file, mode='r')
+    # make sure we did not receive zipbomb
+    sum_file_size = sum([data.file_size for data in archive.filelist])
+    sum_compress_size = sum([data.compress_size for data in archive.filelist])
+    ratio = sum_file_size / sum_compress_size
+    # Cura usually exports with ratio = 1 (stored, not compressed)
+    if (ratio > 20):
+        raise zf.BadZipFile("Zip Bomb Detected")
+
+    result = io.BytesIO()
+    resulting_config = zf.ZipFile(result, 'w')
+
+    for config_entry in archive.filelist:
+        with archive.open(config_entry, 'r') as binary_entry:
+            if config_entry.filename.startswith('base/'):
+                resulting_config.writestr(config_entry, binary_entry.read())
+                continue
+
+            entry = io.TextIOWrapper(binary_entry)
+            cfg = ConfigParser()
+            cfg.read_file(entry)
+        # write parameters
+        for param in parameters:
+            cfg.set('values', param[0], str(param[1]))
+        entry = io.StringIO()
+        cfg.write(entry)
+        resulting_config.writestr(config_entry, entry.getvalue())
+
+    archive.close()
+    resulting_config.close()
+    return result.getvalue()
