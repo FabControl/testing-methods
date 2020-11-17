@@ -3,6 +3,7 @@ from flask import Flask, jsonify, make_response, abort, request, send_file
 from persistence import Persistence
 from initialize_test import OptimizerSession
 from base64 import b64encode
+import json
 
 app = Flask(__name__)
 
@@ -60,9 +61,14 @@ def get_routine():
 @app.route('/config/<slicer>', methods=['POST'])
 @app.route('/config/<slicer>/<quality_type>', methods=['POST'])
 def serve_config(slicer, quality_type='normal'):
-    assert request.json is not None
     from generate_configuration import Converter
-    converter = Converter(request.json)
+    # making sure to be compatible with unreleased changes in frontend server
+    # at least for now
+    if request.json is None:
+        persistence = json.load(request.files['persistence'])
+    else:
+        persistence = request.json
+    converter = Converter(persistence)
     content = None
     config_format = None
     if "simplify" in slicer:
@@ -72,7 +78,10 @@ def serve_config(slicer, quality_type='normal'):
         content = converter.to_prusa().encode()
         config_format = "ini"
     elif "cura" in slicer:
-        content = converter.to_cura(quality_type)
+        sample_config = None
+        if "sample_config" in request.files:
+            sample_config = request.files["sample_config"].stream
+        content = converter.to_cura(quality_type=quality_type, sample_config=sample_config)
         config_format = "curaprofile"
     return jsonify({"format": config_format, "content": b64encode(content).decode()})
 
