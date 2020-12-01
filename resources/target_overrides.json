@@ -7,10 +7,12 @@
     "infill_pattern": "rectilinear"
   },
   "fast_printing": {
+    "solid_infill_pattern": "rectilinear",
     "top_solid_layers": 3,
     "bottom_solid_layers": 3
   },
   "mechanical_strength": {
+    "solid_infill_pattern": "rectilinear",
     "perimeter": 4,
     "bottom_solid_layers": 8,
     "top_solid_layers": 8
