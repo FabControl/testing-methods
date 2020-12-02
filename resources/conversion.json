@@ -36,10 +36,10 @@
     "py/object": "conversion_dictionary.Param",
     "reverse_modifier": null,
     "simplify3d": {
-      "modifier": null,
+      "modifier": "int(100 * y / x)",
       "name": null,
-      "parameter": null,
-      "parent_parameter": null,
+      "parameter": "denseSupportInfillPercentage",
+      "parent_parameter": "track_width",
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
       "root": {
@@ -87,10 +87,10 @@
     "py/object": "conversion_dictionary.Param",
     "reverse_modifier": null,
     "simplify3d": {
-      "modifier": null,
+      "modifier": "int(x / y + 0.5)",
       "name": null,
-      "parameter": null,
-      "parent_parameter": null,
+      "parameter": "supportUpperSeparationLayers",
+      "parent_parameter": "track_height",
       "py/object": "conversion_dictionary.Slicer",
       "reverse_modifier": null,
       "root": {
