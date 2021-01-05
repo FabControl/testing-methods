@@ -297,11 +297,11 @@ class Gplus(G):
         self.retraction_speed = self._machine.settings.retraction_speed if retraction_speed is None else retraction_speed
         temp_speed = self.speed/60 if speed is None else speed
         self.feed(temp_speed*2)
-        self.write(f"G1 F{self.retraction_speed * 60:.0f} E {-retraction_distance:.3f}")
+        self.write(f"G1 F{self.retraction_speed * 60:.0f} E{-retraction_distance:.3f}")
         self.move(z=lift, rapid=True)
         self.move(x, y, z, extrude=False, rapid=True, **kwargs)
         self.move(z=-lift, rapid=True)
-        self.write(f"G1 F{self.retraction_speed * 60:.0f} E {retraction_distance:.3f}")
+        self.write(f"G1 F{self.retraction_speed * 60:.0f} E{retraction_distance:.3f}")
         self.feed(temp_speed)
 
     def abs_travel(self,
@@ -324,11 +324,11 @@ class Gplus(G):
         self.retraction_speed = retraction_speed
         temp_speed = self.speed / 60
         self.feed(temp_speed * 2 if speed is None else speed)
-        self.write(f"G1 F{self.retraction_speed * 60:.0f} E {-retraction_distance:.3f}")
+        self.write(f"G1 F{self.retraction_speed * 60:.0f} E{-retraction_distance:.3f}")
         self.move(z=lift)
         self.abs_move(x, y, z+lift, extrude=False, **kwargs)
         self.move(z=-lift)
-        self.write(f"G1 F{self.retraction_speed * 60:.0f} E {retraction_distance:.3f}")
+        self.write(f"G1 F{self.retraction_speed * 60:.0f} E{retraction_distance:.3f}")
         self.feed(temp_speed)
 
     def feed(self, rate):
