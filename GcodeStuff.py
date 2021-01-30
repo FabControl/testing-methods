@@ -243,6 +243,11 @@ class Gplus(G):
                 kwargs["E"] = 0 + current_extruder_position
 
         self._update_current_position(x=x, y=y, z=z, **kwargs)
+        if self.is_relative:
+            roundoff = 1.0 * 10** (-self.output_digits)
+            x = None if x is not None and abs(x) < roundoff else x
+            y = None if y is not None and abs(y) < roundoff else y
+            z = None if z is not None and abs(z) < roundoff else z
         args = self._format_args(x, y, z, **kwargs)
         cmd = "G0 " if rapid else "G1 "
         self.write(cmd + args)
