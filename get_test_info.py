@@ -127,7 +127,7 @@ def get_test_info(persistence):
                                       hint_active=hint_active_generic)
     offset_z = Parameter("z-offset", "offset_z", "mm", "{:.3f}",
                          value=persistence["settings"]["offset_z"] if persistence["settings"]["offset_z"] else 0,
-                         min_max=[0, 2],
+                         min_max=[-2, 2],
                          hint_active=hint_active_generic)
 
     other_parameters = []
@@ -180,7 +180,7 @@ def get_test_info(persistence):
 
         parameter_values_for_comments = TestInfo("z-offset", "00", number_of_layers=2, number_of_test_structures=number_of_test_structures, number_of_substructures=number_of_substructures, raft=False,
                                                  parameter_one=Parameter("z-offset", "offset_z", "mm", "{:.3f}",
-                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0, 0.45, number_of_test_structures).tolist(), min_max=[0.0, 2]),
+                                                                         value=values_parameter_one if persistence["session"]["min_max_parameter_one"] != [] else np.linspace(0, 0.45, number_of_test_structures).tolist(), min_max=[-2.0, 2]),
                                                  parameter_two=Parameter(None, None, None),
                                                  other_parameters=other_parameters,
                                                  hint_init="This test is needed to find Z-offset value in case of non-level print bed or printbed coating.",
